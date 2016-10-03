@@ -185,6 +185,15 @@ function prepareQuestionsPayload(questions, botPayload, res) {
         if (emailContactMethods && emailContactMethods.length) {
             email = emailContactMethods[0].target;
         };
+
+        let textField = '';
+        if (phone && email) {
+            textField = phone + " | " + email;
+        } else if (phone) {
+            textField = phone;
+        } else if {
+            textField = email;
+        };
         // if (questions[i].guide.steps) {
         //     console.log("Solutions for Question #" + i + ": " + JSON.stringify(questions[i].guide.steps));
         // } else {
@@ -199,7 +208,7 @@ function prepareQuestionsPayload(questions, botPayload, res) {
             "color": color,
             // redundant link to one in the Fields - add this if removing the Field
             // "title_link": "https://answers.gethuman.co/_" + encodeURIComponent(urlId),
-            "text": phone + " | " + email,
+            "text": textField,
             "fields": [
                 {
                     // "title": "*****************************************",

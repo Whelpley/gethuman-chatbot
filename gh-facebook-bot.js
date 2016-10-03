@@ -15,10 +15,6 @@ module.exports = function (req, res, next) {
         // handling text input
         if (event.message && event.message.text) {
             let text = event.message.text;
-            // echoes back everything sent
-            // keep in development stage to confirm functionality of response
-            // sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200));
-
             // search Questions, if found returns Question cards, if not returns Company cards
             requestQuestionCards(sender, text);
         }
@@ -27,7 +23,7 @@ module.exports = function (req, res, next) {
         if (event.postback) {
           // test message verify button - echoes postback payload
           let text = JSON.stringify(event.postback);
-          sendTextMessage(sender, "Postback received: "+text.substring(0, 200), token);
+          sendTextMessage(sender, "Postback received: "+ text.substring(0, 200), token);
 
           let payloadText = event.postback.payload;
           sendDummyCard(sender, payloadText);
