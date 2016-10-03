@@ -143,10 +143,6 @@ function requestQuestionCards(sender, text) {
     })
 };
 
-// needs:
-    // refactoring
-    // variable scope checking
-    // error handling
 function requestCompanyCards(sender, text) {
     let companies = [];
 

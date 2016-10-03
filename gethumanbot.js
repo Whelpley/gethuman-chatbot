@@ -325,20 +325,7 @@ function prepareCompaniesPayload(companies, botPayload, res) {
     });
 }
 
-// inserts new lines to a string
-// for the text fields of attachments, so they collapse earlier
-// drawback - will cut off string at arbitrary point, when expanded will still be cut
-// also does not seem to work consistently!
-// function insertLineBreaks(string, cutoff) {
-//   if (string.length > cutoff) {
-//     let breaks = "\n\n\n\n\n";
-//     string = string.substring(0,cutoff) + breaks + string.substring(cutoff);
-//   };
-//   return string;
-// }
-
-// WARNING - from Stack Overflow
-// string of regex's to remove tags
+// string of regex's to remove HTML tags from string
 function stripHtml(string) {
     return string.replace(/<\s*br\/*>/gi, "\n")
       .replace(/<\s*a.*href="(.*?)".*>(.*?)<\/a>/gi, " $2 (Link->$1) ")
