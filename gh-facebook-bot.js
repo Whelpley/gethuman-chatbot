@@ -221,22 +221,22 @@ function sendAllQuestionCards(sender, questions) {
         };
         // truncate title
         title = title.substring(0,79);
-        // real solutions:
-        let solution = questions[i].guide.steps[0].details || 'No solution found. Despair and wail!';
-        console.log("Solution for Question # " + i + ": " + solution);
-        solution = solution.substring(0,79);
+        // real solutions: not longer needed
+        // let solution = questions[i].guide.steps[0].details || 'No solution found. Despair and wail!';
+        // console.log("Solution for Question # " + i + ": " + solution);
+        // solution = solution.substring(0,79);
 
         let singleElement = {
             "title": title,
-            "subtitle": solution,
+            // "subtitle": solution,
             "buttons": [{
                 "type": "web_url",
                 "url": "https://answers.gethuman.co/_" + encodeURIComponent(urlId) ,
-                "title": "More Info"
+                "title": "Step by Step Guide"
             }, {
                 "type": "web_url",
                 "url": "https://gethuman.com?company=" + encodeURIComponent(companyName) ,
-                "title": "Solve - $20"
+                "title": "Solve for Me - $20"
             }],
         };
         // if there is a valid phone # (needs stricter checks), add Call button
@@ -258,17 +258,13 @@ function sendAllCompanyCards(sender, companies) {
     // iterate over companies, make single cards, push into elements
     for (let i = 0; i < companies.length; i++) {
         let name = companies[i].name || '';
-        let email = companies[i].email || 'No email found';
+        let email = companies[i].email || '';
         let phone = companies[i].phone || '';
         //format phone# for international format
         let phoneIntl = (phone) ? phoneFormatter.format(phone, "+1NNNNNNNNNN") : '';
-        // dummy image
-        // has to be a valid URL - not local storage
-        // let image = "http://findicons.com/files/icons/2198/dark_glass/128/modem2.png"
         let singleElement = {
             "title": name,
             "subtitle": email,
-            // "image_url": image,
             "buttons": [
             // This would trigger a new card, but it's not needed since the Guides are already checked for initially.
             // {
@@ -279,7 +275,7 @@ function sendAllCompanyCards(sender, companies) {
             {
                 "type": "web_url",
                 "url": "https://gethuman.com?company=" + encodeURIComponent(name) ,
-                "title": "Solve - $20"
+                "title": "Solve for me  - $20"
             }],
         };
         // if there is a valid phone # (needs stricter checks), add Call button
