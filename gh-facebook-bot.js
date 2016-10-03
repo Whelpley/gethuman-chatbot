@@ -3,6 +3,8 @@
 const request = require('request')
 const phoneFormatter = require('phone-formatter');
 
+const token = process.env.FB_PAGE_ACCESS_TOKEN
+
 module.exports = function (req, res, next) {
     //where all responses to text inputs are handled
     let messaging_events = req.body.entry[0].messaging
