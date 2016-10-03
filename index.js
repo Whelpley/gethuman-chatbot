@@ -9,18 +9,51 @@ const phoneFormatter = require('phone-formatter');
 const token = process.env.FB_PAGE_ACCESS_TOKEN
 const GH_token = process.env.GH_API_ACCESS_TOKEN
 
+var hellobot = require('./hellobot.js');
+var dicebot = require('./dicebot.js');
+var getHumanbot = require('./gethumanbot.js');
+
 app.set('port', (process.env.PORT || 5000))
 
 // Process application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({extended: false}))
+// what FB wants
+// app.use(bodyParser.urlencoded({extended: false}))
+// what Slack wants
+app.use(bodyParser.urlencoded({ extended: true }));
+
 // Process application/json
 app.use(bodyParser.json())
 
+app.use(function (err, req, res, next) {
+  console.error(err.stack);
+  res.status(400).send(err.message);
+});
+
+// ****************
+// SLACK CODE
+// ***************
+
+// test route
+app.get('/', function (req, res) { res.status(200).send('Hello world!') });
+
+// hellobot
+app.post('/hello', hellobot);
+
+// dicebot
+app.post('/roll', dicebot);
+
+// gethuman bot
+app.post('/gethuman', getHumanbot);
+
+// *******************
+// FACEBOOK CODE BELOW
+// **************
+
 // Index route
 // not really needed, but will appear if the Heroku app is requested via browser
-app.get('/', function (req, res) {
-    res.send('Hello world, I am a chat bot. Nothing to see over here, move along now.')
-})
+// app.get('/', function (req, res) {
+//     res.send('Hello world, I am a chat bot. Nothing to see over here, move along now.')
+// })
 
 // for Facebook verification
 app.get('/webhook/', function (req, res) {
@@ -373,7 +406,7 @@ function sendCards(sender, elements) {
 }
 
 // should this function declaration exist elsewhere?
-// Should we just use the un-compressed Company object returned from the API?
+// Should we just use the un-compressed Company object returned from the API? (answer: YES)
 function Company(name, phone, email) {
   this.name = name;
   this.phone = phone;
@@ -381,6 +414,12 @@ function Company(name, phone, email) {
 };
 
 // Spin up the server
-app.listen(app.get('port'), function() {
-    console.log('running on port', app.get('port'))
-})
+// FB version
+// app.listen(app.get('port'), function() {
+//     console.log('running on port', app.get('port'))
+// })
+
+// Slack version
+app.listen(port, function () {
+  console.log('Fusion bot listening on port ' + port);
+});
