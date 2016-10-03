@@ -107,16 +107,8 @@ function requestQuestionCards(sender, text) {
                                 for (var i = 0; i < questions.length; i++) {
                                     let cID = questions[i].companyId;
                                     questions[i].company = companyTable[cID];
-                                    // console.log("Company object attached to Question # "
-                                    //     + i
-                                    //     + ": "
-                                    //     + JSON.stringify(questions[i].company));
                                     let gID = questions[i].guideId;
                                     questions[i].guide = guideTable[gID];
-                                    // console.log("Guide object attached to Question # "
-                                    // + i
-                                    // + ": "
-                                    // + JSON.stringify(questions[i].guide));
                                 };
                                 // Make cards out of massive data hash
                                 // (room for optimization later! too much data being shuffled around!)

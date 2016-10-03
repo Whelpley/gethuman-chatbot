@@ -1,4 +1,4 @@
-'use strict'
+ 'use strict'
 
 const request = require('request');
 const phoneFormatter = require('phone-formatter');
@@ -157,7 +157,7 @@ function summonCompanyResponse(textInput, botPayload, res) {
 };
 
 function prepareQuestionsPayload(questions, botPayload, res) {
-    botPayload.text = "Here are some issues potentially matching your input, and how to resolve them. Check them out!";
+    botPayload.text = "Here are some issues potentially matching your input, and links for how to resolve them:";
     botPayload.icon_emoji = ':tada:';
     botPayload.attachments = [];
 
@@ -169,28 +169,37 @@ function prepareQuestionsPayload(questions, botPayload, res) {
         let urlId = questions[i].urlId || '';
         let phone = (questions[i].company) ? questions[i].company.callback.phone : '';
         //format phone# for international format
-        let phoneIntl = (phone) ? phoneFormatter.format(phone, "+1NNNNNNNNNN") : '';
+        // let phoneIntl = (phone) ? phoneFormatter.format(phone, "+1NNNNNNNNNN") : '';
+
         let title = questions[i].title || '';
         // check if company name is in title already, add to front if not
         if (title.indexOf(name) < 0) {
             title = name + ": " + title;
         };
-        // also has potential for funky-not-fresh formatting wrt HTML tags - how to strip?
-        if (questions[i].guide.steps) {
-            console.log("Solutions for Question #" + i + ": " + JSON.stringify(questions[i].guide.steps));
-        } else {
-            console.log("No solutions found for Question #" + i);
+
+        let email = '';
+        // filter GH array to find contactInfo
+        let emailContactMethods = questions[i].company.contactMethods.filter(function ( method ) {
+            return method.type === "email";
+        });
+        if (emailContactMethods && emailContactMethods.length) {
+            email = emailContactMethods[0].target;
         };
-        let solution = questions[i].guide.steps[0].details || 'No solution found for this issue.';
+        // if (questions[i].guide.steps) {
+        //     console.log("Solutions for Question #" + i + ": " + JSON.stringify(questions[i].guide.steps));
+        // } else {
+        //     console.log("No solutions found for Question #" + i);
+        // };
+        // let solution = questions[i].guide.steps[0].details || 'No solution found for this issue.';
         // experimental solution to strip Html
-        solution = stripHtml(solution);
+        // solution = stripHtml(solution);
         let singleAttachment = {
             "fallback": "Solution guide for " + name,
             "title": title,
             "color": color,
             // redundant link to one in the Fields - add this if removing the Field
             // "title_link": "https://answers.gethuman.co/_" + encodeURIComponent(urlId),
-            "text": solution,
+            "text": phone + " | " + email,
             "fields": [
                 {
                     // "title": "*****************************************",
@@ -199,48 +208,48 @@ function prepareQuestionsPayload(questions, botPayload, res) {
                 },
                 {
                     // "title": "More info",
-                    "value": "<https://answers.gethuman.co/_" + encodeURIComponent(urlId) + "|See full guide>",
+                    "value": "<https://answers.gethuman.co/_" + encodeURIComponent(urlId) + "|Step by Step Guide>",
                     "short": true
                 },
                 {
                     // "title": "Let us do it for you",
-                    "value": "<https://gethuman.com?company=" + encodeURIComponent(name) + "|Hire GetHuman to Solve - $20>",
+                    "value": "<https://gethuman.com?company=" + encodeURIComponent(name) + "|Solve for me - $20>",
                     "short": true
                 }
             ]
         };
-        if (phoneIntl) {
-            singleAttachment.fields.push({
-                // "title": "Talk with " + name,
-                "value": "<tel:" + phoneIntl + "|Call " + name + ">",
-                "short": true
-            })
-        };
+        // if (phoneIntl) {
+        //     singleAttachment.fields.push({
+        //         // "title": "Talk with " + name,
+        //         "value": "<tel:" + phoneIntl + "|Call " + name + ">",
+        //         "short": true
+        //     })
+        // };
         botPayload.attachments.push(singleAttachment);
     };
     // attach buttons to receive feedback
-    // not currently functional, until Bot status acheived
-    botPayload.attachments.push({
-        "fallback": "Are you happy with these answers?",
-        "title": "Are you happy with these answers?",
-        "callback_id": "questions_feedback",
-        "color": "#ff0000",
-        "attachment_type": "default",
-        "actions": [
-            {
-                "name": "yes",
-                "text": "Yes",
-                "type": "button",
-                "value": "Yes"
-            },
-            {
-                "name": "no",
-                "text": "No",
-                "type": "button",
-                "value": "No"
-            }
-        ]
-    });
+    // buttons not currently functional, until Bot status acheived
+    // botPayload.attachments.push({
+    //     "fallback": "Are you happy with these answers?",
+    //     "title": "Are you happy with these answers?",
+    //     "callback_id": "questions_feedback",
+    //     "color": "#ff0000",
+    //     "attachment_type": "default",
+    //     "actions": [
+    //         {
+    //             "name": "yes",
+    //             "text": "Yes",
+    //             "type": "button",
+    //             "value": "Yes"
+    //         },
+    //         {
+    //             "name": "no",
+    //             "text": "No",
+    //             "type": "button",
+    //             "value": "No"
+    //         }
+    //     ]
+    // });
 
     console.log("About to send the Questions payload. Godspeed!");
     send(botPayload, function (error, status, body) {
@@ -282,7 +291,7 @@ function prepareCompaniesPayload(companies, botPayload, res) {
             "fallback": "Company info for " + name,
             "title": name,
             "color": color,
-            "text": email + "\n" + phone,
+            "text": email + " | " + phone,
             "fields": [
                 {
                     // "title": "Solve - $20",
@@ -299,37 +308,38 @@ function prepareCompaniesPayload(companies, botPayload, res) {
         //         "short": true
         //     })
         // };
-        if (email) {
-            singleAttachment.fields.unshift({
-                    // "title": "Email " + name,
-                    "value": "<mailto:" + email + "|Email " + name + ">",
-                    "short": true
-            })
-        };
+        // if (email) {
+        //     singleAttachment.fields.unshift({
+        //             // "title": "Email " + name,
+        //             "value": "<mailto:" + email + "|Email " + name + ">",
+        //             "short": true
+        //     })
+        // };
         botPayload.attachments.push(singleAttachment);
     };
     // payload ready, send it on!
-    console.log("About to send the Questions payload. Godspeed!");
+    // console.log("About to send the Questions payload. Godspeed!");
     send(botPayload, function (error, status, body) {
       if (error) {
         return next(error);
       } else if (status !== 200) {
         // inform user that our Incoming WebHook failed
-        console.log("Oh the humanity! Companies payload has crashed and burned.");
-        console.log("Let's have a look at the payload: " + JSON.stringify(botPayload));
+        // console.log("Oh the humanity! Companies payload has crashed and burned.");
+        // console.log("Let's have a look at the payload: " + JSON.stringify(botPayload));
         return next(new Error('Incoming WebHook: ' + status + ' ' + body));
       } else {
-        console.log("Companies payload sent on for much win.");
+        // console.log("Companies payload sent on for much win.");
         return res.status(200).end();
       }
     });
 }
 
 // string of regex's to remove HTML tags from string
-function stripHtml(string) {
-    return string.replace(/<\s*br\/*>/gi, "\n")
-      .replace(/<\s*a.*href="(.*?)".*>(.*?)<\/a>/gi, " $2 (Link->$1) ")
-      .replace(/<\s*\/*.+?>/ig, "\n")
-      .replace(/ {2,}/gi, " ")
-      .replace(/\n+\s*/gi, "\n\n");
-}
+// not needed if not displaying solutions text
+// function stripHtml(string) {
+//     return string.replace(/<\s*br\/*>/gi, "\n")
+//       .replace(/<\s*a.*href="(.*?)".*>(.*?)<\/a>/gi, " $2 (Link->$1) ")
+//       .replace(/<\s*\/*.+?>/ig, "\n")
+//       .replace(/ {2,}/gi, " ")
+//       .replace(/\n+\s*/gi, "\n\n");
+// }
