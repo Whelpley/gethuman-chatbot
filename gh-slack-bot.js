@@ -170,15 +170,14 @@ function prepareQuestionsPayload(questions, botPayload, res) {
         let phone = (questions[i].company) ? questions[i].company.callback.phone : '';
         //format phone# for international format
         // let phoneIntl = (phone) ? phoneFormatter.format(phone, "+1NNNNNNNNNN") : '';
-
         let title = questions[i].title || '';
         // check if company name is in title already, add to front if not
         if (title.indexOf(name) < 0) {
             title = name + ": " + title;
         };
-
         let email = '';
         // filter GH array to find contactInfo
+        // does this turn up any email at all? Investigate later.
         let emailContactMethods = questions[i].company.contactMethods.filter(function ( method ) {
             return method.type === "email";
         });
@@ -191,7 +190,7 @@ function prepareQuestionsPayload(questions, botPayload, res) {
             textField = phone + " | " + email;
         } else if (phone) {
             textField = phone;
-        } else if {
+        } else if (email) {
             textField = email;
         };
         // if (questions[i].guide.steps) {
