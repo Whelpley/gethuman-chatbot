@@ -11,7 +11,7 @@ const GH_token = process.env.GH_API_ACCESS_TOKEN
 
 var hellobot = require('./hellobot.js');
 var dicebot = require('./dicebot.js');
-var getHumanbot = require('./gethumanbot.js');
+var ghSlackBot = require('./gethumanbot.js');
 var ghFacebookBot = require('./gh-facebook-bot.js');
 
 //FB version
@@ -46,12 +46,8 @@ app.post('/hello', hellobot);
 // dicebot
 app.post('/roll', dicebot);
 
-// gethuman bot
-app.post('/gethuman', getHumanbot);
-
-// *******************
-// FACEBOOK CODE BELOW
-// **************
+// gethuman bot for Slack
+app.post('/gethuman', ghSlackBot);
 
 // for Facebook verification
 app.get('/webhook/', function (req, res) {

@@ -1,6 +1,7 @@
 'use strict'
 
 const request = require('request')
+const phoneFormatter = require('phone-formatter');
 
 module.exports = function (req, res, next) {
     //where all responses to text inputs are handled
@@ -110,10 +111,10 @@ function requestQuestionCards(sender, text) {
                                     //     + JSON.stringify(questions[i].company));
                                     let gID = questions[i].guideId;
                                     questions[i].guide = guideTable[gID];
-                                    console.log("Guide object attached to Question # "
-                                    + i
-                                    + ": "
-                                    + JSON.stringify(questions[i].guide));
+                                    // console.log("Guide object attached to Question # "
+                                    // + i
+                                    // + ": "
+                                    // + JSON.stringify(questions[i].guide));
                                 };
                                 // Make cards out of massive data hash
                                 // (room for optimization later! too much data being shuffled around!)
