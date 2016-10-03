@@ -13,7 +13,10 @@ var hellobot = require('./hellobot.js');
 var dicebot = require('./dicebot.js');
 var getHumanbot = require('./gethumanbot.js');
 
-app.set('port', (process.env.PORT || 5000))
+//FB version
+// app.set('port', (process.env.PORT || 5000))
+// Slack version
+var port = process.env.PORT || 3000;
 
 // Process application/x-www-form-urlencoded
 // what FB wants
