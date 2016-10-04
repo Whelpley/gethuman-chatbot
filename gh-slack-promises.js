@@ -1,6 +1,7 @@
 'use strict'
 
 const request = require('request');
+const rp = require('request-promise');
 
 const colors = ['#1c4fff', '#e84778', '#ffc229', '#1ae827', '#5389ff'];
 
@@ -116,18 +117,30 @@ function summonQuestionResponse(textInput, botPayload, res) {
 // first target to Promise-ify
 function summonCompanyResponse(textInput, botPayload, res) {
     var companies = [];
-    request('https://api.gethuman.co/v3/companies/search?limit=5&match=' + encodeURIComponent(textInput), function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-            companies = JSON.parse(body);
-            if (companies && companies.length) {
-                prepareCompaniesPayload(companies, botPayload, res);
-            } else {
-                prepareNothingFoundPayload(botPayload, res);
-            };
-        } else if (error) {
-          console.log(error);
-        }
+    // request('https://api.gethuman.co/v3/companies/search?limit=5&match=' + encodeURIComponent(textInput), function (error, response, body) {
+    //     if (!error && response.statusCode == 200) {
+    //         companies = JSON.parse(body);
+    //         if (companies && companies.length) {
+    //             prepareCompaniesPayload(companies, botPayload, res);
+    //         } else {
+    //             prepareNothingFoundPayload(botPayload, res);
+    //         };
+    //     } else if (error) {
+    //       console.log(error);
+    //     }
+    // })
+    rp('https://api.gethuman.co/v3/companies/search?limit=5&match=' + encodeURIComponent(textInput))
+    .then(function (htmlString) {
+        companies = JSON.parse(htmlString);
+        if (companies && companies.length) {
+            prepareCompaniesPayload(companies, botPayload, res);
+        } else {
+            prepareNothingFoundPayload(botPayload, res);
+        };
     })
+    .catch(function (err) {
+        console.log(err);
+    });
 };
 
 function prepareQuestionsPayload(questions, botPayload, res) {
