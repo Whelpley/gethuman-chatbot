@@ -4,14 +4,14 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const request = require('request')
 const app = express()
-const phoneFormatter = require('phone-formatter');
 
 const token = process.env.FB_PAGE_ACCESS_TOKEN
+// is this even used?
 const GH_token = process.env.GH_API_ACCESS_TOKEN
 
 var hellobot = require('./hellobot.js');
 var dicebot = require('./dicebot.js');
-var ghSlackBot = require('./gh-slack-bot.js');
+var ghSlackBot = require('./gh-slack-promises.js');
 var ghFacebookBot = require('./gh-facebook-bot.js');
 
 var port = process.env.PORT || 3000;
