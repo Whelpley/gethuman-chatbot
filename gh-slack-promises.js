@@ -58,77 +58,120 @@ function summonQuestionResponse(textInput, botPayload, res) {
         isGuide: true
     };
     let limit = 5;
-    request('https://api.gethuman.co/v3/posts/search?match='
-            + encodeURIComponent(textInput)
-            + '&limit='
-            + limit
-            + '&filterBy='
-            + encodeURIComponent(JSON.stringify(filters))
-            , function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-            questions = JSON.parse(body);
-            if (questions && questions.length) {
-                for (let i = 0; i < questions.length; i++) {
-                    companyIDs.push(questions[i].companyId);
-                    guideIDs.push(questions[i].guideId);
-                };
-                request('https://api.gethuman.co/v3/companies?where='
-                    + encodeURIComponent(JSON.stringify({ _id: { $in: companyIDs }}))
-                    , function (error, response, body) {
-                    if (!error && response.statusCode == 200) {
-                        companyObjects = JSON.parse(body);
-                        for (let i = 0; i < companyObjects.length; i++) {
-                            companyTable[companyObjects[i]._id] = companyObjects[i]
-                        };
-                        request('https://api.gethuman.co/v3/guides?where='
-                            + encodeURIComponent(JSON.stringify({ _id: { $in: guideIDs }}))
-                            , function (error, response, body) {
-                            if (!error && response.statusCode == 200) {
-                                guideObjects = JSON.parse(body);
-                                for (let i = 0; i < guideObjects.length; i++) {
-                                    guideTable[guideObjects[i]._id] = guideObjects[i]
-                                };
-                                // attach Companies and Guides to Questions
-                                for (var i = 0; i < questions.length; i++) {
-                                    let cID = questions[i].companyId;
-                                    questions[i].company = companyTable[cID];
-                                    let gID = questions[i].guideId;
-                                    questions[i].guide = guideTable[gID];
-                                };
-                                prepareQuestionsPayload(questions, botPayload, res);
-                            } else if (error) {
-                            console.log(error);
-                          }
-                        });
-                    } else if (error) {
-                    console.log(error);
-                  }
-                });
-            } else {
-                // console.log("Received no results from Questions API for input: " + textInput);
-                summonCompanyResponse(textInput, botPayload, res);
+
+    rp('https://api.gethuman.co/v3/posts/search?match='
+        + encodeURIComponent(textInput)
+        + '&limit='
+        + limit
+        + '&filterBy='
+        + encodeURIComponent(JSON.stringify(filters)))
+    .then(function (htmlString) {
+        questions = JSON.parse(htmlString);
+        if (questions && questions.length) {
+            for (let i = 0; i < questions.length; i++) {
+                companyIDs.push(questions[i].companyId);
+                guideIDs.push(questions[i].guideId);
             };
-        } else if (error) {
-            console.log(error);
-        }
+            rp('https://api.gethuman.co/v3/companies?where='
+                + encodeURIComponent(JSON.stringify({ _id: { $in: companyIDs }})))
+            .then(function (htmlString) {
+                companyObjects = JSON.parse(htmlString);
+                for (let i = 0; i < companyObjects.length; i++) {
+                    companyTable[companyObjects[i]._id] = companyObjects[i]
+                };
+                // final request
+                rp('https://api.gethuman.co/v3/guides?where='
+                    + encodeURIComponent(JSON.stringify({ _id: { $in: guideIDs }})))
+                .then(function (htmlString) {
+                    guideObjects = JSON.parse(body);
+                    for (let i = 0; i < guideObjects.length; i++) {
+                        guideTable[guideObjects[i]._id] = guideObjects[i]
+                    };
+                    for (var i = 0; i < questions.length; i++) {
+                        let cID = questions[i].companyId;
+                        questions[i].company = companyTable[cID];
+                        let gID = questions[i].guideId;
+                        questions[i].guide = guideTable[gID];
+                    };
+                    prepareQuestionsPayload(questions, botPayload, res);
+                })
+                .catch(function (err) {
+                    console.log(err);
+                });
+            })
+            .catch(function (err) {
+                console.log(err);
+            });
+        } else {
+            console.log("Received no results from Questions API for input: " + textInput);
+            summonCompanyResponse(textInput, botPayload, res);
+        };
     })
+    .catch(function (err) {
+        console.log(err);
+    });
+
+    // ---- original request -----
+    // request('https://api.gethuman.co/v3/posts/search?match='
+    //         + encodeURIComponent(textInput)
+    //         + '&limit='
+    //         + limit
+    //         + '&filterBy='
+    //         + encodeURIComponent(JSON.stringify(filters))
+    //         , function (error, response, body) {
+    //     if (!error && response.statusCode == 200) {
+    //         questions = JSON.parse(body);
+    //         if (questions && questions.length) {
+    //             for (let i = 0; i < questions.length; i++) {
+    //                 companyIDs.push(questions[i].companyId);
+    //                 guideIDs.push(questions[i].guideId);
+    //             };
+    //             request('https://api.gethuman.co/v3/companies?where='
+    //                 + encodeURIComponent(JSON.stringify({ _id: { $in: companyIDs }}))
+    //                 , function (error, response, body) {
+    //                 if (!error && response.statusCode == 200) {
+    //                     companyObjects = JSON.parse(body);
+    //                     for (let i = 0; i < companyObjects.length; i++) {
+    //                         companyTable[companyObjects[i]._id] = companyObjects[i]
+    //                     };
+    //                     request('https://api.gethuman.co/v3/guides?where='
+    //                         + encodeURIComponent(JSON.stringify({ _id: { $in: guideIDs }}))
+    //                         , function (error, response, body) {
+    //                         if (!error && response.statusCode == 200) {
+    //                             guideObjects = JSON.parse(body);
+    //                             for (let i = 0; i < guideObjects.length; i++) {
+    //                                 guideTable[guideObjects[i]._id] = guideObjects[i]
+    //                             };
+    //                             // attach Companies and Guides to Questions
+    //                             for (var i = 0; i < questions.length; i++) {
+    //                                 let cID = questions[i].companyId;
+    //                                 questions[i].company = companyTable[cID];
+    //                                 let gID = questions[i].guideId;
+    //                                 questions[i].guide = guideTable[gID];
+    //                             };
+    //                             prepareQuestionsPayload(questions, botPayload, res);
+    //                         } else if (error) {
+    //                         console.log(error);
+    //                       }
+    //                     });
+    //                 } else if (error) {
+    //                 console.log(error);
+    //               }
+    //             });
+    //         } else {
+    //             // console.log("Received no results from Questions API for input: " + textInput);
+    //             summonCompanyResponse(textInput, botPayload, res);
+    //         };
+    //     } else if (error) {
+    //         console.log(error);
+    //     }
+    // })
+    // --------------------------------
 };
 
 // first target to Promise-ify
 function summonCompanyResponse(textInput, botPayload, res) {
     var companies = [];
-    // request('https://api.gethuman.co/v3/companies/search?limit=5&match=' + encodeURIComponent(textInput), function (error, response, body) {
-    //     if (!error && response.statusCode == 200) {
-    //         companies = JSON.parse(body);
-    //         if (companies && companies.length) {
-    //             prepareCompaniesPayload(companies, botPayload, res);
-    //         } else {
-    //             prepareNothingFoundPayload(botPayload, res);
-    //         };
-    //     } else if (error) {
-    //       console.log(error);
-    //     }
-    // })
     rp('https://api.gethuman.co/v3/companies/search?limit=5&match=' + encodeURIComponent(textInput))
     .then(function (htmlString) {
         companies = JSON.parse(htmlString);
