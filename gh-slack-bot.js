@@ -1,7 +1,6 @@
 'use strict'
 
 const request = require('request');
-
 const colors = ['#1c4fff', '#e84778', '#ffc229', '#1ae827', '#5389ff'];
 
 module.exports = function (req, res, next) {
@@ -159,7 +158,6 @@ function prepareQuestionsPayload(questions, botPayload, res) {
 
     for (let i = 0; i < questions.length; i++) {
         let name = questions[i].companyName || '';
-        console.log("Company name found: " + name);
         let color = colors[i];
         let urlId = questions[i].urlId || '';
         let phone = (questions[i].company) ? questions[i].company.callback.phone : '';
@@ -168,9 +166,6 @@ function prepareQuestionsPayload(questions, botPayload, res) {
             title = name + ": " + title;
         };
         let email = '';
-        // filter GH array to find contactInfo
-        // does this turn up any email at all? Investigating....
-        console.log("Contact Methods for " + name + ": " + JSON.stringify(questions[i].company.contactMethods));
         let emailContactMethods = questions[i].company.contactMethods.filter(function ( method ) {
             return method.type === "email";
         });
@@ -271,7 +266,6 @@ function prepareCompaniesPayload(companies, botPayload, res) {
             "text": email + " | " + phone,
             "fields": [
                 {
-                    // "title": "Solve - $20",
                     "value": "<http://gethuman.com?company=" + encodeURIComponent(name) + "|Hire GetHuman to Solve - $20>",
                     "short": true
                 }
