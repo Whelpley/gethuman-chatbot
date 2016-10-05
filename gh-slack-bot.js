@@ -1,4 +1,4 @@
- 'use strict'
+'use strict'
 
 const request = require('request');
 const phoneFormatter = require('phone-formatter');
@@ -6,6 +6,7 @@ const phoneFormatter = require('phone-formatter');
 const colors = ['#1c4fff', '#e84778', '#ffc229', '#1ae827', '#5389ff'];
 
 module.exports = function (req, res, next) {
+    console.log("got this far!");
   var botPayload = {};
   botPayload.username = 'Gethuman Bot';
   botPayload.channel = req.body.channel_id;
@@ -17,17 +18,12 @@ module.exports = function (req, res, next) {
   } else {
       botPayload.text = "Tell me your customer service issue.";
       botPayload.icon_emoji = ':question:';
-      // console.log("About to send the payload. Godspeed!");
       send(botPayload, function (error, status, body) {
         if (error) {
           return next(error);
         } else if (status !== 200) {
-          // inform user that our Incoming WebHook failed
-          // console.log("Oh the humanity! Payload has crashed and burned.");
-          // console.log("Let's have a look at the payload: " + JSON.stringify(botPayload));
           return next(new Error('Incoming WebHook: ' + status + ' ' + body));
         } else {
-          // console.log("Payload sent on for much win.");
           return res.status(200).end();
       }
       });

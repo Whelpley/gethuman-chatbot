@@ -26,9 +26,9 @@ app.use(function (err, req, res, next) {
 // test route
 app.get('/', function (req, res) { res.status(200).send('Hello world!') });
 
-// hellobot - to delete
+// hellobot - keep for testing
 app.post('/hello', hellobot);
-// dicebot - to delete
+// dicebot - keep for testing
 app.post('/roll', dicebot);
 // gethuman bot for Slack
 app.post('/gethuman', ghSlackBot);
