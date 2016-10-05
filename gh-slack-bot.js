@@ -18,35 +18,9 @@ module.exports = function (req, res, next) {
 }
 
 // old send
-function send (payload, callback) {
-  var path = process.env.INCOMING_WEBHOOK_PATH;
-  var uri = 'https://hooks.slack.com/services/' + path;
-
-  request({
-    uri: uri,
-    method: 'POST',
-    body: JSON.stringify(payload)
-  }, function (error, response, body) {
-    if (error) {
-      return callback(error);
-    }
-    callback(null, response.statusCode, body);
-  });
-}
-
-// new send
-// function send (payload) {
+// function send (payload, callback) {
 //   var path = process.env.INCOMING_WEBHOOK_PATH;
 //   var uri = 'https://hooks.slack.com/services/' + path;
-//   var callback = function (error, status, body) {
-//       if (error) {
-//         return next(error);
-//       } else if (status !== 200) {
-//         return next(new Error('Incoming WebHook: ' + status + ' ' + body));
-//       } else {
-//         return res.status(200).end();
-//       }
-//     };
 
 //   request({
 //     uri: uri,
@@ -59,6 +33,32 @@ function send (payload, callback) {
 //     callback(null, response.statusCode, body);
 //   });
 // }
+
+// new send
+function send (payload) {
+  var path = process.env.INCOMING_WEBHOOK_PATH;
+  var uri = 'https://hooks.slack.com/services/' + path;
+  var cb = function(error, status, body) {
+      if (error) {
+        return next(error);
+      } else if (status !== 200) {
+        return next(new Error('Incoming WebHook: ' + status + ' ' + body));
+      } else {
+        return res.status(200).end();
+      }
+    };
+
+  request({
+    uri: uri,
+    method: 'POST',
+    body: JSON.stringify(payload)
+  }, function (error, response, body) {
+    if (error) {
+      return cb(error);
+    }
+    cb(null, response.statusCode, body);
+  });
+}
 
 
 
@@ -165,24 +165,11 @@ function prepareQuestionsPayload(questions, botPayload, res) {
         if (title.indexOf(name) < 0) {
             title = name + ": " + title;
         };
-        let email = '';
         let emailContactMethods = questions[i].company.contactMethods.filter(function ( method ) {
             return method.type === "email";
         });
-        if (emailContactMethods && emailContactMethods.length) {
-            email = emailContactMethods[0].target;
-        };
-
+        let email = (emailContactMethods && emailContactMethods.length) ? emailContactMethods[0].target : '';
         let textField = formatTextField(phone, email);
-        // let textField = '';
-        // if (phone && email) {
-        //     textField = phone + " | " + email;
-        // } else if (phone) {
-        //     textField = phone;
-        // } else if (email) {
-        //     textField = email;
-        // };
-
         let singleAttachment = {
             "fallback": "Solution guide for " + name,
             "title": title,
@@ -231,17 +218,17 @@ function prepareQuestionsPayload(questions, botPayload, res) {
     // });
 
 // old send
-    send(botPayload, function (error, status, body) {
-      if (error) {
-        return next(error);
-      } else if (status !== 200) {
-        return next(new Error('Incoming WebHook: ' + status + ' ' + body));
-      } else {
-        return res.status(200).end();
-      }
-    });
+    // send(botPayload, function (error, status, body) {
+    //   if (error) {
+    //     return next(error);
+    //   } else if (status !== 200) {
+    //     return next(new Error('Incoming WebHook: ' + status + ' ' + body));
+    //   } else {
+    //     return res.status(200).end();
+    //   }
+    // });
 // new send
-    // send(botPayload);
+    send(botPayload);
 };
 
 function prepareCompaniesPayload(companies, botPayload, res) {
