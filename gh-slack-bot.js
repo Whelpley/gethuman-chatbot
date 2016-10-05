@@ -291,7 +291,7 @@ function prepareUserInputPrompt(botPayload, res) {
 function prepareNothingFoundPayload(botPayload, res) {
     botPayload.text = "We could not find anything matching your input to our database. Could you try rephrasing your concern, and be sure to spell the company name correctly?";
     botPayload.icon_emoji = ':stuck_out_tongue:';
-    console.log("Received no results from Companies API for input: " + textInput);
+    console.log("Received no results from Companies API for user input");
     send(botPayload, function (error, status, body) {
         if (error) {
           return next(error);
@@ -301,7 +301,7 @@ function prepareNothingFoundPayload(botPayload, res) {
           return res.status(200).end();
         }
     });
-}
+};
 
 function prepareApiFailPayload(botPayload, res) {
     botPayload.text = "The GetHuman database just borked out. Sorry, try again later!";
@@ -316,4 +316,4 @@ function prepareApiFailPayload(botPayload, res) {
           return res.status(200).end();
         }
     });
-}
+};
