@@ -13,21 +13,9 @@ module.exports = function (req, res, next) {
   //handling text input
   var textInput = (req.body.text) ? req.body.text : '';
   if (textInput) {
-    //this breaks ...
       summonQuestionResponse(textInput, botPayload, res);
   } else {
-    //this works...
-      botPayload.text = "Tell me your customer service issue.";
-      botPayload.icon_emoji = ':question:';
-      send(botPayload, function (error, status, body) {
-        if (error) {
-          return next(error);
-        } else if (status !== 200) {
-          return next(new Error('Incoming WebHook: ' + status + ' ' + body));
-        } else {
-          return res.status(200).end();
-      }
-      });
+    prepareUserInputPrompt(botPayload, res);
   };
 }
 
@@ -61,7 +49,6 @@ function summonQuestionResponse(textInput, botPayload, res) {
         isGuide: true
     };
     let limit = 5;
-    console.log("checking in before first request");
 
     request('http://api.gethuman.co/v3/posts/search?match='
             + encodeURIComponent(textInput)
@@ -71,7 +58,6 @@ function summonQuestionResponse(textInput, botPayload, res) {
             + encodeURIComponent(JSON.stringify(filters))
             , function (error, response, body) {
         if (!error && response.statusCode == 200) {
-            console.log("first request is successful win");
 
             questions = JSON.parse(body);
             if (questions && questions.length) {
@@ -79,8 +65,6 @@ function summonQuestionResponse(textInput, botPayload, res) {
                     companyIDs.push(questions[i].companyId);
                     guideIDs.push(questions[i].guideId);
                 };
-                // console.log("Company ID's: " + companyIDs);
-                // console.log("Guide ID's: " + guideIDs);
                 request('http://api.gethuman.co/v3/companies?where='
                     + encodeURIComponent(JSON.stringify({ _id: { $in: companyIDs }}))
                     , function (error, response, body) {
@@ -89,7 +73,6 @@ function summonQuestionResponse(textInput, botPayload, res) {
                         for (let i = 0; i < companyObjects.length; i++) {
                             companyTable[companyObjects[i]._id] = companyObjects[i]
                         };
-                        // console.log("All company Objects returned from API: " + JSON.stringify(companyTable));
                         request('http://api.gethuman.co/v3/guides?where='
                             + encodeURIComponent(JSON.stringify({ _id: { $in: guideIDs }}))
                             , function (error, response, body) {
@@ -98,7 +81,6 @@ function summonQuestionResponse(textInput, botPayload, res) {
                                 for (let i = 0; i < guideObjects.length; i++) {
                                     guideTable[guideObjects[i]._id] = guideObjects[i]
                                 };
-                                // console.log("All guide Objects returned from API: " + JSON.stringify(guideTable));
                                 // attach Companies and Guides to Questions
                                 for (var i = 0; i < questions.length; i++) {
                                     let cID = questions[i].companyId;
@@ -108,20 +90,22 @@ function summonQuestionResponse(textInput, botPayload, res) {
                                 };
                                 prepareQuestionsPayload(questions, botPayload, res);
                             } else if (error) {
-                            console.log(error);
-                          }
+                                prepareApiFailPayload(botPayload, res);
+                                console.log(error);
+                            }
                         });
                     } else if (error) {
-                    console.log(error);
-                  }
+                        prepareApiFailPayload(botPayload, res);
+                        console.log(error);
+                    }
                 });
             } else {
                 // console.log("Received no results from Questions API for input: " + textInput);
                 summonCompanyResponse(textInput, botPayload, res);
             };
         } else if (error) {
-            console.log("breaking at first request");
             // should it send a basic message back if the GH API is broken?
+            prepareApiFailPayload(botPayload, res);
             console.log(error);
         }
     })
@@ -137,19 +121,7 @@ function summonCompanyResponse(textInput, botPayload, res) {
             if (companies && companies.length) {
                 prepareCompaniesPayload(companies, botPayload, res);
             } else {
-                // send back a plain text response, prompt for usable input
-                botPayload.text = "We could not find anything matching your input to our database. Could you try rephrasing your concern, and be sure to spell the company name correctly?";
-                botPayload.icon_emoji = ':stuck_out_tongue:';
-                console.log("Received no results from Companies API for input: " + textInput);
-                send(botPayload, function (error, status, body) {
-                    if (error) {
-                      return next(error);
-                    } else if (status !== 200) {
-                      return next(new Error('Incoming WebHook: ' + status + ' ' + body));
-                    } else {
-                      return res.status(200).end();
-                    }
-                });
+                prepareNothingFoundPayload(botPayload, res);
             };
         } else if (error) {
           console.log(error);
@@ -163,22 +135,19 @@ function prepareQuestionsPayload(questions, botPayload, res) {
     botPayload.attachments = [];
 
     for (let i = 0; i < questions.length; i++) {
-        // console.log("Question # " + i + ": " + JSON.stringify(questions[i]));
         let name = questions[i].companyName || '';
         console.log("Company name found: " + name);
         let color = colors[i];
         let urlId = questions[i].urlId || '';
         let phone = (questions[i].company) ? questions[i].company.callback.phone : '';
-        //format phone# for international format
-        // let phoneIntl = (phone) ? phoneFormatter.format(phone, "+1NNNNNNNNNN") : '';
         let title = questions[i].title || '';
-        // check if company name is in title already, add to front if not
         if (title.indexOf(name) < 0) {
             title = name + ": " + title;
         };
         let email = '';
         // filter GH array to find contactInfo
-        // does this turn up any email at all? Investigate later.
+        // does this turn up any email at all? Investigating....
+        console.log("Contact Methods for " + name + ": " + questions[i].company.contactMethods);
         let emailContactMethods = questions[i].company.contactMethods.filter(function ( method ) {
             return method.type === "email";
         });
@@ -194,50 +163,31 @@ function prepareQuestionsPayload(questions, botPayload, res) {
         } else if (email) {
             textField = email;
         };
-        // if (questions[i].guide.steps) {
-        //     console.log("Solutions for Question #" + i + ": " + JSON.stringify(questions[i].guide.steps));
-        // } else {
-        //     console.log("No solutions found for Question #" + i);
-        // };
-        // let solution = questions[i].guide.steps[0].details || 'No solution found for this issue.';
-        // experimental solution to strip Html
-        // solution = stripHtml(solution);
         let singleAttachment = {
             "fallback": "Solution guide for " + name,
             "title": title,
             "color": color,
-            // redundant link to one in the Fields - add this if removing the Field
-            // "title_link": "https://answers.gethuman.co/_" + encodeURIComponent(urlId),
             "text": textField,
             "fields": [
                 {
-                    // "title": "*****************************************",
                     "value": "------------------------------------------------------",
                     "short": false
                 },
                 {
-                    // "title": "More info",
                     "value": "<http://answers.gethuman.co/_" + encodeURIComponent(urlId) + "|Step by Step Guide>",
                     "short": true
                 },
                 {
-                    // "title": "Let us do it for you",
                     "value": "<http://gethuman.com?company=" + encodeURIComponent(name) + "|Solve for me - $20>",
                     "short": true
                 }
             ]
         };
-        // if (phoneIntl) {
-        //     singleAttachment.fields.push({
-        //         // "title": "Talk with " + name,
-        //         "value": "<tel:" + phoneIntl + "|Call " + name + ">",
-        //         "short": true
-        //     })
-        // };
         botPayload.attachments.push(singleAttachment);
     };
+
     // attach buttons to receive feedback
-    // buttons not currently functional, until Bot status acheived
+    // (buttons not currently functional, until Bot status acheived)
     // botPayload.attachments.push({
     //     "fallback": "Are you happy with these answers?",
     //     "title": "Are you happy with these answers?",
@@ -260,17 +210,12 @@ function prepareQuestionsPayload(questions, botPayload, res) {
     //     ]
     // });
 
-    // console.log("About to send the Questions payload. Godspeed!");
     send(botPayload, function (error, status, body) {
       if (error) {
         return next(error);
       } else if (status !== 200) {
-        // inform user that our Incoming WebHook failed
-        // console.log("Oh the humanity! Questions payload has crashed and burned.");
-        // console.log("Let's have a look at the payload: " + JSON.stringify(botPayload));
         return next(new Error('Incoming WebHook: ' + status + ' ' + body));
       } else {
-        // console.log("Questions payload sent on for much win.");
         return res.status(200).end();
       }
     });
@@ -286,10 +231,7 @@ function prepareCompaniesPayload(companies, botPayload, res) {
         console.log("Company name found: " + name);
         let color = colors[i];
         let phone = companies[i].callback.phone || '';
-        // not needed! Slack will auto-detect phone number!
-        // let phoneIntl = (phone) ? phoneFormatter.format(phone, "+1NNNNNNNNNN") : '';
         let email = '';
-        // filter GH array to find contactInfo
         let emailContactMethods = companies[i].contactMethods.filter(function ( method ) {
             return method.type === "email";
         });
@@ -309,35 +251,14 @@ function prepareCompaniesPayload(companies, botPayload, res) {
                 }
             ]
         };
-        // No need for this - Slack auto-interprets phone!
-        // if (phoneIntl) {
-        //     singleAttachment.fields.unshift({
-        //         "title": "Want to talk to " + name + " ?",
-        //         "value": "<tel:" + phoneIntl + "|Call them now>",
-        //         "short": true
-        //     })
-        // };
-        // if (email) {
-        //     singleAttachment.fields.unshift({
-        //             // "title": "Email " + name,
-        //             "value": "<mailto:" + email + "|Email " + name + ">",
-        //             "short": true
-        //     })
-        // };
         botPayload.attachments.push(singleAttachment);
     };
-    // payload ready, send it on!
-    // console.log("About to send the Questions payload. Godspeed!");
     send(botPayload, function (error, status, body) {
       if (error) {
         return next(error);
       } else if (status !== 200) {
-        // inform user that our Incoming WebHook failed
-        // console.log("Oh the humanity! Companies payload has crashed and burned.");
-        // console.log("Let's have a look at the payload: " + JSON.stringify(botPayload));
         return next(new Error('Incoming WebHook: ' + status + ' ' + body));
       } else {
-        // console.log("Companies payload sent on for much win.");
         return res.status(200).end();
       }
     });
@@ -352,3 +273,47 @@ function prepareCompaniesPayload(companies, botPayload, res) {
 //       .replace(/ {2,}/gi, " ")
 //       .replace(/\n+\s*/gi, "\n\n");
 // }
+
+function prepareUserInputPrompt(botPayload, res) {
+    botPayload.text = "Tell me your customer service issue.";
+    botPayload.icon_emoji = ':question:';
+    send(botPayload, function (error, status, body) {
+    if (error) {
+      return next(error);
+    } else if (status !== 200) {
+      return next(new Error('Incoming WebHook: ' + status + ' ' + body));
+    } else {
+      return res.status(200).end();
+    }
+    });
+};
+
+function prepareNothingFoundPayload(botPayload, res) {
+    botPayload.text = "We could not find anything matching your input to our database. Could you try rephrasing your concern, and be sure to spell the company name correctly?";
+    botPayload.icon_emoji = ':stuck_out_tongue:';
+    console.log("Received no results from Companies API for input: " + textInput);
+    send(botPayload, function (error, status, body) {
+        if (error) {
+          return next(error);
+        } else if (status !== 200) {
+          return next(new Error('Incoming WebHook: ' + status + ' ' + body));
+        } else {
+          return res.status(200).end();
+        }
+    });
+}
+
+function prepareApiFailPayload(botPayload, res) {
+    botPayload.text = "The GetHuman database just borked out. Sorry, try again later!";
+    botPayload.icon_emoji = ':stuck_out_tongue:';
+    console.log("GetHuman API failed.");
+    send(botPayload, function (error, status, body) {
+        if (error) {
+          return next(error);
+        } else if (status !== 200) {
+          return next(new Error('Incoming WebHook: ' + status + ' ' + body));
+        } else {
+          return res.status(200).end();
+        }
+    });
+}
