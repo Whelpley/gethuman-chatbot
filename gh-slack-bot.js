@@ -18,9 +18,36 @@ module.exports = function (req, res, next) {
   };
 }
 
-function send (payload, callback) {
+// old send
+// function send (payload, callback) {
+//   var path = process.env.INCOMING_WEBHOOK_PATH;
+//   var uri = 'https://hooks.slack.com/services/' + path;
+
+//   request({
+//     uri: uri,
+//     method: 'POST',
+//     body: JSON.stringify(payload)
+//   }, function (error, response, body) {
+//     if (error) {
+//       return callback(error);
+//     }
+//     callback(null, response.statusCode, body);
+//   });
+// }
+
+// new send
+function send (payload) {
   var path = process.env.INCOMING_WEBHOOK_PATH;
   var uri = 'https://hooks.slack.com/services/' + path;
+  var callback = function (error, status, body) {
+      if (error) {
+        return next(error);
+      } else if (status !== 200) {
+        return next(new Error('Incoming WebHook: ' + status + ' ' + body));
+      } else {
+        return res.status(200).end();
+      }
+    };
 
   request({
     uri: uri,
@@ -33,6 +60,8 @@ function send (payload, callback) {
     callback(null, response.statusCode, body);
   });
 }
+
+
 
 function summonQuestionResponse(textInput, botPayload, res) {
     var questions = [];
@@ -204,15 +233,18 @@ function prepareQuestionsPayload(questions, botPayload, res) {
     //     ]
     // });
 
-    send(botPayload, function (error, status, body) {
-      if (error) {
-        return next(error);
-      } else if (status !== 200) {
-        return next(new Error('Incoming WebHook: ' + status + ' ' + body));
-      } else {
-        return res.status(200).end();
-      }
-    });
+// old send
+    // send(botPayload, function (error, status, body) {
+    //   if (error) {
+    //     return next(error);
+    //   } else if (status !== 200) {
+    //     return next(new Error('Incoming WebHook: ' + status + ' ' + body));
+    //   } else {
+    //     return res.status(200).end();
+    //   }
+    // });
+// new send
+    send(botPayload);
 };
 
 function prepareCompaniesPayload(companies, botPayload, res) {
