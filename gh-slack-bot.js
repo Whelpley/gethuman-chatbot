@@ -1,7 +1,6 @@
 'use strict'
 
 const request = require('request');
-const phoneFormatter = require('phone-formatter');
 
 const colors = ['#1c4fff', '#e84778', '#ffc229', '#1ae827', '#5389ff'];
 
@@ -10,10 +9,10 @@ module.exports = function (req, res, next) {
   botPayload.username = 'Gethuman Bot';
   botPayload.channel = req.body.channel_id;
 
-  //handling text input
-  var textInput = (req.body.text) ? req.body.text : '';
+  // var textInput = (req.body.text) ? req.body.text : '';
+  var textInput = req.body.text;
   if (textInput) {
-      summonQuestionResponse(textInput, botPayload, res);
+    summonQuestionResponse(textInput, botPayload, res);
   } else {
     prepareUserInputPrompt(botPayload, res);
   };
@@ -100,11 +99,9 @@ function summonQuestionResponse(textInput, botPayload, res) {
                     }
                 });
             } else {
-                // console.log("Received no results from Questions API for input: " + textInput);
                 summonCompanyResponse(textInput, botPayload, res);
             };
         } else if (error) {
-            // should it send a basic message back if the GH API is broken?
             prepareApiFailPayload(botPayload, res);
             console.log(error);
         }
@@ -112,12 +109,9 @@ function summonQuestionResponse(textInput, botPayload, res) {
 };
 
 function summonCompanyResponse(textInput, botPayload, res) {
-    var companies = [];
-
     request('http://api.gethuman.co/v3/companies/search?limit=5&match=' + encodeURIComponent(textInput), function (error, response, body) {
         if (!error && response.statusCode == 200) {
-            companies = JSON.parse(body);
-            // console.log("Full API response: " + body);
+            var companies = JSON.parse(body);
             if (companies && companies.length) {
                 prepareCompaniesPayload(companies, botPayload, res);
             } else {
@@ -147,7 +141,7 @@ function prepareQuestionsPayload(questions, botPayload, res) {
         let email = '';
         // filter GH array to find contactInfo
         // does this turn up any email at all? Investigating....
-        console.log("Contact Methods for " + name + ": " + questions[i].company.contactMethods);
+        console.log("Contact Methods for " + name + ": " + JSON.stringify(questions[i].company.contactMethods));
         let emailContactMethods = questions[i].company.contactMethods.filter(function ( method ) {
             return method.type === "email";
         });
@@ -290,7 +284,7 @@ function prepareUserInputPrompt(botPayload, res) {
 
 function prepareNothingFoundPayload(botPayload, res) {
     botPayload.text = "We could not find anything matching your input to our database. Could you try rephrasing your concern, and be sure to spell the company name correctly?";
-    botPayload.icon_emoji = ':stuck_out_tongue:';
+    botPayload.icon_emoji = ':question:';
     console.log("Received no results from Companies API for user input");
     send(botPayload, function (error, status, body) {
         if (error) {
@@ -305,7 +299,7 @@ function prepareNothingFoundPayload(botPayload, res) {
 
 function prepareApiFailPayload(botPayload, res) {
     botPayload.text = "The GetHuman database just borked out. Sorry, try again later!";
-    botPayload.icon_emoji = ':stuck_out_tongue:';
+    botPayload.icon_emoji = ':question:';
     console.log("GetHuman API failed.");
     send(botPayload, function (error, status, body) {
         if (error) {
