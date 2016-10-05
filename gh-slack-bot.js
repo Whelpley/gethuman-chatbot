@@ -6,7 +6,6 @@ const phoneFormatter = require('phone-formatter');
 const colors = ['#1c4fff', '#e84778', '#ffc229', '#1ae827', '#5389ff'];
 
 module.exports = function (req, res, next) {
-    console.log("got this far!");
   var botPayload = {};
   botPayload.username = 'Gethuman Bot';
   botPayload.channel = req.body.channel_id;
@@ -14,8 +13,10 @@ module.exports = function (req, res, next) {
   //handling text input
   var textInput = (req.body.text) ? req.body.text : '';
   if (textInput) {
+    //this breaks ...
       summonQuestionResponse(textInput, botPayload, res);
   } else {
+    //this works...
       botPayload.text = "Tell me your customer service issue.";
       botPayload.icon_emoji = ':question:';
       send(botPayload, function (error, status, body) {
@@ -60,6 +61,8 @@ function summonQuestionResponse(textInput, botPayload, res) {
         isGuide: true
     };
     let limit = 5;
+    console.log("checking in before first request");
+
     request('https://api.gethuman.co/v3/posts/search?match='
             + encodeURIComponent(textInput)
             + '&limit='
@@ -68,6 +71,8 @@ function summonQuestionResponse(textInput, botPayload, res) {
             + encodeURIComponent(JSON.stringify(filters))
             , function (error, response, body) {
         if (!error && response.statusCode == 200) {
+            console.log("first request is successful win");
+
             questions = JSON.parse(body);
             if (questions && questions.length) {
                 for (let i = 0; i < questions.length; i++) {
@@ -115,6 +120,7 @@ function summonQuestionResponse(textInput, botPayload, res) {
                 summonCompanyResponse(textInput, botPayload, res);
             };
         } else if (error) {
+            console.log("breaking at first request");
             console.log(error);
         }
     })
