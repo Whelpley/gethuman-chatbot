@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha test/test.js -w"
   },
   "author": "",
   "license": "ISC",
@@ -14,5 +14,9 @@
     "phone-formatter": "0.0.2",
     "request": "^2.75.0",
     "request-promise": "^4.1.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.1.0"
   }
 }
