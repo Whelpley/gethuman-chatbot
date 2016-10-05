@@ -49,7 +49,7 @@ function requestQuestionCards(sender, text) {
         isGuide: true
     };
     let limit = 5;
-    request('https://api.gethuman.co/v3/posts/search?match='
+    request('http://api.gethuman.co/v3/posts/search?match='
             + encodeURIComponent(text)
             + '&limit='
             + limit
@@ -70,7 +70,7 @@ function requestQuestionCards(sender, text) {
                 // console.log("Company ID's: " + companyIDs);
                 // console.log("Guide ID's: " + guideIDs);
                 // make hash table of companyID: company Objects
-                request('https://api.gethuman.co/v3/companies?where='
+                request('http://api.gethuman.co/v3/companies?where='
                     + encodeURIComponent(JSON.stringify({ _id: { $in: companyIDs }}))
                     , function (error, response, body) {
                     if (!error && response.statusCode == 200) {
@@ -85,7 +85,7 @@ function requestQuestionCards(sender, text) {
 
                         // TIME FOR CALLBACK HELL! Nesting requests!
                         // make hash table of guideID: guide Objects
-                        request('https://api.gethuman.co/v3/guides?where='
+                        request('http://api.gethuman.co/v3/guides?where='
                             + encodeURIComponent(JSON.stringify({ _id: { $in: guideIDs }}))
                             , function (error, response, body) {
                             if (!error && response.statusCode == 200) {
@@ -134,7 +134,7 @@ function requestQuestionCards(sender, text) {
 function requestCompanyCards(sender, text) {
     let companies = [];
 
-    request('https://api.gethuman.co/v3/companies/search?limit=5&match=' + encodeURIComponent(text), function (error, response, body) {
+    request('http://api.gethuman.co/v3/companies/search?limit=5&match=' + encodeURIComponent(text), function (error, response, body) {
         if (!error && response.statusCode == 200) {
         let parsedBody = JSON.parse(body);
         // console.log("Full API response: " + parsedBody);
@@ -219,11 +219,11 @@ function sendAllQuestionCards(sender, questions) {
             // "subtitle": solution,
             "buttons": [{
                 "type": "web_url",
-                "url": "https://answers.gethuman.co/_" + encodeURIComponent(urlId) ,
+                "url": "http://answers.gethuman.co/_" + encodeURIComponent(urlId) ,
                 "title": "Step by Step Guide"
             }, {
                 "type": "web_url",
-                "url": "https://gethuman.com?company=" + encodeURIComponent(companyName) ,
+                "url": "http://gethuman.com?company=" + encodeURIComponent(companyName) ,
                 "title": "Solve for Me - $20"
             }],
         };
@@ -262,7 +262,7 @@ function sendAllCompanyCards(sender, companies) {
             // },
             {
                 "type": "web_url",
-                "url": "https://gethuman.com?company=" + encodeURIComponent(name) ,
+                "url": "http://gethuman.com?company=" + encodeURIComponent(name) ,
                 "title": "Solve for me  - $20"
             }],
         };
@@ -285,7 +285,7 @@ function sendAllCompanyCards(sender, companies) {
 function sendTextMessage(sender, text) {
     let messageData = { text:text }
     request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
+        url: 'http://graph.facebook.com/v2.6/me/messages',
         qs: {access_token:token},
         method: 'POST',
         json: {
@@ -304,7 +304,7 @@ function sendTextMessage(sender, text) {
 //sends styled cards with buttons
 function sendCards(sender, elements) {
     request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
+        url: 'http://graph.facebook.com/v2.6/me/messages',
         qs: {access_token:token},
         method: 'POST',
         json: {
