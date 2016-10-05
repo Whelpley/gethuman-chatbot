@@ -173,14 +173,16 @@ function prepareQuestionsPayload(questions, botPayload, res) {
             email = emailContactMethods[0].target;
         };
 
-        let textField = '';
-        if (phone && email) {
-            textField = phone + " | " + email;
-        } else if (phone) {
-            textField = phone;
-        } else if (email) {
-            textField = email;
-        };
+        let textField = formatTextField(phone, email);
+        // let textField = '';
+        // if (phone && email) {
+        //     textField = phone + " | " + email;
+        // } else if (phone) {
+        //     textField = phone;
+        // } else if (email) {
+        //     textField = email;
+        // };
+
         let singleAttachment = {
             "fallback": "Solution guide for " + name,
             "title": title,
@@ -259,11 +261,12 @@ function prepareCompaniesPayload(companies, botPayload, res) {
         if (emailContactMethods && emailContactMethods.length) {
             email = emailContactMethods[0].target;
         };
+        let textField = formatTextField(phone, email);
         let singleAttachment = {
             "fallback": "Company info for " + name,
             "title": name,
             "color": color,
-            "text": email + " | " + phone,
+            "text": textField,
             "fields": [
                 {
                     "value": "<http://gethuman.com?company=" + encodeURIComponent(name) + "|Hire GetHuman to Solve - $20>",
@@ -337,3 +340,15 @@ function prepareApiFailPayload(botPayload, res) {
         }
     });
 };
+
+function formatTextField(phone, email) {
+    let result = '';
+    if (phone && email) {
+        result = phone + " | " + email;
+    } else if (phone) {
+        result = phone;
+    } else if (email) {
+        result = email;
+    };
+    return result;
+}
