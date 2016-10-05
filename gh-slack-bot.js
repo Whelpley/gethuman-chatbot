@@ -17,36 +17,10 @@ module.exports = function (req, res, next) {
   };
 }
 
-// old send
-// function send (payload, callback) {
-//   var path = process.env.INCOMING_WEBHOOK_PATH;
-//   var uri = 'https://hooks.slack.com/services/' + path;
-
-//   request({
-//     uri: uri,
-//     method: 'POST',
-//     body: JSON.stringify(payload)
-//   }, function (error, response, body) {
-//     if (error) {
-//       return callback(error);
-//     }
-//     callback(null, response.statusCode, body);
-//   });
-// }
-
-// new send
-function send (payload) {
+// old send - why can't I compress in the callback?
+function send (payload, callback) {
   var path = process.env.INCOMING_WEBHOOK_PATH;
   var uri = 'https://hooks.slack.com/services/' + path;
-  var cb = function(error, status, body) {
-      if (error) {
-        return next(error);
-      } else if (status !== 200) {
-        return next(new Error('Incoming WebHook: ' + status + ' ' + body));
-      } else {
-        return res.status(200).end();
-      }
-    };
 
   request({
     uri: uri,
@@ -54,29 +28,43 @@ function send (payload) {
     body: JSON.stringify(payload)
   }, function (error, response, body) {
     if (error) {
-      return cb(error);
+      return callback(error);
     }
-    cb(null, response.statusCode, body);
+    callback(null, response.statusCode, body);
   });
 }
 
-
+// new send
+// function send (payload) {
+//   var path = process.env.INCOMING_WEBHOOK_PATH;
+//   var uri = 'https://hooks.slack.com/services/' + path;
+//   var cb = function(error, status, body) {
+//       if (error) {
+//         return next(error);
+//       } else if (status !== 200) {
+//         return next(new Error('Incoming WebHook: ' + status + ' ' + body));
+//       } else {
+//         return res.status(200).end();
+//       }
+//     };
+//   request({
+//     uri: uri,
+//     method: 'POST',
+//     body: JSON.stringify(payload)
+//   }, function (error, response, body) {
+//     if (error) {
+//       return cb(error);
+//     }
+//     cb(null, response.statusCode, body);
+//   });
+// }
 
 function summonQuestionResponse(textInput, botPayload, res) {
-    var questions = [];
-    var companyIDs = [];
-    var guideIDs = [];
-    var companyObjects = [];
-    var companyTable = {};
-    var guideObjects = [];
-    var guideTable = {};
-
     let filters = {
         type: 'question',
         isGuide: true
     };
     let limit = 5;
-
     request('http://api.gethuman.co/v3/posts/search?match='
             + encodeURIComponent(textInput)
             + '&limit='
@@ -85,8 +73,13 @@ function summonQuestionResponse(textInput, botPayload, res) {
             + encodeURIComponent(JSON.stringify(filters))
             , function (error, response, body) {
         if (!error && response.statusCode == 200) {
-
-            questions = JSON.parse(body);
+            var companyIDs = [];
+            var guideIDs = [];
+            var companyObjects = [];
+            var companyTable = {};
+            var guideObjects = [];
+            var guideTable = {};
+            var questions = JSON.parse(body);
             if (questions && questions.length) {
                 for (let i = 0; i < questions.length; i++) {
                     companyIDs.push(questions[i].companyId);
@@ -218,17 +211,17 @@ function prepareQuestionsPayload(questions, botPayload, res) {
     // });
 
 // old send
-    // send(botPayload, function (error, status, body) {
-    //   if (error) {
-    //     return next(error);
-    //   } else if (status !== 200) {
-    //     return next(new Error('Incoming WebHook: ' + status + ' ' + body));
-    //   } else {
-    //     return res.status(200).end();
-    //   }
-    // });
+    send(botPayload, function (error, status, body) {
+      if (error) {
+        return next(error);
+      } else if (status !== 200) {
+        return next(new Error('Incoming WebHook: ' + status + ' ' + body));
+      } else {
+        return res.status(200).end();
+      }
+    });
 // new send
-    send(botPayload);
+    // send(botPayload);
 };
 
 function prepareCompaniesPayload(companies, botPayload, res) {
@@ -241,13 +234,11 @@ function prepareCompaniesPayload(companies, botPayload, res) {
         console.log("Company name found: " + name);
         let color = colors[i];
         let phone = companies[i].callback.phone || '';
-        let email = '';
+        // similar to other email harvest, but not the same
         let emailContactMethods = companies[i].contactMethods.filter(function ( method ) {
             return method.type === "email";
         });
-        if (emailContactMethods && emailContactMethods.length) {
-            email = emailContactMethods[0].target;
-        };
+        let email = (emailContactMethods && emailContactMethods.length) ? email = emailContactMethods[0].target : '';
         let textField = formatTextField(phone, email);
         let singleAttachment = {
             "fallback": "Company info for " + name,
@@ -338,4 +329,4 @@ function formatTextField(phone, email) {
         result = email;
     };
     return result;
-}
+};
