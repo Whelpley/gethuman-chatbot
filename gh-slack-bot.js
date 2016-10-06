@@ -65,7 +65,7 @@ function summonQuestionResponse(textInput, botPayload, res) {
         isGuide: true
     };
     let limit = 5;
-    request('http://api.gethuman.co/v3/posts/search?match='
+    request('https://api.gethuman.co/v3/posts/search?match='
             + encodeURIComponent(textInput)
             + '&limit='
             + limit
@@ -85,7 +85,7 @@ function summonQuestionResponse(textInput, botPayload, res) {
                     companyIDs.push(questions[i].companyId);
                     guideIDs.push(questions[i].guideId);
                 };
-                request('http://api.gethuman.co/v3/companies?where='
+                request('https://api.gethuman.co/v3/companies?where='
                     + encodeURIComponent(JSON.stringify({ _id: { $in: companyIDs }}))
                     , function (error, response, body) {
                     if (!error && response.statusCode == 200) {
@@ -93,7 +93,7 @@ function summonQuestionResponse(textInput, botPayload, res) {
                         for (let i = 0; i < companyObjects.length; i++) {
                             companyTable[companyObjects[i]._id] = companyObjects[i]
                         };
-                        request('http://api.gethuman.co/v3/guides?where='
+                        request('https://api.gethuman.co/v3/guides?where='
                             + encodeURIComponent(JSON.stringify({ _id: { $in: guideIDs }}))
                             , function (error, response, body) {
                             if (!error && response.statusCode == 200) {
@@ -130,7 +130,7 @@ function summonQuestionResponse(textInput, botPayload, res) {
 };
 
 function summonCompanyResponse(textInput, botPayload, res) {
-    request('http://api.gethuman.co/v3/companies/search?limit=5&match=' + encodeURIComponent(textInput), function (error, response, body) {
+    request('https://api.gethuman.co/v3/companies/search?limit=5&match=' + encodeURIComponent(textInput), function (error, response, body) {
         if (!error && response.statusCode == 200) {
             var companies = JSON.parse(body);
             if (companies && companies.length) {
@@ -174,11 +174,11 @@ function prepareQuestionsPayload(questions, botPayload, res) {
                     "short": false
                 },
                 {
-                    "value": "<http://answers.gethuman.co/_" + encodeURIComponent(urlId) + "|Step by Step Guide>",
+                    "value": "<https://answers.gethuman.co/_" + encodeURIComponent(urlId) + "|Step by Step Guide>",
                     "short": true
                 },
                 {
-                    "value": "<http://gethuman.com?company=" + encodeURIComponent(name) + "|Solve for me - $20>",
+                    "value": "<https://gethuman.com?company=" + encodeURIComponent(name) + "|Solve for me - $20>",
                     "short": true
                 }
             ]
@@ -247,7 +247,7 @@ function prepareCompaniesPayload(companies, botPayload, res) {
             "text": textField,
             "fields": [
                 {
-                    "value": "<http://gethuman.com?company=" + encodeURIComponent(name) + "|Hire GetHuman to Solve - $20>",
+                    "value": "<https://gethuman.com?company=" + encodeURIComponent(name) + "|Hire GetHuman to Solve - $20>",
                     "short": true
                 }
             ]
