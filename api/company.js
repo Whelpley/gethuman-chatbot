@@ -10,6 +10,7 @@ module.exports = {
 
 //takes input text, queries Companies API, returns Promise of Companies object
 function findByText(textInput) {
+  console.log("Running Company Find-by-Text search");
   var deferred = Q.defer();
   // var url = getUrl();
   var url = 'https://api.gethuman.co/v3/companies/search';

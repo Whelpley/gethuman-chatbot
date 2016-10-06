@@ -29,8 +29,10 @@ function findByText(textInput) {
     function (error, response, body) {
       if (error) {
           // deferred.reject(new Error(error));
+          console.log("Hit an error getting the Posts!");
           deferred.reject(error);
       } else {
+          console.log("Managed to hit the Posts API with success!");
           deferred.resolve(JSON.parse(body));
       }
   });

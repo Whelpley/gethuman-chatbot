@@ -19,20 +19,19 @@ module.exports = function (req, res, next) {
     .then(function (postAndCompanySearchResults) {
         var posts = postAndCompanySearchResults[0];
         var companies = postAndCompanySearchResults[1];
-        console.log("Posts: " + "\n" +JSON.stringify(posts));
-        console.log("Companies returned: " + "\n" + JSON.stringify(companies));
+        console.log("Posts returned: " + "\n" + JSON.stringify(posts).substring(0,300));
+        console.log("Companies returned: " + "\n" + JSON.stringify(companies).substring(0,300));
 
 // not returning any posts, even when it should ...
         if (posts && posts.length) {
             console.log("Yes we found some Posts!");
-            // ? is this right order for nesting Promises ?
-            // return goes where?
             return attachCompaniesAndGuides(posts)
                 .then(function (posts){
                     return preparePayload.posts(posts);
                 });
         }
         else if (companies && companies.length) {
+            console.log("At least we found some companies!");
             return preparePayload.companies(companies);
         }
         else {
