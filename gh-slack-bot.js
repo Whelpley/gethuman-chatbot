@@ -138,39 +138,6 @@ function summonCompanyResponse(textInput, botPayload, res) {
     })
 };
 
-// should be in file called /services/company.js
-function searchCompanies(textInput) {
-    var deferred = Q.defer();
-    var url = getUrl();
-
-    request(url, function (error, response, body) {
-        if (error) {
-            deferred.reject(error);
-        }
-        else {
-            deferred.resolve(JSON.parse(body));
-        }
-    });
-
-    return deferred.promise;
-}
-
-// function blah() {
-//     return searchCompanies('asdfasdf')
-//         .then(function (companies) {
-//             return companies;
-//         });
-// }
-
-// blah()
-//     .then(function (companies) {
-
-//     })
-//     .catch(function (err) {
-//         log.console(err);
-//     });
-
-
 function prepareQuestionsPayload(questions, botPayload, res) {
     botPayload.text = "Here are some issues potentially matching your input, and links for how to resolve them:";
     botPayload.icon_emoji = ':tada:';
