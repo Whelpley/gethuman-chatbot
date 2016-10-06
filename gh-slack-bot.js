@@ -1,6 +1,8 @@
 'use strict'
 
 const request = require('request');
+const rp = require('request-promise');
+
 const colors = ['#1c4fff', '#e84778', '#ffc229', '#1ae827', '#5389ff'];
 
 module.exports = function (req, res, next) {
@@ -129,20 +131,38 @@ function summonQuestionResponse(textInput, botPayload, res) {
     })
 };
 
+// first target to Promise-ify
 function summonCompanyResponse(textInput, botPayload, res) {
-    request('https://api.gethuman.co/v3/companies/search?limit=5&match=' + encodeURIComponent(textInput), function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-            var companies = JSON.parse(body);
-            if (companies && companies.length) {
-                prepareCompaniesPayload(companies, botPayload, res);
-            } else {
-                prepareNothingFoundPayload(botPayload, res);
-            };
-        } else if (error) {
-          console.log(error);
-        }
+    var companies = [];
+    rp('https://api.gethuman.co/v3/companies/search?limit=5&match=' + encodeURIComponent(textInput))
+    .then(function (htmlString) {
+        companies = JSON.parse(htmlString);
+        if (companies && companies.length) {
+            prepareCompaniesPayload(companies, botPayload, res);
+        } else {
+            prepareNothingFoundPayload(botPayload, res);
+        };
     })
+    .catch(function (err) {
+        console.log(err);
+    });
 };
+
+// non-Promise version
+// function summonCompanyResponse(textInput, botPayload, res) {
+//     request('https://api.gethuman.co/v3/companies/search?limit=5&match=' + encodeURIComponent(textInput), function (error, response, body) {
+//         if (!error && response.statusCode == 200) {
+//             var companies = JSON.parse(body);
+//             if (companies && companies.length) {
+//                 prepareCompaniesPayload(companies, botPayload, res);
+//             } else {
+//                 prepareNothingFoundPayload(botPayload, res);
+//             };
+//         } else if (error) {
+//           console.log(error);
+//         }
+//     })
+// };
 
 function prepareQuestionsPayload(questions, botPayload, res) {
     botPayload.text = "Here are some issues potentially matching your input, and links for how to resolve them:";
