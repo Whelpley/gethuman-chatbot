@@ -21,7 +21,6 @@ module.exports = function (req, res, next) {
         var companies = postAndCompanySearchResults[1];
         console.log("Posts returned: " + "\n" + JSON.stringify(posts).substring(0,300));
         console.log("Companies returned: " + "\n" + JSON.stringify(companies).substring(0,300));
-
 // not returning any posts, even when it should ...
         if (posts && posts.length) {
             console.log("Yes we found some Posts!");

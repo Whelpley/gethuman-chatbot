@@ -12,7 +12,9 @@ function findByText(textInput) {
   console.log("Running Post Find-by-Text search");
   var deferred = Q.defer();
   // var url = getUrl();
-  var url = 'https://api.gethuman.co/v3/posts/search';
+  // var url = 'https://api.gethuman.co/v3/posts/search';
+  var url = 'http://api.gethuman.co/v3/posts/search';
+
   var match = encodeURIComponent(textInput);
   var limit = 5;
   var filters = encodeURIComponent(JSON.stringify({
