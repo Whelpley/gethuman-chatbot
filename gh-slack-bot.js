@@ -2,6 +2,8 @@
 
 const request = require('request'),
     rp = require('request-promise'),
+    colors = ['#1c4fff', '#e84778', '#ffc229', '#1ae827', '#5389ff'];
+
 
 
 module.exports = function (req, res, next) {
