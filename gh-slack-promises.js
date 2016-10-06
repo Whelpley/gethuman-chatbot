@@ -14,16 +14,18 @@ module.exports = function (req, res, next) {
         postSearch.findByText(textInput),
         companySearch.findByText(textInput)
     ])
+    // this step should return a payload for sending
     .then(function (postAndCompanySearchResults) {
         var posts = postAndCompanySearchResults[0];
         var companies = postAndCompanySearchResults[1];
 
         if (posts && posts.length) {
             // ? is this right order for nesting Promises ?
+            // return goes where?
             attachCompaniesAndGuides(posts)
-            .then(function (posts){
-                return preparePayload.posts(posts);
-            });
+                .then(function (posts){
+                    return preparePayload.posts(posts);
+                });
         }
         else if (companies && companies.length) {
             return preparePayload.companies(companies);
@@ -35,9 +37,8 @@ module.exports = function (req, res, next) {
     .then(function (payload) {
         res.send(payload);
     })
-    .catch(function err) {
-        // still need a payload formatter for errors
-        res.send(getFormattedError(err));
+    .catch(function (err) {
+        res.send(preparePayload.error(err));
     });
   } else {
     res.send(preparePayload.inputPrompt());
@@ -53,6 +54,7 @@ function attachCompaniesAndGuides(posts) {
         guideIDs.push(posts[i].guideId);
     };
 
+// does the return belong here?
     return Q.all([
             companySearch.findByIds(companyIDs),
             guideSearch.findByIds(guideIDs)
@@ -78,6 +80,23 @@ function attachCompaniesAndGuides(posts) {
 }
 
 // old send - why can't I compress in the callback?
+// function send (payload, callback) {
+//   var path = process.env.INCOMING_WEBHOOK_PATH;
+//   var uri = 'https://hooks.slack.com/services/' + path;
+
+//   request({
+//     uri: uri,
+//     method: 'POST',
+//     body: JSON.stringify(payload)
+//   }, function (error, response, body) {
+//     if (error) {
+//       return callback(error);
+//     }
+//     callback(null, response.statusCode, body);
+//   });
+// }
+
+// new send
 function send (payload, callback) {
   var path = process.env.INCOMING_WEBHOOK_PATH;
   var uri = 'https://hooks.slack.com/services/' + path;
@@ -88,12 +107,21 @@ function send (payload, callback) {
     body: JSON.stringify(payload)
   }, function (error, response, body) {
     if (error) {
-      return callback(error);
+      return cb(error);
     }
-    callback(null, response.statusCode, body);
+    cb(null, response.statusCode, body);
   });
 }
 
+function cb (error, status, body) {
+    if (error) {
+        return next(error);
+    } else if (status !== 200) {
+        return next(new Error('Incoming WebHook: ' + status + ' ' + body));
+    } else {
+        return res.status(200).end();
+    }
+}
 
 // Save for now - how Send is invoked
     // send(botPayload, function (error, status, body) {

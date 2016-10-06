@@ -4,22 +4,22 @@ const colors = ['#1c4fff', '#e84778', '#ffc229', '#1ae827', '#5389ff'];
 
 var payload = {};
 payload.username = 'Gethuman Bot';
-// where do we pass in the channel ID?
+// where do we pass in the 'req' for channel ID?
   // payload.channel = req.body.channel_id;
 
 module.exports = {
   posts: posts,
   companies: companies,
   nothingFound: nothingFound,
-  inputPrompt: inputPrompt
-  apiFail: apiFail,
+  inputPrompt: inputPrompt,
+  error: error
 }
 
 // prepares payload from Posts (with nested Companies + Guides) object
 function posts(posts) {
-    botPayload.text = "Here are some issues potentially matching your input, and links for how to resolve them:";
-    botPayload.icon_emoji = ':tada:';
-    botPayload.attachments = [];
+    payload.text = "Here are some issues potentially matching your input, and links for how to resolve them:";
+    payload.icon_emoji = ':tada:';
+    payload.attachments = [];
 
     for (let i = 0; i < posts.length; i++) {
         let name = posts[i].companyName || '';
@@ -57,32 +57,7 @@ function posts(posts) {
         };
         payload.attachments.push(singleAttachment);
     };
-
     return payload;
-
-    // attach buttons to receive feedback
-    // (buttons not currently functional, until Bot status acheived)
-    // botPayload.attachments.push({
-    //     "fallback": "Are you happy with these answers?",
-    //     "title": "Are you happy with these answers?",
-    //     "callback_id": "questions_feedback",
-    //     "color": "#ff0000",
-    //     "attachment_type": "default",
-    //     "actions": [
-    //         {
-    //             "name": "yes",
-    //             "text": "Yes",
-    //             "type": "button",
-    //             "value": "Yes"
-    //         },
-    //         {
-    //             "name": "no",
-    //             "text": "No",
-    //             "type": "button",
-    //             "value": "No"
-    //         }
-    //     ]
-    // });
 };
 
 // prepares payload from Posts object
@@ -93,7 +68,6 @@ function companies(companies) {
 
     for (let i=0; i < companies.length; i++) {
         let name = companies[i].name || '';
-        console.log("Company name found: " + name);
         let color = colors[i];
         let phone = companies[i].callback.phone || '';
         // similar to other email harvest, but not the same
@@ -116,26 +90,25 @@ function companies(companies) {
         };
         payload.attachments.push(singleAttachment);
     };
-
     return payload;
 }
 
 function nothingFound() {
     payload.text = "We could not find anything matching your input to our database. Could you try rephrasing your concern, and be sure to spell the company name correctly?";
     payload.icon_emoji = ':question:';
-    // console.log("Received no results from Companies API for user input");
+    console.log("Received no results from GetHuman API for user input");
     return payload;
 };
 
 function inputPrompt() {
     payload.text = "Tell me your customer service issue.";
-    payload.icon_emoji = ':question:';
+    payload.icon_emoji = ':ear:';
     return payload;
 };
 
-function apiFail() {
-    botPayload.text = "The GetHuman database just borked out. Sorry, try again later!";
-    botPayload.icon_emoji = ':question:';
+function error() {
+    payload.text = error;
+    payload.icon_emoji = ':no_good:';
     console.log("GetHuman API failed.");
     return payload;
 };
