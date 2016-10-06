@@ -16,29 +16,6 @@ module.exports = function (req, res, next) {
     prepareUserInputPrompt(botPayload, res);
   };
 
-  // Q.all([
-  //       post.searchQuestions(textInput),
-  //       company.searchCompanies(textInput)
-  //   ])
-  //   .then(function (res) {
-  //       var questions = res[0];
-  //       var comapnies = res[1];
-
-  //       if (questions && questions.length) {
-  //           res.send(prepareQuestionsPayload(questions));
-  //       }
-  //       else if (companies && companies.length) {
-  //           res.send(prepareCompaniesPayload(companies));
-  //       }
-  //       else {
-
-  //       }
-  //   })
-  //   .catch(function err) {
-  //       res.send(getFormattedError(err))
-  //   });
-
-
 }
 
 // old send - why can't I compress in the callback?
@@ -57,31 +34,6 @@ function send (payload, callback) {
     callback(null, response.statusCode, body);
   });
 }
-
-// new send
-// function send (payload) {
-//   var path = process.env.INCOMING_WEBHOOK_PATH;
-//   var uri = 'https://hooks.slack.com/services/' + path;
-//   var cb = function(error, status, body) {
-//       if (error) {
-//         return next(error);
-//       } else if (status !== 200) {
-//         return next(new Error('Incoming WebHook: ' + status + ' ' + body));
-//       } else {
-//         return res.status(200).end();
-//       }
-//     };
-//   request({
-//     uri: uri,
-//     method: 'POST',
-//     body: JSON.stringify(payload)
-//   }, function (error, response, body) {
-//     if (error) {
-//       return cb(error);
-//     }
-//     cb(null, response.statusCode, body);
-//   });
-// }
 
 function summonQuestionResponse(textInput, botPayload, res) {
     let filters = {

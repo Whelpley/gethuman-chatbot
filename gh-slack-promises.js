@@ -18,11 +18,15 @@ module.exports = function (req, res, next) {
     .then(function (postAndCompanySearchResults) {
         var posts = postAndCompanySearchResults[0];
         var companies = postAndCompanySearchResults[1];
+        console.log("Posts: " + "\n" +JSON.stringify(posts));
+        console.log("Companies returned: " + "\n" + JSON.stringify(companies));
 
+// not returning any posts, even when it should ...
         if (posts && posts.length) {
+            console.log("Yes we found some Posts!");
             // ? is this right order for nesting Promises ?
             // return goes where?
-            attachCompaniesAndGuides(posts)
+            return attachCompaniesAndGuides(posts)
                 .then(function (posts){
                     return preparePayload.posts(posts);
                 });
@@ -96,32 +100,7 @@ function attachCompaniesAndGuides(posts) {
 //   });
 // }
 
-// new send
-function send (payload, callback) {
-  var path = process.env.INCOMING_WEBHOOK_PATH;
-  var uri = 'https://hooks.slack.com/services/' + path;
 
-  request({
-    uri: uri,
-    method: 'POST',
-    body: JSON.stringify(payload)
-  }, function (error, response, body) {
-    if (error) {
-      return cb(error);
-    }
-    cb(null, response.statusCode, body);
-  });
-}
-
-function cb (error, status, body) {
-    if (error) {
-        return next(error);
-    } else if (status !== 200) {
-        return next(new Error('Incoming WebHook: ' + status + ' ' + body));
-    } else {
-        return res.status(200).end();
-    }
-}
 
 // Save for now - how Send is invoked
     // send(botPayload, function (error, status, body) {
@@ -133,6 +112,35 @@ function cb (error, status, body) {
     //     return res.status(200).end();
     //   }
     // });
+
+
+// new send
+// function send (payload) {
+//   var path = process.env.INCOMING_WEBHOOK_PATH;
+//   var uri = 'https://hooks.slack.com/services/' + path;
+
+//   request({
+//     uri: uri,
+//     method: 'POST',
+//     body: JSON.stringify(payload)
+//   }, function (error, response, body) {
+//     if (error) {
+//       return cb(error);
+//     }
+//     cb(null, response.statusCode, body);
+//   });
+// }
+
+// function cb (error, status, body) {
+//     if (error) {
+//         return next(error);
+//     } else if (status !== 200) {
+//         return next(new Error('Incoming WebHook: ' + status + ' ' + body));
+//     } else {
+//         return res.status(200).end();
+//     }
+// }
+
 
 
 

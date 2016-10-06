@@ -9,6 +9,7 @@ module.exports = {
 
 //takes input text, queries Posts API, returns Promise of Posts object
 function findByText(textInput) {
+  console.log("Running Post Find-by-Text search");
   var deferred = Q.defer();
   // var url = getUrl();
   var url = 'https://api.gethuman.co/v3/posts/search';

@@ -2,8 +2,9 @@
 
 const colors = ['#1c4fff', '#e84778', '#ffc229', '#1ae827', '#5389ff'];
 
-var payload = {};
-payload.username = 'Gethuman Bot';
+// where should we invoke the payload?
+// var payload = {};
+// payload.username = 'Gethuman Bot';
 // where do we pass in the 'req' for channel ID?
   // payload.channel = req.body.channel_id;
 
@@ -17,6 +18,8 @@ module.exports = {
 
 // prepares payload from Posts (with nested Companies + Guides) object
 function posts(posts) {
+    var payload = {};
+    payload.username = 'Gethuman Bot';
     payload.text = "Here are some issues potentially matching your input, and links for how to resolve them:";
     payload.icon_emoji = ':tada:';
     payload.attachments = [];
@@ -62,6 +65,8 @@ function posts(posts) {
 
 // prepares payload from Posts object
 function companies(companies) {
+    var payload = {};
+    payload.username = 'Gethuman Bot';
     payload.text = "We could not find any specific questions matching your input, but here is the contact information for some companies that could help you resolve your issue:";
     payload.icon_emoji = ':flashlight:';
     payload.attachments = [];
@@ -94,6 +99,8 @@ function companies(companies) {
 }
 
 function nothingFound() {
+    var payload = {};
+    payload.username = 'Gethuman Bot';
     payload.text = "We could not find anything matching your input to our database. Could you try rephrasing your concern, and be sure to spell the company name correctly?";
     payload.icon_emoji = ':question:';
     console.log("Received no results from GetHuman API for user input");
@@ -101,12 +108,16 @@ function nothingFound() {
 };
 
 function inputPrompt() {
+    var payload = {};
+    payload.username = 'Gethuman Bot';
     payload.text = "Tell me your customer service issue.";
     payload.icon_emoji = ':ear:';
     return payload;
 };
 
 function error() {
+    var payload = {};
+    payload.username = 'Gethuman Bot';
     payload.text = error;
     payload.icon_emoji = ':no_good:';
     console.log("GetHuman API failed.");
