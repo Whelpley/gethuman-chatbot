@@ -1,22 +1,44 @@
 'use strict'
 
-const request = require('request');
-const rp = require('request-promise');
+const request = require('request'),
+    rp = require('request-promise'),
 
-const colors = ['#1c4fff', '#e84778', '#ffc229', '#1ae827', '#5389ff'];
 
 module.exports = function (req, res, next) {
   var botPayload = {};
   botPayload.username = 'Gethuman Bot';
   botPayload.channel = req.body.channel_id;
 
-  // var textInput = (req.body.text) ? req.body.text : '';
   var textInput = req.body.text;
   if (textInput) {
     summonQuestionResponse(textInput, botPayload, res);
   } else {
     prepareUserInputPrompt(botPayload, res);
   };
+
+  // Q.all([
+  //       post.searchQuestions(textInput),
+  //       company.searchCompanies(textInput)
+  //   ])
+  //   .then(function (res) {
+  //       var questions = res[0];
+  //       var comapnies = res[1];
+
+  //       if (questions && questions.length) {
+  //           res.send(prepareQuestionsPayload(questions));
+  //       }
+  //       else if (companies && companies.length) {
+  //           res.send(prepareCompaniesPayload(companies));
+  //       }
+  //       else {
+
+  //       }
+  //   })
+  //   .catch(function err) {
+  //       res.send(getFormattedError(err))
+  //   });
+
+
 }
 
 // old send - why can't I compress in the callback?
@@ -132,37 +154,70 @@ function summonQuestionResponse(textInput, botPayload, res) {
 };
 
 // first target to Promise-ify
-function summonCompanyResponse(textInput, botPayload, res) {
-    var companies = [];
-    rp('https://api.gethuman.co/v3/companies/search?limit=5&match=' + encodeURIComponent(textInput))
-    .then(function (htmlString) {
-        companies = JSON.parse(htmlString);
-        if (companies && companies.length) {
-            prepareCompaniesPayload(companies, botPayload, res);
-        } else {
-            prepareNothingFoundPayload(botPayload, res);
-        };
-    })
-    .catch(function (err) {
-        console.log(err);
-    });
-};
+// function summonCompanyResponse(textInput, botPayload, res) {
+//     var companies = [];
+//     rp('https://api.gethuman.co/v3/companies/search?limit=5&match=' + encodeURIComponent(textInput))
+//     .then(function (htmlString) {
+//         companies = JSON.parse(htmlString);
+//         if (companies && companies.length) {
+//             prepareCompaniesPayload(companies, botPayload, res);
+//         } else {
+//             prepareNothingFoundPayload(botPayload, res);
+//         };
+//     })
+//     .catch(function (err) {
+//         console.log(err);
+//     });
+// };
 
 // non-Promise version
-// function summonCompanyResponse(textInput, botPayload, res) {
-//     request('https://api.gethuman.co/v3/companies/search?limit=5&match=' + encodeURIComponent(textInput), function (error, response, body) {
-//         if (!error && response.statusCode == 200) {
-//             var companies = JSON.parse(body);
-//             if (companies && companies.length) {
-//                 prepareCompaniesPayload(companies, botPayload, res);
-//             } else {
-//                 prepareNothingFoundPayload(botPayload, res);
-//             };
-//         } else if (error) {
-//           console.log(error);
-//         }
+function summonCompanyResponse(textInput, botPayload, res) {
+    request('https://api.gethuman.co/v3/companies/search?limit=5&match=' + encodeURIComponent(textInput), function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            var companies = JSON.parse(body);
+            if (companies && companies.length) {
+                prepareCompaniesPayload(companies, botPayload, res);
+            } else {
+                prepareNothingFoundPayload(botPayload, res);
+            };
+        } else if (error) {
+          console.log(error);
+        }
+    })
+};
+
+// should be in file called /services/company.js
+function searchCompanies(textInput) {
+    var deferred = Q.defer();
+    var url = getUrl();
+
+    request(url, function (error, response, body) {
+        if (error) {
+            deferred.reject(error);
+        }
+        else {
+            deferred.resolve(JSON.parse(body));
+        }
+    });
+
+    return deferred.promise;
+}
+
+// function blah() {
+//     return searchCompanies('asdfasdf')
+//         .then(function (companies) {
+//             return companies;
+//         });
+// }
+
+// blah()
+//     .then(function (companies) {
+
 //     })
-// };
+//     .catch(function (err) {
+//         log.console(err);
+//     });
+
 
 function prepareQuestionsPayload(questions, botPayload, res) {
     botPayload.text = "Here are some issues potentially matching your input, and links for how to resolve them:";

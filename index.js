@@ -11,7 +11,8 @@ const GH_token = process.env.GH_API_ACCESS_TOKEN
 
 var hellobot = require('./hellobot.js');
 var dicebot = require('./dicebot.js');
-var ghSlackBot = require('./gh-slack-bot.js');
+// now using experimental Promise version
+var ghSlackBot = require('./gh-slack-promises.js');
 var ghFacebookBot = require('./gh-facebook-bot.js');
 
 var port = process.env.PORT || 3000;
@@ -40,7 +41,7 @@ app.get('/webhook/', function (req, res) {
     if (req.query['hub.verify_token'] === 'my_voice_is_my_password_verify_me') {
         res.send(req.query['hub.challenge'])
     }
-    res.send('Error, wrong token')
+    res.send('Error, wrong token');
 })
 
 app.listen(port, function () {
