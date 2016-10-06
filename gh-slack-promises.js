@@ -1,47 +1,74 @@
 'use strict'
 
 const request = require('request'),
-    companySearch = require('./api/company-search.js'),
-    questionSearch = require('./api/question-search.js'),
+    Q = require('q'),
+    companySearch = require('./api/company.js'),
+    postSearch = require('./api/post.js'),
+    guideSearch = require('./api/guide.js'),
     colors = ['#1c4fff', '#e84778', '#ffc229', '#1ae827', '#5389ff'];
 
 module.exports = function (req, res, next) {
 // these can go down to Send methods
-  var botPayload = {};
-  botPayload.username = 'Gethuman Bot';
-  botPayload.channel = req.body.channel_id;
+  // var botPayload = {};
+  // botPayload.username = 'Gethuman Bot';
+  // botPayload.channel = req.body.channel_id;
 
   var textInput = req.body.text;
   if (textInput) {
-    summonQuestionResponse(textInput, botPayload, res);
-    // instead: top of the Q Promise stack
+    Q.all([
+        postSearch.findByText(textInput),
+        companySearch.findByText(textInput)
+    ])
+    .then(function (postAndCompanySearchResults) {
+        var posts = postAndCompanySearchResults[0];
+        var companies = postAndCompanySearchResults[1];
+
+        if (posts && posts.length) {
+            return preparePostsPayload(posts);
+        }
+        else if (companies && companies.length) {
+            return prepareCompaniesPayload(companies);
+        }
+        else {
+            return prepareNothingFoundPayload;
+        }
+    })
+    .then(function (responsePayload) {
+        res.send(responsePayload);
+    })
+    .catch(function err) {
+        res.send(getFormattedError(err))
+    });
   } else {
-    prepareUserInputPrompt(botPayload, res);
+    prepareUserInputPrompt();
   };
 
-  // Q.all([
-  //       searchQuestions(textInput),
-  //       searchCompanies(textInput)
-  //   ])
-  //   .then(function (res) {
-  //       var questions = res[0];
-  //       var comapnies = res[1];
-
-  //       if (questions && questions.length) {
-  //           res.send(prepareQuestionsPayload(questions));
-  //       }
-  //       else if (companies && companies.length) {
-  //           res.send(prepareCompaniesPayload(companies));
-  //       }
-  //       else {
-
-  //       }
-  //   })
-  //   .catch(function err) {
-  //       res.send(getFormattedError(err))
-  //   });
 
 
+}
+
+function prepareQuestionsPayload(questions) {
+    var companyIDs = [];
+    var guideIDs = [];
+
+    for (let i = 0; i < questions.length; i++) {
+        companyIDs.push(questions[i].companyId);
+        guideIDs.push(questions[i].guideId);
+    };
+
+    return Q.all([
+            company.findByIds(companyIDs),
+            guide.findByIds(guideIDs)
+        ])
+    .then(function (companyAndGuides) {
+        var companies = companyAndGuides[0];
+        var guides = companyAndGuides[1];
+
+        // create object that get put into res.send
+
+        return {};
+
+    })
 }
 
 // old send - why can't I compress in the callback?

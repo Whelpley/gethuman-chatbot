@@ -1,24 +1,19 @@
 'use strict'
 
-const request = require('request');
 const Q = require('q');
 const request = require('request');
 
-//takes input text, queries Companies API, returns Promise of Companies object
-module.exports = function(textInput) {
+module.exports = {
+  findByIds: findByIds
+}
 
+//takes input array of Guide ID's, queries Companies API, returns Promise of Guides object
+function findByIds(guideIds) {
   var deferred = Q.defer();
-
   // var url = getUrl();
-  var url = 'https://api.gethuman.co/v3/companies/search';
-  var limit = 5;
-  var match = encodeURIComponent(textInput);
-
-  request(url
-    + '?limit='
-    + limit
-    + '&match='
-    + match,
+  var url = 'https://api.gethuman.co/v3/guides?where=';
+  var params = encodeURIComponent(JSON.stringify({ _id: { $in: guideIds }}));
+  request(url + params,
     function (error, response, body) {
       if (error) {
           // deferred.reject(new Error(error));
@@ -27,6 +22,6 @@ module.exports = function(textInput) {
           deferred.resolve(JSON.parse(body));
       }
   });
-
   return deferred.promise;
 }
+
