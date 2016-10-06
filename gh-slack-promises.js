@@ -8,6 +8,7 @@ const request = require('request'),
     preparePayload = require('./api/payloads.js');
 
 module.exports = function (req, res, next) {
+  var channelId = req.body.channel_id;
   var textInput = req.body.text;
   if (textInput) {
     Q.all([
@@ -39,13 +40,20 @@ module.exports = function (req, res, next) {
         }
     })
     .then(function (payload) {
-        res.send(payload);
+        return send(channelId, payload)
+            .then(function () {
+                res.status(200).end();
+            });
     })
     .catch(function (err) {
-        res.send(preparePayload.error(err));
+        console.log(err);
+        res.status(200).end();
     });
   } else {
-    res.send(preparePayload.inputPrompt());
+    send(channelId, preparePayload.inputPrompt())
+            .then(function () {
+                res.status(200).end();
+            });
   };
 }
 
@@ -84,21 +92,28 @@ function attachCompaniesAndGuides(posts) {
 }
 
 // old send - why can't I compress in the callback?
-// function send (payload, callback) {
-//   var path = process.env.INCOMING_WEBHOOK_PATH;
-//   var uri = 'https://hooks.slack.com/services/' + path;
+function send (channelId, payload) {
+    var deferred = Q.defer();
+  var path = process.env.INCOMING_WEBHOOK_PATH;
+  var uri = 'https://hooks.slack.com/services/' + path;
 
-//   request({
-//     uri: uri,
-//     method: 'POST',
-//     body: JSON.stringify(payload)
-//   }, function (error, response, body) {
-//     if (error) {
-//       return callback(error);
-//     }
-//     callback(null, response.statusCode, body);
-//   });
-// }
+  payload.channel = channelId;
+
+  request({
+    uri: uri,
+    method: 'POST',
+    body: JSON.stringify(payload)
+  }, function (error, response, body) {
+    if (error) {
+      deferred.reject(error);
+    }
+    else {
+        deferred.resolve();
+    }
+  });
+
+  return deferred.promise;
+}
 
 
 
