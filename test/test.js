@@ -1,30 +1,28 @@
-// make a test that posts the slash command to /gethuman, get a 200 status
-
-// var expect  = require("chai").expect;
-// var request = require("request");
+'use strict'
 
 var chai = require('chai'),
   assert = chai.assert,
-  preparePayload = require('../api/payloads.js');
+  expect = chai.expect,
+  preparePayload = require('../api/payloads.js'),
+  mockData = require('./mockdata.js'),
+  posts = mockData.posts,
+  companies = mockData.companies,
+  colors = mockData.colors;
 
-// const mockPosts = [
-//   {
-//     companyName: "First Company",
-//     urlID: AAAA,
-//     title: "This is the first Post",
-//     company: {
-
-//     },
-
-//   }
-
-// ]
-
-
+// 'hello world' test
 describe('Array', function() {
   it('should start empty', function() {
     var arr = [];
 
     assert.equal(arr.length, 0);
+  });
+});
+
+// simple test - text of input prompt
+describe('Input Prompt', function() {
+  it('should prompt user for issue', function() {
+    var payload = preparePayload.inputPrompt();
+
+    assert.equal(payload.text, "Tell me your customer service issue.");
   });
 });
