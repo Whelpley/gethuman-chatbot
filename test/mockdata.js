@@ -1,15 +1,5 @@
 'use strict'
 
-module.exports = {
-  posts: posts,
-  companies: companies,
-  colors: colors,
-  steve: "Steve"
-  // steve: steve
-}
-
-// var steve = "Steve";
-
 var colors = ['#1c4fff', '#e84778', '#ffc229', '#1ae827', '#5389ff'];
 
 var posts = [
@@ -21,7 +11,7 @@ var posts = [
       contactMethods: [
         {
           "type":"phone",
-          "target":"866-111-2222"
+          "target":"866-111-1111"
         },
         {
           "type":"email",
@@ -80,5 +70,10 @@ var companies = [
       phone: "866-222-2222"
     }
   },
+];
 
-]
+module.exports = {
+  posts: posts,
+  companies: companies,
+  colors: colors
+}

@@ -76,7 +76,7 @@ function companies(companies) {
         let emailContactMethods = companies[i].contactMethods.filter(function ( method ) {
             return method.type === "email";
         });
-        let email = (emailContactMethods && emailContactMethods.length) ? email = emailContactMethods[0].target : '';
+        let email = (emailContactMethods && emailContactMethods.length) ? emailContactMethods[0].target : '';
         let textField = formatTextField(phone, email);
         let singleAttachment = {
             "fallback": "Company info for " + name,

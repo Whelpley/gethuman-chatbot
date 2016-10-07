@@ -9,16 +9,6 @@ var chai = require('chai'),
   companies = mockData.companies,
   colors = mockData.colors;
 
-var steve = mockData.steve;
-
-// 'hello world' test
-describe('Array', function() {
-  it('should start empty', function() {
-    var arr = [];
-    assert.equal(arr.length, 0);
-  });
-});
-
 // simple tests
 
 describe('Input Prompt Payload', function() {
@@ -49,23 +39,43 @@ describe('Error Notice Payload', function() {
 // tests vs mock data
 
 describe('Check Mock Data', function() {
-  it('has steve', function() {
-    assert.typeOf(steve, 'string');
-    assert.equal(steve, "Steve");
-  });
   it('has a colors array', function() {
     assert.lengthOf(mockData.colors, 5);
   });
-  // it('has valid Companies object', function() {
-  //   assert.equal(companies[0].name, "First Company");
-  // });
+  it('has valid Companies object', function() {
+    assert.equal(companies[0].name, "First Company");
+  });
+  it('has valid Posts object', function() {
+    assert.equal(posts[0].companyName, "First Company");
+  });
 });
 
-// describe('Companies Payload', function() {
-//   var payload = preparePayload.companies(companies);
+// complex payload testing
 
-//   it('has the correct introduction text', function() {
-//     assert.equal(payload.text, "We could not find any specific questions matching your input, but here is the contact information for some companies that could help you resolve your issue:");
-//   });
+describe('Companies Payload', function() {
+  var payload = preparePayload.companies(companies);
 
-// });
+  it('has the correct introduction text', function() {
+    assert.equal(payload.text, "We could not find any specific questions matching your input, but here is the contact information for some companies that could help you resolve your issue:");
+  });
+  it('has the correct company name', function() {
+    assert.equal(payload.attachments[0].title, companies[0].name);
+  });
+  it('has a correctly formatted phone and email field', function() {
+    assert.equal(payload.attachments[0].text, "866-111-1111 | first@first.com");
+  });
+});
+
+describe('Posts Payload', function() {
+  var payload = preparePayload.posts(posts);
+
+  it('has the correct introduction text', function() {
+    assert.equal(payload.text, "Here are some issues potentially matching your input, and links for how to resolve them:");
+  });
+  it('has the correct title', function() {
+    assert.equal(payload.attachments[0].title, "First Company: This is the first Post");
+  });
+  it('has a correctly formatted phone and email field', function() {
+    assert.equal(payload.attachments[0].text, "866-111-1111 | first@first.com");
+  });
+});
