@@ -18,7 +18,8 @@ describe('Array', function() {
   });
 });
 
-// simple test - text of input prompt
+// simple tests
+
 describe('Input Prompt', function() {
   it('should prompt user for issue', function() {
     var payload = preparePayload.inputPrompt();
@@ -26,3 +27,22 @@ describe('Input Prompt', function() {
     assert.equal(payload.text, "Tell me your customer service issue.");
   });
 });
+
+describe('Nothing Found Notice', function() {
+  it('inform user that there are no matches to input', function() {
+    var payload = preparePayload.nothingFound();
+
+    assert.equal(payload.text, "We could not find anything matching your input to our database. Could you try rephrasing your concern, and be sure to spell the company name correctly?");
+  });
+});
+
+describe('Error Notice', function() {
+  it('pass through an error', function() {
+    var error = "There was a problem, oh no!"
+    var payload = preparePayload.error(error);
+
+    assert.equal(payload.text, "There was a problem, oh no!");
+  });
+});
+
+// tests vs mock data

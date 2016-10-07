@@ -105,7 +105,7 @@ function nothingFound() {
     payload.username = 'Gethuman Bot';
     payload.text = "We could not find anything matching your input to our database. Could you try rephrasing your concern, and be sure to spell the company name correctly?";
     payload.icon_emoji = ':question:';
-    console.log("Received no results from GetHuman API for user input");
+    // console.log("Received no results from GetHuman API for user input");
     return payload;
 };
 
