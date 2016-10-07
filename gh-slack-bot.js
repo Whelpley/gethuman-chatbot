@@ -4,8 +4,6 @@ const request = require('request'),
     rp = require('request-promise'),
     colors = ['#1c4fff', '#e84778', '#ffc229', '#1ae827', '#5389ff'];
 
-
-
 module.exports = function (req, res, next) {
   var botPayload = {};
   botPayload.username = 'Gethuman Bot';
@@ -17,14 +15,12 @@ module.exports = function (req, res, next) {
   } else {
     prepareUserInputPrompt(botPayload, res);
   };
-
 }
 
 // old send - why can't I compress in the callback?
 function send (payload, callback) {
   var path = process.env.INCOMING_WEBHOOK_PATH;
   var uri = 'https://hooks.slack.com/services/' + path;
-
   request({
     uri: uri,
     method: 'POST',
@@ -206,7 +202,6 @@ function prepareQuestionsPayload(questions, botPayload, res) {
     //     ]
     // });
 
-// old send
     send(botPayload, function (error, status, body) {
       if (error) {
         return next(error);
@@ -216,8 +211,6 @@ function prepareQuestionsPayload(questions, botPayload, res) {
         return res.status(200).end();
       }
     });
-// new send
-    // send(botPayload);
 };
 
 function prepareCompaniesPayload(companies, botPayload, res) {

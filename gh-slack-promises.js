@@ -19,18 +19,16 @@ module.exports = function (req, res, next) {
     .then(function (postAndCompanySearchResults) {
         var posts = postAndCompanySearchResults[0];
         var companies = postAndCompanySearchResults[1];
-        console.log("Posts returned: " + "\n" + JSON.stringify(posts).substring(0,300));
-        console.log("Companies returned: " + "\n" + JSON.stringify(companies).substring(0,300));
+        console.log("Posts returned AFTER Q: " + "\n" + JSON.stringify(posts).substring(0,400));
+        console.log("Companies returned AFTER Q: " + "\n" + JSON.stringify(companies).substring(0,400));
 // not returning any posts, even when it should ...
         if (posts && posts.length) {
-            console.log("Yes we found some Posts!");
             return attachCompaniesAndGuides(posts)
                 .then(function (posts){
                     return preparePayload.posts(posts);
                 });
         }
         else if (companies && companies.length) {
-            console.log("At least we found some companies!");
             return preparePayload.companies(companies);
         }
         else {
@@ -89,7 +87,7 @@ function attachCompaniesAndGuides(posts) {
     })
 }
 
-// old send - why can't I compress in the callback?
+// new send
 function send (channelId, payload) {
     var deferred = Q.defer();
   var path = process.env.INCOMING_WEBHOOK_PATH;

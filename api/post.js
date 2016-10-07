@@ -34,6 +34,7 @@ function findByText(textInput) {
           deferred.reject(error);
       } else {
           console.log("Managed to hit the Posts API with success!");
+          console.log("Posts returned BEFORE Q: " + body.substring(0,400));
           deferred.resolve(JSON.parse(body));
       }
   });
