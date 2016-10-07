@@ -45,7 +45,7 @@ function summonQuestionResponse(textInput, botPayload, res) {
             + limit
             + '&filterBy='
             + encodeURIComponent(JSON.stringify(filters))
-            , function (error, response, body) {
+    , function (error, response, body) {
         if (!error && response.statusCode == 200) {
             var companyIDs = [];
             var guideIDs = [];
@@ -53,6 +53,8 @@ function summonQuestionResponse(textInput, botPayload, res) {
             var companyTable = {};
             var guideObjects = [];
             var guideTable = {};
+            console.log("Managed to hit the Companies API with success!");
+            console.log("Companies returned BEFORE Q: " + body.substring(0,400));
             var questions = JSON.parse(body);
             if (questions && questions.length) {
                 for (let i = 0; i < questions.length; i++) {

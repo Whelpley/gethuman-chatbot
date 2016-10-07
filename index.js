@@ -12,7 +12,7 @@ const GH_token = process.env.GH_API_ACCESS_TOKEN
 var hellobot = require('./hellobot.js');
 var dicebot = require('./dicebot.js');
 // now using experimental Promise version
-var ghSlackBot = require('./gh-slack-promises.js');
+var ghSlackBot = require('./gh-slack-bot.js');
 var ghFacebookBot = require('./gh-facebook-bot.js');
 
 var port = process.env.PORT || 3000;
