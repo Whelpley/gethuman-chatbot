@@ -43,7 +43,11 @@ module.exports = function (req, res, next) {
     })
     .catch(function (err) {
         console.log(err);
-        res.status(200).end();
+        send(channelId, preparePayload.error(err))
+            .then(function () {
+                res.status(200).end();
+            });
+        // res.status(200).end();
     });
   } else {
     send(channelId, preparePayload.inputPrompt())
@@ -62,7 +66,6 @@ function attachCompaniesAndGuides(posts) {
         guideIDs.push(posts[i].guideId);
     };
 
-// does the return belong here?
     return Q.all([
             companySearch.findByIds(companyIDs),
             guideSearch.findByIds(guideIDs)

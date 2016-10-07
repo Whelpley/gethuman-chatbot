@@ -115,7 +115,7 @@ function inputPrompt() {
     return payload;
 };
 
-function error() {
+function error(error) {
     var payload = {};
     payload.username = 'Gethuman Bot';
     payload.text = error;
