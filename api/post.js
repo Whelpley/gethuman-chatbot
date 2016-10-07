@@ -32,7 +32,12 @@ function findByText(textInput) {
           // deferred.reject(new Error(error));
           console.log("Hit an error getting the Posts!");
           deferred.reject(error);
-      } else {
+      }
+      else if (reponse.statusCode !== 200) {
+          console.log("Unfriendly status returned:" + response.statusCode);
+          deferred.reject(error);
+      }
+      else {
           console.log("Managed to hit the Posts API with success!");
           console.log("Status: " + response.statusCode);
           console.log("Posts returned BEFORE Q: " + body.substring(0,400));

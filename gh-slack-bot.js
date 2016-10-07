@@ -53,8 +53,8 @@ function summonQuestionResponse(textInput, botPayload, res) {
             var companyTable = {};
             var guideObjects = [];
             var guideTable = {};
-            console.log("Managed to hit the Companies API with success!");
-            console.log("Companies returned BEFORE Q: " + body.substring(0,400));
+            console.log("Managed to hit the Posts API with success!");
+            console.log("Posts returned: " + body.substring(0,400));
             var questions = JSON.parse(body);
             if (questions && questions.length) {
                 for (let i = 0; i < questions.length; i++) {

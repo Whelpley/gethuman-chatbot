@@ -51,9 +51,9 @@ module.exports = function (req, res, next) {
     });
   } else {
     send(channelId, preparePayload.inputPrompt())
-            .then(function () {
-                res.status(200).end();
-            });
+        .then(function () {
+            res.status(200).end();
+        });
   };
 }
 
