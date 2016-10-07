@@ -33,7 +33,7 @@ function findByText(textInput) {
           console.log("Hit an error getting the Posts!");
           deferred.reject(error);
       }
-      else if (reponse.statusCode !== 200) {
+      else if (response.statusCode !== 200) {
           console.log("Unfriendly status returned:" + response.statusCode);
           deferred.reject(error);
       }
