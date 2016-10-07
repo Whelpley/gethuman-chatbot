@@ -58,6 +58,7 @@ module.exports = function (req, res, next) {
 }
 
 // access Company and Guide objects matching each Question, return one mega-Posts object
+//  !!!! WE DONT EVEN NEED THE GUIDES - ON THE CHOPPING BLOCK !!!!
 function attachCompaniesAndGuides(posts) {
     var companyIDs = [];
     var guideIDs = [];

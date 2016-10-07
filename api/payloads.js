@@ -2,12 +2,6 @@
 
 const colors = ['#1c4fff', '#e84778', '#ffc229', '#1ae827', '#5389ff'];
 
-// where should we invoke the payload?
-// var payload = {};
-// payload.username = 'Gethuman Bot';
-// where do we pass in the 'req' for channel ID?
-  // payload.channel = req.body.channel_id;
-
 module.exports = {
   posts: posts,
   companies: companies,
@@ -16,8 +10,9 @@ module.exports = {
   error: error
 }
 
+
 // prepares payload from Posts (with nested Companies + Guides) object
-// !!! This does not even touch the Guide !!!
+// !!! This does not even touch the Guide - eliminate it !!!
 function posts(posts) {
     var payload = {};
     payload.username = 'Gethuman Bot';
@@ -122,7 +117,7 @@ function error(error) {
     payload.username = 'Gethuman Bot';
     payload.text = error;
     payload.icon_emoji = ':no_good:';
-    console.log("GetHuman API failed.");
+    // console.log("GetHuman API failed.");
     return payload;
 };
 

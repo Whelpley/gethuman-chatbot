@@ -9,18 +9,19 @@ var chai = require('chai'),
   companies = mockData.companies,
   colors = mockData.colors;
 
+var steve = mockData.steve;
+
 // 'hello world' test
 describe('Array', function() {
   it('should start empty', function() {
     var arr = [];
-
     assert.equal(arr.length, 0);
   });
 });
 
 // simple tests
 
-describe('Input Prompt', function() {
+describe('Input Prompt Payload', function() {
   it('should prompt user for issue', function() {
     var payload = preparePayload.inputPrompt();
 
@@ -28,7 +29,7 @@ describe('Input Prompt', function() {
   });
 });
 
-describe('Nothing Found Notice', function() {
+describe('Nothing Found Notice Payload', function() {
   it('inform user that there are no matches to input', function() {
     var payload = preparePayload.nothingFound();
 
@@ -36,8 +37,8 @@ describe('Nothing Found Notice', function() {
   });
 });
 
-describe('Error Notice', function() {
-  it('pass through an error', function() {
+describe('Error Notice Payload', function() {
+  it('passes through an error', function() {
     var error = "There was a problem, oh no!"
     var payload = preparePayload.error(error);
 
@@ -46,3 +47,25 @@ describe('Error Notice', function() {
 });
 
 // tests vs mock data
+
+describe('Check Mock Data', function() {
+  it('has steve', function() {
+    assert.typeOf(steve, 'string');
+    assert.equal(steve, "Steve");
+  });
+  it('has a colors array', function() {
+    assert.lengthOf(mockData.colors, 5);
+  });
+  // it('has valid Companies object', function() {
+  //   assert.equal(companies[0].name, "First Company");
+  // });
+});
+
+// describe('Companies Payload', function() {
+//   var payload = preparePayload.companies(companies);
+
+//   it('has the correct introduction text', function() {
+//     assert.equal(payload.text, "We could not find any specific questions matching your input, but here is the contact information for some companies that could help you resolve your issue:");
+//   });
+
+// });

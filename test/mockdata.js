@@ -3,13 +3,19 @@
 module.exports = {
   posts: posts,
   companies: companies,
-  colors: colors
+  colors: colors,
+  steve: "Steve"
+  // steve: steve
 }
+
+// var steve = "Steve";
+
+var colors = ['#1c4fff', '#e84778', '#ffc229', '#1ae827', '#5389ff'];
 
 var posts = [
   {
     companyName: "First Company",
-    urlID: 'AAAA',
+    urlId: 'AAAA',
     title: "This is the first Post",
     company: {
       contactMethods: [
@@ -29,7 +35,7 @@ var posts = [
   },
   {
     companyName: "Second Company",
-    urlID: 'BBBB',
+    urlId: 'BBBB',
     title: "This is the second Post",
     company: {
       contactMethods: [
@@ -76,5 +82,3 @@ var companies = [
   },
 
 ]
-
-var colors = ['#1c4fff', '#e84778', '#ffc229', '#1ae827', '#5389ff'];
