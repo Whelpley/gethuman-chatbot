@@ -19,8 +19,8 @@ module.exports = function (req, res, next) {
     .then(function (postAndCompanySearchResults) {
         var posts = postAndCompanySearchResults[0];
         var companies = postAndCompanySearchResults[1];
-        console.log("Posts returned AFTER Q: " + "\n" + JSON.stringify(posts).substring(0,400));
-        console.log("Companies returned AFTER Q: " + "\n" + JSON.stringify(companies).substring(0,400));
+        // console.log("Posts returned AFTER Q: " + "\n" + JSON.stringify(posts).substring(0,400));
+        // console.log("Companies returned AFTER Q: " + "\n" + JSON.stringify(companies).substring(0,400));
 // not returning any posts, even when it should ...
         if (posts && posts.length) {
             return attachCompaniesAndGuides(posts)
@@ -90,9 +90,8 @@ function attachCompaniesAndGuides(posts) {
     })
 }
 
-// new send
 function send (channelId, payload) {
-    var deferred = Q.defer();
+  var deferred = Q.defer();
   var path = process.env.INCOMING_WEBHOOK_PATH;
   var uri = 'https://hooks.slack.com/services/' + path;
 
@@ -115,45 +114,6 @@ function send (channelId, payload) {
 }
 
 
-
-// Save for now - how Send is invoked
-    // send(botPayload, function (error, status, body) {
-    //   if (error) {
-    //     return next(error);
-    //   } else if (status !== 200) {
-    //     return next(new Error('Incoming WebHook: ' + status + ' ' + body));
-    //   } else {
-    //     return res.status(200).end();
-    //   }
-    // });
-
-
-// new send
-// function send (payload) {
-//   var path = process.env.INCOMING_WEBHOOK_PATH;
-//   var uri = 'https://hooks.slack.com/services/' + path;
-
-//   request({
-//     uri: uri,
-//     method: 'POST',
-//     body: JSON.stringify(payload)
-//   }, function (error, response, body) {
-//     if (error) {
-//       return cb(error);
-//     }
-//     cb(null, response.statusCode, body);
-//   });
-// }
-
-// function cb (error, status, body) {
-//     if (error) {
-//         return next(error);
-//     } else if (status !== 200) {
-//         return next(new Error('Incoming WebHook: ' + status + ' ' + body));
-//     } else {
-//         return res.status(200).end();
-//     }
-// }
 
 
 

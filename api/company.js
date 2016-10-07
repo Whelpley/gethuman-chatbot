@@ -26,8 +26,8 @@ function findByText(textInput) {
           // deferred.reject(new Error(error));
           deferred.reject(error);
       } else {
-          console.log("Managed to hit the Companies API with success!");
-          console.log("Companies returned BEFORE Q: " + body.substring(0,400));
+          // console.log("Managed to hit the Companies API with success!");
+          // console.log("Companies returned BEFORE Q: " + body.substring(0,400));
           deferred.resolve(JSON.parse(body));
       }
   });

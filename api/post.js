@@ -13,7 +13,6 @@ function findByText(textInput) {
   var deferred = Q.defer();
   // var url = getUrl();
   var url = 'https://api.gethuman.co/v3/posts/search';
-
   var match = encodeURIComponent(textInput);
   var limit = 5;
   var filters = encodeURIComponent(JSON.stringify({
@@ -38,9 +37,9 @@ function findByText(textInput) {
       //     deferred.reject(error);
       // }
       else {
-          console.log("Managed to hit the Posts API and get a respons!");
-          console.log("Status: " + response.statusCode);
-          console.log("Posts returned BEFORE Q: " + body.substring(0,400));
+          // console.log("Managed to hit the Posts API and get a respons!");
+          // console.log("Status: " + response.statusCode);
+          // console.log("Posts returned BEFORE Q: " + body.substring(0,400));
           deferred.resolve(JSON.parse(body));
       }
   });

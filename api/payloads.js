@@ -17,6 +17,7 @@ module.exports = {
 }
 
 // prepares payload from Posts (with nested Companies + Guides) object
+// !!! This does not even touch the Guide !!!
 function posts(posts) {
     var payload = {};
     payload.username = 'Gethuman Bot';
@@ -25,6 +26,7 @@ function posts(posts) {
     payload.attachments = [];
 
     for (let i = 0; i < posts.length; i++) {
+        console.log("Contact Methods: " + JSON.stringify(posts[i].company.contactMethods));
         let name = posts[i].companyName || '';
         let color = colors[i];
         let urlId = posts[i].urlId || '';
