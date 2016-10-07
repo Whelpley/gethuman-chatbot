@@ -26,19 +26,19 @@ function findByText(textInput) {
     + '&limit='
     + limit
     + '&filterBy='
-    + encodeURIComponent(JSON.stringify(filters)),
+    + filters,
   function (error, response, body) {
       if (error) {
           // deferred.reject(new Error(error));
           console.log("Hit an error getting the Posts!");
           deferred.reject(error);
       }
-      else if (response.statusCode !== 200) {
-          console.log("Unfriendly status returned:" + response.statusCode);
-          deferred.reject(error);
-      }
+      // else if (response.statusCode !== 200) {
+      //     console.log("Unfriendly status returned:" + response.statusCode);
+      //     deferred.reject(error);
+      // }
       else {
-          console.log("Managed to hit the Posts API with success!");
+          console.log("Managed to hit the Posts API and get a respons!");
           console.log("Status: " + response.statusCode);
           console.log("Posts returned BEFORE Q: " + body.substring(0,400));
           deferred.resolve(JSON.parse(body));
