@@ -16,7 +16,6 @@ function findByIds(guideIds) {
   request(url + params,
     function (error, response, body) {
       if (error) {
-          // deferred.reject(new Error(error));
           deferred.reject(error);
       } else {
           deferred.resolve(JSON.parse(body));

@@ -22,7 +22,6 @@ function posts(posts) {
 
 
     for (let i = 0; i < posts.length; i++) {
-        console.log("Contact Methods: " + JSON.stringify(posts[i].company.contactMethods));
         let name = posts[i].companyName || '';
         let color = colors[i];
         let urlId = posts[i].urlId || '';
@@ -109,7 +108,6 @@ function nothingFound() {
     payload.username = 'Gethuman Bot';
     payload.text = "We could not find anything matching your input to our database. Could you try rephrasing your concern, and be sure to spell the company name correctly?";
     payload.icon_emoji = ':question:';
-    // console.log("Received no results from GetHuman API for user input");
     return payload;
 };
 
@@ -126,7 +124,6 @@ function error(error) {
     payload.username = 'Gethuman Bot';
     payload.text = error;
     payload.icon_emoji = ':no_good:';
-    // console.log("GetHuman API failed.");
     return payload;
 };
 

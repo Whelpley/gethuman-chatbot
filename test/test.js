@@ -85,7 +85,7 @@ describe('Posts Payload - Happy Path', function() {
 describe('Companies Payload - Path of Failure', function() {
   var empty = {};
   var payload = preparePayload.companies(empty);
-  console.log("Payload returned from empty input: " + JSON.stringify(payload));
+  // console.log("Payload returned from empty input: " + JSON.stringify(payload));
 
   it('empty Companies object returns no attachments on payload', function() {
     assert.equal(payload.attachments, '');

@@ -8,6 +8,8 @@ const request = require('request'),
     preparePayload = require('./api/payloads.js');
 
 module.exports = function (req, res, next) {
+    console.log(JSON.stringify(req));
+
   var channelId = req.body.channel_id;
   var textInput = req.body.text;
   if (textInput) {
@@ -55,6 +57,7 @@ module.exports = function (req, res, next) {
 
 // access Company and Guide objects matching each Question, return one mega-Posts object
 //  !!!! WE DONT EVEN NEED THE GUIDES - ON THE CHOPPING BLOCK !!!!
+// method could also be refactored
 function attachCompaniesAndGuides(posts) {
     var companyIDs = [];
     var guideIDs = [];

@@ -1,19 +1,19 @@
 'use strict'
 
-const express = require('express')
-const bodyParser = require('body-parser')
-const request = require('request')
-const app = express()
+const express = require('express'),
+ bodyParser = require('body-parser'),
+ request = require('request'),
+ app = express();
 
+// should this just be declared in FB bot module?
 const token = process.env.FB_PAGE_ACCESS_TOKEN
 // is this even used?
 const GH_token = process.env.GH_API_ACCESS_TOKEN
 
-var hellobot = require('./hellobot.js');
-var dicebot = require('./dicebot.js');
-// now using experimental Promise version
-var ghSlackBot = require('./gh-slack-promises.js');
-var ghFacebookBot = require('./gh-facebook-bot.js');
+var hellobot = require('./hellobot.js'),
+ dicebot = require('./dicebot.js'),
+ ghSlackBot = require('./gh-slack-promises.js'),
+ ghFacebookBot = require('./gh-facebook-bot.js');
 
 var port = process.env.PORT || 3000;
 
@@ -47,3 +47,54 @@ app.get('/webhook/', function (req, res) {
 app.listen(port, function () {
   console.log('Fusion bot listening on port ' + port);
 });
+
+
+// // unified api endpoint
+// app.post('/v3/webhook', function (req, res) {
+
+//   // put data from the Express req object into our custom context object
+//   // let's us build to a custom object rather than something Express specific
+//   var platformRequestContext = { userRequest: req.body };
+
+//   // get a BotHandler object based on the context
+//   // code would have logic to look at context and return either
+//   // SlackBotHandler object or the MessengerBotHandler, etc.
+//   getBotHandler(platformRequestContext)
+//     .then(function (botHandler) {
+
+//       // do what is currently in payloads module
+//       return botHandler.getHandlerSuccessResponse(platformRequestContext);
+//     })
+
+//     // this is an object that contains { raw: {}, data: {}, context: {} }
+//     .then(function (handlerSuccessResponse) {
+
+//       // this is the response to the original request in line 53
+//       res.send(handlerSuccessResponse.raw);
+
+//       // this is really only if need brand new request back to platform
+//       // i.e. used for slack (but messenger this may be empty)
+//       botHandler.sendResponseToPlatform(handlerSuccessResponse);
+//     })
+//     .catch(function (err) {
+
+//       // get response object that contains the thing you want to send to
+//       // the bot when an error occurs
+//       var handlerErrorResponse = botHandler.getHandlerErrorResponse(err, platformRequestContext);
+
+//       // send response to original request (line 53)
+//       res.send(handlerErrorResponse.raw);
+
+//       // this should log error and then call botHandler.sendResponseToPlatform()
+//       // under the scenes
+//       botHandler.sendErrorResponse(handlerErrorResponse);
+//     });
+// });
+
+// var handlers = [require('./slack.handler'), require('./messenger.handler')];
+
+// function getBotHandler(platformRequestContext) {
+//   // loop through handlers and call handlers[i].isHandlerForRequest(plaformRequestContext)
+
+//   // else if handler not found, throw error
+// }

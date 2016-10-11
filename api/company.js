@@ -10,7 +10,6 @@ module.exports = {
 
 //takes input text, queries Companies API, returns Promise of Companies object
 function findByText(textInput) {
-  console.log("Running Company Find-by-Text search");
   var deferred = Q.defer();
   // var url = getUrl();
   var url = 'https://api.gethuman.co/v3/companies/search';
@@ -23,11 +22,8 @@ function findByText(textInput) {
     + match,
     function (error, response, body) {
       if (error) {
-          // deferred.reject(new Error(error));
           deferred.reject(error);
       } else {
-          // console.log("Managed to hit the Companies API with success!");
-          // console.log("Companies returned BEFORE Q: " + body.substring(0,400));
           deferred.resolve(JSON.parse(body));
       }
   });
@@ -43,7 +39,6 @@ function findByIds(companyIds) {
   request(url + params,
     function (error, response, body) {
       if (error) {
-          // deferred.reject(new Error(error));
           deferred.reject(error);
       } else {
           deferred.resolve(JSON.parse(body));
