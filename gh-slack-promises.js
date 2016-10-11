@@ -15,13 +15,9 @@ module.exports = function (req, res, next) {
         postSearch.findByText(textInput),
         companySearch.findByText(textInput)
     ])
-    // this step should return a payload for sending
     .then(function (postAndCompanySearchResults) {
         var posts = postAndCompanySearchResults[0];
         var companies = postAndCompanySearchResults[1];
-        // console.log("Posts returned AFTER Q: " + "\n" + JSON.stringify(posts).substring(0,400));
-        // console.log("Companies returned AFTER Q: " + "\n" + JSON.stringify(companies).substring(0,400));
-// not returning any posts, even when it should ...
         if (posts && posts.length) {
             return attachCompaniesAndGuides(posts)
                 .then(function (posts){

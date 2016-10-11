@@ -50,9 +50,9 @@ describe('Check Mock Data', function() {
   });
 });
 
-// complex payload testing
+// complex payload testing - happy path
 
-describe('Companies Payload', function() {
+describe('Companies Payload - Happy Path', function() {
   var payload = preparePayload.companies(companies);
 
   it('has the correct introduction text', function() {
@@ -66,7 +66,7 @@ describe('Companies Payload', function() {
   });
 });
 
-describe('Posts Payload', function() {
+describe('Posts Payload - Happy Path', function() {
   var payload = preparePayload.posts(posts);
 
   it('has the correct introduction text', function() {
@@ -79,3 +79,19 @@ describe('Posts Payload', function() {
     assert.equal(payload.attachments[0].text, "866-111-1111 | first@first.com");
   });
 });
+
+// unhappy path - passing in empty object as payloads
+
+describe('Companies Payload - Path of Failure', function() {
+  var empty = {};
+  var payload = preparePayload.companies(empty);
+  console.log("Payload returned from empty input: " + JSON.stringify(payload));
+
+  it('empty Companies object returns no attachments on payload', function() {
+    assert.equal(payload.attachments, []);
+  });
+});
+
+// is there a situation in which the GH API returns Posts or Companies, but the formatting is incorrect?
+
+// does error handling require integration testing?
