@@ -8,7 +8,9 @@ const request = require('request'),
     preparePayload = require('./api/payloads.js');
 
 module.exports = function (req, res, next) {
-    console.log("Request received: " + req);
+    console.log("Request title: " + JSON.stringify(req.title));
+    console.log("Request body: " + JSON.stringify(req.body));
+
 
   var channelId = req.body.channel_id;
   var textInput = req.body.text;
