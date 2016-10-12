@@ -44,6 +44,7 @@ function getResponsePayload(platformRequestContext) {
               // return attachCompaniesAndGuides(posts)
               attachCompaniesAndGuides(posts)
                 .then(function (posts){
+                    console.log("About to prepare payload from Posts object: " + JSON.stringify(posts).substring(0,200));
                     result.data = preparePayload.posts(posts);
                     result.raw = result.data;
                     console.log("Payload prepared by slack handler for POSTS: " + JSON.stringify(result));
@@ -145,7 +146,7 @@ function attachCompaniesAndGuides(posts) {
             let gID = posts[i].guideId;
             posts[i].guide = guideTable[gID];
         };
-        console.log("About to return Posts after attaching C and G.");
+        console.log("About to return Posts after attaching C and G: " + JSON.stringify(posts).substring(0,200));
         return posts;
     })
 }
