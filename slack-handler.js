@@ -29,7 +29,6 @@ function getResponsePayload(platformRequestContext) {
     data: {},
     context: platformRequestContext
   }
-  // will this export properly?
   if (textInput) {
     result.data =
       Q.all([
@@ -53,13 +52,17 @@ function getResponsePayload(platformRequestContext) {
           else {
               return preparePayload.nothingFound();
           }
+      }).then(function() {
+          result.raw = result.data;
+          console.log("Payload prepared by slack handler for input " + textInput + ": " + JSON.stringify(result));
+          return result;
       })
     } else {
       result.data = preparePayload.inputPrompt();
+      result.raw = result.data;
+      console.log("Payload prepared by slack handler for NO TEXT INPUT: " + JSON.stringify(result));
+      return Q.when(result);
     };
-  result.raw = result.data;
-  console.log("Payload prepared by slack handler: " + JSON.stringify(result));
-  return Q.when(result);
 }
 
 function sendResponseToPlatform(payload) {
