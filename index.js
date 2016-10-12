@@ -101,7 +101,7 @@ function getBotHandler(platformRequestContext) {
 
   for (let i = 0; i < handlers.length; i++) {
     if (handlers[i].isHandlerForRequest(platformRequestContext)) {
-      botfound = true;
+      botFound = true;
       return handlers[i];
     };
   };
