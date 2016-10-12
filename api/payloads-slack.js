@@ -1,3 +1,5 @@
+// prepares payloads for Slack responses
+
 'use strict'
 
 const colors = ['#1c4fff', '#e84778', '#ffc229', '#1ae827', '#5389ff'];
@@ -10,16 +12,15 @@ module.exports = {
   error: error
 }
 
-
 // prepares payload from Posts (with nested Companies + Guides) object
 // !!! This does not even touch the Guide - eliminate it !!!
 function posts(posts) {
     var payload = {};
     payload.username = 'Gethuman Bot';
+    // should this specifically reference the input?
     payload.text = "Here are some issues potentially matching your input, and links for how to resolve them:";
     payload.icon_emoji = ':tada:';
     payload.attachments = [];
-
 
     for (let i = 0; i < posts.length; i++) {
         let name = posts[i].companyName || '';
@@ -63,17 +64,11 @@ function posts(posts) {
 // prepares payload from Posts object
 function companies(companies) {
 
-
     var payload = {};
     payload.username = 'Gethuman Bot';
     payload.text = "We could not find any specific questions matching your input, but here is the contact information for some companies that could help you resolve your issue:";
     payload.icon_emoji = ':flashlight:';
     payload.attachments = [];
-
-    // a simple error handler - how to handle junk input, not just empty?
-    // if (companies === {}) {
-    //   return nothingFound();
-    // }
 
     for (let i=0; i < companies.length; i++) {
         let name = companies[i].name || '';

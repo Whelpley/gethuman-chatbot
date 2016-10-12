@@ -5,12 +5,10 @@ const request = require('request'),
     companySearch = require('./api/company.js'),
     postSearch = require('./api/post.js'),
     guideSearch = require('./api/guide.js'),
-    preparePayload = require('./api/payloads.js');
+    preparePayload = require('./api/payloads-slack.js');
 
 module.exports = function (req, res, next) {
-    console.log("Request title: " + JSON.stringify(req.title));
-    console.log("Request body: " + JSON.stringify(req.body));
-
+    // console.log("Request body: " + JSON.stringify(req.body));
 
   var channelId = req.body.channel_id;
   var textInput = req.body.text;
@@ -47,7 +45,6 @@ module.exports = function (req, res, next) {
             .then(function () {
                 res.status(200).end();
             });
-        // res.status(200).end();
     });
   } else {
     send(channelId, preparePayload.inputPrompt())
@@ -111,7 +108,6 @@ function send (channelId, payload) {
         deferred.resolve();
     }
   });
-
   return deferred.promise;
 }
 
