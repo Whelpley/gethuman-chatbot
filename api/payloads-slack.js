@@ -14,7 +14,7 @@ module.exports = {
 
 // prepares payload from Posts object
 function posts(posts) {
-    console.log("Starting preparation of Posts payload: " + JSON.stringify(posts).substring(0,200));
+    // console.log("Starting preparation of Posts payload: " + JSON.stringify(posts).substring(0,200));
     var payload = {};
     payload.username = 'Gethuman Bot';
     // should this specifically reference the input?
@@ -58,7 +58,7 @@ function posts(posts) {
         };
         payload.attachments.push(singleAttachment);
     };
-    console.log("Posts payload packaged to send: " + JSON.stringify(payload));
+    // console.log("Posts payload packaged to send: " + JSON.stringify(payload));
     return payload;
 };
 

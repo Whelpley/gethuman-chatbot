@@ -36,20 +36,19 @@ function getResponsePayload(platformRequestContext) {
       ])
       .then(function (postAndCompanySearchResults) {
           var posts = postAndCompanySearchResults[0];
-          console.log("Posts returned by first query: " + JSON.stringify(posts).substring(0,200));
+          // console.log("Posts returned by first query: " + JSON.stringify(posts).substring(0,200));
           var companies = postAndCompanySearchResults[1];
-          console.log("Companies returned by first query:: " + JSON.stringify(companies).substring(0,200));
+          // console.log("Companies returned by first query:: " + JSON.stringify(companies).substring(0,200));
           if (posts && posts.length) {
             // is it a bad idea to have a nested .then?
               // return attachCompaniesAndGuides(posts)
               attachCompaniesAndGuides(posts)
                 .then(function (posts){
                     console.log("About to prepare payload from Posts object: " + JSON.stringify(posts).substring(0,200));
-                    // works until step above???
                     result.data = preparePayload.posts(posts);
                     result.raw = result.data;
-                    // does not go to here
                     console.log("Payload prepared by slack handler for POSTS: " + JSON.stringify(result));
+                    // goes to here fine !!
                     return result;
                 });
           }
@@ -103,11 +102,11 @@ function sendResponseToPlatform(payload) {
 function getErrorPayload(err, platformRequestContext) {
   var result = {
     raw: {},
-    // data: {},
+    data: {},
     context: platformRequestContext
   };
-  result.raw = preparePayload.error(err);
-  // result.raw = result.data;
+  result.data = preparePayload.error(err);
+  result.raw = result.data;
   return Q.when(result);
 }
 
@@ -122,7 +121,7 @@ function sendErrorResponse(errorPayload) {
 //  !!!! WE DONT EVEN NEED THE GUIDES - ON THE CHOPPING BLOCK !!!!
 // method could also be refactored
 function attachCompaniesAndGuides(posts) {
-    console.log("About to attach C and G to Posts.");
+    // console.log("About to attach C and G to Posts.");
     var companyIDs = [];
     var guideIDs = [];
     for (let i = 0; i < posts.length; i++) {
@@ -151,7 +150,7 @@ function attachCompaniesAndGuides(posts) {
             let gID = posts[i].guideId;
             posts[i].guide = guideTable[gID];
         };
-        console.log("About to return Posts after attaching C and G: " + JSON.stringify(posts).substring(0,200));
+        // console.log("About to return Posts after attaching C and G: " + JSON.stringify(posts).substring(0,200));
         return posts;
     })
 }
