@@ -29,50 +29,52 @@ function getResponsePayload(platformRequestContext) {
     data:  {},
     context: platformRequestContext
   }
-  if (textInput) {
-      Q.all([
-          postSearch.findByText(textInput),
-          companySearch.findByText(textInput)
-      ])
-      .then(function (postAndCompanySearchResults) {
-          var posts = postAndCompanySearchResults[0];
-          // console.log("Posts returned by first query: " + JSON.stringify(posts).substring(0,200));
-          var companies = postAndCompanySearchResults[1];
-          // console.log("Companies returned by first query:: " + JSON.stringify(companies).substring(0,200));
-          if (posts && posts.length) {
-            // is it a bad idea to have a nested .then?
-              // return attachCompaniesAndGuides(posts)
-              attachCompaniesAndGuides(posts)
-                .then(function (posts){
-                    console.log("About to prepare payload from Posts object: " + JSON.stringify(posts).substring(0,200));
-                    result.data = preparePayload.posts(posts);
-                    result.raw = result.data;
-                    console.log("Payload prepared by slack handler for POSTS: " + JSON.stringify(result));
-                    // goes to here fine !!
-                    return result;
-                });
-          }
-          else if (companies && companies.length) {
-              result.data = preparePayload.companies(companies);
-              result.raw = result.data;
-              console.log("Payload prepared by slack handler for COMPANIES: " + JSON.stringify(result));
-              // goes to here fine!
-              return result;
-          }
-          else {
-              result.data = preparePayload.nothingFound();
-              result.raw = result.data;
-              console.log("Payload prepared by slack handler for NOTHING FOUND: " + JSON.stringify(result));
-              // goes to here fine!
-              return result;
-          }
-      })
-    } else {
+
+  if (!textInput) {
       result.data = preparePayload.inputPrompt();
       result.raw = result.data;
       console.log("Payload prepared by slack handler for NO TEXT INPUT: " + JSON.stringify(result));
-      return result;
-    };
+      return Q.when(result);
+  }
+
+  return Q.all([
+      postSearch.findByText(textInput),
+      companySearch.findByText(textInput)
+  ])
+  .then(function (postAndCompanySearchResults) {
+      var posts = postAndCompanySearchResults[0];
+      // console.log("Posts returned by first query: " + JSON.stringify(posts).substring(0,200));
+      var companies = postAndCompanySearchResults[1];
+      // console.log("Companies returned by first query:: " + JSON.stringify(companies).substring(0,200));
+
+      if (posts && posts.length) {
+        // is it a bad idea to have a nested .then?
+          // return attachCompaniesAndGuides(posts)
+          attachCompaniesAndGuides(posts)
+            .then(function (posts){
+                console.log("About to prepare payload from Posts object: " + JSON.stringify(posts).substring(0,200));
+                result.data = preparePayload.posts(posts);
+                result.raw = result.data;
+                console.log("Payload prepared by slack handler for POSTS: " + JSON.stringify(result));
+                // goes to here fine !!
+                return result;
+            });
+      }
+      else if (companies && companies.length) {
+          result.data = preparePayload.companies(companies);
+          result.raw = result.data;
+          console.log("Payload prepared by slack handler for COMPANIES: " + JSON.stringify(result));
+          // goes to here fine!
+          return result;
+      }
+      else {
+          result.data = preparePayload.nothingFound();
+          result.raw = result.data;
+          console.log("Payload prepared by slack handler for NOTHING FOUND: " + JSON.stringify(result));
+          // goes to here fine!
+          return result;
+      }
+  })
 }
 
 function sendResponseToPlatform(payload) {

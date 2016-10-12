@@ -66,7 +66,7 @@ app.post('/gethuman', function (req, res) {
   // should send an error if no appropriate bot found
   var botHandler = getBotHandler(platformRequestContext);
 
-  Q.when(botHandler.getResponsePayload(platformRequestContext))
+  botHandler.getResponsePayload(platformRequestContext)
     // this is an object that contains { raw: {}, data: {}, context: {} }
     .then(function (responsePayload) {
       //does not go to here!
@@ -83,6 +83,8 @@ app.post('/gethuman', function (req, res) {
 
     })
     .catch(function (err) {
+      console.error(err);
+
       // get response object that contains the thing you want to send to
       // the bot when an error occurs
       var errorPayload = botHandler.getErrorPayload(err, platformRequestContext);
