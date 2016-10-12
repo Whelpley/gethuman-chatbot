@@ -55,7 +55,7 @@ function getResponsePayload(platformRequestContext) {
       }).then(function() {
           result.raw = result.data;
           console.log("Payload prepared by slack handler for input " + textInput + ": " + JSON.stringify(result));
-          return result;
+          return Q.when(result);
       })
     } else {
       result.data = preparePayload.inputPrompt();
