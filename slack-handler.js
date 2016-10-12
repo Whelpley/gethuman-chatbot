@@ -26,11 +26,10 @@ function getResponsePayload(platformRequestContext) {
   var textInput = platformRequestContext.userRequest.text;
   var result = {
     raw: {},
-    // data: {},
+    data:  {},
     context: platformRequestContext
   }
   if (textInput) {
-    result.raw =
       Q.all([
           postSearch.findByText(textInput),
           companySearch.findByText(textInput)
@@ -41,27 +40,32 @@ function getResponsePayload(platformRequestContext) {
           var companies = postAndCompanySearchResults[1];
           console.log("Companies returned by first query:: " + JSON.stringify(companies).substring(0,200));
           if (posts && posts.length) {
+            // is it a bad idea to have a nested .then?
               // return attachCompaniesAndGuides(posts)
               attachCompaniesAndGuides(posts)
                 .then(function (posts){
-                    return preparePayload.posts(posts);
+                    result.data = preparePayload.posts(posts);
+                    result.raw = result.data;
+                    console.log("Payload prepared by slack handler for POSTS: " + JSON.stringify(result));
+                    return result;
                 });
           }
           else if (companies && companies.length) {
-              return preparePayload.companies(companies);
+              result.data = preparePayload.companies(companies);
+              result.raw = result.data;
+              console.log("Payload prepared by slack handler for COMPANIES: " + JSON.stringify(result));
+              return result;
           }
           else {
-              return preparePayload.nothingFound();
+              result.data = preparePayload.nothingFound();
+              result.raw = result.data;
+              console.log("Payload prepared by slack handler for NOTHING FOUND: " + JSON.stringify(result));
+              return result;
           }
       })
-      // .then(function() {
-      //     result.raw = result.data;
-      //     console.log("Payload prepared by slack handler for input " + textInput + ": " + JSON.stringify(result));
-      //     return result;
-      // })
     } else {
-      result.raw = preparePayload.inputPrompt();
-      // result.raw = result.data;
+      result.data = preparePayload.inputPrompt();
+      result.raw = result.data;
       console.log("Payload prepared by slack handler for NO TEXT INPUT: " + JSON.stringify(result));
       return result;
     };
@@ -113,6 +117,7 @@ function sendErrorResponse(errorPayload) {
 //  !!!! WE DONT EVEN NEED THE GUIDES - ON THE CHOPPING BLOCK !!!!
 // method could also be refactored
 function attachCompaniesAndGuides(posts) {
+    console.log("About to attach C and G to Posts.");
     var companyIDs = [];
     var guideIDs = [];
     for (let i = 0; i < posts.length; i++) {
@@ -140,6 +145,7 @@ function attachCompaniesAndGuides(posts) {
             let gID = posts[i].guideId;
             posts[i].guide = guideTable[gID];
         };
+        console.log("About to return Posts after attaching C and G.");
         return posts;
     })
 }
