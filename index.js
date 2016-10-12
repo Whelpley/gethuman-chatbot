@@ -31,7 +31,7 @@ app.get('/', function (req, res) { res.status(200).send('Hello world!') });
 app.post('/hello', hellobot);
 // dicebot - keep for testing
 app.post('/roll', dicebot);
-// gethuman bot for Slack
+// gethuman bot for Slack - to be deprecated
 app.post('/gethuman', ghSlackBot);
 // gethuman bot for FB
 app.post('/webhook/', ghFacebookBot);
@@ -81,13 +81,15 @@ app.post('/v3/webhook', function (req, res) {
       res.send(errorPayload.raw);
       // this should log error and then call botHandler.sendResponseToPlatform()
       // under the scenes
-      botHandler.sendErrorResponse(errorPayload);
+      botHandler.sendErrorResponse(errorPayload)
+        .then(function () {
+          res.status(200).end();
+        });
     });
 });
 
 
 // export this to a module
-
 var handlers = [require('./slack-handler'), require('./messenger-handler')];
 
 function getBotHandler(platformRequestContext) {
