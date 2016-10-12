@@ -16,7 +16,7 @@ module.exports = {
 }
 
 function isHandlerForRequest(platformRequestContext) {
-  var responseUrl = platformRequestContext.userRequest.body.response_url || '';
+  var responseUrl = platformRequestContext.userRequest.response_url || '';
   return (responseUrl && responseUrl.includes('hooks.slack.com')) ? true : false;
 }
 
