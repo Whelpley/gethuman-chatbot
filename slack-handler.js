@@ -23,7 +23,7 @@ function isHandlerForRequest(platformRequestContext) {
 // returns result of payload objects, ready to send on
 function getResponsePayload(platformRequestContext) {
   // var channelId = platformRequestContext.userRequest.body.channel_id;
-  var textInput = platformRequestContext.userRequest.body.text;
+  var textInput = platformRequestContext.userRequest.text;
   var result = {
     raw: {},
     data: {},
