@@ -38,7 +38,9 @@ function getResponsePayload(platformRequestContext) {
       ])
       .then(function (postAndCompanySearchResults) {
           var posts = postAndCompanySearchResults[0];
+          console.log("Posts returned by first query: " + JSON.stringify(posts).substring(0,200));
           var companies = postAndCompanySearchResults[1];
+          console.log("Companies returned by first query:: " + JSON.stringify(companies).substring(0,200));
           if (posts && posts.length) {
               return attachCompaniesAndGuides(posts)
                 .then(function (posts){

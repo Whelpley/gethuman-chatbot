@@ -61,6 +61,7 @@ app.post('/gethuman', function (req, res) {
     userRequest: req.body,
     disableSeparateResponse: !!req.params.istest
   };
+  console.log("Platform request: " + JSON.stringify(platformRequestContext));}
   // get a BotHandler object based on the context
   // should send an error if no appropriate bot found
   var botHandler = getBotHandler(platformRequestContext);
