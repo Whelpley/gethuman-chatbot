@@ -72,7 +72,7 @@ app.post('/v3/webhook', function (req, res) {
     })
     .then(function () {
       res.status(200).end();
-    });
+    })
     .catch(function (err) {
       // get response object that contains the thing you want to send to
       // the bot when an error occurs
