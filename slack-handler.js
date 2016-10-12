@@ -45,8 +45,10 @@ function getResponsePayload(platformRequestContext) {
               attachCompaniesAndGuides(posts)
                 .then(function (posts){
                     console.log("About to prepare payload from Posts object: " + JSON.stringify(posts).substring(0,200));
+                    // works until step above???
                     result.data = preparePayload.posts(posts);
                     result.raw = result.data;
+                    // does not go to here
                     console.log("Payload prepared by slack handler for POSTS: " + JSON.stringify(result));
                     return result;
                 });
@@ -55,12 +57,14 @@ function getResponsePayload(platformRequestContext) {
               result.data = preparePayload.companies(companies);
               result.raw = result.data;
               console.log("Payload prepared by slack handler for COMPANIES: " + JSON.stringify(result));
+              // goes to here fine!
               return result;
           }
           else {
               result.data = preparePayload.nothingFound();
               result.raw = result.data;
               console.log("Payload prepared by slack handler for NOTHING FOUND: " + JSON.stringify(result));
+              // goes to here fine!
               return result;
           }
       })
@@ -136,6 +140,7 @@ function attachCompaniesAndGuides(posts) {
         // refactor this
         var companyTable = {};
         var guideTable = {};
+        // do I need to translate these to map/forEach operations for async?
         for (let i = 0; i < companies.length; i++) {
             companyTable[companies[i]._id] = companies[i];
             guideTable[guides[i]._id] = guides[i];

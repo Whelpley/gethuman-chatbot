@@ -12,10 +12,9 @@ module.exports = {
   error: error
 }
 
-// prepares payload from Posts (with nested Companies + Guides) object
-// !!! This does not even touch the Guide - eliminate it !!!
+// prepares payload from Posts object
 function posts(posts) {
-    console.log("Starting preparation of Posts payload: " + JSON.stringify(companies).substring(0,200));
+    console.log("Starting preparation of Posts payload: " + JSON.stringify(posts).substring(0,200));
     var payload = {};
     payload.username = 'Gethuman Bot';
     // should this specifically reference the input?

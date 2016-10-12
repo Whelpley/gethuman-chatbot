@@ -69,6 +69,7 @@ app.post('/gethuman', function (req, res) {
   Q.when(botHandler.getResponsePayload(platformRequestContext))
     // this is an object that contains { raw: {}, data: {}, context: {} }
     .then(function (responsePayload) {
+      console.log("About to send a message back to Client: " + JSON.stringify(responsePayload));
       // this is the response to the original request
       // (comment this out if for now if needed return for Facebook/other bots)
       res.send(responsePayload.raw);
