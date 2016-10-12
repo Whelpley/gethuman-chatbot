@@ -68,6 +68,7 @@ app.post('/gethuman', function (req, res) {
 
   Q.when(botHandler.getResponsePayload(platformRequestContext))
     // this is an object that contains { raw: {}, data: {}, context: {} }
+    // trying with only raw data!
     .then(function (responsePayload) {
       // this is the response to the original request
       // (comment this out if for now if needed return for Facebook/other bots)
@@ -75,11 +76,10 @@ app.post('/gethuman', function (req, res) {
       // this is really only if need brand new request back to platform
       // i.e. used for slack (but messenger this may be empty)
 
-      if (!platformRequestContext.disableSeparateResponse) {
-        botHandler.sendResponseToPlatform(responsePayload);
-      }
+      // if (!platformRequestContext.disableSeparateResponse) {
+      //   botHandler.sendResponseToPlatform(responsePayload);
+      // }
 
-      // possibly an if/else required if two different Sends will break it
     })
     .catch(function (err) {
       // get response object that contains the thing you want to send to
@@ -89,10 +89,10 @@ app.post('/gethuman', function (req, res) {
       res.send(errorPayload.raw);
       // this should log error and then call botHandler.sendResponseToPlatform()
       // under the scenes
-      botHandler.sendErrorResponse(errorPayload)
-        .then(function () {
-          res.status(200).end();
-        });
+      // botHandler.sendErrorResponse(errorPayload)
+      //   .then(function () {
+      //     res.status(200).end();
+      //   });
     });
 });
 

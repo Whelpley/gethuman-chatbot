@@ -26,11 +26,11 @@ function getResponsePayload(platformRequestContext) {
   var textInput = platformRequestContext.userRequest.text;
   var result = {
     raw: {},
-    data: {},
+    // data: {},
     context: platformRequestContext
   }
   if (textInput) {
-    result.data =
+    result.raw =
       Q.all([
           postSearch.findByText(textInput),
           companySearch.findByText(textInput)
@@ -41,7 +41,8 @@ function getResponsePayload(platformRequestContext) {
           var companies = postAndCompanySearchResults[1];
           console.log("Companies returned by first query:: " + JSON.stringify(companies).substring(0,200));
           if (posts && posts.length) {
-              return attachCompaniesAndGuides(posts)
+              // return attachCompaniesAndGuides(posts)
+              attachCompaniesAndGuides(posts)
                 .then(function (posts){
                     return preparePayload.posts(posts);
                 });
@@ -53,14 +54,14 @@ function getResponsePayload(platformRequestContext) {
               return preparePayload.nothingFound();
           }
       })
-      .then(function() {
-          result.raw = result.data;
-          console.log("Payload prepared by slack handler for input " + textInput + ": " + JSON.stringify(result));
-          return result;
-      })
+      // .then(function() {
+      //     result.raw = result.data;
+      //     console.log("Payload prepared by slack handler for input " + textInput + ": " + JSON.stringify(result));
+      //     return result;
+      // })
     } else {
-      result.data = preparePayload.inputPrompt();
-      result.raw = result.data;
+      result.raw = preparePayload.inputPrompt();
+      // result.raw = result.data;
       console.log("Payload prepared by slack handler for NO TEXT INPUT: " + JSON.stringify(result));
       return result;
     };
@@ -93,11 +94,11 @@ function sendResponseToPlatform(payload) {
 function getErrorPayload(err, platformRequestContext) {
   var result = {
     raw: {},
-    data: {},
+    // data: {},
     context: platformRequestContext
   };
-  result.data = preparePayload.error(err);
-  result.raw = result.data;
+  result.raw = preparePayload.error(err);
+  // result.raw = result.data;
   return Q.when(result);
 }
 
