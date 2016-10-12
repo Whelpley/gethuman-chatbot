@@ -49,8 +49,7 @@ function getResponsePayload(platformRequestContext) {
 
       if (posts && posts.length) {
         // is it a bad idea to have a nested .then?
-          // return attachCompaniesAndGuides(posts)
-          attachCompaniesAndGuides(posts)
+          return attachCompaniesAndGuides(posts)
             .then(function (posts){
                 console.log("About to prepare payload from Posts object: " + JSON.stringify(posts).substring(0,200));
                 result.data = preparePayload.posts(posts);
