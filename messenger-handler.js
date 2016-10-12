@@ -1,3 +1,10 @@
+'use strict'
+
+module.exports = {
+  getResponsePayload: getResponsePayload,
+  sendResponseToPlatform: sendResponseToPlatform,
+  isHandlerForRequest: isHandlerForRequest
+}
 
 // need to examine the request coming from Facebook for what distinguishes it
 // basically returns False now
@@ -19,7 +26,4 @@ function sendResponseToPlatform() {
 
 }
 
-module.exports = {
-  getHandlerSuccessResponse: getHandlerSuccessResponse,
-  sendResponseToPlatform: sendResponseToPlatform
-}
+
