@@ -57,7 +57,7 @@ function getResponsePayload(platformRequestContext) {
     };
   result.raw = result.data;
   console.log("Payload prepared by slack handler: " + JSON.stringify(result));
-  return result;
+  return Q.when(result);
 }
 
 function sendResponseToPlatform(payload) {
@@ -92,7 +92,7 @@ function getErrorPayload(err, platformRequestContext) {
   };
   result.data = preparePayload.error(err);
   result.raw = result.data;
-  return result;
+  return Q.when(result);
 }
 
 function sendErrorResponse(errorPayload) {
