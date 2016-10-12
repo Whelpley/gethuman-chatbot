@@ -55,6 +55,7 @@ function getResponsePayload(platformRequestContext) {
     } else {
       result.data = preparePayload.inputPrompt();
     };
+  result.raw = result.data;
   console.log("Payload prepared by slack handler: " + JSON.stringify(result));
   return result;
 }
@@ -90,6 +91,7 @@ function getErrorPayload(err, platformRequestContext) {
     context: platformRequestContext
   };
   result.data = preparePayload.error(err);
+  result.raw = result.data;
   return result;
 }
 

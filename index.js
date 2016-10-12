@@ -3,6 +3,7 @@
 const express = require('express'),
  bodyParser = require('body-parser'),
  request = require('request'),
+ Q = require('q'),
  app = express();
 
 // should this just be declared in FB bot module?
@@ -56,13 +57,15 @@ app.listen(port, function () {
 app.post('/gethuman', function (req, res) {
 // app.post('/v3/webhook', function (req, res) {
   // put data from the Express req object into our custom context object
-  var platformRequestContext = { userRequest: req.body };
+  var platformRequestContext = {
+    userRequest: req.body,
+    disableSeparateResponse: !!req.params.istest
+  };
   // get a BotHandler object based on the context
-  getBotHandler(platformRequestContext)
-    .then(function (botHandler) {
-      // hit the API and form up a payload for response
-      return botHandler.getResponsePayload(platformRequestContext);
-    })
+  // should send an error if no appropriate bot found
+  var botHandler = getBotHandler(platformRequestContext);
+
+  botHandler.getResponsePayload(platformRequestContext)
     // this is an object that contains { raw: {}, data: {}, context: {} }
     .then(function (responsePayload) {
       // this is the response to the original request
@@ -70,11 +73,12 @@ app.post('/gethuman', function (req, res) {
       res.send(responsePayload.raw);
       // this is really only if need brand new request back to platform
       // i.e. used for slack (but messenger this may be empty)
-      botHandler.sendResponseToPlatform(responsePayload)
+
+      if (!platformRequestContext.disableSeparateResponse) {
+        botHandler.sendResponseToPlatform(responsePayload);
+      }
+
       // possibly an if/else required if two different Sends will break it
-    })
-    .then(function () {
-      res.status(200).end();
     })
     .catch(function (err) {
       // get response object that contains the thing you want to send to
@@ -97,17 +101,14 @@ var handlers = [require('./slack-handler'), require('./messenger-handler')];
 
 function getBotHandler(platformRequestContext) {
   // loop through handlers and call handlers[i].isHandlerForRequest(platformRequestContext)
-  var botFound = false;
 
   for (let i = 0; i < handlers.length; i++) {
     if (handlers[i].isHandlerForRequest(platformRequestContext)) {
-      botFound = true;
+      console.log("Found a bot to handle request!");
       return handlers[i];
     };
   };
-  // else if handler not found, throw error
-  if (!botFound) {
-    throw "Request coming from unrecognized platform";
-  };
 
+  // else if handler not found, throw error
+  throw "Request coming from unrecognized platform";
 }
