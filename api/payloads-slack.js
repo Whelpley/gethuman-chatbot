@@ -15,6 +15,7 @@ module.exports = {
 // prepares payload from Posts (with nested Companies + Guides) object
 // !!! This does not even touch the Guide - eliminate it !!!
 function posts(posts) {
+    console.log("Starting preparation of Posts payload: " + JSON.stringify(companies).substring(0,200));
     var payload = {};
     payload.username = 'Gethuman Bot';
     // should this specifically reference the input?
@@ -58,12 +59,13 @@ function posts(posts) {
         };
         payload.attachments.push(singleAttachment);
     };
+    console.log("Posts payload packaged to send: " + JSON.stringify(payload));
     return payload;
 };
 
 // prepares payload from Posts object
 function companies(companies) {
-
+    console.log("Starting preparation of Companies payload: " + JSON.stringify(companies).substring(0,200));
     var payload = {};
     payload.username = 'Gethuman Bot';
     payload.text = "We could not find any specific questions matching your input, but here is the contact information for some companies that could help you resolve your issue:";
@@ -94,6 +96,7 @@ function companies(companies) {
         };
         payload.attachments.push(singleAttachment);
     };
+    console.log("Companies payload packaged to send: " + JSON.stringify(payload));
     return payload;
 
 }

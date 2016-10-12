@@ -10,12 +10,7 @@ module.exports = {
 // basically returns False now
 function isHandlerForRequest(platformRequestContext) {
   var responseUrl = platformRequestContext.userRequest.response_url || '';
-
-  if (responseUrl && responseUrl.includes('facebook')) {
-    return true;
-  } else {
-    return false;
-  }
+  return (responseUrl && responseUrl.includes('facebook')) ? true : false;
 }
 
 function getResponsePayload() {
