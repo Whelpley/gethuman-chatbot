@@ -11,9 +11,9 @@ const token = process.env.FB_PAGE_ACCESS_TOKEN
 const GH_token = process.env.GH_API_ACCESS_TOKEN
 
 var hellobot = require('./hellobot.js'),
- dicebot = require('./dicebot.js'),
- ghSlackBot = require('./gh-slack-promises.js'),
- ghFacebookBot = require('./gh-facebook-bot.js');
+ dicebot = require('./dicebot.js');
+ // ghSlackBot = require('./gh-slack-promises.js'),
+ // ghFacebookBot = require('./gh-facebook-bot.js');
 
 var port = process.env.PORT || 3000;
 
@@ -32,9 +32,9 @@ app.post('/hello', hellobot);
 // dicebot - keep for testing
 app.post('/roll', dicebot);
 // gethuman bot for Slack - to be deprecated
-app.post('/gethuman', ghSlackBot);
-// gethuman bot for FB
-app.post('/webhook/', ghFacebookBot);
+// app.post('/gethuman', ghSlackBot);
+// gethuman bot for FB - to be deprecated
+// app.post('/webhook/', ghFacebookBot);
 
 // for Facebook verification
 app.get('/webhook/', function (req, res) {

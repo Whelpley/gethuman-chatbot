@@ -64,7 +64,7 @@ function sendResponseToPlatform(payload) {
   var path = process.env.INCOMING_WEBHOOK_PATH;
   var uri = 'https://hooks.slack.com/services/' + path;
 
-  payload.data.channel = payload.context.channel_id;
+  payload.data.channel = payload.context.userRequest.channel_id;
 
   console.log("Payload about to be sent back to Slack: " + JSON.stringify(payload.data));
 
