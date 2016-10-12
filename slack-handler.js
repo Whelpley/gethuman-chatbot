@@ -55,13 +55,13 @@ function getResponsePayload(platformRequestContext) {
       }).then(function() {
           result.raw = result.data;
           console.log("Payload prepared by slack handler for input " + textInput + ": " + JSON.stringify(result));
-          return Q.when(result);
+          return result;
       })
     } else {
       result.data = preparePayload.inputPrompt();
       result.raw = result.data;
       console.log("Payload prepared by slack handler for NO TEXT INPUT: " + JSON.stringify(result));
-      return Q.when(result);
+      return result;
     };
 }
 
