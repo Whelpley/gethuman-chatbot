@@ -5,7 +5,7 @@ const express = require('express'),
   request = require('request'),
   Q = require('q'),
   app = express(),
-  getBotHandler = require('get-bot-handler.js');
+  getBotHandler = require('./get-bot-handler.js').getBotHandler;
 
 // should this just be declared in FB bot module?
 const token = process.env.FB_PAGE_ACCESS_TOKEN
