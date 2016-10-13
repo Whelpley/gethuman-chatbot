@@ -50,7 +50,10 @@ app.listen(port, function () {
 // ***********************
 
 // -Temporarily using this endpoint, change to V3/ when Slack issue handled
-app.post('/gethuman', function (req, res) {
+app.post('/gethuman', handleRequest);
+app.post('/v3/gethuman', handleRequest);
+
+function handleRequest(req, res) {
 // app.post('/v3/webhook', function (req, res) {
   // put data from the Express req object into our custom context object
   var platformRequestContext = {
@@ -93,6 +96,4 @@ app.post('/gethuman', function (req, res) {
         res.send(errorPayload.raw);
       }
     });
-});
-
-
+}
