@@ -73,6 +73,9 @@ function getContextFromExpressReqRes(req, res) {
     isTest: !!req.params.istest,
     sendResponse: function (payload) {
       res.send(payload);
+    },
+    finishResponse: function() {
+      res.status(200).end();
     }
   };
 }

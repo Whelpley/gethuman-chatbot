@@ -55,8 +55,11 @@ function getResponsePayload(context) {
   })
 }
 
-// does it need to wrap up with 'res.status(200).end()' at end? I think not...
+// does it need to wrap up with 'res.status(200).end()' at end? Yes....
 function sendResponseToPlatform(payload) {
+  // shoot back an immediate Status 200 to let Slack know it's all cool
+  payload.context.finishResponse();
+
   var deferred = Q.defer();
   var path = process.env.INCOMING_WEBHOOK_PATH;
   var uri = 'https://hooks.slack.com/services/' + path;
@@ -72,7 +75,7 @@ function sendResponseToPlatform(payload) {
       deferred.reject(error);
     }
     else {
-        deferred.resolve();
+      deferred.resolve();
     }
   });
   return deferred.promise;
@@ -98,33 +101,33 @@ function queryCompaniesOfPosts(posts) {
         companyIDs.push(posts[i].companyId);
     };
     return Q.when(companySearch.findByIds(companyIDs))
-      .then(attachCompaniesToPosts(companies))
-    //   .then(function (companies) {
-    //     var companyTable = {};
-    //     for (let i = 0; i < companies.length; i++) {
-    //         companyTable[companies[i]._id] = companies[i];
-    //     };
-    //     for (let i = 0; i < posts.length; i++) {
-    //         let cID = posts[i].companyId;
-    //         posts[i].company = companyTable[cID];
-    //     };
-    //     return posts;
-    // })
+      // .then(attachCompaniesToPosts(companies))
+      .then(function (companies) {
+        var companyTable = {};
+        for (let i = 0; i < companies.length; i++) {
+            companyTable[companies[i]._id] = companies[i];
+        };
+        for (let i = 0; i < posts.length; i++) {
+            let cID = posts[i].companyId;
+            posts[i].company = companyTable[cID];
+        };
+        return posts;
+    })
 }
 
 // will this carry the reference to the Posts object?
 // if not, how to pass in Posts?
-function attachCompaniesToPosts(companies) {
-  var companyTable = {};
-  for (let i = 0; i < companies.length; i++) {
-      companyTable[companies[i]._id] = companies[i];
-  };
-  for (let i = 0; i < posts.length; i++) {
-      let cID = posts[i].companyId;
-      posts[i].company = companyTable[cID];
-  };
-  return posts;
-}
+// function attachCompaniesToPosts(companies) {
+//   var companyTable = {};
+//   for (let i = 0; i < companies.length; i++) {
+//       companyTable[companies[i]._id] = companies[i];
+//   };
+//   for (let i = 0; i < posts.length; i++) {
+//       let cID = posts[i].companyId;
+//       posts[i].company = companyTable[cID];
+//   };
+//   return posts;
+// }
 
 // ------------------------------
 
