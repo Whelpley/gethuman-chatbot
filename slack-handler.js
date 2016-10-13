@@ -18,41 +18,40 @@ function getResponsePayload(context) {
     data:  {},
     context: context
   }
-
   if (!textInput) {
       payload.data = preparePayload.inputPrompt();
       // payload.raw = payload.data;
-      // console.log("Payload prepared by slack handler for NO TEXT INPUT: " + JSON.stringify(payload));
       return Q.when(payload);
   }
-
   return Q.all([
       postSearch.findByText(textInput),
       companySearch.findByText(textInput)
   ])
-  .then(function (postAndCompanySearchResults) {
-      var posts = postAndCompanySearchResults[0];
-      var companies = postAndCompanySearchResults[1];
-      if (posts && posts.length) {
-        // is it a bad idea to have a nested .then?
-          return queryCompaniesOfPosts(posts)
-            .then(function (posts){
-                payload.data = preparePayload.posts(posts);
-                // payload.raw = payload.data;
-                return payload;
-            });
-      }
-      else if (companies && companies.length) {
-          payload.data = preparePayload.companies(companies);
-          // payload.raw = payload.data;
-          return payload;
-      }
-      else {
-          payload.data = preparePayload.nothingFound();
-          // payload.raw = payload.data;
-          return payload;
-      }
-  })
+  .then(getPayloadFromPostAndCompanySearch(postAndCompanySearchResults)
+  //   function (postAndCompanySearchResults) {
+  //     var posts = postAndCompanySearchResults[0];
+  //     var companies = postAndCompanySearchResults[1];
+  //     if (posts && posts.length) {
+  //       // is it a bad idea to have a nested .then?
+  //         return queryCompaniesOfPosts(posts)
+  //           .then(function (posts){
+  //               payload.data = preparePayload.posts(posts);
+  //               // payload.raw = payload.data;
+  //               return payload;
+  //           });
+  //     }
+  //     else if (companies && companies.length) {
+  //         payload.data = preparePayload.companies(companies);
+  //         // payload.raw = payload.data;
+  //         return payload;
+  //     }
+  //     else {
+  //         payload.data = preparePayload.nothingFound();
+  //         // payload.raw = payload.data;
+  //         return payload;
+  //     }
+  // }
+  )
 }
 
 // does it need to wrap up with 'res.status(200).end()' at end? Yes....
@@ -93,6 +92,30 @@ function sendErrorResponse(err, context) {
 }
 
 //  ---------- Helper Methods ----------------
+
+function getPayloadFromPostAndCompanySearch(postAndCompanySearchResults) {
+  var posts = postAndCompanySearchResults[0];
+  var companies = postAndCompanySearchResults[1];
+  if (posts && posts.length) {
+    // is it a bad idea to have a nested .then?
+      return queryCompaniesOfPosts(posts)
+        .then(function (posts){
+            payload.data = preparePayload.posts(posts);
+            // payload.raw = payload.data;
+            return payload;
+        });
+  }
+  else if (companies && companies.length) {
+      payload.data = preparePayload.companies(companies);
+      // payload.raw = payload.data;
+      return payload;
+  }
+  else {
+      payload.data = preparePayload.nothingFound();
+      // payload.raw = payload.data;
+      return payload;
+  }
+}
 
 function queryCompaniesOfPosts(posts) {
     // console.log("About to attach Companies to Posts.");
