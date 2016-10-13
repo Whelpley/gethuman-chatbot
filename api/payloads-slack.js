@@ -14,7 +14,6 @@ module.exports = {
 
 // prepares payload from Posts object
 function posts(posts) {
-    // console.log("Starting preparation of Posts payload: " + JSON.stringify(posts).substring(0,200));
     var payload = {};
     payload.username = 'Gethuman Bot';
     // should this specifically reference the input?
@@ -26,16 +25,21 @@ function posts(posts) {
         let name = posts[i].companyName || '';
         let color = colors[i];
         let urlId = posts[i].urlId || '';
-        let phone = (posts[i].company) ? posts[i].company.callback.phone : '';
         let title = posts[i].title || '';
         if (title.indexOf(name) < 0) {
             title = name + ": " + title;
         };
-        let emailContactMethods = posts[i].company.contactMethods.filter(function ( method ) {
-            return method.type === "email";
-        });
-        let email = (emailContactMethods && emailContactMethods.length) ? emailContactMethods[0].target : '';
-        let textField = formatTextField(phone, email);
+
+        let textField = extractTextFieldFromPost(posts[i]);
+
+        // let phone = (posts[i].company) ? posts[i].company.callback.phone : '';
+        // let emailContactMethods = posts[i].company.contactMethods.filter(function ( method ) {
+        //     return method.type === "email";
+        // });
+        // let email = (emailContactMethods && emailContactMethods.length) ? emailContactMethods[0].target : '';
+        // let textField = formatTextField(phone, email);
+
+
         let singleAttachment = {
             "fallback": "Solution guide for " + name,
             "title": title,
@@ -64,7 +68,6 @@ function posts(posts) {
 
 // prepares payload from Posts object
 function companies(companies) {
-    console.log("Starting preparation of Companies payload: " + JSON.stringify(companies).substring(0,200));
     var payload = {};
     payload.username = 'Gethuman Bot';
     payload.text = "We could not find any specific questions matching your input, but here is the contact information for some companies that could help you resolve your issue:";
@@ -74,13 +77,18 @@ function companies(companies) {
     for (let i=0; i < companies.length; i++) {
         let name = companies[i].name || '';
         let color = colors[i];
-        let phone = companies[i].callback.phone || '';
+
+        let textField = extractTextFieldFromCompany(companies[i]);
+
         // similar to other email harvest, but not the same
-        let emailContactMethods = companies[i].contactMethods.filter(function ( method ) {
-            return method.type === "email";
-        });
-        let email = (emailContactMethods && emailContactMethods.length) ? emailContactMethods[0].target : '';
-        let textField = formatTextField(phone, email);
+        // let phone = companies[i].callback.phone || '';
+        // let emailContactMethods = companies[i].contactMethods.filter(function ( method ) {
+        //     return method.type === "email";
+        // });
+        // let email = (emailContactMethods && emailContactMethods.length) ? emailContactMethods[0].target : '';
+        // let textField = formatTextField(phone, email);
+
+
         let singleAttachment = {
             "fallback": "Company info for " + name,
             "title": name,
@@ -95,7 +103,7 @@ function companies(companies) {
         };
         payload.attachments.push(singleAttachment);
     };
-    console.log("Companies payload packaged to send: " + JSON.stringify(payload));
+    // console.log("Companies payload packaged to send: " + JSON.stringify(payload));
     return payload;
 
 }
@@ -124,7 +132,25 @@ function error(error) {
     return payload;
 };
 
-// helper functions
+// ---------------- helper functions ----------------
+
+function extractTextFieldFromPost(post) {
+    let phone = (post.company) ? post.company.callback.phone : '';
+    let emailContactMethods = post.company.contactMethods.filter(function ( method ) {
+        return method.type === "email";
+    });
+    let email = (emailContactMethods && emailContactMethods.length) ? emailContactMethods[0].target : '';
+    return formatTextField(phone, email);
+}
+
+function extractTextFieldFromCompany(company) {
+    let phone = company.callback.phone || '';
+    let emailContactMethods = company.contactMethods.filter(function ( method ) {
+        return method.type === "email";
+    });
+    let email = (emailContactMethods && emailContactMethods.length) ? emailContactMethods[0].target : '';
+    let textField = formatTextField(phone, email);
+}
 
 function formatTextField(phone, email) {
     let result = '';
