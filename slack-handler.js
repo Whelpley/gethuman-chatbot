@@ -27,30 +27,31 @@ function getResponsePayload(context) {
       postSearch.findByText(textInput),
       companySearch.findByText(textInput)
   ])
-  .then(getPayloadFromPostAndCompanySearch(postAndCompanySearchResults)
-  //   function (postAndCompanySearchResults) {
-  //     var posts = postAndCompanySearchResults[0];
-  //     var companies = postAndCompanySearchResults[1];
-  //     if (posts && posts.length) {
-  //       // is it a bad idea to have a nested .then?
-  //         return queryCompaniesOfPosts(posts)
-  //           .then(function (posts){
-  //               payload.data = preparePayload.posts(posts);
-  //               // payload.raw = payload.data;
-  //               return payload;
-  //           });
-  //     }
-  //     else if (companies && companies.length) {
-  //         payload.data = preparePayload.companies(companies);
-  //         // payload.raw = payload.data;
-  //         return payload;
-  //     }
-  //     else {
-  //         payload.data = preparePayload.nothingFound();
-  //         // payload.raw = payload.data;
-  //         return payload;
-  //     }
-  // }
+  .then(
+    // getPayloadFromPostAndCompanySearch(postAndCompanySearchResults)
+    function (postAndCompanySearchResults) {
+      var posts = postAndCompanySearchResults[0];
+      var companies = postAndCompanySearchResults[1];
+      if (posts && posts.length) {
+        // is it a bad idea to have a nested .then?
+          return queryCompaniesOfPosts(posts)
+            .then(function (posts){
+                payload.data = preparePayload.posts(posts);
+                // payload.raw = payload.data;
+                return payload;
+            });
+      }
+      else if (companies && companies.length) {
+          payload.data = preparePayload.companies(companies);
+          // payload.raw = payload.data;
+          return payload;
+      }
+      else {
+          payload.data = preparePayload.nothingFound();
+          // payload.raw = payload.data;
+          return payload;
+      }
+  }
   )
 }
 
@@ -93,29 +94,29 @@ function sendErrorResponse(err, context) {
 
 //  ---------- Helper Methods ----------------
 
-function getPayloadFromPostAndCompanySearch(postAndCompanySearchResults) {
-  var posts = postAndCompanySearchResults[0];
-  var companies = postAndCompanySearchResults[1];
-  if (posts && posts.length) {
-    // is it a bad idea to have a nested .then?
-      return queryCompaniesOfPosts(posts)
-        .then(function (posts){
-            payload.data = preparePayload.posts(posts);
-            // payload.raw = payload.data;
-            return payload;
-        });
-  }
-  else if (companies && companies.length) {
-      payload.data = preparePayload.companies(companies);
-      // payload.raw = payload.data;
-      return payload;
-  }
-  else {
-      payload.data = preparePayload.nothingFound();
-      // payload.raw = payload.data;
-      return payload;
-  }
-}
+// function getPayloadFromPostAndCompanySearch(postAndCompanySearchResults) {
+//   var posts = postAndCompanySearchResults[0];
+//   var companies = postAndCompanySearchResults[1];
+//   if (posts && posts.length) {
+//     // is it a bad idea to have a nested .then?
+//       return queryCompaniesOfPosts(posts)
+//         .then(function (posts){
+//             payload.data = preparePayload.posts(posts);
+//             // payload.raw = payload.data;
+//             return payload;
+//         });
+//   }
+//   else if (companies && companies.length) {
+//       payload.data = preparePayload.companies(companies);
+//       // payload.raw = payload.data;
+//       return payload;
+//   }
+//   else {
+//       payload.data = preparePayload.nothingFound();
+//       // payload.raw = payload.data;
+//       return payload;
+//   }
+// }
 
 function queryCompaniesOfPosts(posts) {
     // console.log("About to attach Companies to Posts.");
