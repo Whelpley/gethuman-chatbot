@@ -1,20 +1,19 @@
 'use strict'
 
 const express = require('express'),
- bodyParser = require('body-parser'),
- request = require('request'),
- Q = require('q'),
- app = express();
+  bodyParser = require('body-parser'),
+  request = require('request'),
+  Q = require('q'),
+  app = express(),
+  getBotHandler = require('get-bot-handler.js');
 
 // should this just be declared in FB bot module?
 const token = process.env.FB_PAGE_ACCESS_TOKEN
 // is this even used?
-const GH_token = process.env.GH_API_ACCESS_TOKEN
+// const GH_token = process.env.GH_API_ACCESS_TOKEN
 
 var hellobot = require('./hellobot.js'),
  dicebot = require('./dicebot.js');
- // ghSlackBot = require('./gh-slack-promises.js'),
- // ghFacebookBot = require('./gh-facebook-bot.js');
 
 var port = process.env.PORT || 3000;
 
@@ -32,10 +31,6 @@ app.get('/', function (req, res) { res.status(200).send('Hello world!') });
 app.post('/hello', hellobot);
 // dicebot - keep for testing
 app.post('/roll', dicebot);
-// gethuman bot for Slack - to be deprecated
-// app.post('/gethuman', ghSlackBot);
-// gethuman bot for FB - to be deprecated
-// app.post('/webhook/', ghFacebookBot);
 
 // for Facebook verification
 app.get('/webhook/', function (req, res) {
@@ -83,7 +78,6 @@ app.post('/gethuman', function (req, res) {
     })
     .catch(function (err) {
       console.error(err);
-
       // get response object that contains the thing you want to send to
       // the bot when an error occurs
       var errorPayload = botHandler.getErrorPayload(err, platformRequestContext);
@@ -98,19 +92,3 @@ app.post('/gethuman', function (req, res) {
 });
 
 
-// export this to a module
-var handlers = [require('./slack-handler'), require('./messenger-handler')];
-
-function getBotHandler(platformRequestContext) {
-  // loop through handlers and call handlers[i].isHandlerForRequest(platformRequestContext)
-
-  for (let i = 0; i < handlers.length; i++) {
-    if (handlers[i].isHandlerForRequest(platformRequestContext)) {
-      console.log("Found a bot to handle request!");
-      return handlers[i];
-    };
-  };
-
-  // else if handler not found, throw error
-  throw "Request coming from unrecognized platform";
-}
