@@ -6,35 +6,24 @@ const request = require('request'),
     postSearch = require('./api/post.js'),
     preparePayload = require('./api/payloads-slack.js');
 
-module.exports = {
-  isHandlerForRequest: isHandlerForRequest,
-  getResponsePayload: getResponsePayload,
-  sendResponseToPlatform: sendResponseToPlatform,
-  getErrorPayload: getErrorPayload,
-  sendErrorResponse: sendErrorResponse
-}
-
-function isHandlerForRequest(platformRequestContext) {
-  var responseUrl = platformRequestContext.userRequest.response_url || '';
+function isHandlerForRequest(context) {
+  var responseUrl = context.userRequest.response_url || '';
   return (responseUrl && responseUrl.includes('hooks.slack.com')) ? true : false;
 }
 
-// returns result of payload objects, ready to send on
-function getResponsePayload(platformRequestContext) {
-  // flag context to send delayed & formatted message for Slack
-  platformRequestContext.disableSeparateResponse = true;
-  var textInput = platformRequestContext.userRequest.text;
-  var result = {
-    raw: {},
+function getResponsePayload(context) {
+  var textInput = context.userRequest.text;
+  var payload = {
+    // raw: {},
     data:  {},
-    context: platformRequestContext
+    context: context
   }
 
   if (!textInput) {
-      result.data = preparePayload.inputPrompt();
-      result.raw = result.data;
-      console.log("Payload prepared by slack handler for NO TEXT INPUT: " + JSON.stringify(result));
-      return Q.when(result);
+      payload.data = preparePayload.inputPrompt();
+      // payload.raw = payload.data;
+      console.log("Payload prepared by slack handler for NO TEXT INPUT: " + JSON.stringify(payload));
+      return Q.when(payload);
   }
 
   return Q.all([
@@ -46,42 +35,41 @@ function getResponsePayload(platformRequestContext) {
       // console.log("Posts returned by first query: " + JSON.stringify(posts).substring(0,200));
       var companies = postAndCompanySearchResults[1];
       // console.log("Companies returned by first query:: " + JSON.stringify(companies).substring(0,200));
-
       if (posts && posts.length) {
         // is it a bad idea to have a nested .then?
           return attachCompaniesToPosts(posts)
             .then(function (posts){
-                console.log("About to prepare payload from Posts object: " + JSON.stringify(posts).substring(0,200));
-                result.data = preparePayload.posts(posts);
-                result.raw = result.data;
-                console.log("Payload prepared by slack handler for POSTS: " + JSON.stringify(result));
-                return result;
+                // console.log("About to prepare payload from Posts object: " + JSON.stringify(posts).substring(0,200));
+                payload.data = preparePayload.posts(posts);
+                // payload.raw = payload.data;
+                // console.log("Payload prepared by slack handler for POSTS: " + JSON.stringify(payload));
+                return payload;
             });
       }
       else if (companies && companies.length) {
-          result.data = preparePayload.companies(companies);
-          result.raw = result.data;
-          console.log("Payload prepared by slack handler for COMPANIES: " + JSON.stringify(result));
-          return result;
+          payload.data = preparePayload.companies(companies);
+          // payload.raw = payload.data;
+          console.log("Payload prepared by slack handler for COMPANIES: " + JSON.stringify(payload));
+          return payload;
       }
       else {
-          result.data = preparePayload.nothingFound();
-          result.raw = result.data;
-          console.log("Payload prepared by slack handler for NOTHING FOUND: " + JSON.stringify(result));
-          return result;
+          payload.data = preparePayload.nothingFound();
+          // payload.raw = payload.data;
+          console.log("Payload prepared by slack handler for NOTHING FOUND: " + JSON.stringify(payload));
+          return payload;
       }
   })
 }
 
+// for other bots, this will just call context.sendResponse(payload) under the hood
+// does it need to wrap up with 'res.status(200).end()' at end?
 function sendResponseToPlatform(payload) {
   var deferred = Q.defer();
   var path = process.env.INCOMING_WEBHOOK_PATH;
   var uri = 'https://hooks.slack.com/services/' + path;
 
   payload.data.channel = payload.context.userRequest.channel_id;
-
-  console.log("Payload about to be sent back to Slack: " + JSON.stringify(payload.data));
-
+  // console.log("Payload about to be sent back to Slack: " + JSON.stringify(payload.data));
   request({
     uri: uri,
     method: 'POST',
@@ -97,32 +85,27 @@ function sendResponseToPlatform(payload) {
   return deferred.promise;
 }
 
-function getErrorPayload(err, platformRequestContext) {
-  var result = {
-    raw: {},
+function sendErrorResponse(err, context) {
+  console.log("Ran into an error: " + err);
+  var payload = {
+    // raw: {},
     data: {},
-    context: platformRequestContext
+    context: context
   };
-  result.data = preparePayload.error(err);
-  result.raw = result.data;
-  return Q.when(result);
-}
-
-function sendErrorResponse(errorPayload) {
-  console.log("Ran into an error: " + error);
+  payload.data = preparePayload.error(err);
   sendResponseToPlatform(errorPayload);
 }
 
 //  ---------- Helper Methods ----------------
 
 function attachCompaniesToPosts(posts) {
-    console.log("About to attach Companies to Posts.");
+    // console.log("About to attach Companies to Posts.");
     var companyIDs = [];
     for (let i = 0; i < posts.length; i++) {
         companyIDs.push(posts[i].companyId);
     };
     return Q.when(companySearch.findByIds(companyIDs))
-    .then(function (companies) {
+      .then(function (companies) {
         // refactor this
         var companyTable = {};
         // do I need to translate these to map/forEach operations for async?
@@ -136,4 +119,13 @@ function attachCompaniesToPosts(posts) {
         console.log("About to return Posts after attaching Companies: " + JSON.stringify(posts).substring(0,400));
         return posts;
     })
+}
+
+// ------------------------------
+
+module.exports = {
+  isHandlerForRequest: isHandlerForRequest,
+  getResponsePayload: getResponsePayload,
+  sendResponseToPlatform: sendResponseToPlatform,
+  sendErrorResponse: sendErrorResponse
 }

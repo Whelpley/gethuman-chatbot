@@ -46,54 +46,36 @@ app.listen(port, function () {
 });
 
 // ***************************************
-// unified api endpoint
+// unified api endpoint (kinda)
 // ***********************
 
-// -Temporarily using this endpoint, change to V3/ when Slack issue handled
-// app.post('/gethuman', handleRequest);
+app.post('/gethuman', handleRequest);
 app.post('/v3/gethuman', handleRequest);
 
 function handleRequest(req, res) {
-// app.post('/v3/webhook', function (req, res) {
   // put data from the Express req object into our custom context object
-  var platformRequestContext = {
-    userRequest: req.body,
-    disableSeparateResponse: !!req.params.istest
-  };
-  console.log("Platform request: " + JSON.stringify(platformRequestContext));
-  // get a BotHandler object based on the context
-  // should send an error if no appropriate bot found
-  var botHandler = getBotHandler(platformRequestContext);
-
-  botHandler.getResponsePayload(platformRequestContext)
-    // this is an object that contains { raw: {}, data: {}, context: {} }
+  var context = getContextFromExpressReqRes(req, res);
+  console.log("Platform request: " + JSON.stringify(context));
+  // get the bot handler
+  var botHandler = getBotHandler(context);
+  // get the response payload from the handler
+  botHandler.getResponsePayload(context)
     .then(function (responsePayload) {
-      console.log("About to send a message back to Client: " + JSON.stringify(responsePayload));
-
-      // This sends a delayed response after the immediate 200 response
-      // (default false, but true for Slack)
-      if (platformRequestContext.disableSeparateResponse) {
-        res.status(200).end();
-        botHandler.sendResponseToPlatform(responsePayload);
-      }
-      else {
-        res.send(responsePayload.raw);
-      }
-
+      // console.log("About to send a message back to Client: " + JSON.stringify(responsePayload));
+      // send back the response
+      botHandler.sendResponseToPlatform(responsePayload);
     })
     .catch(function (err) {
-      console.error(err);
-      // get response object that contains the thing you want to send to
-      // the bot when an error occurs
-      var errorPayload = botHandler.getErrorPayload(err, platformRequestContext);
-      // this should log error and then call botHandler.sendResponseToPlatform()
-      // under the scenes
-      if (platformRequestContext.disableSeparateResponse) {
-        res.status(200).end();
-        botHandler.sendErrorResponse(errorPayload)
-      }
-      else {
-        res.send(errorPayload.raw);
-      }
+      botHandler.sendErrorResponse(err, context);
     });
+}
+
+function getContextFromExpressReqRes(req, res) {
+  return {
+    userRequest: req.body,
+    isTest: !!req.params.istest,
+    sendResponse: function (payload) {
+      res.send(payload);
+    }
+  };
 }
