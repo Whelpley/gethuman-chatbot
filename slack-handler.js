@@ -22,7 +22,7 @@ function getResponsePayload(context) {
   if (!textInput) {
       payload.data = preparePayload.inputPrompt();
       // payload.raw = payload.data;
-      console.log("Payload prepared by slack handler for NO TEXT INPUT: " + JSON.stringify(payload));
+      // console.log("Payload prepared by slack handler for NO TEXT INPUT: " + JSON.stringify(payload));
       return Q.when(payload);
   }
 
@@ -32,37 +32,30 @@ function getResponsePayload(context) {
   ])
   .then(function (postAndCompanySearchResults) {
       var posts = postAndCompanySearchResults[0];
-      // console.log("Posts returned by first query: " + JSON.stringify(posts).substring(0,200));
       var companies = postAndCompanySearchResults[1];
-      // console.log("Companies returned by first query:: " + JSON.stringify(companies).substring(0,200));
       if (posts && posts.length) {
         // is it a bad idea to have a nested .then?
-          return attachCompaniesToPosts(posts)
+          return queryCompaniesOfPosts(posts)
             .then(function (posts){
-                // console.log("About to prepare payload from Posts object: " + JSON.stringify(posts).substring(0,200));
                 payload.data = preparePayload.posts(posts);
                 // payload.raw = payload.data;
-                // console.log("Payload prepared by slack handler for POSTS: " + JSON.stringify(payload));
                 return payload;
             });
       }
       else if (companies && companies.length) {
           payload.data = preparePayload.companies(companies);
           // payload.raw = payload.data;
-          console.log("Payload prepared by slack handler for COMPANIES: " + JSON.stringify(payload));
           return payload;
       }
       else {
           payload.data = preparePayload.nothingFound();
           // payload.raw = payload.data;
-          console.log("Payload prepared by slack handler for NOTHING FOUND: " + JSON.stringify(payload));
           return payload;
       }
   })
 }
 
-// for other bots, this will just call context.sendResponse(payload) under the hood
-// does it need to wrap up with 'res.status(200).end()' at end?
+// does it need to wrap up with 'res.status(200).end()' at end? I think not...
 function sendResponseToPlatform(payload) {
   var deferred = Q.defer();
   var path = process.env.INCOMING_WEBHOOK_PATH;
@@ -98,27 +91,39 @@ function sendErrorResponse(err, context) {
 
 //  ---------- Helper Methods ----------------
 
-function attachCompaniesToPosts(posts) {
+function queryCompaniesOfPosts(posts) {
     // console.log("About to attach Companies to Posts.");
     var companyIDs = [];
     for (let i = 0; i < posts.length; i++) {
         companyIDs.push(posts[i].companyId);
     };
     return Q.when(companySearch.findByIds(companyIDs))
-      .then(function (companies) {
-        // refactor this
-        var companyTable = {};
-        // do I need to translate these to map/forEach operations for async?
-        for (let i = 0; i < companies.length; i++) {
-            companyTable[companies[i]._id] = companies[i];
-        };
-        for (let i = 0; i < posts.length; i++) {
-            let cID = posts[i].companyId;
-            posts[i].company = companyTable[cID];
-        };
-        console.log("About to return Posts after attaching Companies: " + JSON.stringify(posts).substring(0,400));
-        return posts;
-    })
+      .then(attachCompaniesToPosts(companies))
+    //   .then(function (companies) {
+    //     var companyTable = {};
+    //     for (let i = 0; i < companies.length; i++) {
+    //         companyTable[companies[i]._id] = companies[i];
+    //     };
+    //     for (let i = 0; i < posts.length; i++) {
+    //         let cID = posts[i].companyId;
+    //         posts[i].company = companyTable[cID];
+    //     };
+    //     return posts;
+    // })
+}
+
+// will this carry the reference to the Posts object?
+// if not, how to pass in Posts?
+function attachCompaniesToPosts(companies) {
+  var companyTable = {};
+  for (let i = 0; i < companies.length; i++) {
+      companyTable[companies[i]._id] = companies[i];
+  };
+  for (let i = 0; i < posts.length; i++) {
+      let cID = posts[i].companyId;
+      posts[i].company = companyTable[cID];
+  };
+  return posts;
 }
 
 // ------------------------------

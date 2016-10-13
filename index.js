@@ -56,13 +56,10 @@ function handleRequest(req, res) {
   // put data from the Express req object into our custom context object
   var context = getContextFromExpressReqRes(req, res);
   console.log("Platform request: " + JSON.stringify(context));
-  // get the bot handler
   var botHandler = getBotHandler(context);
-  // get the response payload from the handler
   botHandler.getResponsePayload(context)
     .then(function (responsePayload) {
-      // console.log("About to send a message back to Client: " + JSON.stringify(responsePayload));
-      // send back the response
+      console.log("About to send a message back to Client: " + JSON.stringify(responsePayload));
       botHandler.sendResponseToPlatform(responsePayload);
     })
     .catch(function (err) {
