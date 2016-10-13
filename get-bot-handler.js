@@ -1,3 +1,5 @@
+'use strict'
+
 var handlers = [require('./slack-handler'), require('./messenger-handler')];
 
 module.exports = {
