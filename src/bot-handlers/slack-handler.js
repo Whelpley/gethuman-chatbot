@@ -2,10 +2,11 @@
 
 const request = require('request'),
     Q = require('q'),
-    companySearch = require('./api/company.js'),
-    postSearch = require('./api/post.js'),
-    preparePayload = require('./api/payloads-slack.js');
+    companySearch = require('../api-gh/company.js'),
+    postSearch = require('../api-gh/post.js'),
+    preparePayload = require('./slack-payload.js');
 
+// unit testable
 function isHandlerForRequest(context) {
   var responseUrl = context.userRequest.response_url || '';
   return (responseUrl && responseUrl.includes('hooks.slack.com')) ? true : false;
@@ -27,33 +28,31 @@ function getResponsePayload(context) {
       postSearch.findByText(textInput),
       companySearch.findByText(textInput)
   ])
-  .then(
-    // ReferenceError: postAndCompanySearchResults is not defined
-    // getPayloadFromPostAndCompanySearch(postAndCompanySearchResults)
-    function (postAndCompanySearchResults) {
-      var posts = postAndCompanySearchResults[0];
-      var companies = postAndCompanySearchResults[1];
-      if (posts && posts.length) {
-        // is it a bad idea to have a nested .then?
-          return queryCompaniesOfPosts(posts)
-            .then(function (posts){
-                payload.data = preparePayload.posts(posts);
-                // payload.raw = payload.data;
-                return payload;
-            });
-      }
-      else if (companies && companies.length) {
-          payload.data = preparePayload.companies(companies);
-          // payload.raw = payload.data;
-          return payload;
-      }
-      else {
-          payload.data = preparePayload.nothingFound();
-          // payload.raw = payload.data;
-          return payload;
-      }
-    }
-  )
+  .then(getPayload)
+}
+
+function getPayload(postAndCompanySearchResults) {
+  var posts = postAndCompanySearchResults[0];
+  var companies = postAndCompanySearchResults[1];
+  if (posts && posts.length) {
+    // is it a bad idea to have a nested .then?
+      return queryCompaniesOfPosts(posts)
+        .then(function (posts){
+            payload.data = preparePayload.posts(posts);
+            // payload.raw = payload.data;
+            return payload;
+        });
+  }
+  else if (companies && companies.length) {
+      payload.data = preparePayload.companies(companies);
+      // payload.raw = payload.data;
+      return payload;
+  }
+  else {
+      payload.data = preparePayload.nothingFound();
+      // payload.raw = payload.data;
+      return payload;
+  }
 }
 
 // does it need to wrap up with 'res.status(200).end()' at end? Yes....

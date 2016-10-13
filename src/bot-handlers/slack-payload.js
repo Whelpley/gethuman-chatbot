@@ -4,14 +4,6 @@
 
 const colors = ['#1c4fff', '#e84778', '#ffc229', '#1ae827', '#5389ff'];
 
-module.exports = {
-  posts: posts,
-  companies: companies,
-  nothingFound: nothingFound,
-  inputPrompt: inputPrompt,
-  error: error
-}
-
 // prepares payload from Posts object
 function posts(posts) {
     var payload = {};
@@ -115,7 +107,7 @@ function error(error) {
 
 function extractTextFieldFromPost(post) {
     let phone = (post.company) ? post.company.callback.phone : '';
-    let emailContactMethods = post.company.contactMethods.filter(function ( method ) {
+    let emailContactMethods = post.company.contactMethods.filter(function (method) {
         return method.type === "email";
     });
     let email = (emailContactMethods && emailContactMethods.length) ? emailContactMethods[0].target : '';
@@ -124,11 +116,11 @@ function extractTextFieldFromPost(post) {
 
 function extractTextFieldFromCompany(company) {
     let phone = company.callback.phone || '';
-    let emailContactMethods = company.contactMethods.filter(function ( method ) {
+    let emailContactMethods = company.contactMethods.filter(function (method) {
         return method.type === "email";
     });
     let email = (emailContactMethods && emailContactMethods.length) ? emailContactMethods[0].target : '';
-    let textField = formatTextField(phone, email);
+    return formatTextField(phone, email);
 }
 
 function formatTextField(phone, email) {
@@ -143,5 +135,11 @@ function formatTextField(phone, email) {
     return result;
 };
 
-
+module.exports = {
+  posts: posts,
+  companies: companies,
+  nothingFound: nothingFound,
+  inputPrompt: inputPrompt,
+  error: error
+}
 
