@@ -50,7 +50,7 @@ app.listen(port, function () {
 // ***********************
 
 // -Temporarily using this endpoint, change to V3/ when Slack issue handled
-app.post('/gethuman', handleRequest);
+// app.post('/gethuman', handleRequest);
 app.post('/v3/gethuman', handleRequest);
 
 function handleRequest(req, res) {
