@@ -12,6 +12,7 @@ const token = process.env.FB_PAGE_ACCESS_TOKEN
 // is this even used?
 // const GH_token = process.env.GH_API_ACCESS_TOKEN
 
+// simple test bots
 var hellobot = require('./hellobot.js'),
  dicebot = require('./dicebot.js');
 
@@ -65,14 +66,15 @@ app.post('/gethuman', function (req, res) {
     // this is an object that contains { raw: {}, data: {}, context: {} }
     .then(function (responsePayload) {
       console.log("About to send a message back to Client: " + JSON.stringify(responsePayload));
-      // this is the response to the original request
-      // (comment this out if for now if needed return for Facebook/other bots)
-      res.send(responsePayload.raw);
-      // this is really only if need brand new request back to platform
-      // i.e. used for slack (but messenger this may be empty)
 
-      if (!platformRequestContext.disableSeparateResponse) {
+      // This sends a delayed response after the immediate 200 response
+      // (default false, but true for Slack)
+      if (platformRequestContext.disableSeparateResponse) {
+        res.status(200).end();
         botHandler.sendResponseToPlatform(responsePayload);
+      }
+      else {
+        res.send(responsePayload.raw);
       }
 
     })
@@ -81,12 +83,14 @@ app.post('/gethuman', function (req, res) {
       // get response object that contains the thing you want to send to
       // the bot when an error occurs
       var errorPayload = botHandler.getErrorPayload(err, platformRequestContext);
-      // send response to original request
-      res.send(errorPayload.raw);
       // this should log error and then call botHandler.sendResponseToPlatform()
       // under the scenes
-      if (!platformRequestContext.disableSeparateResponse) {
+      if (platformRequestContext.disableSeparateResponse) {
+        res.status(200).end();
         botHandler.sendErrorResponse(errorPayload)
+      }
+      else {
+        res.send(errorPayload.raw);
       }
     });
 });

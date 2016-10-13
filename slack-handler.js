@@ -21,7 +21,8 @@ function isHandlerForRequest(platformRequestContext) {
 
 // returns result of payload objects, ready to send on
 function getResponsePayload(platformRequestContext) {
-  // var channelId = platformRequestContext.userRequest.body.channel_id;
+  // flag context to send delayed & formatted message for Slack
+  platformRequestContext.disableSeparateResponse = true;
   var textInput = platformRequestContext.userRequest.text;
   var result = {
     raw: {},
@@ -114,7 +115,6 @@ function sendErrorResponse(errorPayload) {
 
 //  ---------- Helper Methods ----------------
 
-// method could also be refactored
 function attachCompaniesToPosts(posts) {
     console.log("About to attach Companies to Posts.");
     var companyIDs = [];
