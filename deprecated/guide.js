@@ -24,3 +24,15 @@ function findByIds(guideIds) {
   return deferred.promise;
 }
 
+// function to strip HTML from text - if including Guides later
+
+// string of regex's to remove HTML tags from string
+// not needed if not displaying solutions text
+// function stripHtml(string) {
+//     return string.replace(/<\s*br\/*>/gi, "\n")
+//       .replace(/<\s*a.*href="(.*?)".*>(.*?)<\/a>/gi, " $2 (Link->$1) ")
+//       .replace(/<\s*\/*.+?>/ig, "\n")
+//       .replace(/ {2,}/gi, " ")
+//       .replace(/\n+\s*/gi, "\n\n");
+// }
+

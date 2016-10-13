@@ -29,17 +29,7 @@ function posts(posts) {
         if (title.indexOf(name) < 0) {
             title = name + ": " + title;
         };
-
         let textField = extractTextFieldFromPost(posts[i]);
-
-        // let phone = (posts[i].company) ? posts[i].company.callback.phone : '';
-        // let emailContactMethods = posts[i].company.contactMethods.filter(function ( method ) {
-        //     return method.type === "email";
-        // });
-        // let email = (emailContactMethods && emailContactMethods.length) ? emailContactMethods[0].target : '';
-        // let textField = formatTextField(phone, email);
-
-
         let singleAttachment = {
             "fallback": "Solution guide for " + name,
             "title": title,
@@ -77,18 +67,7 @@ function companies(companies) {
     for (let i=0; i < companies.length; i++) {
         let name = companies[i].name || '';
         let color = colors[i];
-
         let textField = extractTextFieldFromCompany(companies[i]);
-
-        // similar to other email harvest, but not the same
-        // let phone = companies[i].callback.phone || '';
-        // let emailContactMethods = companies[i].contactMethods.filter(function ( method ) {
-        //     return method.type === "email";
-        // });
-        // let email = (emailContactMethods && emailContactMethods.length) ? emailContactMethods[0].target : '';
-        // let textField = formatTextField(phone, email);
-
-
         let singleAttachment = {
             "fallback": "Company info for " + name,
             "title": name,
@@ -164,13 +143,5 @@ function formatTextField(phone, email) {
     return result;
 };
 
-// string of regex's to remove HTML tags from string
-// not needed if not displaying solutions text
-// function stripHtml(string) {
-//     return string.replace(/<\s*br\/*>/gi, "\n")
-//       .replace(/<\s*a.*href="(.*?)".*>(.*?)<\/a>/gi, " $2 (Link->$1) ")
-//       .replace(/<\s*\/*.+?>/ig, "\n")
-//       .replace(/ {2,}/gi, " ")
-//       .replace(/\n+\s*/gi, "\n\n");
-// }
+
 
