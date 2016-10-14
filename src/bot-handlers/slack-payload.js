@@ -3,6 +3,7 @@
 'use strict'
 
 const colors = ['#1c4fff', '#e84778', '#ffc229', '#1ae827', '#5389ff'];
+const Q = require('q');
 
 function addPostsToPayload(payload, posts) {
   return queryCompaniesOfPosts(posts)

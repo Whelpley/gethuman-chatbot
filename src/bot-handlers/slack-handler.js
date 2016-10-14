@@ -1,10 +1,10 @@
 'use strict'
 
-const request = require('request'),
-    Q = require('q'),
-    companySearch = require('../api-gh/company.js'),
-    postSearch = require('../api-gh/post.js'),
-    preparePayload = require('./slack-payload.js');
+const request = require('request');
+const Q = require('q');
+const companySearch = require('../api-gh/company.js');
+const postSearch = require('../api-gh/post.js');
+const preparePayload = require('./slack-payload.js');
 
 // unit testable
 function isHandlerForRequest(context) {
