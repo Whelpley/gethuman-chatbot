@@ -4,8 +4,67 @@
 
 const colors = ['#1c4fff', '#e84778', '#ffc229', '#1ae827', '#5389ff'];
 
+function addPostsToPayload(payload, posts) {
+  return queryCompaniesOfPosts(posts)
+    .then(function (posts){
+        payload.data = preparePostsPayload(posts);
+        payload.raw = payload.data;
+        return payload;
+    });
+}
+
+function addCompaniesToPayload(payload, companies) {
+    payload.data = prepareCompaniesPayload(companies);
+    payload.raw = payload.data;
+    return payload;
+}
+
+function nothingFound(payload) {
+    payload.data.username = 'Gethuman Bot';
+    payload.data.text = "We could not find anything matching your input to our database. Could you try rephrasing your concern, and be sure to spell the company name correctly?";
+    payload.data.icon_emoji = ':question:';
+    payload.raw = payload.data;
+    return payload;
+};
+
+function inputPrompt(payload) {
+    payload.data.username = 'Gethuman Bot';
+    payload.data.text = "Tell me your customer service issue.";
+    payload.data.icon_emoji = ':ear:';
+    return payload;
+};
+
+function error(error) {
+    var payload = {};
+    payload.username = 'Gethuman Bot';
+    payload.text = error;
+    payload.icon_emoji = ':no_good:';
+    return payload;
+};
+
+// ---------------- helper functions ----------------
+
+function queryCompaniesOfPosts(posts) {
+    var companyIDs = [];
+    for (let i = 0; i < posts.length; i++) {
+        companyIDs.push(posts[i].companyId);
+    };
+    return Q.when(companySearch.findByIds(companyIDs))
+      .then(function (companies) {
+        var companyTable = {};
+        for (let i = 0; i < companies.length; i++) {
+            companyTable[companies[i]._id] = companies[i];
+        };
+        for (let i = 0; i < posts.length; i++) {
+            let cID = posts[i].companyId;
+            posts[i].company = companyTable[cID];
+        };
+        return posts;
+    })
+}
+
 // prepares payload from Posts object
-function posts(posts) {
+function preparePostsPayload(posts) {
     var payload = {};
     payload.username = 'Gethuman Bot';
     // should this specifically reference the input?
@@ -44,12 +103,11 @@ function posts(posts) {
         };
         payload.attachments.push(singleAttachment);
     };
-    // console.log("Posts payload packaged to send: " + JSON.stringify(payload));
     return payload;
 };
 
 // prepares payload from Posts object
-function companies(companies) {
+function prepareCompaniesPayload(companies) {
     var payload = {};
     payload.username = 'Gethuman Bot';
     payload.text = "We could not find any specific questions matching your input, but here is the contact information for some companies that could help you resolve your issue:";
@@ -74,36 +132,8 @@ function companies(companies) {
         };
         payload.attachments.push(singleAttachment);
     };
-    // console.log("Companies payload packaged to send: " + JSON.stringify(payload));
     return payload;
-
 }
-
-function nothingFound() {
-    var payload = {};
-    payload.username = 'Gethuman Bot';
-    payload.text = "We could not find anything matching your input to our database. Could you try rephrasing your concern, and be sure to spell the company name correctly?";
-    payload.icon_emoji = ':question:';
-    return payload;
-};
-
-function inputPrompt() {
-    var payload = {};
-    payload.username = 'Gethuman Bot';
-    payload.text = "Tell me your customer service issue.";
-    payload.icon_emoji = ':ear:';
-    return payload;
-};
-
-function error(error) {
-    var payload = {};
-    payload.username = 'Gethuman Bot';
-    payload.text = error;
-    payload.icon_emoji = ':no_good:';
-    return payload;
-};
-
-// ---------------- helper functions ----------------
 
 function extractTextFieldFromPost(post) {
     let phone = (post.company) ? post.company.callback.phone : '';
@@ -136,8 +166,8 @@ function formatTextField(phone, email) {
 };
 
 module.exports = {
-  posts: posts,
-  companies: companies,
+  addPostsToPayload: addPostsToPayload,
+  addCompaniesToPayload: addCompaniesToPayload,
   nothingFound: nothingFound,
   inputPrompt: inputPrompt,
   error: error

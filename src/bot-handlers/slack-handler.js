@@ -15,59 +15,37 @@ function isHandlerForRequest(context) {
 function getResponsePayload(context) {
   var textInput = context.userRequest.text;
   var payload = {
-    // raw: {},
+    raw: {},
     data:  {},
     context: context
   }
   if (!textInput) {
-      payload.data = preparePayload.inputPrompt();
-      // payload.raw = payload.data;
-      return Q.when(payload);
+      return Q.when(preparePayload.inputPrompt(payload));
   }
-
   console.log('About to search API for input: ' + textInput);
-  payload.data = Q.all([
+  return Q.all([
       postSearch.findByText(textInput),
       companySearch.findByText(textInput)
   ])
-  .then(getPayload);
+  .then(function (postAndCompanySearchResults) {
+    console.log('About to load payload object from search results');
+    var posts = postAndCompanySearchResults[0];
+    var companies = postAndCompanySearchResults[1];
 
-  console.log('Got a payload ready! See here: ' + JSON.stringify(payload));
-  return payload;
+    if (posts && posts.length) {
+      return preparePayload.addPostsToPayload(payload, posts);
+    }
+    else if (companies && companies.length) {
+      return preparePayload.addCompaniesToPayload(payload, companies);
+    }
+    else {
+      return preparePayload.nothingFound(payload);
+    }
+  });
 }
 
-// check connection from previous function
-// trouble passing variables from end to end
-function getPayload(postAndCompanySearchResults) {
-  console.log('About to load payload object from search results');
-  var posts = postAndCompanySearchResults[0];
-  var companies = postAndCompanySearchResults[1];
-  if (posts && posts.length) {
-    // is it a bad idea to have a nested .then?
-      return queryCompaniesOfPosts(posts)
-        .then(function (posts){
-            return preparePayload.posts(posts);
-            // payload.data = preparePayload.posts(posts);
-            // // payload.raw = payload.data;
-            // return payload;
-        });
-  }
-  else if (companies && companies.length) {
 
-      return preparePayload.companies(companies);
-      // payload.data = preparePayload.companies(companies);
-      // // payload.raw = payload.data;
-      // return payload;
-  }
-  else {
-    return preparePayload.nothingFound();
-      // payload.data = preparePayload.nothingFound();
-      // // payload.raw = payload.data;
-      // return payload;
-  }
-}
-
-// does it need to wrap up with 'res.status(200).end()' at end? Yes....
+// does it need to wrap up with 'res.status(200).end()' at end? Yes it does!
 function sendResponseToPlatform(payload) {
   // shoot back an immediate Status 200 to let Slack know it's all cool
   payload.context.finishResponse();
@@ -103,68 +81,6 @@ function sendErrorResponse(err, context) {
   payload.data = preparePayload.error(err);
   sendResponseToPlatform(errorPayload);
 }
-
-//  ---------- Helper Methods ----------------
-
-// function getPayloadFromPostAndCompanySearch(postAndCompanySearchResults) {
-//   var posts = postAndCompanySearchResults[0];
-//   var companies = postAndCompanySearchResults[1];
-//   if (posts && posts.length) {
-//     // is it a bad idea to have a nested .then?
-//       return queryCompaniesOfPosts(posts)
-//         .then(function (posts){
-//             payload.data = preparePayload.posts(posts);
-//             // payload.raw = payload.data;
-//             return payload;
-//         });
-//   }
-//   else if (companies && companies.length) {
-//       payload.data = preparePayload.companies(companies);
-//       // payload.raw = payload.data;
-//       return payload;
-//   }
-//   else {
-//       payload.data = preparePayload.nothingFound();
-//       // payload.raw = payload.data;
-//       return payload;
-//   }
-// }
-
-function queryCompaniesOfPosts(posts) {
-    var companyIDs = [];
-    for (let i = 0; i < posts.length; i++) {
-        companyIDs.push(posts[i].companyId);
-    };
-    return Q.when(companySearch.findByIds(companyIDs))
-      // .then(attachCompaniesToPosts(companies))
-      .then(function (companies) {
-        var companyTable = {};
-        for (let i = 0; i < companies.length; i++) {
-            companyTable[companies[i]._id] = companies[i];
-        };
-        for (let i = 0; i < posts.length; i++) {
-            let cID = posts[i].companyId;
-            posts[i].company = companyTable[cID];
-        };
-        return posts;
-    })
-}
-
-// will this carry the reference to the Posts object?
-// if not, how to pass in Posts?
-// function attachCompaniesToPosts(companies) {
-//   var companyTable = {};
-//   for (let i = 0; i < companies.length; i++) {
-//       companyTable[companies[i]._id] = companies[i];
-//   };
-//   for (let i = 0; i < posts.length; i++) {
-//       let cID = posts[i].companyId;
-//       posts[i].company = companyTable[cID];
-//   };
-//   return posts;
-// }
-
-// ------------------------------
 
 module.exports = {
   isHandlerForRequest: isHandlerForRequest,
