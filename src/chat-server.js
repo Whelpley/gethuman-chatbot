@@ -53,25 +53,25 @@ function startServer(handlers) {
 function handleRequest(handlers) {
   return function (req, res) {
 
-  // put data from the Express req object into our custom context object
-  var context = getContextFromExpressReqRes(req, res);
+    // put data from the Express req object into our custom context object
+    var context = getContextFromExpressReqRes(req, res);
 
-  console.log("Platform request: " + JSON.stringify(context));
+    console.log("Platform request: " + JSON.stringify(context));
 
-// ---- temporary freeze on actual functionality-----
-  context.finishResponse;
+  // ---- temporary freeze on actual functionality-----
+    context.finishResponse;
 
-// ---------
-  // var botHandler = getBotHandler(handlers, context);
-  // botHandler.getResponsePayload(context)
-  //   .then(function (responsePayload) {
-  //     console.log("About to send a message back to Client: " + JSON.stringify(responsePayload));
-  //     botHandler.sendResponseToPlatform(responsePayload);
-  //   })
-  //   .catch(function (err) {
-  //     botHandler.sendErrorResponse(err, context);
-  //   });
-  // }
+  // ---------
+    // var botHandler = getBotHandler(handlers, context);
+    // botHandler.getResponsePayload(context)
+    //   .then(function (responsePayload) {
+    //     console.log("About to send a message back to Client: " + JSON.stringify(responsePayload));
+    //     botHandler.sendResponseToPlatform(responsePayload);
+    //   })
+    //   .catch(function (err) {
+    //     botHandler.sendErrorResponse(err, context);
+    //   });
+  }
 }
 
 // is unit testable
