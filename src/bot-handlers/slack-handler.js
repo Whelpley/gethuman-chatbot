@@ -14,54 +14,56 @@ function isHandlerForRequest(context) {
 
 function getResponsePayload(context) {
   var textInput = context.userRequest.text;
-
-  if (!textInput) {
-      var payload = {
-        // raw: {},
-        data:  {},
-        context: context
-      }
-      payload.data = preparePayload.inputPrompt();
-      // payload.raw = payload.data;
-      return Q.when(payload);
-  }
-  console.log('About to search API for input: ' + textInput);
-  return Q.all([
-      postSearch.findByText(textInput),
-      companySearch.findByText(textInput)
-  ])
-  .then(getPayload)
-}
-
-// check connection from previous function
-// it may have
-function getPayload(postAndCompanySearchResults) {
-  console.log('About to load payload object from search results');
   var payload = {
     // raw: {},
     data:  {},
     context: context
   }
+  if (!textInput) {
+      payload.data = preparePayload.inputPrompt();
+      // payload.raw = payload.data;
+      return Q.when(payload);
+  }
+
+  console.log('About to search API for input: ' + textInput);
+  payload.data = Q.all([
+      postSearch.findByText(textInput),
+      companySearch.findByText(textInput)
+  ])
+  .then(getPayload);
+
+  console.log('Got a payload ready! See here: ' + JSON.stringify(payload));
+  return payload;
+}
+
+// check connection from previous function
+// trouble passing variables from end to end
+function getPayload(postAndCompanySearchResults) {
+  console.log('About to load payload object from search results');
   var posts = postAndCompanySearchResults[0];
   var companies = postAndCompanySearchResults[1];
   if (posts && posts.length) {
     // is it a bad idea to have a nested .then?
       return queryCompaniesOfPosts(posts)
         .then(function (posts){
-            payload.data = preparePayload.posts(posts);
-            // payload.raw = payload.data;
-            return payload;
+            return preparePayload.posts(posts);
+            // payload.data = preparePayload.posts(posts);
+            // // payload.raw = payload.data;
+            // return payload;
         });
   }
   else if (companies && companies.length) {
-      payload.data = preparePayload.companies(companies);
-      // payload.raw = payload.data;
-      return payload;
+
+      return preparePayload.companies(companies);
+      // payload.data = preparePayload.companies(companies);
+      // // payload.raw = payload.data;
+      // return payload;
   }
   else {
-      payload.data = preparePayload.nothingFound();
-      // payload.raw = payload.data;
-      return payload;
+    return preparePayload.nothingFound();
+      // payload.data = preparePayload.nothingFound();
+      // // payload.raw = payload.data;
+      // return payload;
   }
 }
 
