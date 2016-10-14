@@ -58,16 +58,20 @@ function handleRequest(handlers) {
 
   console.log("Platform request: " + JSON.stringify(context));
 
-  var botHandler = getBotHandler(handlers, context);
-  botHandler.getResponsePayload(context)
-    .then(function (responsePayload) {
-      console.log("About to send a message back to Client: " + JSON.stringify(responsePayload));
-      botHandler.sendResponseToPlatform(responsePayload);
-    })
-    .catch(function (err) {
-      botHandler.sendErrorResponse(err, context);
-    });
-  }
+// ---- temporary freeze on actual functionality-----
+  context.finishResponse;
+
+// ---------
+  // var botHandler = getBotHandler(handlers, context);
+  // botHandler.getResponsePayload(context)
+  //   .then(function (responsePayload) {
+  //     console.log("About to send a message back to Client: " + JSON.stringify(responsePayload));
+  //     botHandler.sendResponseToPlatform(responsePayload);
+  //   })
+  //   .catch(function (err) {
+  //     botHandler.sendErrorResponse(err, context);
+  //   });
+  // }
 }
 
 // is unit testable
