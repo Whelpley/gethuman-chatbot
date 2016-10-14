@@ -2,8 +2,8 @@
 
 const token = process.env.FB_PAGE_ACCESS_TOKEN
 
-function isHandlerForRequest(platformRequestContext) {
-  var object = platformRequestContext.userRequest.object || '';
+function isHandlerForRequest(context) {
+  var object = context.userRequest.object || '';
   return (object === 'page') ? true : false;
 }
 
@@ -22,7 +22,7 @@ function getResponsePayload(context) {
   }
 
   context.finishResponse;
- }
+}
 
 
   // var payload = {
@@ -55,11 +55,8 @@ function getResponsePayload(context) {
   // });
 
 
-}
-
-
 function sendResponseToPlatform() {
-
+  console.log('Hit the sendResponseToPlatform Function');
 }
 
 
