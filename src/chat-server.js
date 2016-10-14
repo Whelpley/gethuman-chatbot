@@ -27,7 +27,8 @@ function startServer(handlers) {
   // dicebot - keep for testing
   app.post('/roll', require('./deprecated/dicebot.js'));
   // for Facebook verification
-  app.get('/v3/webhook/', function (req, res) {
+  app.get('/v3/gethuman', function (req, res) {
+    //---change to this:
     // var context = getContextFromExpressReqRes(req, res);
     // var botHandler = getBotHandler(context);
     // botHandler.verify();
