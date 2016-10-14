@@ -44,8 +44,6 @@ function getResponsePayload(context) {
   });
 }
 
-
-// does it need to wrap up with 'res.status(200).end()' at end? Yes it does!
 function sendResponseToPlatform(payload) {
   // shoot back an immediate Status 200 to let Slack know it's all cool
   payload.context.finishResponse();
@@ -74,11 +72,12 @@ function sendResponseToPlatform(payload) {
 function sendErrorResponse(err, context) {
   console.log("Ran into an error: " + err);
   var payload = {
-    // raw: {},
+    raw: {},
     data: {},
     context: context
   };
   payload.data = preparePayload.error(err);
+  payload.raw = payload.data;
   sendResponseToPlatform(errorPayload);
 }
 

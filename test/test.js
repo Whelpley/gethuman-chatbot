@@ -1,7 +1,6 @@
 'use strict'
 
-// should this be one test file per file tested, or one big one?
-// OR a central test file that calls other test modules?
+// Spread out these tests to files they came from
 
 var chai = require('chai'),
   assert = chai.assert,
@@ -9,10 +8,6 @@ var chai = require('chai'),
   preparePayload = require('../api/payloads-slack.js'),
   slackHandler = require('../slack-handler.js'),
 
-  // just leave these in the methods
-  // posts = mockData.posts,
-  // companies = mockData.companies,
-  // colors = mockData.colors;
 
 // simple tests
 
