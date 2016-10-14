@@ -25,7 +25,7 @@ function getResponsePayload(context) {
       // payload.raw = payload.data;
       return Q.when(payload);
   }
-  consle.log('About to search API for input: ' + textInput);
+  console.log('About to search API for input: ' + textInput);
   return Q.all([
       postSearch.findByText(textInput),
       companySearch.findByText(textInput)
