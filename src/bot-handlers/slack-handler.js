@@ -2,6 +2,8 @@
 
 const request = require('request');
 const Q = require('q');
+const companySearch = require('../api-gh/company.js');
+const postSearch = require('../api-gh/post.js');
 
 // unit testable
 function isHandlerForRequest(context) {
