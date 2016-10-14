@@ -14,16 +14,18 @@ function isHandlerForRequest(context) {
 
 function getResponsePayload(context) {
   var textInput = context.userRequest.text;
-  var payload = {
-    // raw: {},
-    data:  {},
-    context: context
-  }
+
   if (!textInput) {
+      var payload = {
+        // raw: {},
+        data:  {},
+        context: context
+      }
       payload.data = preparePayload.inputPrompt();
       // payload.raw = payload.data;
       return Q.when(payload);
   }
+  consle.log('About to search API for input: ' + textInput);
   return Q.all([
       postSearch.findByText(textInput),
       companySearch.findByText(textInput)
@@ -31,7 +33,15 @@ function getResponsePayload(context) {
   .then(getPayload)
 }
 
+// check connection from previous function
+// it may have
 function getPayload(postAndCompanySearchResults) {
+  console.log('About to load payload object from search results');
+  var payload = {
+    // raw: {},
+    data:  {},
+    context: context
+  }
   var posts = postAndCompanySearchResults[0];
   var companies = postAndCompanySearchResults[1];
   if (posts && posts.length) {

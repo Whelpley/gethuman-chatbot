@@ -1,5 +1,8 @@
 'use strict'
 
+// should this just be declared in FB bot module?
+// const token = process.env.FB_PAGE_ACCESS_TOKEN
+
 module.exports = {
   getResponsePayload: getResponsePayload,
   sendResponseToPlatform: sendResponseToPlatform,

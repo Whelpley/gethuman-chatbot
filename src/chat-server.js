@@ -5,12 +5,8 @@ var bodyParser = require('body-parser');
 var request = require('request');
 var Q = require('q');
 
-// should this just be declared in FB bot module?
-// const token = process.env.FB_PAGE_ACCESS_TOKEN
-// is this even used?
-// const GH_token = process.env.GH_API_ACCESS_TOKEN
-
 function startServer(handlers) {
+  console.log('Starting server');
   var port = process.env.PORT || 3000;
   var app = express();
 
@@ -30,9 +26,6 @@ function startServer(handlers) {
   app.post('/hello', require('./deprecated/hellobot.js'));
   // dicebot - keep for testing
   app.post('/roll', require('./deprecated/dicebot.js'));
-
-
-
   // for Facebook verification
   app.get('/webhook/', function (req, res) {
     // var context = getContextFromExpressReqRes(req, res);
@@ -77,15 +70,12 @@ function handleRequest(handlers) {
 
 // is unit testable
 function getBotHandler(handlers, platformRequestContext) {
-  // loop through handlers and call handlers[i].isHandlerForRequest(platformRequestContext)
-
   for (let i = 0; i < handlers.length; i++) {
     if (handlers[i].isHandlerForRequest(platformRequestContext)) {
       console.log("Found a bot to handle request!");
       return handlers[i];
     };
   };
-
   // else if handler not found, throw error
   throw "Request coming from unrecognized platform";
 }
