@@ -15,6 +15,9 @@ function isHandlerForRequest(context) {
 function getResponsePayload(context) {
   var messaging_events = context.userRequest.entry[0].messaging;
 
+  //send back an immediate 200 response to make FB happy
+  context.finishResponse;
+
   for (let i = 0; i < messaging_events.length; i++) {
     let event = context.userRequest.entry[0].messaging[i]
     let sender = event.sender.id
@@ -51,7 +54,6 @@ function getResponsePayload(context) {
     }
   }
 
-  context.finishResponse;
 }
 
 
@@ -63,6 +65,9 @@ function sendResponseToPlatform(responsePayload) {
   var elements = responsePayload.data;
   var event = responsePayload.userRequest.entry[0].messaging[i];
   var sender = event.sender.id;
+
+  // shoot back an immediate Status 200 to let Slack know it's all cool
+  responsePayload.context.finishResponse();
 
 // gotta make this a Promise
   request({

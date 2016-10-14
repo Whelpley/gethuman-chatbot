@@ -57,6 +57,7 @@ function handleRequest(handlers) {
   var context = getContextFromExpressReqRes(req, res);
 
   console.log("Platform request: " + JSON.stringify(context));
+
   var botHandler = getBotHandler(handlers, context);
   botHandler.getResponsePayload(context)
     .then(function (responsePayload) {
