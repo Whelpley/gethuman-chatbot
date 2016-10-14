@@ -72,8 +72,15 @@ var companies = [
   },
 ];
 
+var blankPayload = {
+  raw: {},
+  data: {},
+  context: {}
+}
+
 module.exports = {
   posts: posts,
   companies: companies,
-  colors: colors
+  colors: colors,
+  blankPayload: blankPayload
 }
