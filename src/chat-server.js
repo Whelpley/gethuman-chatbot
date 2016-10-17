@@ -43,9 +43,9 @@ function startServer(handlers) {
 // reaches Slack version
   app.post('/gethuman', handleRequest(handlers));
 // FB version
-  // app.post('/v3/gethuman', handleRequest(handlers));
+  app.post('/v3/gethuman', handleRequest(handlers));
   // old version for dissection
-  app.post('/v3/gethuman', require('./deprecated/gh-facebook-bot.js'));
+  // app.post('/v3/gethuman', require('./deprecated/gh-facebook-bot.js'));
 
 
   app.listen(port, function () {
