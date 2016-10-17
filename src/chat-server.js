@@ -60,21 +60,23 @@ function handleRequest(handlers) {
   return function (req, res) {
 
     console.log("Incoming request: " + JSON.stringify(req.body));
+    console.log("About to send back Status 200 immediately to response object.")
+    context.finishResponse;
 
     var context = getContextFromExpressReqRes(req, res);
 
     var botHandler = getBotHandler(handlers, context);
     botHandler.getResponsePayload(context)
       .then(function (responsePayload) {
-        console.log("About to send a message back to Client: " + JSON.stringify(responsePayload).substring(0,300));
+        console.log("Reponse payload formed and ready for Send function: " + JSON.stringify(responsePayload).substring(0,300));
         botHandler.sendResponseToPlatform(responsePayload);
       })
       .catch(function (err) {
         botHandler.sendErrorResponse(err, context);
       });
 
-    console.log("About to send back Status 200 to response object.")
-    context.finishResponse;
+    // console.log("About to send back Status 200 to response object.")
+    // context.finishResponse;
   }
 }
 

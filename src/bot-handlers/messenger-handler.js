@@ -16,7 +16,6 @@ function getResponsePayload(context) {
   var messaging_events = context.userRequest.entry[0].messaging;
   console.log("All messaging events: " + JSON.stringify(messaging_events));
 
-// strange looping behavior here - sending messages back to server, won't stop
   for (let i = 0; i < messaging_events.length; i++) {
     let event = context.userRequest.entry[0].messaging[i]
     console.log("Event detected: " + JSON.stringify(event));
@@ -56,7 +55,7 @@ function getResponsePayload(context) {
 }
 
 function sendResponseToPlatform(responsePayload) {
-  console.log('Hitting the sendResponseToPlatform function with this payload: ' + JSON.stringify(responsePayload).substring(0,400));
+  // console.log('Hitting the sendResponseToPlatform function with this payload: ' + JSON.stringify(responsePayload).substring(0,400));
   var elements = responsePayload.data;
 
   // a tricky target ... think we got it!
@@ -64,6 +63,7 @@ function sendResponseToPlatform(responsePayload) {
   console.log("Sender: " + sender);
 
 // gotta make this a Promise
+// is this causing problems by being a callback nested in a Promise chain?
   request({
       url: 'https://graph.facebook.com/v2.6/me/messages',
       qs: {access_token: token},
@@ -88,8 +88,6 @@ function sendResponseToPlatform(responsePayload) {
       }
   });
 
-  // console.log("About to send back Status 200 from within sendResponseToPlatform().")
-  // responsePayload.context.finishResponse;
 }
 
 function sendErrorResponse(err, context) {
