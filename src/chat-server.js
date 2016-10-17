@@ -56,12 +56,13 @@ function handleRequest(handlers) {
     // put data from the Express req object into our custom context object
     var context = getContextFromExpressReqRes(req, res);
 
-    console.log("Platform request: " + JSON.stringify(context));
+    console.log("Incoming request: " + JSON.stringify(req));
 
   // ---- temporary freeze on actual functionality-----
     context.finishResponse;
 
-  // ---------
+  // --------- Freezing the actual function until we figure out WTF is going on
+
     // var botHandler = getBotHandler(handlers, context);
     // botHandler.getResponsePayload(context)
     //   .then(function (responsePayload) {
