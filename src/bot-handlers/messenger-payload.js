@@ -71,12 +71,13 @@ function preparePostsPayload(posts) {
   console.log("Hitting the preparePostsPayload function with these posts: " + JSON.stringify(posts).substring(0,200));
 
     let elements = [];
-    for (let i = 0; i < questions.length; i++) {
-        let companyName = questions[i].companyName || '';
-        let urlId = questions[i].urlId || '';
-        let phone = (questions[i].company) ? questions[i].company.callback.phone : '';
+    for (let i = 0; i < posts.length; i++) {
+        let companyName = posts[i].companyName || '';
+        let urlId = posts[i].urlId || '';
+        let phone = (posts[i].company) ? posts[i].company.callback.phone : '';
+        // need another check to see if phone # is legit - FB cares!
         let phoneIntl = (phone) ? phoneFormatter.format(phone, "+1NNNNNNNNNN") : '';
-        let title = questions[i].title || '';
+        let title = posts[i].title || '';
         if (title.indexOf(companyName) < 0) {
             title = companyName + ": " + title;
         };

@@ -87,7 +87,6 @@ function sendResponseToPlatform(responsePayload) {
           console.log('Error: ', response.body.error)
       }
   });
-
 }
 
 function sendErrorResponse(err, context) {
