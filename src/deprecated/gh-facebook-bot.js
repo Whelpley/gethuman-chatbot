@@ -21,6 +21,7 @@ module.exports = function (req, res, next) {
             let text = event.message.text;
             console.log("Text input detected: " + text);
             // search Questions, if found returns Question cards, if not returns Company cards
+            console.log("About to request Posts");
             requestQuestionCards(sender, text);
         }
 
@@ -66,7 +67,7 @@ function requestQuestionCards(sender, text) {
             // load response object into questions array
             questions = JSON.parse(body);
             if (questions && questions.length) {
-                // let responseText = "We found " + questions.length + " relevant questions to your input.";
+                let responseText = "We found " + questions.length + " relevant questions to your input.";
                 // sendTextMessage(sender, responseText);
                 // console.log("All questions returned from API: " + questions);
                 for (let i = 0; i < questions.length; i++) {
@@ -114,6 +115,8 @@ function requestQuestionCards(sender, text) {
                                 };
                                 // Make cards out of massive data hash
                                 // (room for optimization later! too much data being shuffled around!)
+            console.log("About to send question cards from formed object.");
+
                                 sendAllQuestionCards(sender, questions);
 
                             } else if (error) {
@@ -309,6 +312,8 @@ function sendTextMessage(sender, text) {
 
 //sends styled cards with buttons
 function sendCards(sender, elements) {
+console.log("About to make request to send cards.");
+
     request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
         qs: {access_token:token},

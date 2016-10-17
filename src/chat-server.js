@@ -43,9 +43,9 @@ function startServer(handlers) {
 // reaches Slack version
   app.post('/gethuman', handleRequest(handlers));
 // FB version
-  app.post('/v3/gethuman', handleRequest(handlers));
+  // app.post('/v3/gethuman', handleRequest(handlers));
   // old version for dissection
-  // app.post('/v3/gethuman', require('./deprecated/gh-facebook-bot.js'));
+  app.post('/v3/gethuman', require('./deprecated/gh-facebook-bot.js'));
 
 
   app.listen(port, function () {
@@ -63,8 +63,8 @@ function handleRequest(handlers) {
 
     var context = getContextFromExpressReqRes(req, res);
 
-    console.log("About to send back Status 200 immediately to response object.")
-    context.finishResponse;
+    // console.log("About to send back Status 200 immediately to response object.")
+    // context.finishResponse;
 
     var botHandler = getBotHandler(handlers, context);
     botHandler.getResponsePayload(context)
@@ -76,8 +76,8 @@ function handleRequest(handlers) {
         botHandler.sendErrorResponse(err, context);
       });
 
-    // console.log("About to send back Status 200 to response object.")
-    // context.finishResponse;
+    console.log("About to send back Status 200 to response object.")
+    context.finishResponse;
   }
 }
 
