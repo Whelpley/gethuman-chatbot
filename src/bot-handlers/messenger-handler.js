@@ -60,7 +60,7 @@ function sendResponseToPlatform(responsePayload) {
   var elements = responsePayload.data;
 
   // a tricky target ...
-  var sender = responsePayload.userRequest.entry[0].messaging[0].sender.id;
+  var sender = responsePayload.context.userRequest.entry[0].messaging[0].sender.id;
   console.log("Sender: " + sender);
 
 // gotta make this a Promise

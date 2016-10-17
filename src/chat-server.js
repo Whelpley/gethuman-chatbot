@@ -66,7 +66,7 @@ function handleRequest(handlers) {
     var botHandler = getBotHandler(handlers, context);
     botHandler.getResponsePayload(context)
       .then(function (responsePayload) {
-        console.log("About to send a message back to Client: " + JSON.stringify(responsePayload));
+        console.log("About to send a message back to Client: " + JSON.stringify(responsePayload).substring(0,300));
         botHandler.sendResponseToPlatform(responsePayload);
       })
       .catch(function (err) {

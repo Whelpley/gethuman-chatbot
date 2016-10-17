@@ -106,7 +106,7 @@ function preparePostsPayload(posts) {
         };
         elements.push(singleElement);
     };
-    console.log("Ermagerd we made some Elements for POSTS payload: " + JSON.stringify(elements));
+    console.log("Ermagerd we made some Elements for POSTS payload: " + JSON.stringify(elements).substring(0,200));
     return elements
 }
 
