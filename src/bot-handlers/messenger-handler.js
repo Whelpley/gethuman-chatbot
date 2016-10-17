@@ -14,13 +14,12 @@ function isHandlerForRequest(context) {
 
 function getResponsePayload(context) {
   var messaging_events = context.userRequest.entry[0].messaging;
-
-  //send back an immediate 200 response to make FB happy
-  // context.finishResponse;
+  console.log("All messaging events: " + JSON.stringify(messaging_events));
 
 // strange looping behavior here - sending messages back to server, won't stop
   for (let i = 0; i < messaging_events.length; i++) {
     let event = context.userRequest.entry[0].messaging[i]
+    console.log("Event detected: " + JSON.stringify(event));
     let sender = event.sender.id
 
     if (event.message && event.message.text) {
@@ -54,21 +53,15 @@ function getResponsePayload(context) {
       });
     }
   }
-
 }
-
-
-
-
 
 function sendResponseToPlatform(responsePayload) {
   console.log('Hitting the sendResponseToPlatform function with this payload: ' + JSON.stringify(responsePayload));
   var elements = responsePayload.data;
-  var event = responsePayload.userRequest.entry[0].messaging[i];
-  var sender = event.sender.id;
 
-  // shoot back an immediate Status 200 to let Slack know it's all cool
-  responsePayload.context.finishResponse();
+  // a tricky target ...
+  var sender = responsePayload.userRequest.entry[0].messaging[0].sender.id;
+  console.log("Sender: " + sender);
 
 // gotta make this a Promise
   request({
@@ -97,9 +90,25 @@ function sendResponseToPlatform(responsePayload) {
 
 }
 
+function sendErrorResponse(err, context) {
+  console.log("Ran into an error: " + err);
+
+  // to fill in properly
+
+  // var payload = {
+  //   raw: {},
+  //   data: {},
+  //   context: context
+  // };
+  // payload.data = preparePayload.error(err);
+  // payload.raw = payload.data;
+  // sendResponseToPlatform(errorPayload);
+}
+
 
 module.exports = {
   getResponsePayload: getResponsePayload,
   sendResponseToPlatform: sendResponseToPlatform,
-  isHandlerForRequest: isHandlerForRequest
+  isHandlerForRequest: isHandlerForRequest,
+  sendErrorResponse: sendErrorResponse
 }

@@ -22,11 +22,19 @@ function addCompaniesToPayload(payload, companies) {
 }
 
 function nothingFound(payload) {
-    // payload.data.username = 'Gethuman Bot';
-    // payload.data.text = "We could not find anything matching your input to our database. Could you try rephrasing your concern, and be sure to spell the company name correctly?";
-    // payload.data.icon_emoji = ':question:';
-    // payload.raw = payload.data;
-    // return payload;
+    console.log("About to form up NOTHING FOUND payload.")
+    let elements = [{
+        "title": "Nothing found!",
+        "subtitle": "We're really sorry!",
+        "buttons": [{
+            "type": "web_url",
+            "url": "https://gethuman.com",
+            "title": "Solve for Me - $20"
+        }],
+    }];
+    console.log("Elements returned for NOTHING FOUND payload: " + JSON.stringify(elements));
+
+    return elements;
 };
 
 function error(error) {
@@ -97,15 +105,17 @@ function preparePostsPayload(posts) {
         };
         elements.push(singleElement);
     };
-    console.log("Ermagerd we made some Elements: " + JSON.stringify(elements));
+    console.log("Ermagerd we made some Elements for POSTS payload: " + JSON.stringify(elements));
     return elements
 }
 
 function prepareCompaniesPayload(companies) {
   console.log("Hitting the prepareCompaniesPayload function with these companies: " + JSON.stringify(companies).substring(0,200));
+
+  // Need to fill this in!!!
 }
 
-// Following methods are duplicated: send to another module & share!
+// Following methods are duplicated in another module: combine & share!
 
 function extractTextFieldFromPost(post) {
     let phone = (post.company) ? post.company.callback.phone : '';
