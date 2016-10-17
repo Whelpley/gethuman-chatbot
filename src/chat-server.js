@@ -75,7 +75,6 @@ function handleRequest(handlers) {
 
     console.log("About to send back Status 200 to response object.")
     context.finishResponse;
-
   }
 }
 

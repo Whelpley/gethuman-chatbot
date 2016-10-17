@@ -88,8 +88,8 @@ function sendResponseToPlatform(responsePayload) {
       }
   });
 
-  console.log("About to send back Status 200 from within sendResponseToPlatform().")
-  responsePayload.context.finishResponse;
+  // console.log("About to send back Status 200 from within sendResponseToPlatform().")
+  // responsePayload.context.finishResponse;
 }
 
 function sendErrorResponse(err, context) {
