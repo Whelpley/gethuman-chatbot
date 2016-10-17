@@ -19,6 +19,7 @@ module.exports = function (req, res, next) {
         // handling text input
         if (event.message && event.message.text) {
             let text = event.message.text;
+            console.log("Text input detected: " + text);
             // search Questions, if found returns Question cards, if not returns Company cards
             requestQuestionCards(sender, text);
         }
