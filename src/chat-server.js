@@ -32,11 +32,12 @@ function startServer(handlers) {
     // var context = getContextFromExpressReqRes(req, res);
     // var botHandler = getBotHandler(context);
     // botHandler.verify();
+    console.log("Receiving webhook verification from FB.")
 
-      if (req.query['hub.verify_token'] === 'my_voice_is_my_password_verify_me') {
-          res.send(req.query['hub.challenge'])
-      }
-      res.send('Error, wrong token');
+    if (req.query['hub.verify_token'] === 'cmon_verify_me') {
+        res.send(req.query['hub.challenge'])
+    }
+    res.send('Error, wrong token');
   })
 
   app.post('/gethuman', handleRequest(handlers));
@@ -53,17 +54,19 @@ function startServer(handlers) {
 function handleRequest(handlers) {
   return function (req, res) {
 
+    console.log("Incoming request: " + JSON.stringify(req));
+
     // put data from the Express req object into our custom context object
     var context = getContextFromExpressReqRes(req, res);
 
-    console.log("Incoming request: " + JSON.stringify(req));
 
   // ---- temporary freeze on actual functionality-----
-    context.finishResponse;
+    // context.finishResponse;
+    res.sendStatus(200);
 
   // --------- Freezing the actual function until we figure out WTF is going on
 
-    // var botHandler = getBotHandler(handlers, context);
+    var botHandler = getBotHandler(handlers, context);
     // botHandler.getResponsePayload(context)
     //   .then(function (responsePayload) {
     //     console.log("About to send a message back to Client: " + JSON.stringify(responsePayload));
@@ -76,9 +79,9 @@ function handleRequest(handlers) {
 }
 
 // is unit testable
-function getBotHandler(handlers, platformRequestContext) {
+function getBotHandler(handlers, context) {
   for (let i = 0; i < handlers.length; i++) {
-    if (handlers[i].isHandlerForRequest(platformRequestContext)) {
+    if (handlers[i].isHandlerForRequest(context)) {
       console.log("Found a bot to handle request!");
       return handlers[i];
     };

@@ -16,7 +16,7 @@ function getResponsePayload(context) {
   var messaging_events = context.userRequest.entry[0].messaging;
 
   //send back an immediate 200 response to make FB happy
-  context.finishResponse;
+  // context.finishResponse;
 
 // strange looping behavior here - sending messages back to server, won't stop
   for (let i = 0; i < messaging_events.length; i++) {
