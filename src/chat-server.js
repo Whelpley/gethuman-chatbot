@@ -40,10 +40,12 @@ function startServer(handlers) {
     res.send('Error, wrong token');
   })
 
+// reaches Slack version
   app.post('/gethuman', handleRequest(handlers));
-  // app.post('/v3/gethuman', handleRequest(handlers));
-  // rolling back to old version for dissection
-  app.post('/v3/gethuman', require('./deprecated/gh-facebook-bot.js'));
+// FB version
+  app.post('/v3/gethuman', handleRequest(handlers));
+  // old version for dissection
+  // app.post('/v3/gethuman', require('./deprecated/gh-facebook-bot.js'));
 
 
   app.listen(port, function () {
@@ -57,16 +59,13 @@ function startServer(handlers) {
 function handleRequest(handlers) {
   return function (req, res) {
 
-    console.log("Incoming request: " + JSON.stringify(req));
+    console.log("Incoming request: " + JSON.stringify(req.body));
 
     // put data from the Express req object into our custom context object
     var context = getContextFromExpressReqRes(req, res);
 
-
   // ---- temporary freeze on actual functionality-----
-  // not sure which is going to work for FB!
-    // context.finishResponse;
-    // res.sendStatus(200);
+    context.finishResponse;
 
   // --------- Freezing the actual function until we figure out WTF is going on
 
