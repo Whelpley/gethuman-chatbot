@@ -41,7 +41,10 @@ function startServer(handlers) {
   })
 
   app.post('/gethuman', handleRequest(handlers));
-  app.post('/v3/gethuman', handleRequest(handlers));
+  // app.post('/v3/gethuman', handleRequest(handlers));
+  // rolling back to old version for dissection
+  app.post('/v3/gethuman', require('./deprecated/gh-facebook-bot.js'));
+
 
   app.listen(port, function () {
     console.log('Fusion bot listening on port ' + port);
@@ -61,8 +64,9 @@ function handleRequest(handlers) {
 
 
   // ---- temporary freeze on actual functionality-----
+  // not sure which is going to work for FB!
     // context.finishResponse;
-    res.sendStatus(200);
+    // res.sendStatus(200);
 
   // --------- Freezing the actual function until we figure out WTF is going on
 

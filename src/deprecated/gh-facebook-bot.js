@@ -7,9 +7,13 @@ const token = process.env.FB_PAGE_ACCESS_TOKEN
 
 module.exports = function (req, res, next) {
     //where all responses to text inputs are handled
+    console.log("Incoming request: " + JSON.stringify(req));
+
     let messaging_events = req.body.entry[0].messaging
     for (let i = 0; i < messaging_events.length; i++) {
         let event = req.body.entry[0].messaging[i]
+        console.log("Event detected: " + JSON.stringify(event));
+
         let sender = event.sender.id
 
         // handling text input
@@ -30,7 +34,7 @@ module.exports = function (req, res, next) {
           continue
         }
     }
-
+    console.log("About to send back Status 200 to response object.")
     res.sendStatus(200)
 }
 
