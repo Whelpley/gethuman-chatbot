@@ -35,7 +35,8 @@ module.exports = function (req, res, next) {
         }
     }
     console.log("About to send back Status 200 to response object.")
-    res.sendStatus(200)
+    // res.sendStatus(200)
+    res.status(200).end();
 }
 
 
