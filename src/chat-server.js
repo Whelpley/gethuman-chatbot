@@ -63,9 +63,6 @@ function handleRequest(handlers) {
 
     var context = getContextFromExpressReqRes(req, res);
 
-    // console.log("About to send back Status 200 immediately to response object.")
-    // context.finishResponse;
-
     var botHandler = getBotHandler(handlers, context);
     botHandler.getResponsePayload(context)
       .then(function (responsePayload) {
