@@ -87,7 +87,7 @@ function sendResponseToPlatform(responsePayload) {
           console.log('Error: ', response.body.error)
       }
       console.log("Sending 200 response after message send request");
-      response.send(200).end;
+      responsePayload.context.finishResponse;
   });
 
 }
