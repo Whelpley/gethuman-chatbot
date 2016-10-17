@@ -7,7 +7,7 @@ const token = process.env.FB_PAGE_ACCESS_TOKEN
 
 module.exports = function (req, res, next) {
     //where all responses to text inputs are handled
-    console.log("Incoming request: " + JSON.stringify(req));
+    console.log("Incoming request: " + JSON.stringify(req.body));
 
     let messaging_events = req.body.entry[0].messaging
     for (let i = 0; i < messaging_events.length; i++) {

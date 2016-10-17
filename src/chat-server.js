@@ -86,7 +86,7 @@ function handleRequest(handlers) {
 function getBotHandler(handlers, context) {
   for (let i = 0; i < handlers.length; i++) {
     if (handlers[i].isHandlerForRequest(context)) {
-      console.log("Found a bot to handle request!");
+      console.log("Found a bot to handle request: # " + i + " in handlers");
       return handlers[i];
     };
   };
