@@ -59,8 +59,11 @@ function handleRequest(handlers) {
   return function (req, res) {
 
     console.log("Incoming request: " + JSON.stringify(req.body));
+// install filter against repeat incursions?
 
     var context = getContextFromExpressReqRes(req, res);
+    console.log("About to send back Status 200 to response object.")
+    context.finishResponse;
 
     var botHandler = getBotHandler(handlers, context);
     botHandler.getResponsePayload(context)
@@ -71,8 +74,7 @@ function handleRequest(handlers) {
         botHandler.sendErrorResponse(err, context);
       });
 
-    console.log("About to send back Status 200 to response object.")
-    context.finishResponse;
+
   }
 }
 
