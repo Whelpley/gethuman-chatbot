@@ -55,10 +55,9 @@ function getResponsePayload(context) {
 }
 
 function sendResponseToPlatform(responsePayload) {
-  // console.log('Hitting the sendResponseToPlatform function with this payload: ' + JSON.stringify(responsePayload).substring(0,400));
+  console.log('Hitting the sendResponseToPlatform function with this payload: ' + JSON.stringify(responsePayload).substring(0,400));
   var elements = responsePayload.data;
 
-  // a tricky target ... think we got it!
   var sender = responsePayload.context.userRequest.entry[0].messaging[0].sender.id;
   console.log("Sender: " + sender);
 
@@ -92,17 +91,13 @@ function sendResponseToPlatform(responsePayload) {
 
 function sendErrorResponse(err, context) {
   console.log("Ran into an error: " + err);
-
-  // to fill in properly
-
-  // var payload = {
-  //   raw: {},
-  //   data: {},
-  //   context: context
-  // };
-  // payload.data = preparePayload.error(err);
-  // payload.raw = payload.data;
-  // sendResponseToPlatform(errorPayload);
+  var payload = {
+    raw: preparePayload.error(err),
+    data: {},
+    context: context
+  };
+  payload.data = payload.raw;
+  sendResponseToPlatform(payload)
 }
 
 

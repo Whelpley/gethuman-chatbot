@@ -47,7 +47,6 @@ function startServer(handlers) {
   // old version for dissection
   // app.post('/v3/gethuman', require('./deprecated/gh-facebook-bot.js'));
 
-
   app.listen(port, function () {
     console.log('Fusion bot listening on port ' + port);
   });
@@ -66,7 +65,6 @@ function handleRequest(handlers) {
     var botHandler = getBotHandler(handlers, context);
     botHandler.getResponsePayload(context)
       .then(function (responsePayload) {
-        console.log("Reponse payload formed and ready for Send function: " + JSON.stringify(responsePayload).substring(0,300));
         botHandler.sendResponseToPlatform(responsePayload);
       })
       .catch(function (err) {

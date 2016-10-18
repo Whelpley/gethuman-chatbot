@@ -37,12 +37,21 @@ function nothingFound(payload) {
     return elements;
 };
 
+// needs checking - not yet tested
 function error(error) {
-    // var payload = {};
-    // payload.username = 'Gethuman Bot';
-    // payload.text = error;
-    // payload.icon_emoji = ':no_good:';
-    // return payload;
+    console.log("About to form up ERROR payload.")
+    let elements = [{
+        "title": "We ran into an error!",
+        "subtitle": error,
+        "buttons": [{
+            "type": "web_url",
+            "url": "https://gethuman.com",
+            "title": "Go to GetHuman"
+        }],
+    }];
+    console.log("Elements returned for NOTHING FOUND payload: " + JSON.stringify(elements));
+
+    return elements;
 };
 
 // ----- helper methods
@@ -106,14 +115,42 @@ function preparePostsPayload(posts) {
         };
         elements.push(singleElement);
     };
-    console.log("Ermagerd we made some Elements for POSTS payload: " + JSON.stringify(elements).substring(0,200));
-    return elements
+    // console.log("Elements for POSTS payload: " + JSON.stringify(elements).substring(0,200));
+    return elements;
 }
 
 function prepareCompaniesPayload(companies) {
-  console.log("Hitting the prepareCompaniesPayload function with these companies: " + JSON.stringify(companies).substring(0,200));
+    console.log("Hitting the prepareCompaniesPayload function with these companies: " + JSON.stringify(companies).substring(0,200));
 
-  // Need to fill this in!!!
+    let elements = [];
+    for (let i = 0; i < companies.length; i++) {
+        let name = companies[i].name || '';
+        let email = companies[i].email || '';
+        let phone = companies[i].phone || '';
+        //format phone# for international format
+        let phoneIntl = (phone) ? phoneFormatter.format(phone, "+1NNNNNNNNNN") : '';
+        let singleElement = {
+            "title": name,
+            "subtitle": email,
+            "buttons": [
+            {
+                "type": "web_url",
+                "url": "https://gethuman.com?company=" + encodeURIComponent(name) ,
+                "title": "Solve for me  - $20"
+            }],
+        };
+        // if there is a valid phone # (needs stricter checks), add Call button
+        if (phoneIntl) {
+            singleElement.subtitle = phone + ",\n" + email,
+            singleElement.buttons.unshift({
+                "type": "phone_number",
+                "title": "Call " + name,
+                "payload": phoneIntl
+            })
+        };
+        elements.push(singleElement);
+    };
+    return elements;
 }
 
 // Following methods are duplicated in another module: combine & share!
