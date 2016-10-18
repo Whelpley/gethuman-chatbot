@@ -62,7 +62,7 @@ function formatTextField(phone, email) {
 
 module.exports = {
   preResponse: preResponse,
-  queryCompaniesOfPosts: queryCompaniesOfPosts.
+  queryCompaniesOfPosts: queryCompaniesOfPosts,
   extractTextFieldFromPost: extractTextFieldFromPost,
   extractTextFieldFromCompany: extractTextFieldFromCompany,
   formatTextField: formatTextField
