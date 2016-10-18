@@ -12,6 +12,14 @@ function isHandlerForRequest(context) {
   return (responseUrl && responseUrl.includes('hooks.slack.com')) ? true : false;
 }
 
+function preResponse(context) {
+  // shoot back an immediate Status 200 to let client know it's all cool
+  // (much pain if neglected)
+  if (!context.isTest) {
+    context.finishResponse();
+  }
+}
+
 function getResponsePayload(context) {
   var textInput = context.userRequest.text;
   var payload = {
@@ -42,11 +50,6 @@ function getResponsePayload(context) {
       return preparePayload.nothingFound(payload);
     }
   });
-}
-
-function preResponse(context) {
-  // shoot back an immediate Status 200 to let Slack know it's all cool
-  context.finishResponse();
 }
 
 function sendResponseToPlatform(payload) {

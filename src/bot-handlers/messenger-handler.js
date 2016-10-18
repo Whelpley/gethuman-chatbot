@@ -12,6 +12,14 @@ function isHandlerForRequest(context) {
   return (object === 'page') ? true : false;
 }
 
+function preResponse(context) {
+  // shoot back an immediate Status 200 to let client know it's all cool
+  // (much pain if neglected)
+  if (!context.isTest) {
+    context.finishResponse();
+  }
+}
+
 function getResponsePayload(context) {
   var messaging_events = context.userRequest.entry[0].messaging;
   console.log("All messaging events: " + JSON.stringify(messaging_events));
@@ -51,14 +59,6 @@ function getResponsePayload(context) {
         }
       });
     }
-  }
-}
-
-function preResponse(context) {
-  // shoot back an immediate Status 200 to let messenger know it's all cool
-
-  if (!context.isTest) {
-    context.finishResponse();
   }
 }
 

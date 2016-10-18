@@ -61,25 +61,27 @@ function handleRequest(handlers) {
     var context = getContextFromExpressReqRes(req, res);
     var botHandler = getBotHandler(handlers, context);
 
-    botHandler.preResponse(context)
-      .then(function () {
-        return botHandler.getResponsePayload(context);
-      })
-      .then(function (responsePayload) {
-        botHandler.sendResponseToPlatform(responsePayload);
-      })
-      .catch(function (err) {
-        botHandler.sendErrorResponse(err, context);
-      });
-
-    // var botHandler = getBotHandler(handlers, context);
-    // botHandler.getResponsePayload(context)
+// I don't get why this needs to start the Promise chain, but will switch over if there is a reason for it}
+    // botHandler.preResponse(context)
+    //   .then(function () {
+    //     return botHandler.getResponsePayload(context);
+    //   })
     //   .then(function (responsePayload) {
     //     botHandler.sendResponseToPlatform(responsePayload);
     //   })
     //   .catch(function (err) {
     //     botHandler.sendErrorResponse(err, context);
     //   });
+
+    botHandler.preResponse(context);
+
+    botHandler.getResponsePayload(context)
+      .then(function (responsePayload) {
+        botHandler.sendResponseToPlatform(responsePayload);
+      })
+      .catch(function (err) {
+        botHandler.sendErrorResponse(err, context);
+      });
   }
 }
 
@@ -100,9 +102,10 @@ function getContextFromExpressReqRes(req, res) {
   return {
     userRequest: req.body,
     isTest: !!req.params.istest,
-    sendResponse: function (payload) {
-      res.send(payload);
-    },
+    // not used in either FB or Slack bots, keep in case 3rd bot needs it
+    // sendResponse: function (payload) {
+    //   res.send(payload);
+    // },
     finishResponse: function() {
       res.status(200).end();
     }
