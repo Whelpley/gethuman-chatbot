@@ -131,6 +131,6 @@ module.exports = {
   getResponsePayload: getResponsePayload,
   sendResponseToPlatform: sendResponseToPlatform,
   isHandlerForRequest: isHandlerForRequest,
-  sendErrorResponse: sendErrorResponse.
+  sendErrorResponse: sendErrorResponse,
   verify: verify
 }
