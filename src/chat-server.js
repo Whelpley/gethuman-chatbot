@@ -31,13 +31,6 @@ function startServer(handlers) {
     var context = getContextFromExpressReqRes(req, res);
     var botHandler = getBotHandler(context);
     botHandler.verify(req, res);
-    // .verify() replaces below:
-    // console.log("Receiving webhook verification from FB.")
-
-    // if (req.query['hub.verify_token'] === 'cmon_verify_me') {
-    //     res.send(req.query['hub.challenge'])
-    // }
-    // res.send('Error, wrong token');
   })
 
 // reaches Slack version

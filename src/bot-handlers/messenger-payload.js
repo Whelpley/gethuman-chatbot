@@ -10,14 +10,12 @@ function addPostsToPayload(payload, posts) {
   return queryCompaniesOfPosts(posts)
     .then(function (posts){
         payload.data = preparePostsPayload(posts);
-        payload.raw = payload.data;
         return payload;
     });
 }
 
 function addCompaniesToPayload(payload, companies) {
     payload.data = prepareCompaniesPayload(companies);
-    payload.raw = payload.data;
     return payload;
 }
 
@@ -34,7 +32,6 @@ function nothingFound(payload) {
     }];
     console.log("Elements returned for NOTHING FOUND payload: " + JSON.stringify(elements));
     payload.data = elements;
-    payload.raw = payload.data;
     return payload;
 };
 
@@ -51,7 +48,6 @@ function error(error) {
         }],
     }];
     console.log("Elements returned for ERROR payload: " + JSON.stringify(elements));
-
     return elements;
 };
 

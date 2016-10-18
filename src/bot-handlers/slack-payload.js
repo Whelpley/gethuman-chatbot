@@ -11,14 +11,12 @@ function addPostsToPayload(payload, posts) {
   return queryCompaniesOfPosts(posts)
     .then(function (posts){
         payload.data = preparePostsPayload(posts);
-        payload.raw = payload.data;
         return payload;
     });
 }
 
 function addCompaniesToPayload(payload, companies) {
     payload.data = prepareCompaniesPayload(companies);
-    payload.raw = payload.data;
     return payload;
 }
 
@@ -26,7 +24,6 @@ function nothingFound(payload) {
     payload.data.username = 'Gethuman Bot';
     payload.data.text = "We could not find anything matching your input to our database. Could you try rephrasing your concern, and be sure to spell the company name correctly?";
     payload.data.icon_emoji = ':question:';
-    payload.raw = payload.data;
     return payload;
 };
 

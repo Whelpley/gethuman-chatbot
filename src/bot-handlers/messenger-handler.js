@@ -33,7 +33,6 @@ function getResponsePayload(context) {
       let textInput = event.message.text;
       console.log("Text input received from user: " + textInput);
       var payload = {
-        raw: {},
         data:  {},
         context: context
       };
@@ -109,17 +108,14 @@ function sendResponseWithNewRequest(payload) {
 function sendErrorResponse(err, context) {
   console.log("Ran into an error: " + err);
   var payload = {
-    raw: preparePayload.error(err),
-    data: {},
+    data: preparePayload.error(err),
     context: context
   };
-  payload.data = payload.raw;
   sendResponseToPlatform(payload)
 }
 
 function verify(req, res) {
     console.log("Receiving webhook verification from FB.")
-
     if (req.query['hub.verify_token'] === 'cmon_verify_me') {
         res.send(req.query['hub.challenge'])
     }

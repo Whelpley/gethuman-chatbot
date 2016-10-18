@@ -23,7 +23,6 @@ function preResponse(context) {
 function getResponsePayload(context) {
   var textInput = context.userRequest.text;
   var payload = {
-    raw: {},
     data:  {},
     context: context
   }
@@ -77,12 +76,10 @@ function sendResponseToPlatform(payload) {
 function sendErrorResponse(err, context) {
   console.log("Ran into an error: " + err);
   var payload = {
-    raw: {},
     data: {},
     context: context
   };
   payload.data = preparePayload.error(err);
-  payload.raw = payload.data;
   sendResponseToPlatform(errorPayload);
 }
 
