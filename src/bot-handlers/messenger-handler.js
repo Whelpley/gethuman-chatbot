@@ -54,11 +54,12 @@ function getResponsePayload(context) {
   }
 }
 
-function sendResponseToPlatform(responsePayload) {
-  console.log('Hitting the sendResponseToPlatform function with this payload: ' + JSON.stringify(responsePayload).substring(0,400));
-  var elements = responsePayload.data;
+function sendResponseToPlatform(payload) {
+  console.log('Hitting the sendResponseToPlatform function with this payload: ' + JSON.stringify(payload).substring(0,400));
+  var deferred = Q.defer();
+  var elements = payload.data;
 
-  var sender = responsePayload.context.userRequest.entry[0].messaging[0].sender.id;
+  var sender = payload.context.userRequest.entry[0].messaging[0].sender.id;
   console.log("Sender: " + sender);
 
 // gotta make this a Promise
@@ -80,13 +81,14 @@ function sendResponseToPlatform(responsePayload) {
           },
       }
   }, function(error, response, body) {
-      if (error) {
-          console.log('Error sending messages: ', error)
-      } else if (response.body.error) {
-          console.log('Error: ', response.body.error)
-      }
+    if (error) {
+      deferred.reject(error);
+    }
+    else {
+      deferred.resolve();
+    }
   });
-
+  return deferred.promise;
 }
 
 function sendErrorResponse(err, context) {
