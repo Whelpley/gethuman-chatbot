@@ -5,6 +5,7 @@ const Q = require('q');
 const companySearch = require('../services/company-api-gh.js');
 const postSearch = require('../services/post-api-gh.js');
 const preparePayload = require('./slack-payload.js');
+const utilities = require('../services/utilities.js');
 
 // unit testable
 function isHandlerForRequest(context) {
@@ -21,16 +22,14 @@ function getResponsePayload(context) {
   if (!textInput) {
       return Q.when(preparePayload.inputPrompt(payload));
   }
-  console.log('About to search API for input: ' + textInput);
+  // this could be in a module, except for the nothingFound() fcn
   return Q.all([
-      postSearch.findByText(textInput),
-      companySearch.findByText(textInput)
+    postSearch.findByText(textInput),
+    companySearch.findByText(textInput)
   ])
   .then(function (postAndCompanySearchResults) {
-    console.log('About to load payload object from search results');
     var posts = postAndCompanySearchResults[0];
     var companies = postAndCompanySearchResults[1];
-
     if (posts && posts.length) {
       return preparePayload.addPostsToPayload(payload, posts);
     }
@@ -43,7 +42,18 @@ function getResponsePayload(context) {
   });
 }
 
+// Could be a common function, but refers to unique fcn
 function sendResponseToPlatform(payload) {
+  if (payload.context.isTest) {
+    payload.context.sendResponse(payload);
+    return Q.when();
+  }
+  else {
+    return sendResponseWithNewRequest(payload);
+  }
+}
+
+function sendResponseWithNewRequest(payload) {
   var deferred = Q.defer();
   var path = process.env.INCOMING_WEBHOOK_PATH;
   var uri = 'https://hooks.slack.com/services/' + path;

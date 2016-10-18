@@ -6,6 +6,7 @@ const Q = require('q');
 const companySearch = require('../services/company-api-gh.js');
 const postSearch = require('../services/post-api-gh.js');
 const preparePayload = require('./messenger-payload.js');
+const utilities = require('../services/utilities.js');
 
 function isHandlerForRequest(context) {
   var object = context.userRequest.object || '';
@@ -14,13 +15,14 @@ function isHandlerForRequest(context) {
 
 function getResponsePayload(context) {
   var messaging_events = context.userRequest.entry[0].messaging;
-  console.log("All messaging events: " + JSON.stringify(messaging_events));
+  // console.log("All messaging events: " + JSON.stringify(messaging_events));
 
   for (let i = 0; i < messaging_events.length; i++) {
     let event = context.userRequest.entry[0].messaging[i]
     console.log("Event detected: " + JSON.stringify(event));
     let sender = event.sender.id
 
+// no else case - need to ignore confirmation replies
     if (event.message && event.message.text) {
       let textInput = event.message.text;
       console.log("Text input received from user: " + textInput);
@@ -28,24 +30,21 @@ function getResponsePayload(context) {
         data:  {},
         context: context
       };
+      // this could be in a module, except for the nothingFound() fcn
       return Q.all([
-          postSearch.findByText(textInput),
-          companySearch.findByText(textInput)
+        postSearch.findByText(textInput),
+        companySearch.findByText(textInput)
       ])
       .then(function (postAndCompanySearchResults) {
-        console.log('Initial Post and Company searches complete, about to load payload object from search results');
         var posts = postAndCompanySearchResults[0];
         var companies = postAndCompanySearchResults[1];
         if (posts && posts.length) {
-          console.log("It's going to be a Posts message return");
           return preparePayload.addPostsToPayload(payload, posts);
         }
         else if (companies && companies.length) {
-          console.log("It's going to be a Companies message return");
           return preparePayload.addCompaniesToPayload(payload, companies);
         }
         else {
-          console.log("It's going to be a Nothing Found message return");
           return preparePayload.nothingFound(payload);
         }
       });
@@ -53,6 +52,7 @@ function getResponsePayload(context) {
   }
 }
 
+// Could be a common function, but refers to unique fcn
 function sendResponseToPlatform(payload) {
   if (payload.context.isTest) {
     payload.context.sendResponse(payload);
@@ -64,7 +64,6 @@ function sendResponseToPlatform(payload) {
 }
 
 function sendResponseWithNewRequest(payload) {
-// console.log('Hitting the sendResponseToPlatform function with this payload: ' + JSON.stringify(payload).substring(0,400));
   var deferred = Q.defer();
   var elements = payload.data;
   var sender = payload.context.userRequest.entry[0].messaging[0].sender.id;

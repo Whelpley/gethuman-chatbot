@@ -100,10 +100,10 @@ function getContextFromExpressReqRes(req, res) {
   return {
     userRequest: req.body,
     isTest: !!req.params.istest,
-    // not used in either FB or Slack bots, keep in case 3rd bot needs it
-    // sendResponse: function (payload) {
-    //   res.send(payload);
-    // },
+    // not used in either FB or Slack bots, keep for testing
+    sendResponse: function (payload) {
+      res.send(payload);
+    },
     finishResponse: function() {
       res.status(200).end();
     }

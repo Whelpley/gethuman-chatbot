@@ -5,9 +5,10 @@
 const Q = require('q');
 const companySearch = require('../services/company-api-gh.js');
 const phoneFormatter = require('phone-formatter');
+const utilities = require('../services/utilities.js');
 
 function addPostsToPayload(payload, posts) {
-  return queryCompaniesOfPosts(posts)
+  return utilities.queryCompaniesOfPosts(posts)
     .then(function (posts){
         payload.data = preparePostsPayload(posts);
         return payload;
@@ -20,7 +21,6 @@ function addCompaniesToPayload(payload, companies) {
 }
 
 function nothingFound(payload) {
-    console.log("About to form up NOTHING FOUND payload.")
     let elements = [{
         "title": "Nothing found!",
         "subtitle": "We're really sorry!",
@@ -51,30 +51,8 @@ function error(error) {
     return elements;
 };
 
-// ----- helper methods
-// lots of dupes here!
-
-function queryCompaniesOfPosts(posts) {
-    var companyIDs = [];
-    for (let i = 0; i < posts.length; i++) {
-        companyIDs.push(posts[i].companyId);
-    };
-    return Q.when(companySearch.findByIds(companyIDs))
-      .then(function (companies) {
-        var companyTable = {};
-        for (let i = 0; i < companies.length; i++) {
-            companyTable[companies[i]._id] = companies[i];
-        };
-        for (let i = 0; i < posts.length; i++) {
-            let cID = posts[i].companyId;
-            posts[i].company = companyTable[cID];
-        };
-        return posts;
-    })
-}
-
 function preparePostsPayload(posts) {
-  console.log("Hitting the preparePostsPayload function with these posts: " + JSON.stringify(posts).substring(0,200));
+  // console.log("Hitting the preparePostsPayload function with these posts: " + JSON.stringify(posts).substring(0,200));
 
     let elements = [];
     for (let i = 0; i < posts.length; i++) {
@@ -87,7 +65,7 @@ function preparePostsPayload(posts) {
         if (title.indexOf(companyName) < 0) {
             title = companyName + ": " + title;
         };
-        let textField = extractTextFieldFromPost(posts[i]);
+        let textField = utilities.extractTextFieldFromPost(posts[i]);
 
         let singleElement = {
             "title": title,
@@ -117,7 +95,7 @@ function preparePostsPayload(posts) {
 }
 
 function prepareCompaniesPayload(companies) {
-    console.log("Hitting the prepareCompaniesPayload function with these companies: " + JSON.stringify(companies).substring(0,200));
+    // console.log("Hitting the prepareCompaniesPayload function with these companies: " + JSON.stringify(companies).substring(0,200));
 
     let elements = [];
     for (let i = 0; i < companies.length; i++) {
@@ -126,9 +104,10 @@ function prepareCompaniesPayload(companies) {
         let phone = companies[i].phone || '';
         //format phone# for international format
         let phoneIntl = (phone) ? phoneFormatter.format(phone, "+1NNNNNNNNNN") : '';
+        let textField = utilities.extractTextFieldFromCompany(companies[i]);
         let singleElement = {
             "title": name,
-            "subtitle": email,
+            "subtitle": textField,
             "buttons": [
             {
                 "type": "web_url",
@@ -149,40 +128,6 @@ function prepareCompaniesPayload(companies) {
     };
     return elements;
 }
-
-// Following methods are duplicated in another module: combine & share!
-
-function extractTextFieldFromPost(post) {
-    let phone = (post.company) ? post.company.callback.phone : '';
-    let emailContactMethods = post.company.contactMethods.filter(function (method) {
-        return method.type === "email";
-    });
-    let email = (emailContactMethods && emailContactMethods.length) ? emailContactMethods[0].target : '';
-    return formatTextField(phone, email);
-}
-
-function extractTextFieldFromCompany(company) {
-    let phone = company.callback.phone || '';
-    let emailContactMethods = company.contactMethods.filter(function (method) {
-        return method.type === "email";
-    });
-    let email = (emailContactMethods && emailContactMethods.length) ? emailContactMethods[0].target : '';
-    return formatTextField(phone, email);
-}
-
-function formatTextField(phone, email) {
-    let result = '';
-    if (phone && email) {
-        result = phone + " | " + email;
-    } else if (phone) {
-        result = phone;
-    } else if (email) {
-        result = email;
-    };
-    return result;
-};
-
-// ----------------------------------
 
 module.exports = {
   addPostsToPayload: addPostsToPayload,

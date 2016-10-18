@@ -5,10 +5,11 @@
 const colors = ['#1c4fff', '#e84778', '#ffc229', '#1ae827', '#5389ff'];
 const Q = require('q');
 const companySearch = require('../services/company-api-gh.js');
+const utilities = require('../services/utilities.js');
 
 // harder to test b/c has an API call!
 function addPostsToPayload(payload, posts) {
-  return queryCompaniesOfPosts(posts)
+  return utilities.queryCompaniesOfPosts(posts)
     .then(function (posts){
         payload.data = preparePostsPayload(posts);
         return payload;
@@ -42,29 +43,6 @@ function error(error) {
     return payload;
 };
 
-// ---------------- helper functions ----------------
-// lots of dupes here!
-
-function queryCompaniesOfPosts(posts) {
-    var companyIDs = [];
-    for (let i = 0; i < posts.length; i++) {
-        companyIDs.push(posts[i].companyId);
-    };
-    return Q.when(companySearch.findByIds(companyIDs))
-      .then(function (companies) {
-        var companyTable = {};
-        for (let i = 0; i < companies.length; i++) {
-            companyTable[companies[i]._id] = companies[i];
-        };
-        for (let i = 0; i < posts.length; i++) {
-            let cID = posts[i].companyId;
-            posts[i].company = companyTable[cID];
-        };
-        return posts;
-    })
-}
-
-// prepares payload from Posts object
 function preparePostsPayload(posts) {
     var payload = {};
     payload.username = 'Gethuman Bot';
@@ -81,7 +59,7 @@ function preparePostsPayload(posts) {
         if (title.indexOf(name) < 0) {
             title = name + ": " + title;
         };
-        let textField = extractTextFieldFromPost(posts[i]);
+        let textField = utilities.extractTextFieldFromPost(posts[i]);
         let singleAttachment = {
             "fallback": "Solution guide for " + name,
             "title": title,
@@ -107,7 +85,6 @@ function preparePostsPayload(posts) {
     return payload;
 };
 
-// prepares payload from Posts object
 function prepareCompaniesPayload(companies) {
     var payload = {};
     payload.username = 'Gethuman Bot';
@@ -118,7 +95,7 @@ function prepareCompaniesPayload(companies) {
     for (let i=0; i < companies.length; i++) {
         let name = companies[i].name || '';
         let color = colors[i];
-        let textField = extractTextFieldFromCompany(companies[i]);
+        let textField = utilities.extractTextFieldFromCompany(companies[i]);
         let singleAttachment = {
             "fallback": "Company info for " + name,
             "title": name,
@@ -135,36 +112,6 @@ function prepareCompaniesPayload(companies) {
     };
     return payload;
 }
-
-function extractTextFieldFromPost(post) {
-    let phone = (post.company) ? post.company.callback.phone : '';
-    let emailContactMethods = post.company.contactMethods.filter(function (method) {
-        return method.type === "email";
-    });
-    let email = (emailContactMethods && emailContactMethods.length) ? emailContactMethods[0].target : '';
-    return formatTextField(phone, email);
-}
-
-function extractTextFieldFromCompany(company) {
-    let phone = company.callback.phone || '';
-    let emailContactMethods = company.contactMethods.filter(function (method) {
-        return method.type === "email";
-    });
-    let email = (emailContactMethods && emailContactMethods.length) ? emailContactMethods[0].target : '';
-    return formatTextField(phone, email);
-}
-
-function formatTextField(phone, email) {
-    let result = '';
-    if (phone && email) {
-        result = phone + " | " + email;
-    } else if (phone) {
-        result = phone;
-    } else if (email) {
-        result = email;
-    };
-    return result;
-};
 
 module.exports = {
   addPostsToPayload: addPostsToPayload,
