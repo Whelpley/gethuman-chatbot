@@ -74,7 +74,6 @@ function handleRequest(handlers) {
         botHandler.sendErrorResponse(err, context);
       });
 
-
   }
 }
 

@@ -33,8 +33,9 @@ function nothingFound(payload) {
         }],
     }];
     console.log("Elements returned for NOTHING FOUND payload: " + JSON.stringify(elements));
-
-    return elements;
+    payload.data = elements;
+    payload.raw = payload.data;
+    return payload;
 };
 
 // needs checking - not yet tested
@@ -49,7 +50,7 @@ function error(error) {
             "title": "Go to GetHuman"
         }],
     }];
-    console.log("Elements returned for NOTHING FOUND payload: " + JSON.stringify(elements));
+    console.log("Elements returned for ERROR payload: " + JSON.stringify(elements));
 
     return elements;
 };
