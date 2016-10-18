@@ -61,17 +61,27 @@ function handleRequest(handlers) {
     console.log("Incoming request: " + JSON.stringify(req.body));
 
     var context = getContextFromExpressReqRes(req, res);
-    // console.log("About to send back Status 200 to response object.")
-    context.finishResponse();
-
     var botHandler = getBotHandler(handlers, context);
-    botHandler.getResponsePayload(context)
+
+    botHandler.preResponse(context)
+      .then(function () {
+        return botHandler.getResponsePayload(context);
+      })
       .then(function (responsePayload) {
         botHandler.sendResponseToPlatform(responsePayload);
       })
       .catch(function (err) {
         botHandler.sendErrorResponse(err, context);
       });
+
+    // var botHandler = getBotHandler(handlers, context);
+    // botHandler.getResponsePayload(context)
+    //   .then(function (responsePayload) {
+    //     botHandler.sendResponseToPlatform(responsePayload);
+    //   })
+    //   .catch(function (err) {
+    //     botHandler.sendErrorResponse(err, context);
+    //   });
   }
 }
 

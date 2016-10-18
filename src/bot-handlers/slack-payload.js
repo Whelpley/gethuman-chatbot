@@ -6,6 +6,7 @@ const colors = ['#1c4fff', '#e84778', '#ffc229', '#1ae827', '#5389ff'];
 const Q = require('q');
 const companySearch = require('../api-gh/company.js');
 
+// harder to test b/c has an API call!
 function addPostsToPayload(payload, posts) {
   return queryCompaniesOfPosts(posts)
     .then(function (posts){

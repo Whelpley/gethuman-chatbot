@@ -1,10 +1,10 @@
 // checklist
 // ------------
-// addCompaniesToPayload(payload, companies)
+// addCompaniesToPayload(payload, companies) - X
 // nothingFound(payload) X
 // inputPrompt(payload) X
 // error(error)
-// preparePostsPayload(posts)
+// preparePostsPayload(posts) -
 // prepareCompaniesPayload(companies)
 // extractTextFieldFromPost(post)
 // extractTextFieldFromCompany(company)
@@ -21,6 +21,8 @@ var mockData = require('../mockData.js');
 
 describe('Input Prompt Payload', function() {
   it('should prompt user for issue', function() {
+    // var payload = mockData.getBlankPayload();
+
     var payload = mockData.blankPayload;
     payload = preparePayload.inputPrompt(payload);
 
@@ -43,6 +45,25 @@ describe('Error Notice Payload', function() {
     var payload = preparePayload.error(error);
 
     assert.equal(payload.text, "There was a problem, oh no!");
+  });
+});
+
+// // complex payload testing - happy path
+
+describe('Companies Payload - Happy Path', function() {
+  var companies = mockData.companies;
+  var payload = mockData.blankPayload;
+  payload = preparePayload.addCompaniesToPayload(payload, companies);
+
+// strange variable-scoping behavior
+  it('has the correct introduction text', function() {
+    assert.equal(payload.data.text, "We could not find any specific questions matching your input, but here is the contact information for some companies that could help you resolve your issue:");
+  });
+  it('has the correct company name', function() {
+    assert.equal(payload.data.attachments[0].title, companies[0].name);
+  });
+  it('has a correctly formatted phone and email field', function() {
+    assert.equal(payload.data.attachments[0].text, "866-111-1111 | first@first.com");
   });
 });
 

@@ -54,36 +54,55 @@ function getResponsePayload(context) {
   }
 }
 
+function preResponse(context) {
+  // shoot back an immediate Status 200 to let messenger know it's all cool
+
+  if (!context.isTest) {
+    context.finishResponse();
+  }
+}
+
 function sendResponseToPlatform(payload) {
-  // console.log('Hitting the sendResponseToPlatform function with this payload: ' + JSON.stringify(payload).substring(0,400));
+  if (payload.context.isTest) {
+    payload.context.sendResponse(payload);
+    return Q.when();
+  }
+  else {
+    return sendResponseWithNewRequest(payload);
+  }
+}
+
+function sendResponseWithNewRequest(payload) {
+// console.log('Hitting the sendResponseToPlatform function with this payload: ' + JSON.stringify(payload).substring(0,400));
   var deferred = Q.defer();
   var elements = payload.data;
   var sender = payload.context.userRequest.entry[0].messaging[0].sender.id;
   // console.log("Sender: " + sender);
-  request({
-      url: 'https://graph.facebook.com/v2.6/me/messages',
-      qs: {access_token: token},
-      method: 'POST',
-      json: {
-          recipient: {id: sender},
-          message: {
-              "attachment": {
-                  "type": "template",
-                  "payload": {
-                      "template_type": "generic",
-                      "elements": elements
-                  }
-              }
-          },
+    request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {access_token: token},
+        method: 'POST',
+        json: {
+            recipient: {id: sender},
+            message: {
+                "attachment": {
+                    "type": "template",
+                    "payload": {
+                        "template_type": "generic",
+                        "elements": elements
+                    }
+                }
+            },
+        }
+    }, function(error, response, body) {
+      if (error) {
+        deferred.reject(error);
       }
-  }, function(error, response, body) {
-    if (error) {
-      deferred.reject(error);
-    }
-    else {
-      deferred.resolve();
-    }
-  });
+      else {
+        deferred.resolve();
+      }
+    });
+
   return deferred.promise;
 }
 
@@ -100,6 +119,7 @@ function sendErrorResponse(err, context) {
 
 
 module.exports = {
+  preResponse: preResponse,
   getResponsePayload: getResponsePayload,
   sendResponseToPlatform: sendResponseToPlatform,
   isHandlerForRequest: isHandlerForRequest,

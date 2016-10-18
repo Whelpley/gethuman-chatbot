@@ -2,6 +2,10 @@
 
 var colors = ['#1c4fff', '#e84778', '#ffc229', '#1ae827', '#5389ff'];
 
+function getMockPosts() {
+
+}
+
 var posts = [
   {
     companyName: "First Company",

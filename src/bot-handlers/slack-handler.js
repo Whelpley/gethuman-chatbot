@@ -44,10 +44,12 @@ function getResponsePayload(context) {
   });
 }
 
-function sendResponseToPlatform(payload) {
+function preResponse(context) {
   // shoot back an immediate Status 200 to let Slack know it's all cool
-  payload.context.finishResponse();
+  context.finishResponse();
+}
 
+function sendResponseToPlatform(payload) {
   var deferred = Q.defer();
   var path = process.env.INCOMING_WEBHOOK_PATH;
   var uri = 'https://hooks.slack.com/services/' + path;
@@ -82,6 +84,7 @@ function sendErrorResponse(err, context) {
 }
 
 module.exports = {
+  preResponse: preResponse,
   isHandlerForRequest: isHandlerForRequest,
   getResponsePayload: getResponsePayload,
   sendResponseToPlatform: sendResponseToPlatform,
