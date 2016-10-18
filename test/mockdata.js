@@ -1,17 +1,54 @@
 'use strict'
 
-var colors = ['#1c4fff', '#e84778', '#ffc229', '#1ae827', '#5389ff'];
-
-function getMockPosts() {
-
+function getColors {
+  return ['#1c4fff', '#e84778', '#ffc229', '#1ae827', '#5389ff'];
 }
 
-var posts = [
-  {
-    companyName: "First Company",
-    urlId: 'AAAA',
-    title: "This is the first Post",
-    company: {
+function getPosts() {
+  return [
+    {
+      companyName: "First Company",
+      urlId: 'AAAA',
+      title: "This is the first Post",
+      company: {
+        contactMethods: [
+          {
+            "type":"phone",
+            "target":"866-111-1111"
+          },
+          {
+            "type":"email",
+            "target":"first@first.com"
+          }
+        ],
+        callback: {
+          phone: "866-111-1111"
+        }
+      },
+    },
+    {
+      companyName: "Second Company",
+      urlId: 'BBBB',
+      title: "This is the second Post",
+      company: {
+        contactMethods: [
+          {
+            "type":"phone",
+            "target":"866-222-2222"
+          }
+        ],
+        callback: {
+          phone: "866-222-2222"
+        }
+      },
+    }
+  ];
+}
+
+function getCompanies() {
+  return [
+    {
+      name: "First Company",
       contactMethods: [
         {
           "type":"phone",
@@ -26,12 +63,8 @@ var posts = [
         phone: "866-111-1111"
       }
     },
-  },
-  {
-    companyName: "Second Company",
-    urlId: 'BBBB',
-    title: "This is the second Post",
-    company: {
+    {
+      name: "Second Company",
       contactMethods: [
         {
           "type":"phone",
@@ -42,49 +75,20 @@ var posts = [
         phone: "866-222-2222"
       }
     },
+  ];
+}
+
+function getBlankPayload() {
+  return {
+    raw: {},
+    data: {},
+    context: {}
   }
-];
-
-var companies = [
-  {
-    name: "First Company",
-    contactMethods: [
-      {
-        "type":"phone",
-        "target":"866-111-1111"
-      },
-      {
-        "type":"email",
-        "target":"first@first.com"
-      }
-    ],
-    callback: {
-      phone: "866-111-1111"
-    }
-  },
-  {
-    name: "Second Company",
-    contactMethods: [
-      {
-        "type":"phone",
-        "target":"866-222-2222"
-      }
-    ],
-    callback: {
-      phone: "866-222-2222"
-    }
-  },
-];
-
-var blankPayload = {
-  raw: {},
-  data: {},
-  context: {}
 }
 
 module.exports = {
-  posts: posts,
-  companies: companies,
-  colors: colors,
-  blankPayload: blankPayload
+  getPosts: getPosts,
+  getCompanies: getCompanies,
+  getColors: getColors,
+  getBlankPayload: getBlankPayload
 }

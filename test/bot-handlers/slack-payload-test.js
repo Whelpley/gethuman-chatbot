@@ -1,14 +1,6 @@
 // checklist
 // ------------
-// addCompaniesToPayload(payload, companies) - X
-// nothingFound(payload) X
-// inputPrompt(payload) X
-// error(error)
-// preparePostsPayload(posts) -
-// prepareCompaniesPayload(companies)
-// extractTextFieldFromPost(post)
-// extractTextFieldFromCompany(company)
-// formatTextField(phone, email)
+
 
 'use strict'
 
