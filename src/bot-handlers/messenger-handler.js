@@ -55,15 +55,11 @@ function getResponsePayload(context) {
 }
 
 function sendResponseToPlatform(payload) {
-  console.log('Hitting the sendResponseToPlatform function with this payload: ' + JSON.stringify(payload).substring(0,400));
+  // console.log('Hitting the sendResponseToPlatform function with this payload: ' + JSON.stringify(payload).substring(0,400));
   var deferred = Q.defer();
   var elements = payload.data;
-
   var sender = payload.context.userRequest.entry[0].messaging[0].sender.id;
-  console.log("Sender: " + sender);
-
-// gotta make this a Promise
-// is this causing problems by being a callback nested in a Promise chain?
+  // console.log("Sender: " + sender);
   request({
       url: 'https://graph.facebook.com/v2.6/me/messages',
       qs: {access_token: token},
