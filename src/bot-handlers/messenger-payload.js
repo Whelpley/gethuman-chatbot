@@ -42,7 +42,7 @@ function error(error) {
     console.log("About to form up ERROR payload.")
     let elements = [{
         "title": "We ran into an error!",
-        "subtitle": error,
+        "subtitle": JSON.stringify(error),
         "buttons": [{
             "type": "web_url",
             "url": "https://gethuman.com",
