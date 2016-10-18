@@ -83,10 +83,16 @@ function sendErrorResponse(err, context) {
   sendResponseToPlatform(errorPayload);
 }
 
+// not needed?
+function verify() {
+    console.log("Nothing to see here.")
+}
+
 module.exports = {
   preResponse: preResponse,
   isHandlerForRequest: isHandlerForRequest,
   getResponsePayload: getResponsePayload,
   sendResponseToPlatform: sendResponseToPlatform,
-  sendErrorResponse: sendErrorResponse
+  sendErrorResponse: sendErrorResponse,
+  verify: verify
 }

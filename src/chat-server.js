@@ -28,24 +28,22 @@ function startServer(handlers) {
   app.post('/roll', require('./deprecated/dicebot.js'));
   // for Facebook verification
   app.get('/v3/gethuman', function (req, res) {
-    //---change to this:
-    // var context = getContextFromExpressReqRes(req, res);
-    // var botHandler = getBotHandler(context);
-    // botHandler.verify();
-    console.log("Receiving webhook verification from FB.")
+    var context = getContextFromExpressReqRes(req, res);
+    var botHandler = getBotHandler(context);
+    botHandler.verify(req, res);
+    // .verify() replaces below:
+    // console.log("Receiving webhook verification from FB.")
 
-    if (req.query['hub.verify_token'] === 'cmon_verify_me') {
-        res.send(req.query['hub.challenge'])
-    }
-    res.send('Error, wrong token');
+    // if (req.query['hub.verify_token'] === 'cmon_verify_me') {
+    //     res.send(req.query['hub.challenge'])
+    // }
+    // res.send('Error, wrong token');
   })
 
 // reaches Slack version
   app.post('/gethuman', handleRequest(handlers));
 // FB version
   app.post('/v3/gethuman', handleRequest(handlers));
-  // old version for dissection
-  // app.post('/v3/gethuman', require('./deprecated/gh-facebook-bot.js'));
 
   app.listen(port, function () {
     console.log('Fusion bot listening on port ' + port);

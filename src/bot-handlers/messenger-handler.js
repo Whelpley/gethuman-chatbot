@@ -117,11 +117,20 @@ function sendErrorResponse(err, context) {
   sendResponseToPlatform(payload)
 }
 
+function verify(req, res) {
+    console.log("Receiving webhook verification from FB.")
+
+    if (req.query['hub.verify_token'] === 'cmon_verify_me') {
+        res.send(req.query['hub.challenge'])
+    }
+    res.send('Error, wrong token');
+}
 
 module.exports = {
   preResponse: preResponse,
   getResponsePayload: getResponsePayload,
   sendResponseToPlatform: sendResponseToPlatform,
   isHandlerForRequest: isHandlerForRequest,
-  sendErrorResponse: sendErrorResponse
+  sendErrorResponse: sendErrorResponse.
+  verify: verify
 }
