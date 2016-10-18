@@ -4,7 +4,7 @@
 
 const colors = ['#1c4fff', '#e84778', '#ffc229', '#1ae827', '#5389ff'];
 const Q = require('q');
-const companySearch = require('../api-gh/company.js');
+const companySearch = require('../services/company-api-gh.js');
 
 // harder to test b/c has an API call!
 function addPostsToPayload(payload, posts) {
@@ -37,12 +37,13 @@ function inputPrompt(payload) {
 function error(error) {
     var payload = {};
     payload.username = 'Gethuman Bot';
-    payload.text = error;
+    payload.text = JSON.stringify(error);
     payload.icon_emoji = ':no_good:';
     return payload;
 };
 
 // ---------------- helper functions ----------------
+// lots of dupes here!
 
 function queryCompaniesOfPosts(posts) {
     var companyIDs = [];

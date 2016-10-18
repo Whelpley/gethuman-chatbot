@@ -3,21 +3,13 @@
 const token = process.env.FB_PAGE_ACCESS_TOKEN
 const request = require('request');
 const Q = require('q');
-const companySearch = require('../api-gh/company.js');
-const postSearch = require('../api-gh/post.js');
+const companySearch = require('../services/company-api-gh.js');
+const postSearch = require('../services/post-api-gh.js');
 const preparePayload = require('./messenger-payload.js');
 
 function isHandlerForRequest(context) {
   var object = context.userRequest.object || '';
   return (object === 'page') ? true : false;
-}
-
-function preResponse(context) {
-  // shoot back an immediate Status 200 to let client know it's all cool
-  // (much pain if neglected)
-  if (!context.isTest) {
-    context.finishResponse();
-  }
 }
 
 function getResponsePayload(context) {
@@ -123,7 +115,6 @@ function verify(req, res) {
 }
 
 module.exports = {
-  preResponse: preResponse,
   getResponsePayload: getResponsePayload,
   sendResponseToPlatform: sendResponseToPlatform,
   isHandlerForRequest: isHandlerForRequest,

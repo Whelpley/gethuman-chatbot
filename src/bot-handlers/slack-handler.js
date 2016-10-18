@@ -2,22 +2,14 @@
 
 const request = require('request');
 const Q = require('q');
-const companySearch = require('../api-gh/company.js');
-const postSearch = require('../api-gh/post.js');
+const companySearch = require('../services/company-api-gh.js');
+const postSearch = require('../services/post-api-gh.js');
 const preparePayload = require('./slack-payload.js');
 
 // unit testable
 function isHandlerForRequest(context) {
   var responseUrl = context.userRequest.response_url || '';
   return (responseUrl && responseUrl.includes('hooks.slack.com')) ? true : false;
-}
-
-function preResponse(context) {
-  // shoot back an immediate Status 200 to let client know it's all cool
-  // (much pain if neglected)
-  if (!context.isTest) {
-    context.finishResponse();
-  }
 }
 
 function getResponsePayload(context) {
@@ -80,16 +72,16 @@ function sendErrorResponse(err, context) {
     context: context
   };
   payload.data = preparePayload.error(err);
-  sendResponseToPlatform(errorPayload);
+  sendResponseToPlatform(payload);
 }
 
 // not needed?
+// will delete this if won't cause problems when missing
 function verify() {
-    console.log("Nothing to see here.")
+  console.log("Nothing to see here.")
 }
 
 module.exports = {
-  preResponse: preResponse,
   isHandlerForRequest: isHandlerForRequest,
   getResponsePayload: getResponsePayload,
   sendResponseToPlatform: sendResponseToPlatform,

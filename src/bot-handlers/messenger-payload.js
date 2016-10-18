@@ -3,7 +3,7 @@
 'use strict'
 
 const Q = require('q');
-const companySearch = require('../api-gh/company.js');
+const companySearch = require('../services/company-api-gh.js');
 const phoneFormatter = require('phone-formatter');
 
 function addPostsToPayload(payload, posts) {
@@ -52,7 +52,7 @@ function error(error) {
 };
 
 // ----- helper methods
-
+// lots of dupes here!
 
 function queryCompaniesOfPosts(posts) {
     var companyIDs = [];

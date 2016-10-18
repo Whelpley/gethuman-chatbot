@@ -3,6 +3,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var request = require('request');
+var utilities = require('./services/utilities.js')
 var Q = require('q');
 
 function startServer(handlers) {
@@ -66,7 +67,9 @@ function handleRequest(handlers) {
     //     botHandler.sendErrorResponse(err, context);
     //   });
 
-    botHandler.preResponse(context);
+// sends 200 response immediately
+// should this be bot-specific?
+    utilities.preResponse(context);
 
     botHandler.getResponsePayload(context)
       .then(function (responsePayload) {
@@ -77,6 +80,8 @@ function handleRequest(handlers) {
       });
   }
 }
+
+// should the below functions exist in another module?
 
 // is unit testable
 function getBotHandler(handlers, context) {
