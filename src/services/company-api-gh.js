@@ -14,6 +14,9 @@ function findAllByText(textInput) {
   // var url = getUrl();
   var url = 'https://api.gethuman.co/v3/companies/search';
   var match = encodeURIComponent(textInput);
+
+  console.log('trying to match ' + match)
+
   request(url
     + '&match='
     + match,
