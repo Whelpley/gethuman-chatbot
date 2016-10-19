@@ -32,7 +32,7 @@ function queryCompaniesOfPosts(posts) {
 }
 
 function extractTextFieldFromPost(post) {
-    let phone = (post.company) ? post.company.callback.phone : '';
+    let phone = (post.company && posts[i].company.callback) ? post.company.callback.phone : '';
     let emailContactMethods = post.company.contactMethods.filter(function (method) {
         return method.type === "email";
     });
