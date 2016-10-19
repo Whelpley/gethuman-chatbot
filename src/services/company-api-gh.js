@@ -5,10 +5,29 @@ const request = require('request');
 
 module.exports = {
   findByText: findByText,
-  findByIds: findByIds
+  findByIds: findByIds,
+  findAllByText: findAllByText
 }
 
-//takes input text, queries Companies API, returns Promise of Companies object
+function findAllByText(textInput) {
+  var deferred = Q.defer();
+  // var url = getUrl();
+  var url = 'https://api.gethuman.co/v3/companies/search';
+  var match = encodeURIComponent(textInput);
+  request(url
+    + '&match='
+    + match,
+    function (error, response, body) {
+      if (error) {
+          deferred.reject(error);
+      } else {
+          deferred.resolve(JSON.parse(body));
+      }
+  });
+  return deferred.promise;
+}
+
+// Old version - Still used with FBM for now
 function findByText(textInput) {
   var deferred = Q.defer();
   // var url = getUrl();

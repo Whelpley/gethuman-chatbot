@@ -2,10 +2,10 @@
 
 const request = require('request');
 const Q = require('q');
-const companySearch = require('../services/company-api-gh.js');
-const postSearch = require('../services/post-api-gh.js');
-const preparePayload = require('./slack-payload.js');
-const utilities = require('../services/utilities.js');
+const companySearch = require('../services/company-api-gh');
+const postSearch = require('../services/post-api-gh');
+const preparePayload = require('./slack-payload');
+const utilities = require('../services/utilities');
 
 // unit testable
 function isHandlerForRequest(context) {
@@ -22,25 +22,66 @@ function getResponsePayload(context) {
   if (!textInput) {
       return Q.when(preparePayload.inputPrompt(payload));
   }
-  // this could be in a module, except for the nothingFound() fcn
-  return Q.all([
-    postSearch.findByText(textInput),
-    companySearch.findByText(textInput)
-  ])
-  .then(function (postAndCompanySearchResults) {
-    var posts = postAndCompanySearchResults[0];
-    var companies = postAndCompanySearchResults[1];
-    if (posts && posts.length) {
-      return preparePayload.addPostsToPayload(payload, posts);
-    }
-    else if (companies && companies.length) {
-      return preparePayload.addCompaniesToPayload(payload, companies);
-    }
-    else {
+  return Q.when(companySearch.findAllByText(textInput))
+  .then(function (companySearchResults) {
+    console.log("Company Search Results: " + companySearchResults);
+// find either
+  // first in list of results
+  // exact match of companyName to user input
+
+// if none found, prepare user prompt for better input
+    var company = {};
+    var exactMatch = companySearchResults.find(function(eachCompany){
+      return eachCompany.name.toLowerCase() === textInput.toLowerCase();
+    });
+    if (!companySearchResults.length) {
       return preparePayload.nothingFound(payload);
     }
+    else if (exactMatch) {
+      company = exactMatch;
+    }
+    else {
+      company = companySearchResults[0];
+    };
+    return preparePayload.addPostsofCompanyToPayload(company);
+
+    // will need to capture other company names for later use
+    // var companyNames = companySearchResults.map(function(eachCompany) {
+    //   return eachCompany.name;
+    // })
+
   });
 }
+
+// Old version
+// function getResponsePayload(context) {
+//   var textInput = context.userRequest.text;
+//   var payload = {
+//     data:  {},
+//     context: context
+//   }
+//   if (!textInput) {
+//       return Q.when(preparePayload.inputPrompt(payload));
+//   }
+//   // this could be in a module, except for the nothingFound() fcn
+//   return Q.all([
+//     postSearch.findByText(textInput),
+//     companySearch.findByText(textInput)
+//   ])
+//   .then(function (postAndCompanySearchResults) {
+//     var posts = postAndCompanySearchResults[0];
+//     var companies = postAndCompanySearchResults[1];
+//     if (posts && posts.length) {
+//       return preparePayload.addPostsToPayload(payload, posts);
+//     }
+//     else if (companies && companies.length) {
+//       return preparePayload.addCompaniesToPayload(payload, companies);
+//     }
+//     else {
+//       return preparePayload.nothingFound(payload);
+//     }
+//   });
+// }
 
 // Could be a common function, but refers to unique fcn
 function sendResponseToPlatform(payload) {

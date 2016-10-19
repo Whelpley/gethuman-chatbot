@@ -38,7 +38,7 @@ function inputPrompt(payload) {
 function error(error) {
     var payload = {};
     payload.username = 'Gethuman Bot';
-    payload.text = JSON.stringify(error);
+    payload.text = error;
     payload.icon_emoji = ':no_good:';
     return payload;
 };
