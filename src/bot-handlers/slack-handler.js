@@ -25,13 +25,8 @@ function getResponsePayload(context) {
   return Q.when(companySearch.findAllByText(textInput))
   .then(function (companySearchResults) {
     console.log("Company Search Results: " + companySearchResults);
-// find either
-  // first in list of results
-  // exact match of companyName to user input
-
-// if none found, prepare user prompt for better input
     var company = {};
-    var exactMatch = companySearchResults.find(function(eachCompany) {
+    var exactMatch = companySearchResults.filter(function(eachCompany) {
       return eachCompany.name.toLowerCase() === textInput.toLowerCase();
     });
     if (!companySearchResults.length) {
@@ -39,8 +34,8 @@ function getResponsePayload(context) {
       return preparePayload.nothingFound(payload);
     }
     else if (exactMatch) {
-      console.log("Found an exact match from Companies search: " + JSON.stringify(exactMatch));
-      company = exactMatch;
+      console.log("Found an exact match from Companies search: " + JSON.stringify(exactMatch[0]));
+      company = exactMatch[0];
     }
     else {
       company = companySearchResults[0];
