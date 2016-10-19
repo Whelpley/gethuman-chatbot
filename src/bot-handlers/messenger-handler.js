@@ -22,7 +22,7 @@ function getResponsePayload(context) {
     console.log("Event detected: " + JSON.stringify(event));
     let sender = event.sender.id
 
-// no else case - need to ignore confirmation replies
+// no else case yet present - need to ignore confirmation replies
     if (event.message && event.message.text) {
       let textInput = event.message.text;
       console.log("Text input received from user: " + textInput);
@@ -52,13 +52,23 @@ function getResponsePayload(context) {
         }
       });
     }
+    // returning a blank object if no text input detected
+    else {
+      return {};
+    }
+
+
   }
 }
 
 // Could be a common function, but refers to unique fcn
+// attempting a clause to stop reponse if non-text Post made from FB
 function sendResponseToPlatform(payload) {
   if (payload.context.isTest) {
     payload.context.sendResponse(payload);
+    return Q.when();
+  }
+  else if (payload === {}) {
     return Q.when();
   }
   else {

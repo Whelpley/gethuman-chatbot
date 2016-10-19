@@ -81,6 +81,7 @@ function handleRequest(botHandlers, actionHandlers) {
     // this is working code
     utilities.preResponse(context);
 
+// botHandler should first detect if this is a message that needs a reply before starting this chain
     botHandler.getResponsePayload(context)
       .then(function (responsePayload) {
         botHandler.sendResponseToPlatform(responsePayload);
