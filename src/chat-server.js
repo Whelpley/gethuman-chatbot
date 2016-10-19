@@ -3,9 +3,9 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var request = require('request');
-var utilities = require('./services/utilities.js')
+var utilities = require('./services/utilities')
 var Q = require('q');
-var brain = require('brain');
+var brain = require('./brain');
 
 function startServer(botHandlers, actionHandlers) {
   console.log('Starting server');
