@@ -7,6 +7,69 @@ const Q = require('q');
 const companySearch = require('../services/company-api-gh.js');
 const utilities = require('../services/utilities.js');
 
+// new version starter!!!
+function addPostsofCompanyToPayload(payload, company) {
+  return utilities.queryPostsofCompany(company)
+    .then(function (company){
+        payload.data = prepareSingleCompanyPayload(company);
+        return payload;
+    });
+}
+
+// 5 Posts Cards, one Company Info Card
+// Later: More results card
+function prepareSingleCompanyPayload(company) {
+    var payloadData = {};
+
+    payloadData.username = 'GetHuman Bot';
+    // should this specifically reference the input?
+    payloadData.text = "Here are the top issues for customers of " + name + ", and links for how to resolve them:";
+    payloadData.icon_emoji = ':tada:';
+    payloadData.attachments = [];
+
+    var phoneAndEmail = utilities.extractTextFieldFromCompany(company);
+    var name = company.name;
+    var posts = company.posts;
+
+    for (let i = 0; i < posts.length; i++) {
+        let title = posts[i].title || '';
+        let color = colors[i];
+        let urlId = posts[i].urlId || '';
+        let singleAttachment = {
+            "fallback": "Issue for " + name,
+            "title": title,
+            "title_link": "<https://answers.gethuman.co/_" + encodeURIComponent(urlId),
+            "color": color,
+            "text": textField,
+            "fields": [
+                {
+                    "value": "<https://gethuman.com?company=" + encodeURIComponent(name) + "|Solve for me - $20>",
+                    "short": true
+                },
+                {
+                    "value": "------------------------------------------------------",
+                    "short": false
+                },
+            ]
+        };
+        payloadData.attachments.push(singleAttachment);
+    };
+    // attach Company contact info:
+    payloadData.attachments.push({
+        "fallback": "Contact info for " + name,
+        "title": "Contact info for " + name,
+        "color": '#000000',
+        "text": phoneAndEmail,
+    });
+    // attach Other Companies info (later)
+    // payloadData.attachments.push({
+
+    // });
+
+    return payloadData;
+}
+
+
 // harder to test b/c has an API call!
 function addPostsToPayload(payload, posts) {
   return utilities.queryCompaniesOfPosts(posts)
@@ -45,7 +108,7 @@ function error(error) {
 
 function preparePostsPayload(posts) {
     var payload = {};
-    payload.username = 'Gethuman Bot';
+    payload.username = 'GetHuman Bot';
     // should this specifically reference the input?
     payload.text = "Here are some issues potentially matching your input, and links for how to resolve them:";
     payload.icon_emoji = ':tada:';

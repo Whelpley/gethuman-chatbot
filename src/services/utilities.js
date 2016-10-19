@@ -12,6 +12,15 @@ function preResponse(context) {
   }
 }
 
+// find the top 5 Posts associated with a Company, attach them to the Company object
+function queryPostsofCompany(company) {
+  return Q.when(postSearch.findPostsofCompany(company))
+    .then(function (posts) {
+      company.posts = posts || [];
+      return company;
+    })
+}
+
 function queryCompaniesOfPosts(posts) {
     var companyIDs = [];
     for (let i = 0; i < posts.length; i++) {

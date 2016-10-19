@@ -31,19 +31,22 @@ function getResponsePayload(context) {
 
 // if none found, prepare user prompt for better input
     var company = {};
-    var exactMatch = companySearchResults.find(function(eachCompany){
+    var exactMatch = companySearchResults.find(function(eachCompany) {
       return eachCompany.name.toLowerCase() === textInput.toLowerCase();
     });
     if (!companySearchResults.length) {
+      console.log("Nothing found in initial Company search");
       return preparePayload.nothingFound(payload);
     }
     else if (exactMatch) {
+      console.log("Found an exact match from Companies search: " + JSON.stringify(exactMatch));
       company = exactMatch;
     }
     else {
       company = companySearchResults[0];
+      console.log("Going with first result from Companies search: " + JSON.stringify(company));
     };
-    return preparePayload.addPostsofCompanyToPayload(company);
+    return preparePayload.addPostsofCompanyToPayload(payload, company);
 
     // will need to capture other company names for later use
     // var companyNames = companySearchResults.map(function(eachCompany) {
