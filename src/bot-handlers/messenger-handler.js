@@ -39,12 +39,15 @@ function getResponsePayload(context) {
         var posts = postAndCompanySearchResults[0];
         var companies = postAndCompanySearchResults[1];
         if (posts && posts.length) {
+          console.log("Found POSTS, loading payload");
           return preparePayload.addPostsToPayload(payload, posts);
         }
         else if (companies && companies.length) {
+          console.log("Found COMPANIES, loading payload");
           return preparePayload.addCompaniesToPayload(payload, companies);
         }
         else {
+          console.log("Found NOTHING, loading payload");
           return preparePayload.nothingFound(payload);
         }
       });
