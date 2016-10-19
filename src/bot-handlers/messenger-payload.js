@@ -58,7 +58,7 @@ function preparePostsPayload(posts) {
     for (let i = 0; i < posts.length; i++) {
         let companyName = posts[i].companyName || '';
         let urlId = posts[i].urlId || '';
-        let phone = (posts[i].company) ? posts[i].company.callback.phone : '';
+        let phone = (posts[i].company && posts[i].company.callback) ? posts[i].company.callback.phone : '';
         // need another check to see if phone # is legit - FB cares!
         let phoneIntl = (phone) ? phoneFormatter.format(phone, "+1NNNNNNNNNN") : '';
         let title = posts[i].title || '';
