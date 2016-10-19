@@ -54,7 +54,8 @@ function getResponsePayload(context) {
     }
     // returning a blank object if no text input detected
     else {
-      return {};
+      Console.log("Non-text-input Post detected from FB");
+      return Q.when({});
     }
 
 
@@ -62,7 +63,7 @@ function getResponsePayload(context) {
 }
 
 // Could be a common function, but refers to unique fcn
-// attempting a clause to stop reponse if non-text Post made from FB
+// attempting a clause to stop reponse & send nothing if non-text Post made from FB
 function sendResponseToPlatform(payload) {
   if (payload.context.isTest) {
     payload.context.sendResponse(payload);
