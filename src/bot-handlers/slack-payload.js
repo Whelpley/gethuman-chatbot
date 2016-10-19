@@ -4,8 +4,8 @@
 
 const colors = ['#1c4fff', '#e84778', '#ffc229', '#1ae827', '#5389ff'];
 const Q = require('q');
-const companySearch = require('../services/company-api-gh.js');
-const utilities = require('../services/utilities.js');
+const companySearch = require('../services/company-api-gh');
+const utilities = require('../services/utilities');
 
 // new version starter!!!
 function addPostsofCompanyToPayload(payload, company) {
@@ -20,6 +20,9 @@ function addPostsofCompanyToPayload(payload, company) {
 // Later: More results card
 function prepareSingleCompanyPayload(company) {
     var payloadData = {};
+    var phoneAndEmail = utilities.extractTextFieldFromCompany(company);
+    var name = company.name;
+    var posts = company.posts;
 
     payloadData.username = 'GetHuman Bot';
     // should this specifically reference the input?
@@ -27,20 +30,16 @@ function prepareSingleCompanyPayload(company) {
     payloadData.icon_emoji = ':tada:';
     payloadData.attachments = [];
 
-    var phoneAndEmail = utilities.extractTextFieldFromCompany(company);
-    var name = company.name;
-    var posts = company.posts;
-
     for (let i = 0; i < posts.length; i++) {
         let title = posts[i].title || '';
+        let title_link = "<https://answers.gethuman.co/_" + encodeURIComponent(urlId);
         let color = colors[i];
         let urlId = posts[i].urlId || '';
         let singleAttachment = {
             "fallback": "Issue for " + name,
             "title": title,
-            "title_link": "<https://answers.gethuman.co/_" + encodeURIComponent(urlId),
+            "title_link": title_link,
             "color": color,
-            "text": textField,
             "fields": [
                 {
                     "value": "<https://gethuman.com?company=" + encodeURIComponent(name) + "|Solve for me - $20>",
@@ -65,7 +64,6 @@ function prepareSingleCompanyPayload(company) {
     // payloadData.attachments.push({
 
     // });
-
     return payloadData;
 }
 
@@ -181,6 +179,7 @@ module.exports = {
   addCompaniesToPayload: addCompaniesToPayload,
   nothingFound: nothingFound,
   inputPrompt: inputPrompt,
-  error: error
+  error: error,
+  addPostsofCompanyToPayload: addPostsofCompanyToPayload
 }
 
