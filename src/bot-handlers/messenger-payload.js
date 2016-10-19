@@ -57,6 +57,7 @@ function error(error) {
 };
 
 function preparePostsPayload(posts) {
+    console.log("About to form payload from POSTS");
     let elements = [];
     for (let i = 0; i < posts.length; i++) {
         let companyName = posts[i].companyName || '';
@@ -93,7 +94,7 @@ function preparePostsPayload(posts) {
         };
         elements.push(singleElement);
     };
-    // console.log("Elements for POSTS payload: " + JSON.stringify(elements).substring(0,200));
+    console.log("Elements for POSTS payload: " + JSON.stringify(elements));
     return elements;
 }
 
