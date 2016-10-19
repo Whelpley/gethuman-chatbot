@@ -11,12 +11,15 @@ function addPostsToPayload(payload, posts) {
   return utilities.queryCompaniesOfPosts(posts)
     .then(function (posts){
         payload.data = preparePostsPayload(posts);
+        console.log ("About to return a POSTS payload: " + JSON.stringify(payload));
         return payload;
     });
 }
 
 function addCompaniesToPayload(payload, companies) {
     payload.data = prepareCompaniesPayload(companies);
+    console.log ("About to return a POSTS payload: " + JSON.stringify(payload));
+
     return payload;
 }
 
@@ -32,6 +35,8 @@ function nothingFound(payload) {
     }];
     console.log("Elements returned for NOTHING FOUND payload: " + JSON.stringify(elements));
     payload.data = elements;
+    console.log ("About to return a NOTHING FOUND payload: " + JSON.stringify(payload));
+
     return payload;
 };
 
