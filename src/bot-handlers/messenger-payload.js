@@ -52,7 +52,7 @@ function error(error) {
 };
 
 function preparePostsPayload(posts) {
-  // console.log("Hitting the preparePostsPayload function with these posts: " + JSON.stringify(posts).substring(0,200));
+  console.log("Hitting the preparePostsPayload function with these posts: " + JSON.stringify(posts));
 
     let elements = [];
     for (let i = 0; i < posts.length; i++) {
