@@ -1,5 +1,4 @@
-
-
+'use strict'
 
 // should the below functions exist in another module?
 
