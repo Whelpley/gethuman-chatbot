@@ -2,9 +2,13 @@
 
 var chatServer = require('./chat-server');
 
-var handlers = [
+var botHandlers = [
   require('./bot-handlers/slack-handler'),
   require('./bot-handlers/messenger-handler')
 ];
 
-chatServer.startServer(handlers);
+var actionHandlers = [
+  require('./actions/action-problem-lookup')
+];
+
+chatServer.startServer(botHandlers, actionHandlers);

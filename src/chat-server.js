@@ -5,8 +5,9 @@ var bodyParser = require('body-parser');
 var request = require('request');
 var utilities = require('./services/utilities.js')
 var Q = require('q');
+var brain = require('brain');
 
-function startServer(handlers) {
+function startServer(botHandlers, actionHandlers) {
   console.log('Starting server');
   var port = process.env.PORT || 3000;
   var app = express();
@@ -23,9 +24,9 @@ function startServer(handlers) {
     res.status(200).send('Hello world!')
   });
 
-  // hellobot - keep for testing
+  // Slack hellobot - keep for testing
   app.post('/hello', require('./deprecated/hellobot.js'));
-  // dicebot - keep for testing
+  // Slack dicebot - keep for testing
   app.post('/roll', require('./deprecated/dicebot.js'));
   // for Facebook verification
   app.get('/v3/gethuman', function (req, res) {
@@ -35,9 +36,9 @@ function startServer(handlers) {
   })
 
 // reaches Slack version
-  app.post('/gethuman', handleRequest(handlers));
+  app.post('/gethuman', handleRequest(botHandlers, actionHandlers));
 // FB version
-  app.post('/v3/gethuman', handleRequest(handlers));
+  app.post('/v3/gethuman', handleRequest(botHandlers, actionHandlers));
 
   app.listen(port, function () {
     console.log('Fusion bot listening on port ' + port);
@@ -47,28 +48,37 @@ function startServer(handlers) {
 }
 
 // is unit testable
-function handleRequest(handlers) {
+function handleRequest(botHandlers, actionHandlers) {
   return function (req, res) {
 
     console.log("Incoming request: " + JSON.stringify(req.body));
 
     var context = getContextFromExpressReqRes(req, res);
-    var botHandler = getBotHandler(handlers, context);
+    var botHandler = brain.getBotHandler(botHandlers, context);
 
-// I don't get why this needs to start the Promise chain, but will switch over if there is a reason for it}
-    // botHandler.preResponse(context)
-    //   .then(function () {
-    //     return botHandler.getResponsePayload(context);
+//************** NON-WORKING CODE rethinking structure
+
+    // // translating the JSON body of the request from the bot platform format
+    // // into a common format that we define
+    // var commonRequestData = botHandler.translateRequstToCommonFormat(context);
+
+    // // first get the action handler (right now just the problem lookup)
+    // brain.getActionHandler(actionHandlers, commonRequestData)
+    //   .then(function (action) {
+    //     return action.processRequest(commonRequestData);
     //   })
-    //   .then(function (responsePayload) {
-    //     botHandler.sendResponseToPlatform(responsePayload);
+    //   .then(function (commonResponseData) {
+    //     var botSpecificResponse = botHandler.translateResponseToCommonFormat(commonResponseData);
+    //     return botHandler.sendResponseToPlatform(botSpecificResponse);
     //   })
     //   .catch(function (err) {
     //     botHandler.sendErrorResponse(err, context);
     //   });
 
-// sends 200 response immediately
-// should this be bot-specific?
+
+//************** END NON-WORKING CODE rethinking structure
+
+    // this is working code
     utilities.preResponse(context);
 
     botHandler.getResponsePayload(context)
@@ -81,19 +91,6 @@ function handleRequest(handlers) {
   }
 }
 
-// should the below functions exist in another module?
-
-// is unit testable
-function getBotHandler(handlers, context) {
-  for (let i = 0; i < handlers.length; i++) {
-    if (handlers[i].isHandlerForRequest(context)) {
-      console.log("Found a bot to handle request: # " + i + " in handlers");
-      return handlers[i];
-    };
-  };
-  // else if handler not found, throw error
-  throw "Request coming from unrecognized platform";
-}
 
 // is unit testable
 function getContextFromExpressReqRes(req, res) {
@@ -112,6 +109,5 @@ function getContextFromExpressReqRes(req, res) {
 
 module.exports = {
   startServer: startServer,
-  getBotHandler: getBotHandler,
   getContextFromExpressReqRes: getContextFromExpressReqRes
 }
