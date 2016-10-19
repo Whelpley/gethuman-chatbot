@@ -54,7 +54,7 @@ function getResponsePayload(context) {
     }
     // returning a blank object if no text input detected
     else {
-      Console.log("Non-text-input Post detected from FB");
+      console.log("Non-text-input Post detected from FB");
       return Q.when({});
     }
 
