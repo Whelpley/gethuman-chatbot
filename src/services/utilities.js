@@ -75,12 +75,8 @@ function formatTextField(phone, email) {
 
 // convert an arry of strings to one string separated by commas, with each entry *bolded*
 function convertArrayToBoldList(arrayOfStrings) {
-  var result = '';
-  for (let i = 0; i < arrayOfStrings.length; i++) {
-    let bolded = arrayOfStrings[i].push("*, ").unshift("*");
-    result.push(bolded);
-  };
-  result.slice(0,-2);
+  var result = '*';
+  result = result.join('*, *') + "*";
   return result;
 }
 
