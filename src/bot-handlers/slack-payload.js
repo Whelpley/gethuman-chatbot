@@ -16,8 +16,7 @@ function addPostsofCompanyToPayload(payload, company) {
     });
 }
 
-// 5 Posts Cards, one Company Info Card
-// Later: More results card
+// 5 Posts Cards, one Company Info Card, one More results card
 function prepareSingleCompanyPayload(company) {
     var payloadData = {};
     var phoneAndEmail = utilities.extractTextFieldFromCompany(company);
@@ -75,7 +74,8 @@ function prepareSingleCompanyPayload(company) {
     // attach Other Companies info
     // if-conditional: were there others?
     if (otherCompanies) {
-        var otherCompaniesList = JSON.stringify(otherCompanies);
+        var otherCompaniesList = convertArrayToBoldList(otherCompanies);
+        console.log("Converted Other Companies list: " + otherCompaniesList);
         payloadData.attachments.push({
             "fallback": "Other solutions",
             "title": "Were you talking about " + name + "?",

@@ -73,6 +73,18 @@ function formatTextField(phone, email) {
     return result;
 };
 
+// convert an arry of strings to one string separated by commas, with each entry *bolded*
+function convertArrayToBoldList(arrayOfStrings) {
+  var result = '';
+  for (let i = 0; i < arrayOfStrings.length; i++) {
+    let bolded = arrayOfStrings[i].push("*, ").unshift("*");
+    result.push(bolded);
+  };
+  result.slice(0,-2);
+  return result;
+}
+
+
 module.exports = {
   preResponse: preResponse,
   queryCompaniesOfPosts: queryCompaniesOfPosts,
@@ -80,5 +92,6 @@ module.exports = {
   extractTextFieldFromCompany: extractTextFieldFromCompany,
   formatTextField: formatTextField,
   queryPostsofCompany: queryPostsofCompany,
-  colors: colors
+  colors: colors,
+  convertArrayToBoldList: convertArrayToBoldList
 }
