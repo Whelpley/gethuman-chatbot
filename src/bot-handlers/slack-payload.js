@@ -5,7 +5,6 @@
 const Q = require('q');
 const companySearch = require('../services/company-api-gh');
 const utilities = require('../services/utilities');
-const colors = utilities.colors;
 
 // new version starter!!!
 function addPostsofCompanyToPayload(payload, company) {
@@ -25,6 +24,7 @@ function prepareSingleCompanyPayload(company) {
     var name = company.name;
     var posts = company.posts;
     var otherCompanies = company.otherCompanies;
+    var colors = utilities.colors;
 
     payloadData.username = 'GetHuman';
     payloadData.icon_emoji = ':tada:';
@@ -49,10 +49,10 @@ function prepareSingleCompanyPayload(company) {
                         "value": "<https://answers.gethuman.co/_" + encodeURIComponent(urlId) + "|More Info ...>",
                         "short": true
                     },
-                    {
-                        "value": "------------------------------------------------------",
-                        "short": false
-                    },
+                    // {
+                    //     "value": "------------------------------------------------------",
+                    //     "short": false
+                    // },
                 ]
             };
             payloadData.attachments.push(singleAttachment);
@@ -61,14 +61,13 @@ function prepareSingleCompanyPayload(company) {
     // if no Posts exist for company, prompt for input
     else {
         payloadData.text = "We did not find anything matching the input \"" +name + "\", please try entering the name of the company your are looking for.";
-    }
+    };
     // attach Company contact info:
     if (phoneAndEmail) {
         payloadData.attachments.push({
             "fallback": "Contact info for " + name,
             "title": "Best way to contact" + name,
             "color": colors[0],
-
             "text": phoneAndEmail,
         });
     }
@@ -106,31 +105,32 @@ function addCompaniesToPayload(payload, companies) {
 function nothingFound(payload) {
     payload.data.username = 'Gethuman Bot';
     payload.data.text = "We could not find anything matching your input to our database. Could you try rephrasing your concern, and be sure to spell the company name correctly?";
-    payload.data.icon_emoji = ':question:';
+    payload.data.icon_emoji = ':gethuman:';
     return payload;
 };
 
 function inputPrompt(payload) {
     payload.data.username = 'Gethuman Bot';
-    payload.data.text = "Tell me your customer service issue.";
-    payload.data.icon_emoji = ':ear:';
+    payload.data.text = "Tell me the company you would like to contact.";
+    payload.data.icon_emoji = ':gethuman:';
     return payload;
 };
 
 function error(error) {
     var payload = {};
-    payload.username = 'Gethuman Bot';
+    payload.username = 'Gethuman';
     payload.text = error;
-    payload.icon_emoji = ':no_good:';
+    payload.icon_emoji = ':gethuman:';
     return payload;
 };
 
+// To be deprecated
 function preparePostsPayload(posts) {
     var payload = {};
-    payload.username = 'GetHuman Bot';
+    payload.username = 'GetHuman';
     // should this specifically reference the input?
     payload.text = "Here are some issues potentially matching your input, and links for how to resolve them:";
-    payload.icon_emoji = ':tada:';
+    payload.icon_emoji = ':gethuman:';
     payload.attachments = [];
 
     for (let i = 0; i < posts.length; i++) {
@@ -167,6 +167,7 @@ function preparePostsPayload(posts) {
     return payload;
 };
 
+// to be deprecated
 function prepareCompaniesPayload(companies) {
     var payload = {};
     payload.username = 'Gethuman Bot';

@@ -4,7 +4,7 @@ const Q = require('q');
 const companySearch = require('./company-api-gh');
 const postSearch = require('./post-api-gh');
 
-const colors = ['#6E9E43', '#7BAB50', '#88B85D', '#94C469', '#A1D176', '#AEDE83', '#BBEB90', '#C8F89D', '#D4FFA9', '#E1FFB6', '#EEFFC3'];
+var colors = ['#6E9E43', '#7BAB50', '#88B85D', '#94C469', '#A1D176', '#AEDE83', '#BBEB90', '#C8F89D', '#D4FFA9', '#E1FFB6', '#EEFFC3'];
 
 function preResponse(context) {
   // shoot back an immediate Status 200 to let client know it's all cool
