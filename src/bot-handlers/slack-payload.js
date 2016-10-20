@@ -80,7 +80,8 @@ function prepareSingleCompanyPayload(company) {
             "fallback": "Other solutions",
             "title": "Were you talking about " + name + "?",
             "color": colors[1],
-            "text": "Or maybe you meant " + otherCompaniesList
+            "text": "Or maybe you meant " + otherCompaniesList,
+            "mrkdwn": true
         });
     }
 
