@@ -35,9 +35,9 @@ function getResponsePayload(context) {
     }
     else if (exactMatch) {
       // console.log("Found an exact match from Companies search: " + JSON.stringify(exactMatch[0]).substring(0,200));
-      console.log("Found an exact match from Companies search: " + JSON.stringify(exactMatch[0]));
+      console.log("Found an exact match from Companies search: " + JSON.stringify(exactMatch));
 
-      company = exactMatch[0];
+      company = exactMatch;
     }
     else {
       company = companySearchResults[0];
