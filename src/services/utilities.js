@@ -24,33 +24,36 @@ function queryPostsofCompany(company) {
     })
 }
 
-function queryCompaniesOfPosts(posts) {
-    var companyIDs = [];
-    for (let i = 0; i < posts.length; i++) {
-        companyIDs.push(posts[i].companyId);
-    };
-    return Q.when(companySearch.findByIds(companyIDs))
-      .then(function (companies) {
-        var companyTable = {};
-        for (let i = 0; i < companies.length; i++) {
-            companyTable[companies[i]._id] = companies[i];
-        };
-        for (let i = 0; i < posts.length; i++) {
-            let cID = posts[i].companyId;
-            posts[i].company = companyTable[cID];
-        };
-        return posts;
-    })
-}
+// deprecated
+// function queryCompaniesOfPosts(posts) {
+//     var companyIDs = [];
+//     for (let i = 0; i < posts.length; i++) {
+//         companyIDs.push(posts[i].companyId);
+//     };
+//     return Q.when(companySearch.findByIds(companyIDs))
+//       .then(function (companies) {
+//         var companyTable = {};
+//         for (let i = 0; i < companies.length; i++) {
+//             companyTable[companies[i]._id] = companies[i];
+//         };
+//         for (let i = 0; i < posts.length; i++) {
+//             let cID = posts[i].companyId;
+//             posts[i].company = companyTable[cID];
+//         };
+//         return posts;
+//     })
+// }
 
-function extractTextFieldFromPost(post) {
-    let phone = (post.company && post.company.callback) ? post.company.callback.phone : '';
-    let emailContactMethods = post.company.contactMethods.filter(function (method) {
-        return method.type === "email";
-    });
-    let email = (emailContactMethods && emailContactMethods.length) ? emailContactMethods[0].target : '';
-    return formatTextField(phone, email);
-}
+
+// deprecated
+// function extractTextFieldFromPost(post) {
+//     let phone = (post.company && post.company.callback) ? post.company.callback.phone : '';
+//     let emailContactMethods = post.company.contactMethods.filter(function (method) {
+//         return method.type === "email";
+//     });
+//     let email = (emailContactMethods && emailContactMethods.length) ? emailContactMethods[0].target : '';
+//     return formatTextField(phone, email);
+// }
 
 function extractTextFieldFromCompany(company) {
     let phone = company.callback.phone || '';
@@ -83,8 +86,8 @@ function convertArrayToBoldList(arrayOfStrings) {
 
 module.exports = {
   preResponse: preResponse,
-  queryCompaniesOfPosts: queryCompaniesOfPosts,
-  extractTextFieldFromPost: extractTextFieldFromPost,
+  // queryCompaniesOfPosts: queryCompaniesOfPosts,
+  // extractTextFieldFromPost: extractTextFieldFromPost,
   extractTextFieldFromCompany: extractTextFieldFromCompany,
   formatTextField: formatTextField,
   queryPostsofCompany: queryPostsofCompany,
