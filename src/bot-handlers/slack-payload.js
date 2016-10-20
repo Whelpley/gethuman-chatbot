@@ -106,7 +106,7 @@ function prepareSingleCompanyPayload(company) {
 
 function nothingFound(payload) {
     payload.data.username = 'Gethuman Bot';
-    payload.data.text = "We could not find anything matching your input to our database. Could you try rephrasing your concern, and be sure to spell the company name correctly?";
+    payload.data.text = "We could not find anything matching your input to our database. Could you tell me what company you are looking to contact?";
     payload.data.icon_emoji = ':gethuman:';
     return payload;
 };
