@@ -81,7 +81,7 @@ function prepareSingleCompanyPayload(company) {
             "title": "Were you talking about " + name + "?",
             "color": colors[1],
             "text": "Or maybe *you* meant " + otherCompaniesList,
-            "mrkdwn": true
+            "mrkdwn_in": ["text"]
         });
     }
 
