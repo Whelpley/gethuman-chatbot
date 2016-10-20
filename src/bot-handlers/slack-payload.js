@@ -34,16 +34,18 @@ function prepareSingleCompanyPayload(company) {
     for (let i = 0; i < posts.length; i++) {
         let title = posts[i].title || '';
         let urlId = posts[i].urlId || ''
-        let title_link = "https://answers.gethuman.co/_" + encodeURIComponent(urlId);
         let color = colors[i];
         let singleAttachment = {
             "fallback": "Issue for " + name,
             "title": title,
-            "title_link": title_link,
             "color": color,
             "fields": [
                 {
                     "value": "<https://gethuman.com?company=" + encodeURIComponent(name) + "|Solve for me - $20>",
+                    "short": true
+                },
+                {
+                    "value": "<https://answers.gethuman.co/_" + encodeURIComponent(urlId) + "|Step by Step Guide>",
                     "short": true
                 },
                 {
