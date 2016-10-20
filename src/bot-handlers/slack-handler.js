@@ -34,12 +34,16 @@ function getResponsePayload(context) {
       return preparePayload.nothingFound(payload);
     }
     else if (exactMatch) {
-      console.log("Found an exact match from Companies search: " + JSON.stringify(exactMatch[0]).substring(0,200));
+      // console.log("Found an exact match from Companies search: " + JSON.stringify(exactMatch[0]).substring(0,200));
+      console.log("Found an exact match from Companies search: " + JSON.stringify(exactMatch[0]));
+
       company = exactMatch[0];
     }
     else {
       company = companySearchResults[0];
-      console.log("Going with first result from Companies search: " + JSON.stringify(company).substring(0,200));
+      // console.log("Going with first result from Companies search: " + JSON.stringify(company).substring(0,200));
+      console.log("Going with first result from Companies search: " + JSON.stringify(company));
+
     };
     return preparePayload.addPostsofCompanyToPayload(payload, company);
 
