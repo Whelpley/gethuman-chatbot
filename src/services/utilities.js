@@ -1,8 +1,8 @@
 'use strict'
 
 const Q = require('q');
-const companySearch = require('./company-api-gh.js');
-const postSearch = require('./post-api-gh.js');
+const companySearch = require('./company-api-gh');
+const postSearch = require('./post-api-gh');
 
 function preResponse(context) {
   // shoot back an immediate Status 200 to let client know it's all cool
@@ -75,5 +75,6 @@ module.exports = {
   queryCompaniesOfPosts: queryCompaniesOfPosts,
   extractTextFieldFromPost: extractTextFieldFromPost,
   extractTextFieldFromCompany: extractTextFieldFromCompany,
-  formatTextField: formatTextField
+  formatTextField: formatTextField,
+  queryPostsofCompany: queryPostsofCompany
 }

@@ -24,7 +24,7 @@ function getResponsePayload(context) {
   }
   return Q.when(companySearch.findAllByText(textInput))
   .then(function (companySearchResults) {
-    console.log("Company Search Results: " + JSON.stringify(companySearchResults));
+    console.log("Company Search Results: " + JSON.stringify(companySearchResults).substring(0,200));
     var company = {};
     var exactMatch = companySearchResults.filter(function(eachCompany) {
       return eachCompany.name.toLowerCase() === textInput.toLowerCase();

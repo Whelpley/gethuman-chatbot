@@ -9,6 +9,7 @@ const utilities = require('../services/utilities');
 
 // new version starter!!!
 function addPostsofCompanyToPayload(payload, company) {
+    // "not a function" - wtf?
   return utilities.queryPostsofCompany(company)
     .then(function (company){
         payload.data = prepareSingleCompanyPayload(company);

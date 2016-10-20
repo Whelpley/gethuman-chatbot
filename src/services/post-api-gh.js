@@ -3,11 +3,6 @@
 const Q = require('q');
 const request = require('request');
 
-module.exports = {
-  findByText: findByText,
-  findPostsofCompany: findPostsofCompany
-}
-
 function findPostsofCompany(company) {
   var deferred = Q.defer();
   // var url = getUrl();
@@ -21,7 +16,7 @@ function findPostsofCompany(company) {
     companyId: company._id
   }));
   request(url
-    + '&limit='
+    + '?limit='
     + limit
     + '&where='
     + params,
@@ -67,4 +62,8 @@ function findByText(textInput) {
   return deferred.promise;
 }
 
+module.exports = {
+  findByText: findByText,
+  findPostsofCompany: findPostsofCompany
+}
 
