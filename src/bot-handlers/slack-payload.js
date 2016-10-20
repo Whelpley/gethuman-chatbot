@@ -34,7 +34,7 @@ function prepareSingleCompanyPayload(company) {
     for (let i = 0; i < posts.length; i++) {
         let title = posts[i].title || '';
         let urlId = posts[i].urlId || ''
-        let title_link = "<https://answers.gethuman.co/_" + encodeURIComponent(urlId);
+        let title_link = "https://answers.gethuman.co/_" + encodeURIComponent(urlId);
         let color = colors[i];
         let singleAttachment = {
             "fallback": "Issue for " + name,
