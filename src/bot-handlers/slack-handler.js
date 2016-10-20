@@ -47,9 +47,11 @@ function getResponsePayload(context) {
     var companyNames = companySearchResults.map(function(eachCompany) {
       return eachCompany.name;
     })
-    console.log("Companies returned from search: " + companyNames);
-    // should filter out the textInput, but keeping for right now
-    company.otherCompanies = companyNames;
+    // filter out the textInput
+    company.otherCompanies = companyNames.filter(function(name){
+      name.toLowerCase() !== textInput.toLowerCase();
+    });
+    console.log("Other companies returned from search: " + JSON.stringify(company.otherCompanies));
 
     return preparePayload.addPostsofCompanyToPayload(payload, company);
   });

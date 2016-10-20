@@ -2,10 +2,10 @@
 
 'use strict'
 
-const colors = ['#1c4fff', '#e84778', '#ffc229', '#1ae827', '#5389ff'];
 const Q = require('q');
 const companySearch = require('../services/company-api-gh');
 const utilities = require('../services/utilities');
+const colors = utilities.colors;
 
 // new version starter!!!
 function addPostsofCompanyToPayload(payload, company) {
@@ -26,55 +26,64 @@ function prepareSingleCompanyPayload(company) {
     var posts = company.posts;
     var otherCompanies = company.otherCompanies;
 
-    payloadData.username = 'GetHuman Bot';
-    // should this specifically reference the input?
-    payloadData.text = "Here are the top issues for customers of " + name + ", and links for how to resolve them:";
+    payloadData.username = 'GetHuman';
     payloadData.icon_emoji = ':tada:';
     payloadData.attachments = [];
 
-    for (let i = 0; i < posts.length; i++) {
-        let title = posts[i].title || '';
-        let urlId = posts[i].urlId || ''
-        let color = colors[i];
-        let singleAttachment = {
-            "fallback": "Issue for " + name,
-            "title": title,
-            "color": color,
-            "fields": [
-                {
-                    "value": "<https://gethuman.com?company=" + encodeURIComponent(name) + "|Solve for me - $20>",
-                    "short": true
-                },
-                {
-                    "value": "<https://answers.gethuman.co/_" + encodeURIComponent(urlId) + "|Step by Step Guide>",
-                    "short": true
-                },
-                {
-                    "value": "------------------------------------------------------",
-                    "short": false
-                },
-            ]
+    if (posts) {
+        payloadData.text = "Top issues for " + name;
+        for (let i = 0; i < posts.length; i++) {
+            let title = posts[i].title || '';
+            let urlId = posts[i].urlId || ''
+            let color = colors[i+2];
+            let singleAttachment = {
+                "fallback": "Issue for " + name,
+                "title": title,
+                "color": color,
+                "fields": [
+                    {
+                        "value": "<https://gethuman.com?company=" + encodeURIComponent(name) + "|Solve for me - $20>",
+                        "short": true
+                    },
+                    {
+                        "value": "<https://answers.gethuman.co/_" + encodeURIComponent(urlId) + "|More Info ...>",
+                        "short": true
+                    },
+                    {
+                        "value": "------------------------------------------------------",
+                        "short": false
+                    },
+                ]
+            };
+            payloadData.attachments.push(singleAttachment);
         };
-        payloadData.attachments.push(singleAttachment);
-    };
+    }
+    // if no Posts exist for company, prompt for input
+    else {
+        payloadData.text = "We did not find anything matching the input \"" +name + "\", please try entering the name of the company your are looking for.";
+    }
     // attach Company contact info:
-    payloadData.attachments.push({
-        "fallback": "Contact info for " + name,
-        "title": "Contact info for " + name,
-        // "color": '#000000',
-        "color": 'rgba(110,158,67,1)',
+    if (phoneAndEmail) {
+        payloadData.attachments.push({
+            "fallback": "Contact info for " + name,
+            "title": "Best way to contact" + name,
+            "color": colors[0],
 
-        "text": phoneAndEmail,
-    });
+            "text": phoneAndEmail,
+        });
+    }
 
     // attach Other Companies info
     // if-conditional: were there others?
-    payloadData.attachments.push({
-        "fallback": "Other solutions",
-        "title": "Was this not the company you were looking for?",
-        "color": colors[0],
-        "text": "Try entering the any of the following: " + JSON.stringify(otherCompanies)
-    });
+    if (otherCompanies) {
+        var otherCompaniesList = JSON.stringify(otherCompanies);
+        payloadData.attachments.push({
+            "fallback": "Other solutions",
+            "title": "Were you talking about " + name + "?",
+            "color": colors[1],
+            "text": "Or maybe you meant " + otherCompaniesList
+        });
+    }
 
     return payloadData;
 }
