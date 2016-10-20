@@ -61,7 +61,9 @@ function prepareSingleCompanyPayload(company) {
     payloadData.attachments.push({
         "fallback": "Contact info for " + name,
         "title": "Contact info for " + name,
-        "color": '#000000',
+        // "color": '#000000',
+        "color": 'rgba(110,158,67,1)',
+
         "text": phoneAndEmail,
     });
 
