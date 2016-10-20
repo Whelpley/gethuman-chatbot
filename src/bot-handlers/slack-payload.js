@@ -24,6 +24,7 @@ function prepareSingleCompanyPayload(company) {
     var phoneAndEmail = utilities.extractTextFieldFromCompany(company);
     var name = company.name;
     var posts = company.posts;
+    var otherCompanies = company.otherCompanies;
 
     payloadData.username = 'GetHuman Bot';
     // should this specifically reference the input?
@@ -70,8 +71,9 @@ function prepareSingleCompanyPayload(company) {
         "fallback": "Other solutions",
         "title": "Was this not the company you were looking for?",
         "color": colors[0],
-        "text": "Try entering the any of the following: ",
+        "text": "Try entering the any of the following: " + JSON.stringify(otherCompanies)
     });
+
     return payloadData;
 }
 

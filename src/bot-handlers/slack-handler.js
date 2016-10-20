@@ -29,6 +29,7 @@ function getResponsePayload(context) {
     var exactMatch = companySearchResults.filter(function(eachCompany) {
       return eachCompany.name.toLowerCase() === textInput.toLowerCase();
     });
+
     if (!companySearchResults.length) {
       console.log("Nothing found in initial Company search");
       return preparePayload.nothingFound(payload);
@@ -41,13 +42,16 @@ function getResponsePayload(context) {
       company = companySearchResults[0];
       console.log("Going with first result from Companies search: " + JSON.stringify(company).substring(0,200));
     };
-    return preparePayload.addPostsofCompanyToPayload(payload, company);
 
     // will need to capture other company names for later use
-    // var companyNames = companySearchResults.map(function(eachCompany) {
-    //   return eachCompany.name;
-    // })
+    var companyNames = companySearchResults.map(function(eachCompany) {
+      return eachCompany.name;
+    })
+    console.log("Companies returned from search: " + companyNames);
+    // should filter out the textInput, but keeping for right now
+    company.otherCompanies = companyNames;
 
+    return preparePayload.addPostsofCompanyToPayload(payload, company);
   });
 }
 
