@@ -33,11 +33,11 @@ function getResponsePayload(context) {
       console.log("Nothing found in initial Company search");
       return preparePayload.nothingFound(payload);
     }
-    else if (exactMatch) {
+    else if (exactMatch && exactMatch.length) {
       // console.log("Found an exact match from Companies search: " + JSON.stringify(exactMatch[0]).substring(0,200));
-      console.log("Found an exact match from Companies search: " + JSON.stringify(exactMatch));
+      console.log("Found an exact match from Companies search: " + JSON.stringify(exactMatch[0]));
 
-      company = exactMatch;
+      company = exactMatch[0];
     }
     else {
       company = companySearchResults[0];
