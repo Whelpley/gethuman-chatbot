@@ -26,7 +26,7 @@ function prepareSingleCompanyPayload(company) {
     var colors = utilities.colors;
 
     payloadData.username = 'GetHuman';
-    payloadData.icon_emoji = ':tada:';
+    payloadData.icon_emoji = ':gethuman:';
     payloadData.attachments = [];
 
     if (posts) {
@@ -80,7 +80,7 @@ function prepareSingleCompanyPayload(company) {
             "fallback": "Other solutions",
             "title": "Were you talking about " + name + "?",
             "color": colors[1],
-            "text": "Or maybe *you* meant " + otherCompaniesList,
+            "text": "Or maybe you meant " + otherCompaniesList,
             "mrkdwn_in": ["text"]
         });
     }
