@@ -74,7 +74,7 @@ function prepareSingleCompanyPayload(company) {
     // attach Other Companies info
     // if-conditional: were there others?
     if (otherCompanies) {
-        var otherCompaniesList = convertArrayToBoldList(otherCompanies);
+        var otherCompaniesList = utilities.convertArrayToBoldList(otherCompanies);
         console.log("Converted Other Companies list: " + otherCompaniesList);
         payloadData.attachments.push({
             "fallback": "Other solutions",
