@@ -12,7 +12,7 @@ module.exports = {
 function findAllByText(textInput) {
   var deferred = Q.defer();
   // var url = getUrl();
-  var url = 'https://api.gethuman.co/v3/companies/search';
+  var url = 'http://api.gethuman.co/v3/companies/search';
   var match = encodeURIComponent(textInput);
 
   console.log('trying to match ' + match)
