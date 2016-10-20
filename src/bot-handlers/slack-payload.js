@@ -73,7 +73,7 @@ function prepareSingleCompanyPayload(company) {
 
     // attach Other Companies info
     // if-conditional: were there others?
-    if (otherCompanies) {
+    if (otherCompanies && otherCompanies.length) {
         var otherCompaniesList = utilities.convertArrayToBoldList(otherCompanies);
         console.log("Converted Other Companies list: " + otherCompaniesList);
         payloadData.attachments.push({

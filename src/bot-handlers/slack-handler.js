@@ -48,10 +48,12 @@ function getResponsePayload(context) {
       return eachCompany.name;
     })
     // filter out the textInput
+    // actually filters out everything!
+    console.log("Other companies returned from search: " + JSON.stringify(companyNames));
     company.otherCompanies = companyNames.filter(function(name){
       name.toLowerCase() !== textInput.toLowerCase();
     });
-    console.log("Other companies returned from search: " + JSON.stringify(company.otherCompanies));
+    console.log("Other companies filtered from input:" + JSON.stringify(company.otherCompanies));
 
     return preparePayload.addPostsofCompanyToPayload(payload, company);
   });
