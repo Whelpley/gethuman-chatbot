@@ -63,10 +63,15 @@ function prepareSingleCompanyPayload(company) {
         "color": '#000000',
         "text": phoneAndEmail,
     });
-    // attach Other Companies info (later)
-    // payloadData.attachments.push({
 
-    // });
+    // attach Other Companies info
+    // if-conditional: were there others?
+    payloadData.attachments.push({
+        "fallback": "Other solutions",
+        "title": "Was this not the company you were looking for?",
+        "color": colors[0],
+        "text": "Try entering the any of the following: ",
+    });
     return payloadData;
 }
 
