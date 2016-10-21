@@ -19,14 +19,14 @@ function getResponsePayload(context) {
   for (let i = 0; i < messaging_events.length; i++) {
     let event = context.userRequest.entry[0].messaging[i]
     console.log("Event detected: " + JSON.stringify(event));
+    var payload = {
+      data:  [],
+      context: context
+    };
 
     if (event.message && event.message.text) {
       let textInput = event.message.text;
       console.log("Text input received from user: " + textInput);
-      var payload = {
-        data:  {},
-        context: context
-      };
 
       // deprecated
       // this could be in a module, except for the nothingFound() fcn
@@ -88,7 +88,7 @@ function getResponsePayload(context) {
     // returning a blank object if no text input detected
     else {
       console.log("Non-text-input Post detected from FB");
-      return Q.when({});
+      return Q.when(payload);
     }
   }
 }
@@ -97,10 +97,10 @@ function getResponsePayload(context) {
 // attempting a clause to stop reponse & send nothing if non-text Post made from FB
 function sendResponseToPlatform(payload) {
   console.log("About to process this payload for sending: " + JSON.stringify(payload));
-  if (payload == {} | !payload) {
+  if (payload.data == []) {
     return Q.when();
   }
-  else if (payload.context && payload.context.isTest) {
+  else if (payload.context.isTest) {
     payload.context.sendResponse(payload);
     return Q.when();
   }
@@ -111,7 +111,7 @@ function sendResponseToPlatform(payload) {
 
 function sendResponseWithNewRequest(payload) {
   var deferred = Q.defer();
-  var elements = payload.data;
+  var elements = payload.data | [];
   var sender = payload.context.userRequest.entry[0].messaging[0].sender.id;
   // console.log("Sender: " + sender);
     request({
