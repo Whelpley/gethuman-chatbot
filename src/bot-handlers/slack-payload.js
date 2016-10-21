@@ -64,7 +64,7 @@ function prepareSingleCompanyPayload(company) {
     if (phoneAndEmail) {
         payloadData.attachments.push({
             "fallback": "Contact info for " + name,
-            "title": "Best way to contact" + name,
+            "title": "Best way to contact " + name + ":",
             "color": colors[0],
             "text": phoneAndEmail,
         });

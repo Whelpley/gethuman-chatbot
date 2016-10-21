@@ -6,6 +6,7 @@ const companySearch = require('../services/company-api-gh');
 const postSearch = require('../services/post-api-gh');
 const preparePayload = require('./slack-payload');
 const utilities = require('../services/utilities');
+const config = require('../config/config');
 
 // unit testable
 function isHandlerForRequest(context) {
@@ -89,9 +90,14 @@ function getResponsePayload(context) {
 // }
 
 // Could be a common function, but refers to unique fcn
+// duplicate fcn in ./messenger-handler
 function sendResponseToPlatform(payload) {
   if (payload.context.isTest) {
     payload.context.sendResponse(payload);
+    return Q.when();
+  }
+  else if (!payload.data || payload.data == []) {
+    console.log("No payload data detected.");
     return Q.when();
   }
   else {
@@ -101,7 +107,8 @@ function sendResponseToPlatform(payload) {
 
 function sendResponseWithNewRequest(payload) {
   var deferred = Q.defer();
-  var path = process.env.INCOMING_WEBHOOK_PATH;
+  // var path = process.env.INCOMING_WEBHOOK_PATH;
+  var path = config.slackAccessToken;
   var uri = 'https://hooks.slack.com/services/' + path;
 
   payload.data.channel = payload.context.userRequest.channel_id;

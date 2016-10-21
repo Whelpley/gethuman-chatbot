@@ -1,12 +1,17 @@
 'use strict'
 
-const token = process.env.FB_PAGE_ACCESS_TOKEN
+
+
 const request = require('request');
 const Q = require('q');
-const companySearch = require('../services/company-api-gh.js');
-const postSearch = require('../services/post-api-gh.js');
-const preparePayload = require('./messenger-payload.js');
-const utilities = require('../services/utilities.js');
+const companySearch = require('../services/company-api-gh');
+const postSearch = require('../services/post-api-gh');
+const preparePayload = require('./messenger-payload');
+const utilities = require('../services/utilities');
+const config = require('../config/config');
+
+// const token = process.env.FB_PAGE_ACCESS_TOKEN
+const token = process.env.facebookAccessToken;
 
 function isHandlerForRequest(context) {
   var object = context.userRequest.object || '';
@@ -99,15 +104,16 @@ function getResponsePayload(context) {
 
 // Could be a common function, but refers to unique fcn
 // attempting a clause to stop reponse & send nothing if non-text Post made from FB
+// duplicate fcn in ./slack-handler
 function sendResponseToPlatform(payload) {
   console.log("About to process this payload for sending: " + JSON.stringify(payload));
-  if (!payload.data | payload.data == []) {
-    console.log("No payload data detected.");
-    return Q.when();
-  }
-  else if (payload.context.isTest) {
+  if (payload.context && payload.context.isTest) {
     console.log("Test flag detected in payload context.");
     payload.context.sendResponse(payload);
+    return Q.when();
+  }
+  else if (!payload.data || payload.data == []) {
+    console.log("No payload data detected.");
     return Q.when();
   }
   else {

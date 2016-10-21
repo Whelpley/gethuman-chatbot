@@ -2,12 +2,13 @@
 
 const Q = require('q');
 const request = require('request');
+const config = require('../config/config');
 
 function findPostsofCompany(company) {
   var deferred = Q.defer();
-  // var url = getUrl();
   // check this URL!
-  var url = 'https://api.gethuman.co/v3/posts';
+  // var url = 'https://api.gethuman.co/v3/posts';
+  var url = config.ghApiBaseUrl + '/posts';
   var limit = 5;
   var params = encodeURIComponent(JSON.stringify({
     type: 'question',

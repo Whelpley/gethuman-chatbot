@@ -11,5 +11,5 @@ module.exports = {
   environment: envName,
   ghApiBaseUrl: envVars.API_BASE_URL,
   facebookAccessToken: envVars.FB_PAGE_ACCESS_TOKEN,
-
+  slackAccessToken: envVars.INCOMING_WEBHOOK_PATH
 };
