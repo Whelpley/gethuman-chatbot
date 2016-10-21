@@ -107,8 +107,8 @@ function sendResponseToPlatform(payload) {
 
 function sendResponseWithNewRequest(payload) {
   var deferred = Q.defer();
-  // var path = process.env.INCOMING_WEBHOOK_PATH;
-  var path = config.slackAccessToken;
+  var path = process.env.INCOMING_WEBHOOK_PATH;
+  // var path = config.slackAccessToken;
   var uri = 'https://hooks.slack.com/services/' + path;
 
   payload.data.channel = payload.context.userRequest.channel_id;

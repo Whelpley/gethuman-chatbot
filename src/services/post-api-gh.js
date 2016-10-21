@@ -6,9 +6,8 @@ const config = require('../config/config');
 
 function findPostsofCompany(company) {
   var deferred = Q.defer();
-  // check this URL!
-  // var url = 'https://api.gethuman.co/v3/posts';
-  var url = config.ghApiBaseUrl + '/posts';
+  var url = process.env.API_BASE_URL + '/v3/posts';
+  // var url = config.ghApiBaseUrl + '/posts';
   var limit = 5;
   var params = encodeURIComponent(JSON.stringify({
     type: 'question',
