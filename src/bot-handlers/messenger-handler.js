@@ -97,10 +97,10 @@ function getResponsePayload(context) {
 // attempting a clause to stop reponse & send nothing if non-text Post made from FB
 function sendResponseToPlatform(payload) {
   console.log("About to process this payload for sending: " + JSON.stringify(payload));
-  if (payload === {} | !payload) {
+  if (payload == {} | !payload) {
     return Q.when();
   }
-  else if (payload.context.isTest) {
+  else if (payload.context && payload.context.isTest) {
     payload.context.sendResponse(payload);
     return Q.when();
   }
