@@ -34,7 +34,7 @@ function prepareSingleCompanyPayload(company) {
             "subtitle": title,
             "buttons": [{
                 "type": "web_url",
-                "url": "https://gethuman.com?company=" + encodeURIComponent(companyName) ,
+                "url": "https://gethuman.com?company=" + encodeURIComponent(name) ,
                 "title": "Solve for Me - $20"
             },
             {
