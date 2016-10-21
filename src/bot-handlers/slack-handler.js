@@ -6,7 +6,7 @@ const companySearch = require('../services/company-api-gh');
 const postSearch = require('../services/post-api-gh');
 const preparePayload = require('./slack-payload');
 const utilities = require('../services/utilities');
-const config = require('../config/config');
+// const config = require('../config/config');
 
 // unit testable
 function isHandlerForRequest(context) {

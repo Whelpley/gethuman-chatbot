@@ -1,14 +1,12 @@
 'use strict'
 
-
-
 const request = require('request');
 const Q = require('q');
 const companySearch = require('../services/company-api-gh');
 const postSearch = require('../services/post-api-gh');
 const preparePayload = require('./messenger-payload');
 const utilities = require('../services/utilities');
-const config = require('../config/config');
+// const config = require('../config/config');
 
 const token = process.env.FB_PAGE_ACCESS_TOKEN;
 // const token = process.env.facebookAccessToken;

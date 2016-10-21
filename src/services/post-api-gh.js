@@ -2,7 +2,7 @@
 
 const Q = require('q');
 const request = require('request');
-const config = require('../config/config');
+// const config = require('../config/config');
 
 function findPostsofCompany(company) {
   var deferred = Q.defer();
