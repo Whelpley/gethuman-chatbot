@@ -80,7 +80,6 @@ function handleRequest(botHandlers, actionHandlers) {
     // this is working code
     utilities.preResponse(context);
 
-// botHandler should first detect if this is a message that needs a reply before starting this chain
     botHandler.getResponsePayload(context)
       .then(function (responsePayload) {
         botHandler.sendResponseToPlatform(responsePayload);
@@ -88,6 +87,18 @@ function handleRequest(botHandlers, actionHandlers) {
       .catch(function (err) {
         botHandler.sendErrorResponse(err, context);
       });
+
+// Trying to send an array of cards in sequence
+    // botHandler.getResponsePayloads(context)
+    //   .then(function (responsePayloads) {
+    //     responsePayloads = responsePayloads || [];
+    //     return Q.all(responsePayloads.map(function (responsePayload) {
+    //       return botHandler.sendResponseToPlatform(responsePayload);
+    //     }));
+    //   })
+    //   .catch(function (err) {
+    //     botHandler.sendErrorResponse(err, context);
+    //   });
   }
 }
 

@@ -31,29 +31,6 @@ function getResponsePayload(context) {
         data:  [],
         context: context
       };
-      // deprecated
-      // this could be in a module, except for the nothingFound() fcn
-      // return Q.all([
-      //   postSearch.findByText(textInput),
-      //   companySearch.findByText(textInput)
-      // ])
-      // .then(function (postAndCompanySearchResults) {
-      //   var posts = postAndCompanySearchResults[0];
-      //   var companies = postAndCompanySearchResults[1];
-      //   if (posts && posts.length) {
-      //     console.log("Found POSTS, loading payload");
-      //     return preparePayload.addPostsToPayload(payload, posts);
-      //   }
-      //   else if (companies && companies.length) {
-      //     console.log("Found COMPANIES, loading payload");
-      //     return preparePayload.addCompaniesToPayload(payload, companies);
-      //   }
-      //   else {
-      //     console.log("Found NOTHING, loading payload");
-      //     return preparePayload.nothingFound(payload);
-      //   }
-      // });
-
       return Q.when(companySearch.findAllByText(textInput))
       .then(function (companySearchResults) {
         // console.log("Company Search Results: " + JSON.stringify(companySearchResults).substring(0,200));
@@ -91,7 +68,7 @@ function getResponsePayload(context) {
     // returning a blank object if no text input detected
     else {
       var payload = {
-        data:  [],
+        data:  {},
         context: context
       };
       console.log("Non-text-input Post detected from FB");
@@ -111,27 +88,19 @@ function sendResponseToPlatform(payload) {
     payload.context.sendResponse(payload);
     return Q.when();
   }
-  else if (!payload.data || (payload.data == [])) {
+  else if (!payload.data || (payload.data === {})) {
     console.log("No payload data detected.");
     return Q.when();
   }
   else {
     console.log("Standard data-having payload detected.");
-    return sendPostCards(payload);
-    // then send 2 more cards: use Q.all([])?
-    // send Company Contact Info
-    // send Other Companies prompt
-    // return Q.all([
-    //   sendPostCards(payload),
-    //   sendCompanyInfo(payload),
-    //   sendOtherCompanyPrompt(payload),
-    // ])
+    return sendResponsesAsReply(payload);
   }
 }
 
-function sendPostCards(payload) {
+function sendResponsesAsReply(payload) {
   var deferred = Q.defer();
-  var elements = payload.data || [];
+  var elements = payload.data.postElements || [];
   var sender = payload.context.userRequest.entry[0].messaging[0].sender.id;
   // console.log("Sender: " + sender);
     request({

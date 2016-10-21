@@ -17,11 +17,19 @@ function addPostsofCompanyToPayload(payload, company) {
 }
 
 function prepareSingleCompanyPayload(company) {
-    var payloadData = [];
+    var payloadData = {
+        postElements: [],
+        companyInfoElements: [],
+        otherCompaniesElements: []
+    };
     var phoneAndEmail = utilities.extractTextFieldFromCompany(company);
     var name = company.name;
     var posts = company.posts;
     var otherCompanies = company.otherCompanies;
+    var email = company.email || '';
+    var phone = company.phone || '';
+    //format phone# for international format
+    var phoneIntl = (phone) ? phoneFormatter.format(phone, "+1NNNNNNNNNN") : '';
 
 // if Posts exist, send Post info cards
     if (posts) {
@@ -43,9 +51,42 @@ function prepareSingleCompanyPayload(company) {
                 "title": "More Info ..."
             }],
         };
-        payloadData.push(singleElement);
+        payloadData.postElements.push(singleElement);
       }
     }
+
+    // make Company Info Card
+    payloadData.companyInfoElements.push({
+        "title": "Contact info for " + name + ":",
+        "subtitle": email,
+        "buttons": [],
+    })
+    //
+    if (phoneIntl) {
+        payloadData.companyInfoElements.buttons.push({
+            "type": "phone_number",
+            "title": "Call " + name,
+            "payload": phoneIntl
+        })
+    };
+
+    if (otherCompanies) {
+        payloadData.otherCompaniesElements.push({
+            "title": "Were you trying to reach " + name + "?",
+            "subtitle": "These buttons will eventually trigger a new search for you in Messenger",
+            "buttons": [],
+        })
+        otherCompanies.forEach(function(altCompany){
+            payloadData.otherCompaniesElements.buttons.push({
+                "type": "web_url",
+                "url": "https://gethuman.com?company=" + encodeURIComponent(altCompany)),
+                "title": altCompany
+            })
+        })
+    }
+
+    // if otherCompanies, make elements for card
+
     return payloadData;
 }
 
