@@ -14,6 +14,7 @@ function getBotHandler(handlers, context) {
   throw "Request coming from unrecognized platform";
 }
 
+// not yet in use
 function getActionHandler(actionHandlers) {
   return actionHandlers && actionHandlers.length && actionHandlers[0];
 }

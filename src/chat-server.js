@@ -43,7 +43,6 @@ function startServer(botHandlers, actionHandlers) {
   app.listen(port, function () {
     console.log('Fusion bot listening on port ' + port);
   });
-
   return app;
 }
 

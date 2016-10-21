@@ -8,7 +8,6 @@ const utilities = require('../services/utilities');
 
 // new version starter!!!
 function addPostsofCompanyToPayload(payload, company) {
-    // "not a function" - wtf?
   return utilities.queryPostsofCompany(company)
     .then(function (company){
         payload.data = prepareSingleCompanyPayload(company);
@@ -30,7 +29,7 @@ function prepareSingleCompanyPayload(company) {
     payloadData.attachments = [];
 
     if (posts) {
-        payloadData.text = "Top issues for " + name;
+        payloadData.text = "Top issues for " + name + ":";
         for (let i = 0; i < posts.length; i++) {
             let title = posts[i].title || '';
             let urlId = posts[i].urlId || ''

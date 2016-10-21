@@ -18,7 +18,7 @@ function preResponse(context) {
 function queryPostsofCompany(company) {
   return Q.when(postSearch.findPostsofCompany(company))
     .then(function (posts) {
-      console.log("Results of Posts of Company search: " + JSON.stringify(posts).substring(0,400));
+      // console.log("Results of Posts of Company search: " + JSON.stringify(posts).substring(0,400));
       company.posts = posts;
       return company;
     })
