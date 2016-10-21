@@ -5,7 +5,9 @@ var envVars = process.env;
 try {
   env = require('./env');
   envVars = Object.assign(envVars, env.base, env[envName]);
-} catch() {}
+} catch(err) {
+  console.log("Error in config: " + err);
+}
 
 module.exports = {
   environment: envName,
