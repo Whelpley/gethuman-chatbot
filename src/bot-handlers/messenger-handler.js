@@ -101,14 +101,17 @@ function getResponsePayload(context) {
 // attempting a clause to stop reponse & send nothing if non-text Post made from FB
 function sendResponseToPlatform(payload) {
   console.log("About to process this payload for sending: " + JSON.stringify(payload));
-  if (payload.data == []) {
+  if (!payload.data | payload.data == []) {
+    console.log("No payload data detected.");
     return Q.when();
   }
   else if (payload.context.isTest) {
+    console.log("Test flag detected in payload context.");
     payload.context.sendResponse(payload);
     return Q.when();
   }
   else {
+    console.log("Standard data-having payload detected.");
     return sendResponseWithNewRequest(payload);
   }
 }
