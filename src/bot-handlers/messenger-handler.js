@@ -19,15 +19,15 @@ function getResponsePayload(context) {
   for (let i = 0; i < messaging_events.length; i++) {
     let event = context.userRequest.entry[0].messaging[i]
     console.log("Event detected: " + JSON.stringify(event));
-    var payload = {
-      data:  [],
-      context: context
-    };
+
 
     if (event.message && event.message.text) {
       let textInput = event.message.text;
       console.log("Text input received from user: " + textInput);
-
+      var payload = {
+        data:  [],
+        context: context
+      };
       // deprecated
       // this could be in a module, except for the nothingFound() fcn
       // return Q.all([
@@ -87,6 +87,10 @@ function getResponsePayload(context) {
     }
     // returning a blank object if no text input detected
     else {
+      var payload = {
+        data:  [],
+        context: context
+      };
       console.log("Non-text-input Post detected from FB");
       return Q.when(payload);
     }
