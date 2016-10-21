@@ -17,7 +17,7 @@ function addPostsofCompanyToPayload(payload, company) {
 }
 
 function prepareSingleCompanyPayload(company) {
-    var payloadData = {};
+    var payloadData = [];
     var phoneAndEmail = utilities.extractTextFieldFromCompany(company);
     var name = company.name;
     var posts = company.posts;
