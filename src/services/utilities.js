@@ -7,9 +7,6 @@ const postSearch = require('./post-api-gh');
 var colors = ['#6E9E43', '#7BAB50', '#88B85D', '#94C469', '#A1D176', '#AEDE83', '#BBEB90', '#C8F89D', '#D4FFA9', '#E1FFB6', '#EEFFC3'];
 
 function preResponse(context) {
-  // shoot back an immediate Status 200 to let client know it's all cool
-  // (much pain if neglected)
-
   if (!context.isTest) {
     console.log("Sending a 200 response to client.");
     context.finishResponse();
