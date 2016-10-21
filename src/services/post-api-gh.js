@@ -7,7 +7,7 @@ const request = require('request');
 function findPostsofCompany(company) {
   var deferred = Q.defer();
   var url = process.env.API_BASE_URL + '/v3/posts';
-  console.log('URL for findPostsofCompany search: ' + url;)
+  console.log('URL for findPostsofCompany search: ' + url);
   // var url = config.ghApiBaseUrl + '/posts';
   var limit = 5;
   var params = encodeURIComponent(JSON.stringify({
