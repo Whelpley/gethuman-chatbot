@@ -30,7 +30,7 @@ function prepareSingleCompanyPayload(company) {
         let title = posts[i].title || '';
         let urlId = posts[i].urlId || ''
         let singleElement = {
-            "title": "Top issues for " + name + ":";
+            "title": "Top issues for " + name + ":",
             "subtitle": title,
             "buttons": [{
                 "type": "web_url",
