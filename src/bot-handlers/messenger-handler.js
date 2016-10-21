@@ -96,7 +96,8 @@ function getResponsePayload(context) {
 // Could be a common function, but refers to unique fcn
 // attempting a clause to stop reponse & send nothing if non-text Post made from FB
 function sendResponseToPlatform(payload) {
-  if (payload === {}) {
+  console.log("About to process this payload for sending: " + JSON.stringify(payload));
+  if (payload === {} | !payload) {
     return Q.when();
   }
   else if (payload.context.isTest) {
