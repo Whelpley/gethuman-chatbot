@@ -117,16 +117,21 @@ function sendResponseToPlatform(payload) {
   }
   else {
     console.log("Standard data-having payload detected.");
-    return sendResponseWithNewRequest(payload);
+    return sendPostCards(payload);
     // then send 2 more cards: use Q.all([])?
     // send Company Contact Info
     // send Other Companies prompt
+    // return Q.all([
+    //   sendPostCards(payload),
+    //   sendCompanyInfo(payload),
+    //   sendOtherCompanyPrompt(payload),
+    // ])
   }
 }
 
-function sendResponseWithNewRequest(payload) {
+function sendPostCards(payload) {
   var deferred = Q.defer();
-  var elements = payload.data | [];
+  var elements = payload.data || [];
   var sender = payload.context.userRequest.entry[0].messaging[0].sender.id;
   // console.log("Sender: " + sender);
     request({
@@ -153,9 +158,10 @@ function sendResponseWithNewRequest(payload) {
         deferred.resolve();
       }
     });
-
   return deferred.promise;
 }
+
+
 
 function sendErrorResponse(err, context) {
   console.log("Ran into an error: " + err);
