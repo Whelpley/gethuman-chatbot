@@ -94,11 +94,11 @@ function sendResponseToPlatform(payload) {
   }
   else {
     console.log("Standard data-having payload detected.");
-    return sendResponsesAsReply(payload);
+    return sendRequestsAsReply(payload);
   }
 }
 
-function sendResponsesAsReply(payload) {
+function sendRequestsAsReply(payload) {
   var deferred = Q.defer();
   var elements = payload.data.postElements || [];
   var sender = payload.context.userRequest.entry[0].messaging[0].sender.id;

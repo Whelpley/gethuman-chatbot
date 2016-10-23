@@ -81,7 +81,9 @@ function handleRequest(botHandlers, actionHandlers) {
     utilities.preResponse(context);
 
     botHandler.getResponsePayload(context)
+    // responsePayload is an array of payloads, each triggering its own request-send
       .then(function (responsePayload) {
+        // Q.all here?
         botHandler.sendResponseToPlatform(responsePayload);
       })
       .catch(function (err) {
