@@ -79,7 +79,7 @@ function prepareSingleCompanyPayload(company) {
         otherCompanies.forEach(function(altCompany){
             payloadData.otherCompaniesElements.buttons.push({
                 "type": "web_url",
-                "url": "https://gethuman.com?company=" + encodeURIComponent(altCompany)),
+                "url": "https://gethuman.com?company=" + encodeURIComponent(altCompany),
                 "title": altCompany
             })
         })
