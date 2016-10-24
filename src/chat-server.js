@@ -51,12 +51,14 @@ function handleRequest(botHandlers, actionHandlers) {
   return function (req, res) {
 
     console.log("Incoming request: " + JSON.stringify(req.body));
-    var isConfirmation = req.body.messaging.filter(function(event){
-      return event === "delivery";
-    })
-    if (isConfirmation) {
-      return
-    };
+
+    // should not be a FB-specific filter at this stage
+    // var isConfirmation = req.body.messaging.filter(function(event){
+    //   return event === "delivery";
+    // })
+    // if (isConfirmation) {
+    //   return
+    // };
 
 
     var context = getContextFromExpressReqRes(req, res);
