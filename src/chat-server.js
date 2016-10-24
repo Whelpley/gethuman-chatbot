@@ -80,8 +80,8 @@ function handleRequest(botHandlers, actionHandlers) {
     // this is working code
     utilities.preResponse(context);
 
-    botHandler.getResponsePayload(context)
-    // responsePayload is an array of payloads, each triggering its own request-send
+    botHandler.getResponseObj(context)
+    // responseObj.data is an array of payloads, each triggering its own request-send
       .then(function (responseObj) {
         // if only one object exists, puts it into an array
         var payloads = [].concat(responseObj.payloads || []);
@@ -130,6 +130,11 @@ function getContextFromExpressReqRes(req, res) {
     }
   };
 }
+
+function chainPromises(calls, val) {
+     if (!calls || !calls.length) { return $q.when(val); }
+     return calls.reduce($q.when, $q.when(val));
+ };
 
 module.exports = {
   startServer: startServer,

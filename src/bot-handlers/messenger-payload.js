@@ -8,42 +8,37 @@ const phoneFormatter = require('phone-formatter');
 const utilities = require('../services/utilities.js');
 
 // new version starter!!!
-function addPostsofCompanyToPayload(payload, company) {
+function addPostsofCompanyToObj(responseObj, company) {
+  // attached associated top Posts of input Company
   return utilities.queryPostsofCompany(company)
     .then(function (company){
-        payload.data = prepareSingleCompanyPayload(company);
-        return payload;
+        responseObj.payloads = preparePayloadsOfObj(company);
+        return responseObj;
     });
 }
 
 // has incoming Company object, with Posts and OtherCompanies attached
-// should it instead load payloadData as an array with each set of elements?
-function prepareSingleCompanyPayload(company) {
-    // var payloadData = {
-    //     postElements: [],
-    //     companyInfoElements: [],
-    //     otherCompaniesElements: []
-    // };
-    var payloadData = [];
+// loads payloads as an array, each will trigger a response
+function preparePayloadsOfObj(company) {
+    var payloads = [];
 
     var phoneAndEmail = utilities.extractTextFieldFromCompany(company);
-    var name = company.name;
     var posts = company.posts;
     var otherCompanies = company.otherCompanies;
+    var name = company.name;
     var email = company.email || '';
     var phone = company.phone || '';
-    //format phone# for international format
     var phoneIntl = (phone) ? phoneFormatter.format(phone, "+1NNNNNNNNNN") : '';
 
 // if Posts exist, send Post info cards
     if (posts) {
-    let postElements = [];
+      var postElements = [];
     // Needs starter card: "Top Issues"
       for (let i = 0; i < posts.length; i++) {
         let title = posts[i].title || '';
         let urlId = posts[i].urlId || ''
         let singleElement = {
-            "title": "Top issues for " + name + ":",
+            "title": "Top issues for " + name + ", #" + i " of " posts.length +":",
             "subtitle": title,
             "buttons": [{
                 "type": "web_url",
@@ -58,47 +53,49 @@ function prepareSingleCompanyPayload(company) {
         };
         postElements.push(singleElement);
       }
-      payloadData.push(postElements);
+      console.log("Post Elements prepared: " + JSON.stringify(postElements));
+      payloads.push(postElements);
     }
 
     // make Company Info Card
-    // needs renewal
-    if (phone || email) {
-        payloadData.companyInfoElements.push({
+    // should it return anything if no phone or email found?
+    if (phoneIntl || email) {
+        var companyInfoElement = [{
             "title": "Contact info for " + name + ":",
-            "subtitle": email,
-            "buttons": [],
-        })
+            "subtitle": email || ''
+        }];
         //
         if (phoneIntl) {
-            payloadData.companyInfoElements.buttons.push({
+            companyInfoElement.buttons = [{
                 "type": "phone_number",
                 "title": "Call " + name,
                 "payload": phoneIntl
-            })
+            }];
         };
+        console.log("Company Info Element prepared: " + JSON.stringify(companyInfoElement));
+        payloads.push(companyInfoElement);
     }
 
-    // needs renewal
-
+    // make Other Companies Card
     if (otherCompanies) {
-        payloadData.otherCompaniesElements.push({
+        var otherCompaniesElement = [{
             "title": "Were you trying to reach " + name + "?",
             "subtitle": "These buttons will eventually trigger a new search for you in Messenger",
             "buttons": [],
-        })
+        }];
+        // change these to a Postback to trigger a new search with altCompany as user input
         otherCompanies.forEach(function(altCompany){
-            payloadData.otherCompaniesElements.buttons.push({
+            otherCompaniesElement.buttons.push({
                 "type": "web_url",
                 "url": "https://gethuman.com?company=" + encodeURIComponent(altCompany),
                 "title": altCompany
             })
         })
+        console.log("Other Companies Element prepared: " + JSON.stringify(otherCompaniesElement));
+        payloads.push(otherCompaniesElement);
     }
 
-    // if otherCompanies, make elements for card
-
-    return payloadData;
+    return payloads;
 }
 
 // deprecated

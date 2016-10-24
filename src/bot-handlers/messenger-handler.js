@@ -16,31 +16,32 @@ function isHandlerForRequest(context) {
   return (object === 'page') ? true : false;
 }
 
-function getResponsePayload(context) {
+function getResponseObj(context) {
   var messaging_events = context.userRequest.entry[0].messaging;
   // console.log("All messaging events: " + JSON.stringify(messaging_events));
   for (let i = 0; i < messaging_events.length; i++) {
-    let event = context.userRequest.entry[0].messaging[i]
+    var event = context.userRequest.entry[0].messaging[i];
+    var responseObj = {
+      payloads:  [],
+      context: context
+    };
     console.log("Event detected: " + JSON.stringify(event));
 
     if (event.message && event.message.text) {
       let textInput = event.message.text;
       console.log("Text input received from user: " + textInput);
-      //payload.data is an array of
-      var responseObj = {
-        payloads:  [],
-        context: context
-      };
       return Q.when(companySearch.findAllByText(textInput))
       .then(function (companySearchResults) {
         // console.log("Company Search Results: " + JSON.stringify(companySearchResults).substring(0,200));
         var company = {};
+
+        // separate out this as function - duplicated in all bots
         var exactMatch = companySearchResults.filter(function(eachCompany) {
           return eachCompany.name.toLowerCase() === textInput.toLowerCase();
         });
         if (!companySearchResults.length) {
           console.log("Nothing found in initial Company search");
-          return preparePayload.nothingFound(payload);
+          return preparePayload.nothingFound(responseObj);
         }
         else if (exactMatch && exactMatch.length) {
           company = exactMatch[0];
@@ -61,18 +62,14 @@ function getResponsePayload(context) {
         });
         console.log("Other companies filtered from input:" + JSON.stringify(company.otherCompanies));
 
-// needs a more clear name - change after removing deprecated functions
-        return preparePayload.addPostsofCompanyToPayload(payload, company);
+        // will format responseObj.payloads according to Company contents
+        return preparePayload.addPostsofCompanyToObj(responseObj, company);
       });
     }
     // returning a blank object if no text input detected
     else {
-      var payload = {
-        data:  {},
-        context: context
-      };
       console.log("Non-text-input Post detected from FB");
-      return Q.when(payload);
+      return Q.when(responseObj);
     }
   }
 }
