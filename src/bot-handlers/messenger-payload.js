@@ -27,7 +27,13 @@ function preparePayloadsOfObj(company) {
     var posts = company.posts;
     var otherCompanies = company.otherCompanies;
     var name = company.name;
-    var email = company.email || '';
+
+    // extract to a helper function
+    var emailContactMethods = company.contactMethods.filter(function (method) {
+        return method.type === "email";
+    });
+    var email = (emailContactMethods && emailContactMethods.length) ? emailContactMethods[0].target : '';
+
     var phone = company.callback.phone || '';
     var phoneIntl = (phone) ? phoneFormatter.format(phone, "+1NNNNNNNNNN") : '';
 
