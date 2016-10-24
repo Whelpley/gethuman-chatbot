@@ -31,10 +31,9 @@ function preparePayloadsOfObj(company) {
     var phone = company.phone || '';
     var phoneIntl = (phone) ? phoneFormatter.format(phone, "+1NNNNNNNNNN") : '';
 
-// if Posts exist, send Post info cards
     if (posts) {
+    // if Posts exist, send Post info cards
       var postElements = new Array();
-    // Needs starter card: "Top Issues"
       for (let i = 0; i < posts.length; i++) {
         let text = posts[i].title || '';
         let urlId = posts[i].urlId || ''

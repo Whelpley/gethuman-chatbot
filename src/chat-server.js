@@ -95,7 +95,7 @@ function handleRequest(botHandlers, actionHandlers) {
         return chainPromises(calls);
       })
       .catch(function (err) {
-        botHandler.sendErrorResponse(err, context);
+        return botHandler.sendErrorResponse(err, context);
       });
   }
 }
