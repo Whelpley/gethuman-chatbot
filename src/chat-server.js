@@ -78,7 +78,7 @@ function handleRequest(botHandlers, actionHandlers) {
 //************** END NON-WORKING CODE rethinking structure
 
     // this is working code
-    utilities.preResponse(context);
+
 
     botHandler.getResponseObj(context)
     // responseObj.data is an array of payloads, each triggering its own request-send
@@ -100,6 +100,8 @@ function handleRequest(botHandlers, actionHandlers) {
         return botHandler.sendErrorResponse(err, context);
         // Q.when(botHandler.sendErrorResponse(err, context));
       });
+
+      utilities.preResponse(context);
   }
 }
 
