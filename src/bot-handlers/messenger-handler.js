@@ -41,7 +41,7 @@ function getResponseObj(context) {
         });
         if (!companySearchResults.length) {
           console.log("Nothing found in initial Company search");
-          return preparePayload.nothingFound(responseObj);
+          return prepareResponse.nothingFound(responseObj);
         }
         else if (exactMatch && exactMatch.length) {
           company = exactMatch[0];
@@ -63,7 +63,7 @@ function getResponseObj(context) {
         console.log("Other companies filtered from input:" + JSON.stringify(company.otherCompanies));
 
         // will format responseObj.payloads according to Company contents
-        return prepareResponse.addPostsofCompanyToObj(responseObj, company);
+        return prepareResponse.loadCompanyToObj(responseObj, company);
       });
     }
     // returning a blank object if no text input detected
@@ -74,16 +74,14 @@ function getResponseObj(context) {
   }
 }
 
-// Could be a common function, but refers to unique fcn
-// attempting a clause to stop reponse & send nothing if non-text Post made from FB
-// duplicate fcn in ./slack-handler
+// duplicate fcn in ./slack-handler (almost) - candidate for module
 function sendResponseToPlatform(payload, context) {
   console.log("About to process this payload for sending: " + JSON.stringify(payload).substring(0,400));
 
   if (!!context.isTest) {
     console.log("Test flag detected in payload context.");
     // triggers inherent Response function from context - not working
-    // should it send anything at all?
+    // (should it send anything at all?)
     // context.sendResponse(payload);
     // context.finishResponse();
     return Q.when();
@@ -99,6 +97,7 @@ function sendResponseToPlatform(payload, context) {
 }
 
 function sendRequestsAsReply(payload, context) {
+  console("Last step before sending this payload: " + JSON.stringify(payload));
   var deferred = Q.defer();
   var sender = context.userRequest.entry[0].messaging[0].sender.id;
   // console.log("Sender: " + sender);
@@ -129,13 +128,12 @@ function sendRequestsAsReply(payload, context) {
   return deferred.promise;
 }
 
+// duplicated in Slack/etc? export to module!
+// (once we figure out how to point back to separate Send functions)
 function sendErrorResponse(err, context) {
   console.log("Ran into an error: " + err);
-  var payload = {
-    data: preparePayload.error(err),
-    context: context
-  };
-  sendResponseToPlatform(payload)
+  var payload = prepareResponse.error(err);
+  sendResponseToPlatform(payload, context);
 }
 
 function verify(req, res) {

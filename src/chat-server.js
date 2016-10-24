@@ -85,13 +85,12 @@ function handleRequest(botHandlers, actionHandlers) {
       .then(function (responseObj) {
         // if only one object exists, puts it into an array
         var payloads = [].concat(responseObj.payloads || []);
-
+        // make an array of call functions
         var calls = payloads.map(function (payload) {
           return function () {
             botHandler.sendResponseToPlatform(payload, responseObj.context);
           }
         });
-
         // call each RequestReply in sequence
         return chainPromises(calls);
       })
