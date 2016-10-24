@@ -7,11 +7,11 @@ const companySearch = require('../services/company-api-gh');
 const utilities = require('../services/utilities');
 
 // Repeated function
-function loadCompanyToObj(payload, company) {
+function loadCompanyToObj(responseObj, company) {
   return utilities.queryPostsofCompany(company)
     .then(function (company){
         responseObj.payloads = preparePayloadsOfObj(company);
-        return payload;
+        return responseObj;
     });
 }
 
