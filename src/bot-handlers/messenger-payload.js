@@ -31,7 +31,7 @@ function preparePayloadsOfObj(company) {
     var phone = company.phone || '';
     var phoneIntl = (phone) ? phoneFormatter.format(phone, "+1NNNNNNNNNN") : '';
 
-    if (posts) {
+    if (posts && posts.length) {
     // if Posts exist, send Post info cards
       var postElements = [];
       for (let i = 0; i < posts.length; i++) {
@@ -87,7 +87,7 @@ function preparePayloadsOfObj(company) {
     }
 
     // make Other Companies Card
-    if (otherCompanies) {
+    if (otherCompanies && otherCompanies.length) {
         var otherCompaniesElement = [{
             "title": "Were you trying to reach " + name + "?",
             "subtitle": "These buttons will eventually trigger a new search for you in Messenger",
