@@ -98,13 +98,14 @@ function handleRequest(botHandlers, actionHandlers) {
         // make an array of call functions
         var calls = payloads.map(function (payload) {
           return function () {
-            botHandler.sendResponseToPlatform(payload, responseObj.context);
+            console.log('in chain for sendResp');
+            return botHandler.sendResponseToPlatform(payload, responseObj.context);
           }
         });
+
         // call each RequestReply in sequence
         // return chainPromises(calls);
-         chainPromises(calls);
-
+        return chainPromises(calls);
       })
       .catch(function (err) {
         // does it need the return here?
@@ -132,9 +133,12 @@ function getContextFromExpressReqRes(req, res) {
 }
 
 function chainPromises(calls, val) {
-     if (!calls || !calls.length) { return Q.when(val); }
-     return calls.reduce(Q.when, Q.when(val));
- };
+  if (!calls || !calls.length) {
+    return Q.when(val);
+  }
+
+  return calls.reduce(Q.when, Q.when(val));
+};
 
 module.exports = {
   startServer: startServer,
