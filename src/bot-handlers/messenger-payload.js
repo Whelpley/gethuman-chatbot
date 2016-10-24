@@ -60,7 +60,7 @@ function preparePayloadsOfObj(company) {
     else {
     // if no Posts found for a Company, indicate so in card
         var noPostsFoundElement = [{
-            "title": "No issues found"
+            "title": "No issues found",
             "subtitle": "We did not find any issues for " + name
         }];
         console.log("No Posts Found Element prepared: " + JSON.stringify(noPostsFoundElement));
