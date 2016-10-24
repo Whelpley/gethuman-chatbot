@@ -27,6 +27,8 @@ function preparePayloadsOfObj(company) {
     var payloads = [{
         username: 'GetHuman',
         icon_emoji: ':gethuman:',
+        // set response_type to 'in_channel' if we want all to see it
+        response_type: 'ephemeral',
         attachments: []
     }];
 
@@ -90,7 +92,8 @@ function nothingFound(responseObj) {
     responseObj.payload = [{
         username: 'GetHuman',
         text: "We could not find anything matching your input to our database. Could you tell me what company you are looking to contact?",
-        icon_emoji: ':gethuman:'
+        icon_emoji: ':gethuman:',
+        response_type: 'ephemeral'
     }]
     return responseObj;
 };
@@ -100,6 +103,7 @@ function inputPrompt(responseObj) {
     responseObj.payload = [{
         username: 'GetHuman',
         text: "Tell me the company you would like to contact.",
+        response_type: 'ephemeral',
         icon_emoji: ':gethuman:'
     }]
     return responseObj;
