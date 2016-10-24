@@ -98,7 +98,7 @@ function sendResponseToPlatform(payload, context) {
 }
 
 function sendRequestsAsReply(payload, context) {
-  console("Last step before sending this payload: " + JSON.stringify(payload));
+  console.log("Last step before sending this payload: " + JSON.stringify(payload));
   var deferred = Q.defer();
   var sender = context.userRequest.entry[0].messaging[0].sender.id;
   // console.log("Sender: " + sender);
