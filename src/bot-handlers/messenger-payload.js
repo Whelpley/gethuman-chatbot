@@ -19,8 +19,9 @@ function loadCompanyToObj(responseObj, company) {
 
 // has incoming Company object, with Posts and OtherCompanies attached
 // loads payloads as an array, each will trigger a response
+// (sub-loading functions should go to separate functions for testability)
 function preparePayloadsOfObj(company) {
-    var payloads = [];
+    var payloads = new Array();
 
     var phoneAndEmail = utilities.extractTextFieldFromCompany(company);
     var posts = company.posts;
@@ -32,7 +33,7 @@ function preparePayloadsOfObj(company) {
 
 // if Posts exist, send Post info cards
     if (posts) {
-      var postElements = [];
+      var postElements = new Array();
     // Needs starter card: "Top Issues"
       for (let i = 0; i < posts.length; i++) {
         let text = posts[i].title || '';
@@ -81,7 +82,7 @@ function preparePayloadsOfObj(company) {
         var otherCompaniesElement = [{
             "title": "Were you trying to reach " + name + "?",
             "subtitle": "These buttons will eventually trigger a new search for you in Messenger",
-            "buttons": [],
+            "buttons": new Array(),
         }];
         // change these to a Postback to trigger a new search with altCompany as user input
         otherCompanies.forEach(function(altCompany){
@@ -97,24 +98,6 @@ function preparePayloadsOfObj(company) {
 
     return payloads;
 }
-
-// deprecated
-// function addPostsToPayload(payload, posts) {
-//   return utilities.queryCompaniesOfPosts(posts)
-//     .then(function (posts){
-//         payload.data = preparePostsPayload(posts);
-//         console.log ("About to return a POSTS payload: " + JSON.stringify(payload));
-//         return payload;
-//     });
-// }
-
-// deprecated
-// function addCompaniesToPayload(payload, companies) {
-//     payload.data = prepareCompaniesPayload(companies);
-//     console.log ("About to return a POSTS payload: " + JSON.stringify(payload));
-
-//     return payload;
-// }
 
 function nothingFound(responseObj) {
     let nothingFoundElement = [{
