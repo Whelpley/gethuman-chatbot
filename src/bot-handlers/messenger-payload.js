@@ -16,12 +16,16 @@ function addPostsofCompanyToPayload(payload, company) {
     });
 }
 
+// has incoming Company object, with Posts and OtherCompanies attached
+// should it instead load payloadData as an array with each set of elements?
 function prepareSingleCompanyPayload(company) {
-    var payloadData = {
-        postElements: [],
-        companyInfoElements: [],
-        otherCompaniesElements: []
-    };
+    // var payloadData = {
+    //     postElements: [],
+    //     companyInfoElements: [],
+    //     otherCompaniesElements: []
+    // };
+    var payloadData = [];
+
     var phoneAndEmail = utilities.extractTextFieldFromCompany(company);
     var name = company.name;
     var posts = company.posts;
@@ -33,6 +37,7 @@ function prepareSingleCompanyPayload(company) {
 
 // if Posts exist, send Post info cards
     if (posts) {
+    let postElements = [];
     // Needs starter card: "Top Issues"
       for (let i = 0; i < posts.length; i++) {
         let title = posts[i].title || '';
@@ -51,24 +56,30 @@ function prepareSingleCompanyPayload(company) {
                 "title": "More Info ..."
             }],
         };
-        payloadData.postElements.push(singleElement);
+        postElements.push(singleElement);
       }
+      payloadData.push(postElements);
     }
 
     // make Company Info Card
-    payloadData.companyInfoElements.push({
-        "title": "Contact info for " + name + ":",
-        "subtitle": email,
-        "buttons": [],
-    })
-    //
-    if (phoneIntl) {
-        payloadData.companyInfoElements.buttons.push({
-            "type": "phone_number",
-            "title": "Call " + name,
-            "payload": phoneIntl
+    // needs renewal
+    if (phone || email) {
+        payloadData.companyInfoElements.push({
+            "title": "Contact info for " + name + ":",
+            "subtitle": email,
+            "buttons": [],
         })
-    };
+        //
+        if (phoneIntl) {
+            payloadData.companyInfoElements.buttons.push({
+                "type": "phone_number",
+                "title": "Call " + name,
+                "payload": phoneIntl
+            })
+        };
+    }
+
+    // needs renewal
 
     if (otherCompanies) {
         payloadData.otherCompaniesElements.push({

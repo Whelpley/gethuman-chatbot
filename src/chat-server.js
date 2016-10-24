@@ -82,9 +82,20 @@ function handleRequest(botHandlers, actionHandlers) {
 
     botHandler.getResponsePayload(context)
     // responsePayload is an array of payloads, each triggering its own request-send
-      .then(function (responsePayload) {
-        // Q.all here?
-        botHandler.sendResponseToPlatform(responsePayload);
+      .then(function (responseObj) {
+        // if only one object exists, puts it into an array
+        var payloads = [].concat(responseObj.payloads || []);
+
+        var calls = payloads.map(function (payload) {
+          return function () {
+            botHandler.sendResponseToPlatform(payload, responseObj.context);
+          }
+        });
+
+        // 3 Q.all, all 3 occur at once
+        // chainPromises, 3 occur in sequence
+
+        return chainPromises(calls);
       })
       .catch(function (err) {
         botHandler.sendErrorResponse(err, context);

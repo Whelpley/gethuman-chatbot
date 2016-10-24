@@ -23,12 +23,12 @@ function getResponsePayload(context) {
     let event = context.userRequest.entry[0].messaging[i]
     console.log("Event detected: " + JSON.stringify(event));
 
-
     if (event.message && event.message.text) {
       let textInput = event.message.text;
       console.log("Text input received from user: " + textInput);
-      var payload = {
-        data:  [],
+      //payload.data is an array of
+      var responseObj = {
+        payloads:  [],
         context: context
       };
       return Q.when(companySearch.findAllByText(textInput))
