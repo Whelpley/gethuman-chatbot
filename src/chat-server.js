@@ -102,7 +102,9 @@ function handleRequest(botHandlers, actionHandlers) {
           }
         });
         // call each RequestReply in sequence
-        return chainPromises(calls);
+        // return chainPromises(calls);
+         chainPromises(calls);
+
       })
       .catch(function (err) {
         // does it need the return here?
