@@ -119,6 +119,7 @@ function sendRequestsAsReply(payload, context) {
             },
         }
     }, function(error, response, body) {
+      console.log('got response from our request');
       if (error) {
         deferred.reject(error);
       }

@@ -55,6 +55,8 @@ function handleRequest(botHandlers, actionHandlers) {
     if (req.body.entry && req.body.entry.length &&
       req.body.entry[0].messaging && req.body.entry[0].messaging.length &&
       !!req.body.entry[0].messaging[0].delivery) {
+
+      console.log('sending back resp 200 right away');
       res.status(200).send();
       return;
     };
