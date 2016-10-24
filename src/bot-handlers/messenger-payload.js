@@ -28,7 +28,7 @@ function preparePayloadsOfObj(company) {
     var otherCompanies = company.otherCompanies;
     var name = company.name;
     var email = company.email || '';
-    var phone = company.phone || '';
+    var phone = company.callback.phone || '';
     var phoneIntl = (phone) ? phoneFormatter.format(phone, "+1NNNNNNNNNN") : '';
 
     if (posts && posts.length) {
