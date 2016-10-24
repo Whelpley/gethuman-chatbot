@@ -38,7 +38,7 @@ function preparePayloadsOfObj(company) {
         let text = posts[i].title || '';
         let urlId = posts[i].urlId || ''
         let singleElement = {
-            "title": "Top issues for " + name + ", #" + i " of " + posts.length + ":",
+            "title": "Top issues for " + name + ", #" + i + " of " + posts.length + ":",
             "subtitle": text,
             "buttons": [{
                 "type": "web_url",
