@@ -95,7 +95,10 @@ function handleRequest(botHandlers, actionHandlers) {
         return chainPromises(calls);
       })
       .catch(function (err) {
+        // does it need the return here?
+
         return botHandler.sendErrorResponse(err, context);
+        // Q.when(botHandler.sendErrorResponse(err, context));
       });
   }
 }

@@ -21,7 +21,7 @@ function loadCompanyToObj(responseObj, company) {
 // loads payloads as an array, each will trigger a response
 // (sub-loading functions should go to separate functions for testability)
 function preparePayloadsOfObj(company) {
-    var payloads = new Array();
+    var payloads = [];
 
     var phoneAndEmail = utilities.extractTextFieldFromCompany(company);
     var posts = company.posts;
@@ -33,7 +33,7 @@ function preparePayloadsOfObj(company) {
 
     if (posts) {
     // if Posts exist, send Post info cards
-      var postElements = new Array();
+      var postElements = [];
       for (let i = 0; i < posts.length; i++) {
         let text = posts[i].title || '';
         let urlId = posts[i].urlId || ''
@@ -57,6 +57,7 @@ function preparePayloadsOfObj(company) {
       console.log(payloads);
       // this is failing for some reason:  TypeError: Cannot read property 'push' of undefined
       payloads.push(postElements);
+      console.log('after payloads.push');
     }
     else {
     // if no Posts found for a Company, indicate so in card
@@ -92,11 +93,11 @@ function preparePayloadsOfObj(company) {
         var otherCompaniesElement = [{
             "title": "Were you trying to reach " + name + "?",
             "subtitle": "These buttons will eventually trigger a new search for you in Messenger",
-            "buttons": new Array(),
+            "buttons": [],
         }];
         // change these to a Postback to trigger a new search with altCompany as user input
         otherCompanies.forEach(function(altCompany){
-            otherCompaniesElement.buttons.push({
+            otherCompaniesElement[0].buttons.push({
                 "type": "web_url",
                 "url": "https://gethuman.com?company=" + encodeURIComponent(altCompany),
                 "title": altCompany

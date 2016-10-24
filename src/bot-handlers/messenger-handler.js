@@ -92,6 +92,7 @@ function sendResponseToPlatform(payload, context) {
   }
   else {
     console.log("Standard data-having payload detected, sending a response");
+    // when coming from Error, stops here....
     return sendRequestsAsReply(payload, context);
   }
 }
