@@ -92,9 +92,7 @@ function handleRequest(botHandlers, actionHandlers) {
           }
         });
 
-        // 3 Q.all, all 3 occur at once
-        // chainPromises, 3 occur in sequence
-
+        // call each RequestReply in sequence
         return chainPromises(calls);
       })
       .catch(function (err) {

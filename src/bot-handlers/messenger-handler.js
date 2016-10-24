@@ -4,7 +4,7 @@ const request = require('request');
 const Q = require('q');
 const companySearch = require('../services/company-api-gh');
 const postSearch = require('../services/post-api-gh');
-const preparePayload = require('./messenger-payload');
+const prepareResponse = require('./messenger-payload');
 const utilities = require('../services/utilities');
 // const config = require('../config/config');
 
@@ -63,7 +63,7 @@ function getResponseObj(context) {
         console.log("Other companies filtered from input:" + JSON.stringify(company.otherCompanies));
 
         // will format responseObj.payloads according to Company contents
-        return preparePayload.addPostsofCompanyToObj(responseObj, company);
+        return prepareResponse.addPostsofCompanyToObj(responseObj, company);
       });
     }
     // returning a blank object if no text input detected
@@ -77,28 +77,30 @@ function getResponseObj(context) {
 // Could be a common function, but refers to unique fcn
 // attempting a clause to stop reponse & send nothing if non-text Post made from FB
 // duplicate fcn in ./slack-handler
-function sendResponseToPlatform(payload) {
+function sendResponseToPlatform(payload, context) {
   console.log("About to process this payload for sending: " + JSON.stringify(payload).substring(0,400));
 
-  if (!!payload.context && !!payload.context.isTest) {
+  if (!!context.isTest) {
     console.log("Test flag detected in payload context.");
-    payload.context.sendResponse(payload);
+    // triggers inherent Response function from context - not working
+    // should it send anything at all?
+    // context.sendResponse(payload);
+    // context.finishResponse();
     return Q.when();
   }
-  else if (!payload.data || (payload.data === {})) {
+  else if (!payload || (payload === [])) {
     console.log("No payload data detected.");
     return Q.when();
   }
   else {
-    console.log("Standard data-having payload detected.");
-    return sendRequestsAsReply(payload);
+    console.log("Standard data-having payload detected, sending a response");
+    return sendRequestsAsReply(payload, context);
   }
 }
 
-function sendRequestsAsReply(payload) {
+function sendRequestsAsReply(payload, context) {
   var deferred = Q.defer();
-  var elements = payload.data.postElements || [];
-  var sender = payload.context.userRequest.entry[0].messaging[0].sender.id;
+  var sender = context.userRequest.entry[0].messaging[0].sender.id;
   // console.log("Sender: " + sender);
     request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
@@ -111,7 +113,7 @@ function sendRequestsAsReply(payload) {
                     "type": "template",
                     "payload": {
                         "template_type": "generic",
-                        "elements": elements
+                        "elements": payload
                     }
                 }
             },
@@ -126,8 +128,6 @@ function sendRequestsAsReply(payload) {
     });
   return deferred.promise;
 }
-
-
 
 function sendErrorResponse(err, context) {
   console.log("Ran into an error: " + err);

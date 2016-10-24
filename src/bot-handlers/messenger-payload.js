@@ -233,5 +233,5 @@ module.exports = {
   // addCompaniesToPayload: addCompaniesToPayload,
   nothingFound: nothingFound,
   error: error,
-  addPostsofCompanyToPayload: addPostsofCompanyToPayload
+  addPostsofCompanyToObj: addPostsofCompanyToObj
 }
