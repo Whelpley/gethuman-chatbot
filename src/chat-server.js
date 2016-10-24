@@ -119,8 +119,8 @@ function getContextFromExpressReqRes(req, res) {
 }
 
 function chainPromises(calls, val) {
-     if (!calls || !calls.length) { return $Q.when(val); }
-     return calls.reduce($Q.when, $Q.when(val));
+     if (!calls || !calls.length) { return Q.when(val); }
+     return calls.reduce(Q.when, Q.when(val));
  };
 
 module.exports = {
