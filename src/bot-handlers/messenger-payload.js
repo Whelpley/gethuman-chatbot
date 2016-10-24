@@ -54,6 +54,8 @@ function preparePayloadsOfObj(company) {
         postElements.push(singleElement);
       }
       console.log("Post Elements prepared: " + JSON.stringify(postElements));
+      console.log(payloads);
+      // this is failing for some reason:  TypeError: Cannot read property 'push' of undefined
       payloads.push(postElements);
     }
     else {

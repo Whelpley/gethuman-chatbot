@@ -100,7 +100,6 @@ function handleRequest(botHandlers, actionHandlers) {
   }
 }
 
-
 // is unit testable
 function getContextFromExpressReqRes(req, res) {
   return {
