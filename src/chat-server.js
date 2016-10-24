@@ -52,14 +52,12 @@ function handleRequest(botHandlers, actionHandlers) {
 
     console.log("Incoming request: " + JSON.stringify(req.body));
 
-    // should not be a FB-specific filter at this stage
-    // var isConfirmation = req.body.messaging.filter(function(event){
-    //   return event === "delivery";
-    // })
-    // if (isConfirmation) {
-    //   return
-    // };
-
+    if (req.body.entry && req.body.entry.length &&
+      req.body.entry[0].messaging && req.body.entry[0].messaging.length &&
+      !!req.body.entry[0].messaging[0].delivery) {
+      res.status(200).send();
+      return;
+    };
 
     var context = getContextFromExpressReqRes(req, res);
     var botHandler = brain.getBotHandler(botHandlers, context);
