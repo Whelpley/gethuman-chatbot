@@ -97,18 +97,6 @@ function handleRequest(botHandlers, actionHandlers) {
       .catch(function (err) {
         botHandler.sendErrorResponse(err, context);
       });
-
-// Trying to send an array of cards in sequence
-    // botHandler.getResponsePayloads(context)
-    //   .then(function (responsePayloads) {
-    //     responsePayloads = responsePayloads || [];
-    //     return Q.all(responsePayloads.map(function (responsePayload) {
-    //       return botHandler.sendResponseToPlatform(responsePayload);
-    //     }));
-    //   })
-    //   .catch(function (err) {
-    //     botHandler.sendErrorResponse(err, context);
-    //   });
   }
 }
 

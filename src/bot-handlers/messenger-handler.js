@@ -145,7 +145,7 @@ function verify(req, res) {
 }
 
 module.exports = {
-  getResponsePayload: getResponsePayload,
+  getResponseObj: getResponseObj,
   sendResponseToPlatform: sendResponseToPlatform,
   isHandlerForRequest: isHandlerForRequest,
   sendErrorResponse: sendErrorResponse,
