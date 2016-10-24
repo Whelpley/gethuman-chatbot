@@ -55,9 +55,7 @@ function preparePayloadsOfObj(company) {
       }
       console.log("Post Elements prepared: " + JSON.stringify(postElements));
       console.log(payloads);
-      // this is failing for some reason:  TypeError: Cannot read property 'push' of undefined
       payloads.push(postElements);
-      console.log('after payloads.push');
     }
     else {
     // if no Posts found for a Company, indicate so in card
@@ -78,7 +76,7 @@ function preparePayloadsOfObj(company) {
         }];
         //
         if (phoneIntl) {
-            companyInfoElement.buttons = [{
+            companyInfoElement[0].buttons = [{
                 "type": "phone_number",
                 "title": "Call " + name,
                 "payload": phoneIntl
