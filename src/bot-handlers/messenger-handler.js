@@ -16,6 +16,7 @@ function isHandlerForRequest(context) {
   return (object === 'page') ? true : false;
 }
 
+// Unique function, but repeated sub-functions
 function getResponseObj(context) {
   var messaging_events = context.userRequest.entry[0].messaging;
   // console.log("All messaging events: " + JSON.stringify(messaging_events));

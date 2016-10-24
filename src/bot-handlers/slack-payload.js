@@ -89,7 +89,7 @@ function preparePayloadsOfObj(company) {
 
 // unique function
 function nothingFound(responseObj) {
-    responseObj.payload = [{
+    responseObj.payloads = [{
         username: 'GetHuman',
         text: "We could not find anything matching your input to our database. Could you tell me what company you are looking to contact?",
         icon_emoji: ':gethuman:',
@@ -100,7 +100,7 @@ function nothingFound(responseObj) {
 
 // unique function
 function inputPrompt(responseObj) {
-    responseObj.payload = [{
+    responseObj.payloads = [{
         username: 'GetHuman',
         text: "Tell me the company you would like to contact.",
         response_type: 'ephemeral',

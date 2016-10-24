@@ -14,6 +14,7 @@ function isHandlerForRequest(context) {
   return (responseUrl && responseUrl.includes('hooks.slack.com')) ? true : false;
 }
 
+// Unique function, but repeated sub-functions
 function getResponseObj(context) {
   var textInput = context.userRequest.text;
   var responseObj = {
@@ -25,7 +26,7 @@ function getResponseObj(context) {
   }
   return Q.when(companySearch.findAllByText(textInput))
   .then(function (companySearchResults) {
-    console.log("Company Search Results: " + JSON.stringify(companySearchResults).substring(0,200));
+    // console.log("Company Search Results: " + JSON.stringify(companySearchResults).substring(0,200));
     var company = {};
 
     // separate out this as function - duplicated in all bots
