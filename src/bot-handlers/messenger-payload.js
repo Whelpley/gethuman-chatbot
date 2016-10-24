@@ -35,11 +35,11 @@ function preparePayloadsOfObj(company) {
       var postElements = [];
     // Needs starter card: "Top Issues"
       for (let i = 0; i < posts.length; i++) {
-        let title = posts[i].title || '';
+        let text = posts[i].title || '';
         let urlId = posts[i].urlId || ''
         let singleElement = {
-            "title": "Top issues for " + name + ", #" + i.toString() " of " posts.length.toString() + ":",
-            "subtitle": title,
+            "title": "Top issues for " + name + ", #" + i " of " + posts.length + ":",
+            "subtitle": text,
             "buttons": [{
                 "type": "web_url",
                 "url": "https://gethuman.com?company=" + encodeURIComponent(name) ,
