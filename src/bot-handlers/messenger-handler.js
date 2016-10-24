@@ -119,8 +119,12 @@ function sendRequestsAsReply(payload, context) {
             },
         }
     }, function(error, response, body) {
-      console.log('got response from our request');
+      console.log('Response from our request: ' + JSON.stringify(response));
+      console.log('Body from our request: ' + JSON.stringify(body));
+
       if (error) {
+        console.log('Error from our request: ' + JSON.stringify(error));
+
         deferred.reject(error);
       }
       else {
