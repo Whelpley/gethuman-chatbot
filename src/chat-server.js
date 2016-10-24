@@ -96,12 +96,21 @@ function handleRequest(botHandlers, actionHandlers) {
         // if only one object exists, puts it into an array
         var payloads = [].concat(responseObj.payloads || []);
         // make an array of call functions
+
+        var counter = 1;
+
         var calls = payloads.map(function (payload) {
           return function () {
-            console.log('in chain for sendResp');
-            return botHandler.sendResponseToPlatform(payload, responseObj.context);
+            console.log('in chain for sendResp ' + counter);
+            counter++;
+            return botHandler.sendResponseToPlatform(payload, responseObj.context)
+              .catch(function (err) {
+                console.log('err is ' + err);
+              });
           }
         });
+
+        console.log('# of calls is ' + calls.length);
 
         // call each RequestReply in sequence
         // return chainPromises(calls);
