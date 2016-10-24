@@ -39,7 +39,7 @@ function preparePayloadsOfObj(company) {
         let text = posts[i].title || '';
         let urlId = posts[i].urlId || ''
         let singleElement = {
-            "title": "Top issues for " + name + ", #" + i + " of " + posts.length + ":",
+            "title": "Top issues for " + name + ", #" + (i+1) + " of " + posts.length + ":",
             "subtitle": text,
             "buttons": [{
                 "type": "web_url",
@@ -56,6 +56,15 @@ function preparePayloadsOfObj(company) {
       }
       console.log("Post Elements prepared: " + JSON.stringify(postElements));
       payloads.push(postElements);
+    }
+    else {
+    // if no Posts found for a Company, indicate so in card
+        var noPostsFoundElement = [{
+            "title": "No issues found"
+            "subtitle": "We did not find any issues for " + name
+        }];
+        console.log("No Posts Found Element prepared: " + JSON.stringify(noPostsFoundElement));
+        payloads.push(noPostsFoundElement);
     }
 
     // make Company Info Card
@@ -96,6 +105,7 @@ function preparePayloadsOfObj(company) {
         payloads.push(otherCompaniesElement);
     }
 
+    console.log("All payload elements prepared: " + JSON.stringify(payloads));
     return payloads;
 }
 
