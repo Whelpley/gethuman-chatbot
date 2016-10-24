@@ -94,7 +94,8 @@ function preparePayloadsOfObj(company) {
             "buttons": [],
         }];
         // change these to a Postback to trigger a new search with altCompany as user input
-        otherCompanies.forEach(function(altCompany){
+        var otherCompaniesSubSet = otherCompanies.slice(0,3);
+        otherCompaniesSubSet.forEach(function(altCompany){
             otherCompaniesElement[0].buttons.push({
                 "type": "web_url",
                 "url": "https://gethuman.com?company=" + encodeURIComponent(altCompany),
