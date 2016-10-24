@@ -52,14 +52,15 @@ function handleRequest(botHandlers, actionHandlers) {
 
     console.log("Incoming request: " + JSON.stringify(req.body));
 
-    if (req.body.entry && req.body.entry.length &&
-      req.body.entry[0].messaging && req.body.entry[0].messaging.length &&
-      !!req.body.entry[0].messaging[0].delivery) {
+// // filters out a FB confirmation message (also happens later in code)
+//     if (req.body.entry && req.body.entry.length &&
+//       req.body.entry[0].messaging && req.body.entry[0].messaging.length &&
+//       !!req.body.entry[0].messaging[0].delivery) {
 
-      console.log('sending back resp 200 right away');
-      res.status(200).send();
-      return;
-    };
+//       console.log('sending back resp 200 right away');
+//       res.status(200).send();
+//       return;
+//     };
 
     var context = getContextFromExpressReqRes(req, res);
     var botHandler = brain.getBotHandler(botHandlers, context);

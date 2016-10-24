@@ -76,7 +76,7 @@ function getResponseObj(context) {
 
 // duplicate fcn in ./slack-handler (almost) - candidate for module
 function sendResponseToPlatform(payload, context) {
-  console.log("About to process this payload for sending: " + JSON.stringify(payload).substring(0,400));
+  // console.log("About to process this payload for sending: " + JSON.stringify(payload).substring(0,400));
 
   if (!!context.isTest) {
     console.log("Test flag detected in payload context.");

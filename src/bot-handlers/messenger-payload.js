@@ -87,13 +87,15 @@ function preparePayloadsOfObj(company) {
     }
 
     // make Other Companies Card
+    // To-Do: Make buttons trigger a Postback to do another search/reply
     if (otherCompanies && otherCompanies.length) {
         var otherCompaniesElement = [{
             "title": "Were you trying to reach " + name + "?",
-            "subtitle": "These buttons will eventually trigger a new search for you in Messenger",
+            "subtitle": "Perhaps you would like to ask me about these companies:",
             "buttons": [],
         }];
         // change these to a Postback to trigger a new search with altCompany as user input
+        // cull down Other Options to 3 - could make more scrolling cards if wanted...
         var otherCompaniesSubSet = otherCompanies.slice(0,3);
         otherCompaniesSubSet.forEach(function(altCompany){
             otherCompaniesElement[0].buttons.push({
@@ -106,7 +108,7 @@ function preparePayloadsOfObj(company) {
         payloads.push(otherCompaniesElement);
     }
 
-    console.log("All payload elements prepared: " + JSON.stringify(payloads));
+    // console.log("All payload elements prepared: " + JSON.stringify(payloads));
     return payloads;
 }
 
