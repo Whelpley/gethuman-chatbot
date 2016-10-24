@@ -97,6 +97,7 @@ function sendResponseToPlatform(payload, context) {
   }
 }
 
+// unique function
 function sendRequestsAsReply(payload, context) {
   console.log("Last step before sending this payload: " + JSON.stringify(payload));
   var deferred = Q.defer();
@@ -139,7 +140,7 @@ function sendRequestsAsReply(payload, context) {
 function sendErrorResponse(err, context) {
   console.log("Ran into an error: " + err);
   var payload = prepareResponse.error(err);
-  sendResponseToPlatform(payload, context);
+  sendRequestsAsReply(payload, context);
 }
 
 function verify(req, res) {

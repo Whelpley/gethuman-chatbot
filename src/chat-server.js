@@ -53,6 +53,7 @@ function handleRequest(botHandlers, actionHandlers) {
     console.log("Incoming request: " + JSON.stringify(req.body));
 
 // // filters out a FB confirmation message (also happens later in code)
+// // (not needed?)
 //     if (req.body.entry && req.body.entry.length &&
 //       req.body.entry[0].messaging && req.body.entry[0].messaging.length &&
 //       !!req.body.entry[0].messaging[0].delivery) {
@@ -90,40 +91,31 @@ function handleRequest(botHandlers, actionHandlers) {
     // this is working code
     utilities.preResponse(context);
 
-
     botHandler.getResponseObj(context)
     // responseObj.data is an array of payloads, each triggering its own request-send
       .then(function (responseObj) {
         // if only one object exists, puts it into an array
         var payloads = [].concat(responseObj.payloads || []);
+
+        // var counter = 1;
         // make an array of call functions
-
-        var counter = 1;
-
         var calls = payloads.map(function (payload) {
           return function () {
-            console.log('in chain for sendResp ' + counter);
-            counter++;
+            // console.log('in chain for sendResp ' + counter);
+            // counter++;
             return botHandler.sendResponseToPlatform(payload, responseObj.context)
               .catch(function (err) {
                 console.log('err is ' + err);
               });
           }
         });
-
-        console.log('# of calls is ' + calls.length);
-
+        // console.log('# of calls is ' + calls.length);
         // call each RequestReply in sequence
-        // return chainPromises(calls);
         return chainPromises(calls);
       })
       .catch(function (err) {
-        // does it need the return here?
-
         return botHandler.sendErrorResponse(err, context);
-        // Q.when(botHandler.sendErrorResponse(err, context));
       });
-
   }
 }
 
@@ -146,7 +138,6 @@ function chainPromises(calls, val) {
   if (!calls || !calls.length) {
     return Q.when(val);
   }
-
   return calls.reduce(Q.when, Q.when(val));
 };
 

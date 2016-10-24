@@ -4,7 +4,7 @@ const request = require('request');
 const Q = require('q');
 const companySearch = require('../services/company-api-gh');
 const postSearch = require('../services/post-api-gh');
-const preparePayload = require('./slack-payload');
+const prepareResponse = require('./slack-payload');
 const utilities = require('../services/utilities');
 // const config = require('../config/config');
 
@@ -14,109 +14,81 @@ function isHandlerForRequest(context) {
   return (responseUrl && responseUrl.includes('hooks.slack.com')) ? true : false;
 }
 
-function getResponsePayload(context) {
+function getResponseObj(context) {
   var textInput = context.userRequest.text;
-  var payload = {
-    data:  {},
+  var responseObj = {
+    payloads:  [],
     context: context
-  }
+  };
   if (!textInput) {
-      return Q.when(preparePayload.inputPrompt(payload));
+    return Q.when(prepareResponse.inputPrompt(responseObj));
   }
   return Q.when(companySearch.findAllByText(textInput))
   .then(function (companySearchResults) {
     console.log("Company Search Results: " + JSON.stringify(companySearchResults).substring(0,200));
     var company = {};
+
+    // separate out this as function - duplicated in all bots
     var exactMatch = companySearchResults.filter(function(eachCompany) {
       return eachCompany.name.toLowerCase() === textInput.toLowerCase();
     });
 
     if (!companySearchResults.length) {
       console.log("Nothing found in initial Company search");
-      return preparePayload.nothingFound(payload);
+      return prepareResponse.nothingFound(responseObj);
     }
     else if (exactMatch && exactMatch.length) {
       company = exactMatch[0];
-      console.log("Found an exact match from Companies search: " + JSON.stringify(exactMatch[0]).substring(0,200));
+      console.log("Found an exact match from Companies search");
     }
     else {
       company = companySearchResults[0];
-      console.log("Going with first result from Companies search: " + JSON.stringify(company).substring(0,200));
+      console.log("Going with first result from Companies search");
     };
 
-    // will need to capture other company names for later use
     var companyNames = companySearchResults.map(function(eachCompany) {
       return eachCompany.name;
     })
     // filter out the textInput
-    // console.log("Other companies returned from search: " + JSON.stringify(companyNames));
     company.otherCompanies = companyNames.filter(function(name){
       return name.toLowerCase() !== textInput.toLowerCase();
     });
     console.log("Other companies filtered from input:" + JSON.stringify(company.otherCompanies));
 
-    return preparePayload.addPostsofCompanyToPayload(payload, company);
+    return prepareResponse.loadCompanyToObj(responseObj, company);
   });
 }
 
-// Old version
-// function getResponsePayload(context) {
-//   var textInput = context.userRequest.text;
-//   var payload = {
-//     data:  {},
-//     context: context
-//   }
-//   if (!textInput) {
-//       return Q.when(preparePayload.inputPrompt(payload));
-//   }
-//   // this could be in a module, except for the nothingFound() fcn
-//   return Q.all([
-//     postSearch.findByText(textInput),
-//     companySearch.findByText(textInput)
-//   ])
-//   .then(function (postAndCompanySearchResults) {
-//     var posts = postAndCompanySearchResults[0];
-//     var companies = postAndCompanySearchResults[1];
-//     if (posts && posts.length) {
-//       return preparePayload.addPostsToPayload(payload, posts);
-//     }
-//     else if (companies && companies.length) {
-//       return preparePayload.addCompaniesToPayload(payload, companies);
-//     }
-//     else {
-//       return preparePayload.nothingFound(payload);
-//     }
-//   });
-// }
-
-// Could be a common function, but refers to unique fcn
-// duplicate fcn in ./messenger-handler
-function sendResponseToPlatform(payload) {
-  if (payload.context.isTest) {
-    payload.context.sendResponse(payload);
+// Repeated function
+function sendResponseToPlatform(payload, context) {
+  if (context.isTest) {
+    context.sendResponse(payload);
     return Q.when();
   }
-  else if (!payload.data || payload.data == []) {
+  else if (!payload || (payload === [])) {
     console.log("No payload data detected.");
     return Q.when();
   }
   else {
-    return sendResponseWithNewRequest(payload);
+    return sendRequestsAsReply(payload, context);
   }
 }
 
-function sendResponseWithNewRequest(payload) {
+// unique function
+function sendRequestsAsReply(payload, context) {
+  console.log("Last step before sending this payload: " + JSON.stringify(payload));
+
   var deferred = Q.defer();
   var path = process.env.INCOMING_WEBHOOK_PATH;
   // var path = config.slackAccessToken;
   var uri = 'https://hooks.slack.com/services/' + path;
 
-  payload.data.channel = payload.context.userRequest.channel_id;
-  // console.log("Payload about to be sent back to Slack: " + JSON.stringify(payload.data));
+  payload.channel = context.userRequest.channel_id;
+
   request({
     uri: uri,
     method: 'POST',
-    body: JSON.stringify(payload.data)
+    body: JSON.stringify(payload)
   }, function (error, response, body) {
     if (error) {
       deferred.reject(error);
@@ -128,14 +100,11 @@ function sendResponseWithNewRequest(payload) {
   return deferred.promise;
 }
 
+// duplicated function - export to module!
 function sendErrorResponse(err, context) {
   console.log("Ran into an error: " + err);
-  var payload = {
-    data: {},
-    context: context
-  };
-  payload.data = preparePayload.error(err);
-  sendResponseToPlatform(payload);
+  var payload = prepareResponse.error(err);
+  sendRequestsAsReply(payload, context);
 }
 
 // not needed?
@@ -146,7 +115,7 @@ function verify() {
 
 module.exports = {
   isHandlerForRequest: isHandlerForRequest,
-  getResponsePayload: getResponsePayload,
+  getResponseObj: getResponseObj,
   sendResponseToPlatform: sendResponseToPlatform,
   sendErrorResponse: sendErrorResponse,
   verify: verify

@@ -7,7 +7,7 @@ const companySearch = require('../services/company-api-gh.js');
 const phoneFormatter = require('phone-formatter');
 const utilities = require('../services/utilities.js');
 
-// new version starter!!!
+// candidate for joint function
 function loadCompanyToObj(responseObj, company) {
   // attached associated top Posts of input Company
   return utilities.queryPostsofCompany(company)
