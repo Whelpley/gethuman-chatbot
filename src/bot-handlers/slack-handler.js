@@ -6,7 +6,7 @@ const companySearch = require('../services/company-api-gh');
 const postSearch = require('../services/post-api-gh');
 const prepareResponse = require('./slack-payload');
 const utilities = require('../services/utilities');
-// const config = require('../config/config');
+const config = require('../config/config');
 
 // unit testable
 function isHandlerForRequest(context) {
@@ -85,8 +85,8 @@ function sendRequestsAsReply(payload, context) {
   console.log("Last step before sending this payload: " + JSON.stringify(payload));
 
   var deferred = Q.defer();
-  var path = process.env.INCOMING_WEBHOOK_PATH;
-  // var path = config.slackAccessToken;
+  // var path = process.env.INCOMING_WEBHOOK_PATH;
+  var path = config.slackAccessToken;
   var uri = 'https://hooks.slack.com/services/' + path;
 
   payload.channel = context.userRequest.channel_id;

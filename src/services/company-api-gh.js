@@ -2,12 +2,14 @@
 
 const Q = require('q');
 const request = require('request');
-// const config = require('../config/config');
+const config = require('../config/config');
 
 function findAllByText(textInput) {
   var deferred = Q.defer();
-  var url = process.env.API_BASE_URL + '/companies/search';
-  // var url = config.ghApiBaseUrl + '/companies/search';
+  // var url = process.env.API_BASE_URL + '/companies/search';
+  var url = config.ghApiBaseUrl + '/companies/search';
+  console.log('URL for findAllByText search: ' + url);
+
   var match = encodeURIComponent(textInput);
 
   console.log('trying to match user input: ' + match)

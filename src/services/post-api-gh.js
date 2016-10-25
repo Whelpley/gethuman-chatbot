@@ -2,13 +2,13 @@
 
 const Q = require('q');
 const request = require('request');
-// const config = require('../config/config');
+const config = require('../config/config');
 
 function findPostsofCompany(company) {
   var deferred = Q.defer();
-  var url = process.env.API_BASE_URL + '/posts';
+  // var url = process.env.API_BASE_URL + '/posts';
+  var url = config.ghApiBaseUrl + '/posts';
   console.log('URL for findPostsofCompany search: ' + url);
-  // var url = config.ghApiBaseUrl + '/posts';
   var limit = 5;
   var params = encodeURIComponent(JSON.stringify({
     type: 'question',
