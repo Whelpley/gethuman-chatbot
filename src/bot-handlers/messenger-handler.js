@@ -9,8 +9,8 @@ const utilities = require('../services/utilities');
 const config = require('../config/config');
 // new config vars!
 
-const token = config.FB_PAGE_ACCESS_TOKEN;
-// const token = process.env.facebookAccessToken;
+const token = config.facebookAccessToken;
+// const token = process.env.FB_PAGE_ACCESS_TOKEN;
 
 function isHandlerForRequest(context) {
   var object = context.userRequest.object || '';
