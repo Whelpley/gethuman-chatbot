@@ -20,7 +20,6 @@ function loadCompanyToObj(responseObj, company) {
 function preparePayloadsOfObj(company) {
     var payloads = [];
 
-    var phoneAndEmail = utilities.extractTextFieldFromCompany(company);
     var posts = company.posts;
     var otherCompanies = company.otherCompanies;
     var name = company.name;
