@@ -18,11 +18,14 @@ function loadCompanyToObj(responseObj, company) {
 // 5 Posts Cards, one Company Info Card, one More results card
 // Unique function
 function preparePayloadsOfObj(company) {
-    var phoneAndEmail = utilities.extractTextFieldFromCompany(company);
     var name = company.name;
     var posts = company.posts;
     var otherCompanies = company.otherCompanies;
     var colors = utilities.colors;
+
+    // var phoneAndEmail = utilities.extractTextFieldFromCompany(company);
+    var contactInfo = utilities.extractContactInfo(company);
+    var topContacts = utilities.formatTextField(contactInfo);
 
     var payloads = [{
         username: 'GetHuman',
@@ -63,7 +66,7 @@ function preparePayloadsOfObj(company) {
         "fallback": "Contact info for " + name,
         "title": "Best way to contact " + name + ":",
         "color": '#999999',
-        "text": phoneAndEmail,
+        "text": topContacts,
     });
 
     // attach Other Companies info if they exist
@@ -77,6 +80,11 @@ function preparePayloadsOfObj(company) {
             "text": "Or maybe you meant " + otherCompaniesList + "?",
             "mrkdwn_in": ["text"]
         });
+    }
+
+    // check if nothing is in payload at this point - return NothingFound payload if so
+    if (!payloads[0].attachments.length) {
+        payloads[0].text = "I couldn't find anything for \"" + name + "\". Please tell me company you are looking for. (ex: \"/gethuman Verizon Wireless\""
     }
 
     return payloads;
