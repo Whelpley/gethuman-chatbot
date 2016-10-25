@@ -60,34 +60,24 @@ function preparePayloadsOfObj(company) {
       console.log(payloads);
       payloads.push(postElements);
     }
-    else {
-    // if no Posts found for a Company, indicate so in card
-        var noPostsFoundElement = [{
-            "title": "No issues found",
-            "subtitle": "We did not find any issues for " + name
-        }];
-        console.log("No Posts Found Element prepared: " + JSON.stringify(noPostsFoundElement));
-        payloads.push(noPostsFoundElement);
-    }
 
     // make Company Info Card
-    // should it return anything if no phone or email found?
-    if (phoneIntl || email) {
-        var companyInfoElement = [{
-            "title": "Contact info for " + name + ":",
-            "subtitle": email || ''
+    // need to harvest other company contact info... make a function!
+
+    var companyInfoElement = [{
+        "title": "Contact info for " + name + ":",
+        "subtitle": email || ''
+    }];
+    //
+    if (phoneIntl) {
+        companyInfoElement[0].buttons = [{
+            "type": "phone_number",
+            "title": phone,
+            "payload": phoneIntl
         }];
-        //
-        if (phoneIntl) {
-            companyInfoElement[0].buttons = [{
-                "type": "phone_number",
-                "title": phone,
-                "payload": phoneIntl
-            }];
-        };
-        console.log("Company Info Element prepared: " + JSON.stringify(companyInfoElement));
-        payloads.push(companyInfoElement);
-    }
+    };
+    console.log("Company Info Element prepared: " + JSON.stringify(companyInfoElement));
+    payloads.push(companyInfoElement);
 
     // make Other Companies Card
     // To-Do: Make buttons trigger a Postback to do another search/reply

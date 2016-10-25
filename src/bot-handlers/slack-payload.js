@@ -56,20 +56,15 @@ function preparePayloadsOfObj(company) {
             payloads[0].attachments.push(singleAttachment);
         };
     }
-    else {
-    // if no Posts exist for company, prompt for input
-        payloads[0].text = "We did not find any issues matching the input \"" +name + "\", please try entering the name of the company you are looking for.";
-    };
 
     // attach Company contact info:
-    if (phoneAndEmail) {
-        payloads[0].attachments.push({
-            "fallback": "Contact info for " + name,
-            "title": "Best way to contact " + name + ":",
-            "color": '#999999',
-            "text": phoneAndEmail,
-        });
-    }
+    // ... needs other company contact methods
+    payloads[0].attachments.push({
+        "fallback": "Contact info for " + name,
+        "title": "Best way to contact " + name + ":",
+        "color": '#999999',
+        "text": phoneAndEmail,
+    });
 
     // attach Other Companies info if they exist
     if (otherCompanies && otherCompanies.length) {
