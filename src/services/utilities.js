@@ -114,9 +114,9 @@ function convertArrayToBoldList(arrayOfStrings) {
 
 module.exports = {
   preResponse: preResponse,
-  extractTextFieldFromCompany: extractTextFieldFromCompany,
   formatTextField: formatTextField,
   queryPostsofCompany: queryPostsofCompany,
   colors: colors,
-  convertArrayToBoldList: convertArrayToBoldList
+  convertArrayToBoldList: convertArrayToBoldList,
+  extractContactInfo: extractContactInfo
 }
