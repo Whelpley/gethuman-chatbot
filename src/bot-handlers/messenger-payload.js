@@ -2,7 +2,7 @@
 
 const Q = require('q');
 const companySearch = require('../services/company-api-gh.js');
-const phoneFormatter = require('phone-formatter');
+// const phoneFormatter = require('phone-formatter');
 const utilities = require('../services/utilities.js');
 
 // Repeated function, different end function
@@ -25,8 +25,8 @@ function preparePayloadsOfObj(company) {
     var name = company.name;
 
     var contactInfo = utilities.extractContactInfo(company);
-    var topContacts = utilities.formatTextField(contactInfo);
-    var phoneIntl = (contactInfo.phone) ? phoneFormatter.format(contactInfo.phone, "+1NNNNNNNNNN") : '';
+    // var topContacts = utilities.formatTextField(contactInfo);
+    // var phoneIntl = (contactInfo.phone) ? phoneFormatter.format(contactInfo.phone, "+1NNNNNNNNNN") : '';
 
     if (posts && posts.length) {
     // if Posts exist, send Post info cards
@@ -58,16 +58,9 @@ function preparePayloadsOfObj(company) {
     // make Company Info Card
     var companyInfoElement = [{
         "title": "Best ways to contact " + name + ":",
-        "subtitle": topContacts
+        'subtitle': 'Why not try these?',
+        'buttons': utilities.formatContactButtonsMessenger(contactInfo);
     }];
-    //
-    if (phoneIntl) {
-        companyInfoElement[0].buttons = [{
-            "type": "phone_number",
-            "title": contactInfo.phone,
-            "payload": phoneIntl
-        }];
-    };
     console.log("Company Info Element prepared: " + JSON.stringify(companyInfoElement));
     payloads.push(companyInfoElement);
 
