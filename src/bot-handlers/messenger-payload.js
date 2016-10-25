@@ -59,7 +59,7 @@ function preparePayloadsOfObj(company) {
     var companyInfoElement = [{
         "title": "Best ways to contact " + name + ":",
         'subtitle': 'Why not try these?',
-        'buttons': utilities.formatContactButtonsMessenger(contactInfo);
+        'buttons': utilities.formatContactButtonsMessenger(contactInfo)
     }];
     console.log("Company Info Element prepared: " + JSON.stringify(companyInfoElement));
     payloads.push(companyInfoElement);
