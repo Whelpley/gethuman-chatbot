@@ -26,7 +26,7 @@ function preparePayloadsOfObj(company) {
 
     var contactInfo = utilities.extractContactInfo(company);
     var topContacts = utilities.formatTextField(contactInfo);
-    var phoneIntl = (contactInfo.phone) ? phoneFormatter.format(phone, "+1NNNNNNNNNN") : '';
+    var phoneIntl = (contactInfo.phone) ? phoneFormatter.format(contactInfo.phone, "+1NNNNNNNNNN") : '';
 
     if (posts && posts.length) {
     // if Posts exist, send Post info cards
