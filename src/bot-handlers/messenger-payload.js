@@ -81,7 +81,7 @@ function preparePayloadsOfObj(company) {
         if (phoneIntl) {
             companyInfoElement[0].buttons = [{
                 "type": "phone_number",
-                "title": "Call " + name,
+                "title": phone,
                 "payload": phoneIntl
             }];
         };
