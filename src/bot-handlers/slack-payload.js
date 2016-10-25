@@ -25,7 +25,7 @@ function preparePayloadsOfObj(company) {
 
     // var phoneAndEmail = utilities.extractTextFieldFromCompany(company);
     var contactInfo = utilities.extractContactInfo(company);
-    var topContacts = utilities.formatTextField(contactInfo);
+    var topContacts = utilities.formatTextFieldSlack(contactInfo);
 
     var payloads = [{
         username: 'GetHuman',

@@ -25,16 +25,6 @@ function queryPostsofCompany(company) {
     })
 }
 
-// to be deprecated
-// function extractTextFieldFromCompany(company) {
-//     let phone = company.callback.phone || '';
-//     let emailContactMethods = company.contactMethods.filter(function (method) {
-//         return method.type === "email";
-//     });
-//     let email = (emailContactMethods && emailContactMethods.length) ? emailContactMethods[0].target : '';
-//     return formatTextField(phone, email);
-// }
-
 // takes Company object, puts associated info into an result object
 function extractContactInfo(company) {
   var contactInfo = {
@@ -93,17 +83,36 @@ function formatTextField(contactInfo) {
   return result;
 };
 
-// function formatTextField(phone, email) {
-//     let result = '';
-//     if (phone && email) {
-//         result = phone + " | " + email;
-//     } else if (phone) {
-//         result = phone;
-//     } else if (email) {
-//         result = email;
-//     };
-//     return result;
-// };
+function formatTextFieldSlack(contactInfo) {
+  var result = '';
+  var counter = 1;
+  for(var key in contactInfo) {
+    if ((counter <= 3) && (contactInfo[key])) {
+      switch(key) {
+          case 'twitter':
+              result = result + '<https://twitter.com/' + contactInfo[key] +'|Twitter> | ';
+              break;
+          case 'web':
+              result = result + '<' + contactInfo[key] +'|Web> | ';
+              break;
+          case 'chat':
+              result = result + '<' + contactInfo[key] +'|Chat> | ';
+              break;
+          case 'facebook':
+              result = result + '<' + contactInfo[key] +'|Facebook> | ';
+              break;
+          default:
+              result = result + contactInfo[key] + ' | ';
+      }
+      counter += 1;
+    }
+  }
+  if (result) {
+    result = result.slice(0,-3);
+  }
+  console.log("Formatted string from contact info: " + result);
+  return result;
+};
 
 // convert an arry of strings to one string separated by commas, with each entry *bolded*
 function convertArrayToBoldList(arrayOfStrings) {
@@ -118,5 +127,6 @@ module.exports = {
   queryPostsofCompany: queryPostsofCompany,
   colors: colors,
   convertArrayToBoldList: convertArrayToBoldList,
-  extractContactInfo: extractContactInfo
+  extractContactInfo: extractContactInfo,
+  formatTextFieldSlack: formatTextFieldSlack
 }
