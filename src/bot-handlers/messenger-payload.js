@@ -7,9 +7,8 @@ const companySearch = require('../services/company-api-gh.js');
 const phoneFormatter = require('phone-formatter');
 const utilities = require('../services/utilities.js');
 
-// candidate for joint function
+// Repeated function, different end function
 function loadCompanyToObj(responseObj, company) {
-  // attached associated top Posts of input Company
   return utilities.queryPostsofCompany(company)
     .then(function (company){
         responseObj.payloads = preparePayloadsOfObj(company);
@@ -119,7 +118,7 @@ function preparePayloadsOfObj(company) {
 }
 
 function nothingFound(responseObj) {
-    let nothingFoundElement = [{
+    let nothingFoundElement = [[{
         "title": "Nothing found! So Sorry!",
         "subtitle": "Please retry your inquiry, and be sure to spell the company name properly.",
         "buttons": [{
@@ -127,7 +126,7 @@ function nothingFound(responseObj) {
             "url": "https://gethuman.com",
             "title": "Solve for Me - $20"
         }],
-    }];
+    }]];
     responseObj.payloads = nothingFoundElement;
     console.log ("Loading a NOTHING FOUND payload into response object");
     return responseObj;

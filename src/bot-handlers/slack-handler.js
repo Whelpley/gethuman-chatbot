@@ -24,6 +24,8 @@ function getResponseObj(context) {
   if (!textInput) {
     return Q.when(prepareResponse.inputPrompt(responseObj));
   }
+
+  // repeat function
   return Q.when(companySearch.findAllByText(textInput))
   .then(function (companySearchResults) {
     // console.log("Company Search Results: " + JSON.stringify(companySearchResults).substring(0,200));
@@ -47,6 +49,7 @@ function getResponseObj(context) {
       console.log("Going with first result from Companies search");
     };
 
+    // mini-duplicated function
     var companyNames = companySearchResults.map(function(eachCompany) {
       return eachCompany.name;
     })
@@ -60,9 +63,11 @@ function getResponseObj(context) {
   });
 }
 
+
 // Repeated function
 function sendResponseToPlatform(payload, context) {
   if (context.isTest) {
+    console.log("Test flag detected in payload context.");
     context.sendResponse(payload);
     return Q.when();
   }
@@ -102,6 +107,7 @@ function sendRequestsAsReply(payload, context) {
 }
 
 // duplicated function - export to module!
+// points to different send function though
 function sendErrorResponse(err, context) {
   console.log("Ran into an error: " + err);
   var payload = prepareResponse.error(err);

@@ -31,6 +31,8 @@ function getResponseObj(context) {
     if (event.message && event.message.text) {
       let textInput = event.message.text;
       console.log("Text input received from user: " + textInput);
+
+    // repeat function
       return Q.when(companySearch.findAllByText(textInput))
       .then(function (companySearchResults) {
         // console.log("Company Search Results: " + JSON.stringify(companySearchResults).substring(0,200));
@@ -46,11 +48,11 @@ function getResponseObj(context) {
         }
         else if (exactMatch && exactMatch.length) {
           company = exactMatch[0];
-          console.log("Found an exact match from Companies search: " + JSON.stringify(exactMatch[0]).substring(0,200));
+          console.log("Found an exact match from Companies search");
         }
         else {
           company = companySearchResults[0];
-          console.log("Going with first result from Companies search: " + JSON.stringify(company).substring(0,200));
+          console.log("Going with first result from Companies search");
         };
 
         // capture other company names for later use
@@ -83,7 +85,7 @@ function sendResponseToPlatform(payload, context) {
     console.log("Test flag detected in payload context.");
     // triggers inherent Response function from context - not working
     // (should it send anything at all?)
-    // context.sendResponse(payload);
+    context.sendResponse(payload);
     // context.finishResponse();
     return Q.when();
   }
@@ -103,7 +105,7 @@ function sendRequestsAsReply(payload, context) {
   console.log("Last step before sending this payload: " + JSON.stringify(payload));
   var deferred = Q.defer();
   var sender = context.userRequest.entry[0].messaging[0].sender.id;
-  console.log("Sender: " + sender);
+  // console.log("Sender: " + sender);
     request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
         qs: {access_token: token},
@@ -137,7 +139,7 @@ function sendRequestsAsReply(payload, context) {
 }
 
 // duplicated in Slack/etc? export to module!
-// (once we figure out how to point back to separate Send functions)
+// points to different send function though
 function sendErrorResponse(err, context) {
   console.log("Ran into an error: " + err);
   var payload = prepareResponse.error(err);

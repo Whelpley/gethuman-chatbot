@@ -6,7 +6,7 @@ const Q = require('q');
 const companySearch = require('../services/company-api-gh');
 const utilities = require('../services/utilities');
 
-// Repeated function
+// Repeated function, different end function
 function loadCompanyToObj(responseObj, company) {
   return utilities.queryPostsofCompany(company)
     .then(function (company){
@@ -58,7 +58,7 @@ function preparePayloadsOfObj(company) {
     }
     else {
     // if no Posts exist for company, prompt for input
-        payloads[0].text = "We did not find any issues matching the input \"" +name + "\", please try entering the name of the company your are looking for.";
+        payloads[0].text = "We did not find any issues matching the input \"" +name + "\", please try entering the name of the company you are looking for.";
     };
 
     // attach Company contact info:
