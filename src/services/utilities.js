@@ -80,9 +80,9 @@ function extractContactInfo(company) {
 function formatTextField(contactInfo) {
   var result = '';
   var counter = 1;
-  for(let i = 0 in contactInfo) {
-    if ((counter <= 3) && (contactInfo[i])) {
-      result = result + contactInfo[i] + ' | ';
+  for(var key in contactInfo) {
+    if ((counter <= 3) && (contactInfo[key])) {
+      result = result + contactInfo[key] + ' | ';
       counter += 1;
     }
   }
