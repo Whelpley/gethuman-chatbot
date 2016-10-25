@@ -46,12 +46,12 @@ function preparePayloadsOfObj(company) {
             "buttons": [{
                 "type": "web_url",
                 "url": "https://gethuman.com?company=" + encodeURIComponent(name) ,
-                "title": "Solve for Me - $20"
+                "title": "Solve this for Me - $20"
             },
             {
                 "type": "web_url",
                 "url": "https://answers.gethuman.co/_" + encodeURIComponent(urlId) ,
-                "title": "More Info ..."
+                "title": "More info ..."
             }],
         };
         postElements.push(singleElement);
@@ -65,8 +65,8 @@ function preparePayloadsOfObj(company) {
     // need to harvest other company contact info... make a function!
 
     var companyInfoElement = [{
-        "title": "Contact info for " + name + ":",
-        "subtitle": email || ''
+        "title": "Best way to contact " + name + ":",
+        "subtitle": email || '___'
     }];
     //
     if (phoneIntl) {
@@ -106,13 +106,15 @@ function preparePayloadsOfObj(company) {
 }
 
 function nothingFound(responseObj) {
+    var textInput = responseObj.context.textInput;
+
     let nothingFoundElement = [[{
-        "title": "Nothing found! So Sorry!",
-        "subtitle": "Please retry your inquiry, and be sure to spell the company name properly.",
+        "title": "Nothing found!",
+        "subtitle": "I couldn't tell what you meant by \"" + textInput + "\". Please tell me company you are looking for. (ex: \"Verizon Wireless\"",
         "buttons": [{
             "type": "web_url",
             "url": "https://gethuman.com",
-            "title": "Solve for Me - $20"
+            "title": "Solve this for Me - $20"
         }],
     }]];
     responseObj.payloads = nothingFoundElement;

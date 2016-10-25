@@ -31,6 +31,7 @@ function getResponseObj(context) {
 
     if (event.message && event.message.text) {
       let textInput = event.message.text;
+      responseObj.context.textInput = textInput;
       console.log("Text input received from user: " + textInput);
 
     // repeat function

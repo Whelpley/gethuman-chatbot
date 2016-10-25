@@ -44,11 +44,11 @@ function preparePayloadsOfObj(company) {
                 "color": color,
                 "fields": [
                     {
-                        "value": "<https://gethuman.com?company=" + encodeURIComponent(name) + "|Solve for me - $20>",
+                        "value": "<https://gethuman.com?company=" + encodeURIComponent(name) + "|Solve this for me - $20>",
                         "short": true
                     },
                     {
-                        "value": "<https://answers.gethuman.co/_" + encodeURIComponent(urlId) + "|More Info ...>",
+                        "value": "<https://answers.gethuman.co/_" + encodeURIComponent(urlId) + "|More info ...>",
                         "short": true
                     }
                 ]
@@ -74,7 +74,7 @@ function preparePayloadsOfObj(company) {
             "fallback": "Other solutions",
             "title": "Were you talking about " + name + "?",
             "color": '#BBBBBB',
-            "text": "Or maybe you meant " + otherCompaniesList,
+            "text": "Or maybe you meant " + otherCompaniesList + "?",
             "mrkdwn_in": ["text"]
         });
     }
@@ -84,9 +84,10 @@ function preparePayloadsOfObj(company) {
 
 // unique function
 function nothingFound(responseObj) {
+    var textInput = responseObj.context.userRequest.text;
     responseObj.payloads = [{
         username: 'GetHuman',
-        text: "We could not find anything matching your input to our database. Could you tell me what company you are looking to contact?",
+        text: "I couldn't tell what you meant by \"" + textInput + "\". Please tell me company you are looking for. (ex: \"/gethuman Verizon Wireless\"",
         icon_emoji: ':gethuman:',
         response_type: 'ephemeral'
     }]
