@@ -7,6 +7,7 @@ const postSearch = require('../services/post-api-gh');
 const prepareResponse = require('./messenger-payload');
 const utilities = require('../services/utilities');
 const config = require('../config/config');
+// new config vars!
 
 const token = config.FB_PAGE_ACCESS_TOKEN;
 // const token = process.env.facebookAccessToken;
