@@ -1,5 +1,3 @@
-// prepares payloads for FB Messenger responses
-
 'use strict'
 
 const Q = require('q');
