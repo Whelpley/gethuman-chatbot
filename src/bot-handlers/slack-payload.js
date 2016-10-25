@@ -37,7 +37,7 @@ function preparePayloadsOfObj(company) {
         for (let i = 0; i < posts.length; i++) {
             let title = posts[i].title || '';
             let urlId = posts[i].urlId || ''
-            let color = colors[i+2];
+            let color = colors[i];
             let singleAttachment = {
                 "fallback": "Issue for " + name,
                 "title": title,
@@ -66,7 +66,7 @@ function preparePayloadsOfObj(company) {
         payloads[0].attachments.push({
             "fallback": "Contact info for " + name,
             "title": "Best way to contact " + name + ":",
-            "color": colors[0],
+            "color": '#999999',
             "text": phoneAndEmail,
         });
     }
@@ -78,7 +78,7 @@ function preparePayloadsOfObj(company) {
         payloads[0].attachments.push({
             "fallback": "Other solutions",
             "title": "Were you talking about " + name + "?",
-            "color": colors[1],
+            "color": '#BBBBBB',
             "text": "Or maybe you meant " + otherCompaniesList,
             "mrkdwn_in": ["text"]
         });
