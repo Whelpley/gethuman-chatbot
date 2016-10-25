@@ -25,14 +25,9 @@ function preparePayloadsOfObj(company) {
     var otherCompanies = company.otherCompanies;
     var name = company.name;
 
-    // extract to a helper function
-    var emailContactMethods = company.contactMethods.filter(function (method) {
-        return method.type === "email";
-    });
-    var email = (emailContactMethods && emailContactMethods.length) ? emailContactMethods[0].target : '';
-
-    var phone = company.callback.phone || '';
-    var phoneIntl = (phone) ? phoneFormatter.format(phone, "+1NNNNNNNNNN") : '';
+    var contactInfo = utilities.extractContactInfo(company);
+    var topContacts = utilities.formatTextField(contactInfo);
+    var phoneIntl = (contactInfo.phone) ? phoneFormatter.format(phone, "+1NNNNNNNNNN") : '';
 
     if (posts && posts.length) {
     // if Posts exist, send Post info cards
@@ -62,17 +57,15 @@ function preparePayloadsOfObj(company) {
     }
 
     // make Company Info Card
-    // need to harvest other company contact info... make a function!
-
     var companyInfoElement = [{
-        "title": "Best way to contact " + name + ":",
-        "subtitle": email || '___'
+        "title": "Best ways to contact " + name + ":",
+        "subtitle": topContacts
     }];
     //
     if (phoneIntl) {
         companyInfoElement[0].buttons = [{
             "type": "phone_number",
-            "title": phone,
+            "title": contactInfo.phone,
             "payload": phoneIntl
         }];
     };
@@ -101,6 +94,18 @@ function preparePayloadsOfObj(company) {
         payloads.push(otherCompaniesElement);
     }
 
+    // check if nothing is in payload at this point - return NothingFound payload if so
+    if (!payloads.length) {
+        payloads.push([{
+            "title": "Nothing found!",
+            "subtitle": "I couldn't tell what you meant by \"" + textInput + "\". Please tell me company you are looking for. (ex: \"Verizon Wireless\")",
+            "buttons": [{
+                "type": "web_url",
+                "url": "https://gethuman.com",
+                "title": "Solve this for Me - $20"
+            }],
+        }])
+    }
     // console.log("All payload elements prepared: " + JSON.stringify(payloads));
     return payloads;
 }
@@ -110,7 +115,7 @@ function nothingFound(responseObj) {
 
     let nothingFoundElement = [[{
         "title": "Nothing found!",
-        "subtitle": "I couldn't tell what you meant by \"" + textInput + "\". Please tell me company you are looking for. (ex: \"Verizon Wireless\"",
+        "subtitle": "I couldn't tell what you meant by \"" + textInput + "\". Please tell me company you are looking for. (ex: \"Verizon Wireless\")",
         "buttons": [{
             "type": "web_url",
             "url": "https://gethuman.com",

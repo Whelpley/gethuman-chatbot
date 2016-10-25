@@ -64,7 +64,7 @@ function preparePayloadsOfObj(company) {
     // ... needs other company contact methods
     payloads[0].attachments.push({
         "fallback": "Contact info for " + name,
-        "title": "Best way to contact " + name + ":",
+        "title": "Best ways to contact " + name + ":",
         "color": '#999999',
         "text": topContacts,
     });
@@ -84,7 +84,7 @@ function preparePayloadsOfObj(company) {
 
     // check if nothing is in payload at this point - return NothingFound payload if so
     if (!payloads[0].attachments.length) {
-        payloads[0].text = "I couldn't find anything for \"" + name + "\". Please tell me company you are looking for. (ex: \"/gethuman Verizon Wireless\""
+        payloads[0].text = "I couldn't find anything for \"" + name + "\". Please tell me company you are looking for. (ex: \"/gethuman Verizon Wireless\")"
     }
 
     return payloads;
@@ -95,7 +95,7 @@ function nothingFound(responseObj) {
     var textInput = responseObj.context.userRequest.text;
     responseObj.payloads = [{
         username: 'GetHuman',
-        text: "I couldn't tell what you meant by \"" + textInput + "\". Please tell me company you are looking for. (ex: \"/gethuman Verizon Wireless\"",
+        text: "I couldn't tell what you meant by \"" + textInput + "\". Please tell me company you are looking for. (ex: \"/gethuman Verizon Wireless\")",
         icon_emoji: ':gethuman:',
         response_type: 'ephemeral'
     }]
