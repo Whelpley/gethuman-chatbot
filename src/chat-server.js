@@ -30,10 +30,16 @@ function startServer(botHandlers, actionHandlers) {
   app.post('/roll', require('./deprecated/dicebot.js'));
   // for Facebook verification
   app.get('/v3/gethuman', function (req, res) {
-    console.log("Receiving verification request from Facebook.");
-    var context = getContextFromExpressReqRes(req, res);
-    var botHandler = brain.getBotHandler(context);
-    botHandler.verify(req, res);
+    // console.log("Receiving verification request from Facebook.");
+    // var context = getContextFromExpressReqRes(req, res);
+    // var botHandler = brain.getBotHandler(context);
+    // botHandler.verify(req, res);
+    console.log("Receiving webhook verification from FB.");
+    console.log("Body of webhook verification from FB: " + JSON.stringify(req.body));
+    if (req.query['hub.verify_token'] === 'cmon_verify_me') {
+        res.send(req.query['hub.challenge'])
+    }
+    res.send('Error, wrong token');
   })
 
 // reaches Slack version
