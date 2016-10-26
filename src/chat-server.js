@@ -32,7 +32,7 @@ function startServer(botHandlers, actionHandlers) {
   app.get('/v3/gethuman', function (req, res) {
     console.log("Receiving verification request from Facebook.");
     var context = getContextFromExpressReqRes(req, res);
-    var botHandler = getBotHandler(context);
+    var botHandler = brain.getBotHandler(context);
     botHandler.verify(req, res);
   })
 
