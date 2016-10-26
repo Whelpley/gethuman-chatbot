@@ -33,13 +33,13 @@ function getResponseObj(context) {
       let textInput = event.message.text;
       responseObj.context.textInput = textInput;
       console.log("Text input received from user: " + textInput);
-      summonResponse(textInput);
+      summonResponse(responseObj, textInput);
     }
     else if (event.postback) {
       let textInput = event.postback.payload;
       responseObj.context.textInput = textInput;
       console.log("Text input received from postback: " + textInput);
-      summonResponse(textInput);
+      summonResponse(responseObj, textInput);
     }
     else {
       console.log("Non-text-input Post detected from FB");
