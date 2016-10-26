@@ -155,7 +155,7 @@ function sendErrorResponse(err, context) {
 }
 
 function verify(req, res) {
-    console.log("Receiving webhook verification from FB.")
+    console.log("Receiving webhook verification from FB.");
     if (req.query['hub.verify_token'] === 'cmon_verify_me') {
         res.send(req.query['hub.challenge'])
     }
