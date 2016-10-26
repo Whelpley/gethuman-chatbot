@@ -160,7 +160,7 @@ function formatContactButtonsMessenger(contactInfo) {
           case 'email':
               button = {
                 "type": "web_url",
-                "url": 'mailto:' + contactInfo[key],
+                "url": contactInfo[key],
                 "title": 'Email'
               };
               break;
