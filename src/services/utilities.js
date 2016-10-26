@@ -148,8 +148,10 @@ function formatContactButtonsMessenger(contactInfo) {
           default:
               console.log("Something went wrong in Facebook contact button formatting");
       }
-      buttons.push(button);
-      counter += 1;
+      if (button) {
+        buttons.push(button);
+        counter += 1;
+      };
     }
   }
   console.log("Buttons formatted from contact info: " + JSON.stringify(buttons));
