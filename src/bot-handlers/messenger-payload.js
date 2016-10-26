@@ -81,10 +81,8 @@ function preparePayloadsOfObj(company) {
             otherCompaniesElement[0].buttons.push({
                 "type": "postback",
                 "title": altCompany,
-                // does the payload need to be an object?
-                "payload": JSON.stringify({
-                    "newSearch": altCompany
-                })
+                // payload must be string, max 100 chars
+                "payload": altCompany
             })
         })
         console.log("Other Companies Element prepared: " + JSON.stringify(otherCompaniesElement));

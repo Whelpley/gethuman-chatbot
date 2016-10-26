@@ -35,7 +35,7 @@ function getResponseObj(context) {
       return summonResponse(responseObj, textInput);
     }
     else if (event.postback) {
-      let textInput = event.postback.payload.newSearch;
+      let textInput = event.postback.payload;
       responseObj.context.textInput = textInput;
       console.log("Text input received from postback: " + textInput);
       return summonResponse(responseObj, textInput);
