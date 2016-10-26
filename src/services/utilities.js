@@ -143,11 +143,7 @@ function formatContactButtonsMessenger(contactInfo) {
               }
               break;
           case 'email':
-              button = {
-                "type": "web_url",
-                "url": 'mailto:' + contactInfo[key],
-                "title": 'Email'
-              };
+              console.log("Email detected, not creating button for it because Messenger won't let us.");
               break;
           default:
               console.log("Something went wrong in Facebook contact button formatting");

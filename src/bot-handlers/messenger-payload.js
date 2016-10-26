@@ -57,8 +57,11 @@ function preparePayloadsOfObj(company) {
         "title": "Best ways to contact " + name + ":",
         'buttons': utilities.formatContactButtonsMessenger(contactInfo)
     }];
+    if (contactInfo.email) {
+        companyInfoElement[0].subtitle = contactInfo.email;
+    };
     // only push in if at least one button exists:
-    if (companyInfoElement[0].buttons.length) {
+    if (companyInfoElement[0].subtitle || companyInfoElement[0].buttons.length) {
         console.log("Company Info Element prepared: " + JSON.stringify(companyInfoElement));
         payloads.push(companyInfoElement);
     };
