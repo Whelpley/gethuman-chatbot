@@ -160,8 +160,8 @@ function formatContactButtonsMessenger(contactInfo) {
           case 'email':
               button = {
                 "type": "web_url",
-                "url": 'www.gethuman.com',
-                "title": contactInfo[key]
+                "url": 'mailto:' + contactInfo[key],
+                "title": 'Email'
               };
               break;
           default:
