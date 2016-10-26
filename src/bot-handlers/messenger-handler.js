@@ -33,43 +33,13 @@ function getResponseObj(context) {
       let textInput = event.message.text;
       responseObj.context.textInput = textInput;
       console.log("Text input received from user: " + textInput);
-
-    // repeat function
-      return Q.when(companySearch.findAllByText(textInput))
-      .then(function (companySearchResults) {
-        // console.log("Company Search Results: " + JSON.stringify(companySearchResults).substring(0,200));
-        var company = {};
-
-        // separate out this as function - duplicated in all bots
-        var exactMatch = companySearchResults.filter(function(eachCompany) {
-          return eachCompany.name.toLowerCase() === textInput.toLowerCase();
-        });
-        if (!companySearchResults.length) {
-          console.log("Nothing found in initial Company search");
-          return prepareResponse.nothingFound(responseObj);
-        }
-        else if (exactMatch && exactMatch.length) {
-          company = exactMatch[0];
-          console.log("Found an exact match from Companies search");
-        }
-        else {
-          company = companySearchResults[0];
-          console.log("Going with first result from Companies search");
-        };
-
-        // capture other company names for later use
-        var companyNames = companySearchResults.map(function(eachCompany) {
-          return eachCompany.name;
-        })
-        // filter out the textInput from companyNames
-        company.otherCompanies = companyNames.filter(function(name){
-          return name.toLowerCase() !== textInput.toLowerCase();
-        });
-        console.log("Other companies filtered from input:" + JSON.stringify(company.otherCompanies));
-
-        // will format responseObj.payloads according to Company contents
-        return prepareResponse.loadCompanyToObj(responseObj, company);
-      });
+      summonResponse(textInput);
+    }
+    else if (event.postback) {
+      let textInput = event.postback.payload;
+      responseObj.context.textInput = textInput;
+      console.log("Text input received from postback: " + textInput);
+      summonResponse(textInput);
     }
     // returning a blank object if no text input detected
     else {
@@ -77,6 +47,44 @@ function getResponseObj(context) {
       return Q.when(responseObj);
     }
   }
+}
+
+function summonResponse(textInput) {
+  return Q.when(companySearch.findAllByText(textInput))
+  .then(function (companySearchResults) {
+    // console.log("Company Search Results: " + JSON.stringify(companySearchResults).substring(0,200));
+    var company = {};
+
+    // separate out this as function - duplicated in all bots
+    var exactMatch = companySearchResults.filter(function(eachCompany) {
+      return eachCompany.name.toLowerCase() === textInput.toLowerCase();
+    });
+    if (!companySearchResults.length) {
+      console.log("Nothing found in initial Company search");
+      return prepareResponse.nothingFound(responseObj);
+    }
+    else if (exactMatch && exactMatch.length) {
+      company = exactMatch[0];
+      console.log("Found an exact match from Companies search");
+    }
+    else {
+      company = companySearchResults[0];
+      console.log("Going with first result from Companies search");
+    };
+
+    // capture other company names for later use
+    var companyNames = companySearchResults.map(function(eachCompany) {
+      return eachCompany.name;
+    })
+    // filter out the textInput from companyNames
+    company.otherCompanies = companyNames.filter(function(name){
+      return name.toLowerCase() !== textInput.toLowerCase();
+    });
+    console.log("Other companies filtered from input:" + JSON.stringify(company.otherCompanies));
+
+    // will format responseObj.payloads according to Company contents
+    return prepareResponse.loadCompanyToObj(responseObj, company);
+  });
 }
 
 // duplicate fcn in ./slack-handler (almost) - candidate for module

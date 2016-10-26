@@ -79,11 +79,19 @@ function preparePayloadsOfObj(company) {
         var otherCompaniesSubSet = otherCompanies.slice(0,3);
         otherCompaniesSubSet.forEach(function(altCompany){
             otherCompaniesElement[0].buttons.push({
-                "type": "web_url",
-                "url": "https://gethuman.com?company=" + encodeURIComponent(altCompany),
-                "title": altCompany
+                "type": "postback",
+                "title": altCompany,
+                // does the payload need to be an object?
+                "payload": altCompany
             })
         })
+        // otherCompaniesSubSet.forEach(function(altCompany){
+        //     otherCompaniesElement[0].buttons.push({
+        //         "type": "web_url",
+        //         "url": "https://gethuman.com?company=" + encodeURIComponent(altCompany),
+        //         "title": altCompany
+        //     })
+        // })
         console.log("Other Companies Element prepared: " + JSON.stringify(otherCompaniesElement));
         payloads.push(otherCompaniesElement);
     }
