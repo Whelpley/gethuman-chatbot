@@ -67,22 +67,7 @@ function extractContactInfo(company) {
   return contactInfo;
 }
 
-// takes contactInfo object, makes string of each existing value, separated by "|", max 3 values
-function formatTextField(contactInfo) {
-  var result = '';
-  var counter = 1;
-  for(var key in contactInfo) {
-    if ((counter <= 3) && (contactInfo[key])) {
-      result = result + contactInfo[key] + ' | ';
-      counter += 1;
-    }
-  }
-  if (result) {
-    result = result.slice(0,-3);
-  }
-  console.log("Formatted string from contact info: " + result);
-  return result;
-};
+
 
 function formatTextFieldSlack(contactInfo) {
   var result = '';
@@ -160,7 +145,7 @@ function formatContactButtonsMessenger(contactInfo) {
           case 'email':
               button = {
                 "type": "web_url",
-                "url": contactInfo[key],
+                "url": 'mailto:' + contactInfo[key],
                 "title": 'Email'
               };
               break;
@@ -184,7 +169,6 @@ function convertArrayToBoldList(arrayOfStrings) {
 
 module.exports = {
   preResponse: preResponse,
-  formatTextField: formatTextField,
   queryPostsofCompany: queryPostsofCompany,
   colors: colors,
   convertArrayToBoldList: convertArrayToBoldList,
