@@ -82,9 +82,9 @@ function preparePayloadsOfObj(company) {
                 "type": "postback",
                 "title": altCompany,
                 // does the payload need to be an object?
-                "payload": {
+                "payload": JSON.stringify({
                     "newSearch": altCompany
-                }
+                })
             })
         })
         console.log("Other Companies Element prepared: " + JSON.stringify(otherCompaniesElement));
