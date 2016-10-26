@@ -41,7 +41,6 @@ function getResponseObj(context) {
       console.log("Text input received from postback: " + textInput);
       summonResponse(textInput);
     }
-    // returning a blank object if no text input detected
     else {
       console.log("Non-text-input Post detected from FB");
       return Q.when(responseObj);
@@ -49,7 +48,7 @@ function getResponseObj(context) {
   }
 }
 
-function summonResponse(textInput) {
+function summonResponse(responseObj, textInput) {
   return Q.when(companySearch.findAllByText(textInput))
   .then(function (companySearchResults) {
     // console.log("Company Search Results: " + JSON.stringify(companySearchResults).substring(0,200));
