@@ -77,34 +77,33 @@ function handleRequest(botHandlers, actionHandlers) {
 
 //************** NEW CODE - action handlers
 
-    // translating the JSON body of the request from the bot platform format
-    // into a common format that we define
     var commonRequest = botHandler.translateRequestToCommonFormat(context);
-
     // first get the action handler (right now just the problem lookup)
     var actionHandler = brain.getActionHandler(actionHandlers);
 
-    actionHandler.processRequest(commonRequest)
-      .then(function (commonResponse) {
-        // form up the payloads
-        var botSpecificResponse = botHandler.translateCommonResponseToPlatform(commonResponse);
-        // may not be necessary.... already is an array
-        var payloads = [].concat(botSpecificResponse.payloads || []);
-        var context = botSpecificResponse.context;
-        // make an array of call functions
-        var calls = payloads.map(function (payload) {
-          return function () {
-            return botHandler.sendResponseToPlatform(payload, context)
-              .catch(function (err) {
-                console.log('err is ' + err);
-              });
-          }
+    if (commonRequest) {
+      actionHandler.processRequest(commonRequest)
+        .then(function (commonResponse) {
+          // form up the payloads
+          var botSpecificResponse = botHandler.translateCommonResponseToPlatform(commonResponse);
+          // may not be necessary.... already is an array
+          var payloads = [].concat(botSpecificResponse.payloads || []);
+          var context = botSpecificResponse.context;
+          // make an array of call functions
+          var calls = payloads.map(function (payload) {
+            return function () {
+              return botHandler.sendResponseToPlatform(payload, context)
+                .catch(function (err) {
+                  console.log('err is ' + err);
+                });
+            }
+          });
+          return chainPromises(calls);
+        })
+        .catch(function (err) {
+          botHandler.sendErrorResponse(err, context);
         });
-        return chainPromises(calls);
-      })
-      .catch(function (err) {
-        botHandler.sendErrorResponse(err, context);
-      });
+    }
 
 
 //************** OLD CODE

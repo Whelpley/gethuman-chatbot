@@ -71,6 +71,7 @@ function verify() {
 // ------------ New Version Code! --------------
 
 // what needs to be known before processing?
+// should this extract more from the context rather than keep passing it around?{}
 function translateRequestToCommonFormat(context) {
   return {
     userInput: context.userRequest.text,
@@ -79,10 +80,32 @@ function translateRequestToCommonFormat(context) {
 }
 
 function translateCommonResponseToPlatform(commonResponse) {
-// need if/else depending on type - right now only handles standard input
   var botSpecificResponse = {
     payloads:  [],
     context: commonResponse.context
+  }
+
+// Case: no user input
+  if (!commonResponse.data) {
+    // is this the right way to load the payload?
+    botSpecificResponse.payloads.push([{
+        username: 'GetHuman',
+        text: "Tell me the company you would like to contact.",
+        response_type: 'ephemeral',
+        icon_emoji: ':gethuman:'
+    }]);
+    return botSpecificResponse;
+  }
+// Case: nothing returned from Companies search
+  else if (commonResponse.data === {}) {
+    var textInput = commonResponse.context.userRequest.text;
+    botSpecificResponse.payloads = [{
+        username: 'GetHuman',
+        text: "I couldn't tell what you meant by \"" + textInput + "\". Please tell me company you are looking for. (ex: \"/gethuman Verizon Wireless\")",
+        icon_emoji: ':gethuman:',
+        response_type: 'ephemeral'
+    }];
+    return botSpecificResponse;
   }
 
   var name = commonResponse.data.name;
@@ -130,7 +153,6 @@ function translateCommonResponseToPlatform(commonResponse) {
   }
 
   // attach Company contact info:
-  // ... needs other company contact methods
   payloads[0].attachments.push({
       "fallback": "Contact info for " + name,
       "title": "Best ways to contact " + name + ":",
@@ -141,7 +163,6 @@ function translateCommonResponseToPlatform(commonResponse) {
   // attach Other Companies info if they exist
   if (otherCompanies && otherCompanies.length) {
       var otherCompaniesList = utilities.convertArrayToBoldList(otherCompanies);
-      console.log("Converted Other Companies list: " + otherCompaniesList);
       payloads[0].attachments.push({
           "fallback": "Other solutions",
           "title": "Were you talking about " + name + "?",
@@ -171,12 +192,12 @@ function sendResponseToPlatform(payload, context) {
     return Q.when();
   }
   else {
-    return sendRequestsAsReply(payload, context);
+    return sendRequestAsReply(payload, context);
   }
 }
 
 // unique function
-function sendRequestsAsReply(payload, context) {
+function sendRequestAsReply(payload, context) {
   console.log("Last step before sending this payload: " + JSON.stringify(payload));
   var deferred = Q.defer();
   var path = config.slackAccessToken;

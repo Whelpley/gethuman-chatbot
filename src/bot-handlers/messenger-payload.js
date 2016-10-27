@@ -22,7 +22,6 @@ function preparePayloadsOfObj(company) {
     var posts = company.posts;
     var otherCompanies = company.otherCompanies;
     var name = company.name;
-
     var contactInfo = utilities.extractContactInfo(company);
 
     if (posts && posts.length) {
@@ -74,8 +73,6 @@ function preparePayloadsOfObj(company) {
             "subtitle": "Perhaps you would like to ask me about these companies:",
             "buttons": [],
         }];
-        // change these to a Postback to trigger a new search with altCompany as user input
-        // cull down Other Options to 3 - could make more scrolling cards if wanted...
         var otherCompaniesSubSet = otherCompanies.slice(0,3);
         otherCompaniesSubSet.forEach(function(altCompany){
             otherCompaniesElement[0].buttons.push({
@@ -89,7 +86,6 @@ function preparePayloadsOfObj(company) {
         payloads.push(otherCompaniesElement);
     }
 
-    // check if nothing is in payload at this point - return NothingFound payload if so
     if (!payloads.length) {
         payloads.push([{
             "title": "Nothing found!",
@@ -101,7 +97,6 @@ function preparePayloadsOfObj(company) {
             }],
         }])
     }
-    // console.log("All payload elements prepared: " + JSON.stringify(payloads));
     return payloads;
 }
 

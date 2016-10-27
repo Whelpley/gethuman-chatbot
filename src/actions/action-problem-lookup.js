@@ -9,17 +9,11 @@ const utilities = require('../services/utilities');
 // takes common request, returns Object
 function processRequest(commonRequest) {
   var commonResponse = {
-    // 'Standard', 'Nothing Found', ....
-    type: '',
-    // Company object, with Posts and Other Companies attached
-    data: {},
     context: commonRequest.context
   };
   var userInput = commonRequest.userInput;
 
-// still need to account for this case
   if (!userInput) {
-    commonResponse.type = 'No Input',
     return commonResponse;
   }
 
@@ -33,7 +27,7 @@ function processRequest(commonRequest) {
     });
     if (!companySearchResults.length) {
       console.log("Nothing found in initial Company search");
-      commonResponse.type = 'No Companies Found',
+      commonResponse.data = {},
       return commonResponse;
     }
     else if (exactMatch && exactMatch.length) {

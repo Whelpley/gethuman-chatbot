@@ -69,7 +69,7 @@ function extractContactInfo(commonResponse) {
 }
 
 
-
+//  should exist in Slack Handler
 function formatTextFieldSlack(contactInfo) {
   var result = '';
   var counter = 1;
@@ -101,6 +101,7 @@ function formatTextFieldSlack(contactInfo) {
   return result;
 };
 
+//  should exist in Messenger Handler
 function formatContactButtonsMessenger(contactInfo) {
   var buttons = [];
   var counter = 1;

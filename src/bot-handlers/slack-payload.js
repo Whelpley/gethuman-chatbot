@@ -1,4 +1,6 @@
 // prepares payloads for Slack responses
+// ALL DEPRECATED
+
 
 'use strict'
 
