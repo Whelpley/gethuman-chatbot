@@ -3,8 +3,8 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var request = require('request');
-var utilities = require('./services/utilities')
 var Q = require('q');
+var utilities = require('./services/utilities')
 var brain = require('./brain');
 
 function startServer(botHandlers, actionHandlers) {
@@ -72,14 +72,11 @@ function handleRequest(botHandlers, actionHandlers) {
 
     var context = getContextFromExpressReqRes(req, res);
     var botHandler = brain.getBotHandler(botHandlers, context);
+    var actionHandler = brain.getActionHandler(actionHandlers);
 
     utilities.preResponse(context);
 
-//************** NEW CODE - action handlers
-
     var commonRequest = botHandler.translateRequestToCommonFormat(context);
-    // first get the action handler (right now just the problem lookup)
-    var actionHandler = brain.getActionHandler(actionHandlers);
 
     if (commonRequest) {
       actionHandler.processRequest(commonRequest)
@@ -104,35 +101,6 @@ function handleRequest(botHandlers, actionHandlers) {
           botHandler.sendErrorResponse(err, context);
         });
     }
-
-
-//************** OLD CODE
-
-    // botHandler.getResponseObj(context)
-    // // responseObj.data is an array of payloads, each triggering its own request-send
-    //   .then(function (responseObj) {
-    //     // if only one object exists, puts it into an array
-    //     var payloads = [].concat(responseObj.payloads || []);
-
-    //     // var counter = 1;
-    //     // make an array of call functions
-    //     var calls = payloads.map(function (payload) {
-    //       return function () {
-    //         // console.log('in chain for sendResp ' + counter);
-    //         // counter++;
-    //         return botHandler.sendResponseToPlatform(payload, responseObj.context)
-    //           .catch(function (err) {
-    //             console.log('err is ' + err);
-    //           });
-    //       }
-    //     });
-    //     // console.log('# of calls is ' + calls.length);
-    //     // call each RequestReply in sequence
-    //     return chainPromises(calls);
-    //   })
-    //   .catch(function (err) {
-    //     return botHandler.sendErrorResponse(err, context);
-    //   });
   }
 }
 

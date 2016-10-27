@@ -2,8 +2,6 @@
 
 const request = require('request');
 const Q = require('q');
-const postSearch = require('../services/post-api-gh');
-const prepareResponse = require('./messenger-payload');
 const utilities = require('../services/utilities');
 const config = require('../config/config');
 
@@ -14,94 +12,7 @@ function isHandlerForRequest(context) {
   return (object === 'page') ? true : false;
 }
 
-// // Unique function, but repeated sub-functions
-// function getResponseObj(context) {
-//   var messaging_events = context.userRequest.entry[0].messaging;
-//   // console.log("All messaging events: " + JSON.stringify(messaging_events));
-//   for (let i = 0; i < messaging_events.length; i++) {
-//     var event = context.userRequest.entry[0].messaging[i];
-//     var responseObj = {
-//       payloads:  [],
-//       context: context
-//     };
-//     console.log("Event detected: " + JSON.stringify(event));
-
-//     if (event.message && event.message.text) {
-//       let textInput = event.message.text;
-//       responseObj.context.textInput = textInput;
-//       console.log("Text input received from user: " + textInput);
-//       return summonResponse(responseObj, textInput);
-//     }
-//     else if (event.postback) {
-//       let textInput = event.postback.payload;
-//       responseObj.context.textInput = textInput;
-//       console.log("Text input received from postback: " + textInput);
-//       return summonResponse(responseObj, textInput);
-//     }
-//     else {
-//       console.log("Non-text-input Post detected from FB");
-//       return Q.when(responseObj);
-//     }
-//   }
-// }
-
-// function summonResponse(responseObj, textInput) {
-//   return Q.when(companySearch.findAllByText(textInput))
-//   .then(function (companySearchResults) {
-//     // console.log("Company Search Results: " + JSON.stringify(companySearchResults).substring(0,200));
-//     var company = {};
-
-//     // separate out this as function - duplicated in all bots
-//     var exactMatch = companySearchResults.filter(function(eachCompany) {
-//       return eachCompany.name.toLowerCase() === textInput.toLowerCase();
-//     });
-//     if (!companySearchResults.length) {
-//       console.log("Nothing found in initial Company search");
-//       return prepareResponse.nothingFound(responseObj);
-//     }
-//     else if (exactMatch && exactMatch.length) {
-//       company = exactMatch[0];
-//       console.log("Found an exact match from Companies search");
-//     }
-//     else {
-//       company = companySearchResults[0];
-//       console.log("Going with first result from Companies search");
-//     };
-
-//     // capture other company names for later use
-//     var companyNames = companySearchResults.map(function(eachCompany) {
-//       return eachCompany.name;
-//     })
-//     // filter out the textInput from companyNames
-//     company.otherCompanies = companyNames.filter(function(name){
-//       return name.toLowerCase() !== textInput.toLowerCase();
-//     });
-//     console.log("Other companies filtered from input:" + JSON.stringify(company.otherCompanies));
-
-//     // will format responseObj.payloads according to Company contents
-//     return prepareResponse.loadCompanyToObj(responseObj, company);
-//   });
-// }
-
-
-
-// duplicated in Slack/etc? export to module!
-// points to different send function though
-function sendErrorResponse(err, context) {
-  console.log("Ran into an error: " + err);
-  var payload = [{
-        "title": "We ran into an error!",
-        "subtitle": JSON.stringify(error),
-        "buttons": [{
-            "type": "web_url",
-            "url": "https://gethuman.com",
-            "title": "Go to GetHuman"
-        }],
-    }];
-  sendRequestsAsReply(payload, context);
-}
-
-// no working just yet
+// no working just yet - needs to account for different structure of verification request
 function verify(req, res) {
     console.log("Receiving webhook verification from FB.");
     if (req.query['hub.verify_token'] === 'cmon_verify_me') {
@@ -109,8 +20,6 @@ function verify(req, res) {
     }
     res.send('Error, wrong token');
 }
-
-//------------------ New Code ------------------
 
 function translateRequestToCommonFormat(context) {
   var commonRequest = {
@@ -192,7 +101,7 @@ function translateCommonResponseToPlatform(commonResponse) {
   // make Company Info Card
   var companyInfoElement = [{
       "title": "Best ways to contact " + name + ":",
-      // this should live in this file
+      // this function should live in this file instead of utilities
       'buttons': utilities.formatContactButtonsMessenger(contactInfo)
   }];
   if (contactInfo.email) {
@@ -238,6 +147,21 @@ function translateCommonResponseToPlatform(commonResponse) {
 
   botSpecificResponse.payloads = payloads;
   return botSpecificResponse;
+}
+
+// duplicated in Slack/etc? export to module!
+function sendErrorResponse(err, context) {
+  console.log("Ran into an error: " + err);
+  var payload = [{
+        "title": "We ran into an error!",
+        "subtitle": JSON.stringify(error),
+        "buttons": [{
+            "type": "web_url",
+            "url": "https://gethuman.com",
+            "title": "Go to GetHuman"
+        }],
+    }];
+  sendRequestsAsReply(payload, context);
 }
 
 // duplicate function - live elsewhere?

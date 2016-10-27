@@ -6,7 +6,7 @@ const companySearch = require('../services/company-api-gh');
 const postSearch = require('../services/post-api-gh');
 const utilities = require('../services/utilities');
 
-// takes common request, returns Object
+// takes common request, returns Object with Data (Company Object) and Context
 function processRequest(commonRequest) {
   var commonResponse = {
     context: commonRequest.context

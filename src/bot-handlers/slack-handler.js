@@ -2,9 +2,6 @@
 
 const request = require('request');
 const Q = require('q');
-const companySearch = require('../services/company-api-gh');
-const postSearch = require('../services/post-api-gh');
-const prepareResponse = require('./slack-payload');
 const utilities = require('../services/utilities');
 const config = require('../config/config');
 
@@ -14,69 +11,23 @@ function isHandlerForRequest(context) {
   return (responseUrl && responseUrl.includes('hooks.slack.com')) ? true : false;
 }
 
-// // Unique function, but repeated sub-functions
-// function getResponseObj(context) {
-//   var textInput = context.userRequest.text;
-//   var responseObj = {
-//     payloads:  [],
-//     context: context
-//   };
-//   if (!textInput) {
-//     return Q.when(prepareResponse.inputPrompt(responseObj));
-//   }
-//   // repeat function
-//   return Q.when(companySearch.findAllByText(textInput))
-//   .then(function (companySearchResults) {
-//     // console.log("Company Search Results: " + JSON.stringify(companySearchResults).substring(0,200));
-//     var company = {};
-
-//     // separate out this as function - duplicated in all bots
-//     var exactMatch = companySearchResults.filter(function(eachCompany) {
-//       return eachCompany.name.toLowerCase() === textInput.toLowerCase();
-//     });
-
-//     if (!companySearchResults.length) {
-//       console.log("Nothing found in initial Company search");
-//       return prepareResponse.nothingFound(responseObj);
-//     }
-//     else if (exactMatch && exactMatch.length) {
-//       company = exactMatch[0];
-//       console.log("Found an exact match from Companies search");
-//     }
-//     else {
-//       company = companySearchResults[0];
-//       console.log("Going with first result from Companies search");
-//     };
-
-//     // mini-duplicated function
-//     var companyNames = companySearchResults.map(function(eachCompany) {
-//       return eachCompany.name;
-//     })
-//     // filter out the textInput
-//     company.otherCompanies = companyNames.filter(function(name){
-//       return name.toLowerCase() !== textInput.toLowerCase();
-//     });
-//     console.log("Other companies filtered from input:" + JSON.stringify(company.otherCompanies));
-
-//     return prepareResponse.loadCompanyToObj(responseObj, company);
-//   });
-// }
-
 // not needed?
 // will delete this if won't cause problems when missing
 function verify() {
   console.log("Nothing to see here.")
 }
 
-// ------------ New Version Code! --------------
-
 // what needs to be known before processing?
 // should this extract more from the context rather than keep passing it around?{}
 function translateRequestToCommonFormat(context) {
-  return {
-    userInput: context.userRequest.text,
+  var commonRequest = {
     context: context
   };
+  var text = context.userRequest.text
+  if (text) {
+    commonRequest.userInput = text;
+  }
+  return commonRequest;
 }
 
 function translateCommonResponseToPlatform(commonResponse) {
