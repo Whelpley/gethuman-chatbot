@@ -84,7 +84,7 @@ function preparePayloadsOfObj(company) {
 
     // check if nothing is in payload at this point - return NothingFound payload if so
     if (!payloads[0].attachments.length) {
-        payloads[0].text = "I couldn't find anything for \"" + name + "\". Please tell me company you are looking for. (ex: \"/gethuman Verizon Wireless\")"
+        payloads[0].text = "I couldn't find anything for \"" + name + "\". Please tell me which company you are looking for. (ex: \"/gethuman Verizon Wireless\")"
     }
     console.log("About to return this Slack payload for sending: " + JSON.stringify(payloads));
     return payloads;
