@@ -84,7 +84,7 @@ function handleRequest(botHandlers, actionHandlers) {
     // first get the action handler (right now just the problem lookup)
     var actionHandler = brain.getActionHandler(actionHandlers);
 
-    actionHandler.processRequest(commonRequest);
+    actionHandler.processRequest(commonRequest)
       .then(function (commonResponse) {
         // form up the payloads
         var botSpecificResponse = botHandler.translateCommonResponseToPlatform(commonResponse);
