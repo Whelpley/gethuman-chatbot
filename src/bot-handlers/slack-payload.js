@@ -31,7 +31,7 @@ function preparePayloadsOfObj(company) {
         username: 'GetHuman',
         icon_emoji: ':gethuman:',
         // set response_type to 'in_channel' if we want all to see it
-        response_type: 'ephemeral',
+        'response_type': 'ephemeral',
         attachments: []
     }];
 
