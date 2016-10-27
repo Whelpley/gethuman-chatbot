@@ -15,8 +15,9 @@ function processRequest(commonRequest) {
     data: {},
     context: commonRequest.context
   };
-  var userInput = commonResponse.userInput;
+  var userInput = commonRequest.userInput;
 
+// still need to account for this case
   if (!userInput) {
     commonResponse.type = 'No Input',
     return commonResponse;
@@ -60,6 +61,7 @@ function processRequest(commonRequest) {
 
     commonResponse.type = 'Standard',
     commonResponse.data = company,
+    console.log("About the return a Common Response from action handler: " +JSON.stringify(commonResponse).substring(0,200));
     return commonResponse;
   });
 }
