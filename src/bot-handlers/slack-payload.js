@@ -31,9 +31,7 @@ function preparePayloadsOfObj(company) {
         username: 'GetHuman',
         icon_emoji: ':gethuman:',
         // set response_type to 'in_channel' if we want all to see it
-        // response_type: 'ephemeral',
-        response_type: 'in_channel',
-
+        response_type: 'ephemeral',
         attachments: []
     }];
 
@@ -88,7 +86,7 @@ function preparePayloadsOfObj(company) {
     if (!payloads[0].attachments.length) {
         payloads[0].text = "I couldn't find anything for \"" + name + "\". Please tell me company you are looking for. (ex: \"/gethuman Verizon Wireless\")"
     }
-
+    console.log("About to return this Slack payload for sending: " + JSON.stringify(payloads));
     return payloads;
 }
 
