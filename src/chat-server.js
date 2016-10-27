@@ -73,56 +73,67 @@ function handleRequest(botHandlers, actionHandlers) {
     var context = getContextFromExpressReqRes(req, res);
     var botHandler = brain.getBotHandler(botHandlers, context);
 
-//************** NON-WORKING CODE rethinking structure
-
-    // // translating the JSON body of the request from the bot platform format
-    // // into a common format that we define
-    // var commonRequestData = botHandler.translateRequstToCommonFormat(context);
-
-    // // first get the action handler (right now just the problem lookup)
-    // brain.getActionHandler(actionHandlers, commonRequestData)
-    //   .then(function (action) {
-    //     return action.processRequest(commonRequestData);
-    //   })
-    //   .then(function (commonResponseData) {
-    //     var botSpecificResponse = botHandler.translateResponseToCommonFormat(commonResponseData);
-    //     return botHandler.sendResponseToPlatform(botSpecificResponse);
-    //   })
-    //   .catch(function (err) {
-    //     botHandler.sendErrorResponse(err, context);
-    //   });
-
-
-//************** END NON-WORKING CODE rethinking structure
-
-    // this is working code
     utilities.preResponse(context);
 
-    botHandler.getResponseObj(context)
-    // responseObj.data is an array of payloads, each triggering its own request-send
-      .then(function (responseObj) {
-        // if only one object exists, puts it into an array
-        var payloads = [].concat(responseObj.payloads || []);
+//************** NEW CODE - action handlers
 
-        // var counter = 1;
+    // translating the JSON body of the request from the bot platform format
+    // into a common format that we define
+    var commonRequest = botHandler.translateRequestToCommonFormat(context);
+
+    // first get the action handler (right now just the problem lookup)
+    var actionHandler = brain.getActionHandler(actionHandlers);
+
+    actionHandler.processRequest(commonRequest);
+      .then(function (commonResponse) {
+        // form up the payloads
+        var botSpecificResponse = botHandler.translateCommonResponseToPlatform(commonResponse);
+        // may not be necessary.... already is an array
+        var payloads = [].concat(botSpecificResponse.payloads || []);
+        var context = botSpecificResponse.context;
         // make an array of call functions
         var calls = payloads.map(function (payload) {
           return function () {
-            // console.log('in chain for sendResp ' + counter);
-            // counter++;
-            return botHandler.sendResponseToPlatform(payload, responseObj.context)
+            return botHandler.sendResponseToPlatform(payload, context)
               .catch(function (err) {
                 console.log('err is ' + err);
               });
           }
         });
-        // console.log('# of calls is ' + calls.length);
-        // call each RequestReply in sequence
         return chainPromises(calls);
       })
       .catch(function (err) {
-        return botHandler.sendErrorResponse(err, context);
+        botHandler.sendErrorResponse(err, context);
       });
+
+
+//************** OLD CODE
+
+    // botHandler.getResponseObj(context)
+    // // responseObj.data is an array of payloads, each triggering its own request-send
+    //   .then(function (responseObj) {
+    //     // if only one object exists, puts it into an array
+    //     var payloads = [].concat(responseObj.payloads || []);
+
+    //     // var counter = 1;
+    //     // make an array of call functions
+    //     var calls = payloads.map(function (payload) {
+    //       return function () {
+    //         // console.log('in chain for sendResp ' + counter);
+    //         // counter++;
+    //         return botHandler.sendResponseToPlatform(payload, responseObj.context)
+    //           .catch(function (err) {
+    //             console.log('err is ' + err);
+    //           });
+    //       }
+    //     });
+    //     // console.log('# of calls is ' + calls.length);
+    //     // call each RequestReply in sequence
+    //     return chainPromises(calls);
+    //   })
+    //   .catch(function (err) {
+    //     return botHandler.sendErrorResponse(err, context);
+    //   });
   }
 }
 

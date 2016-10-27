@@ -27,7 +27,7 @@ function queryPostsofCompany(company) {
 }
 
 // takes Company object, puts associated info into an result object
-function extractContactInfo(company) {
+function extractContactInfo(commonResponse) {
   var contactInfo = {
     phone: '',
     email: '',
@@ -36,6 +36,7 @@ function extractContactInfo(company) {
     chat: '',
     facebook: ''
   };
+  var company = commonResponse.data;
   contactInfo.phone = company.callback.phone || '';
 
   let emailContactMethods = company.contactMethods.filter(function (method) {

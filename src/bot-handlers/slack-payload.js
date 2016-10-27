@@ -23,7 +23,6 @@ function preparePayloadsOfObj(company) {
     var otherCompanies = company.otherCompanies;
     var colors = utilities.colors;
 
-    // var phoneAndEmail = utilities.extractTextFieldFromCompany(company);
     var contactInfo = utilities.extractContactInfo(company);
     var topContacts = utilities.formatTextFieldSlack(contactInfo);
 
