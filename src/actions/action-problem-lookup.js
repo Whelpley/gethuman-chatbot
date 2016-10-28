@@ -27,7 +27,7 @@ function processRequest(commonRequest) {
     });
     if (!companySearchResults.length) {
       console.log("Nothing found in initial Company search");
-      commonResponse.data = {},
+      commonResponse.data = {};
       return commonResponse;
     }
     else if (exactMatch && exactMatch.length) {
