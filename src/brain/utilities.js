@@ -129,6 +129,6 @@ module.exports = {
   convertArrayToBoldList: convertArrayToBoldList,
   extractContactInfo: extractContactInfo,
   formatTextFieldSlack: formatTextFieldSlack,
-  formatContactButtonsMessenger: formatContactButtonsMessenger,
+  // formatContactButtonsMessenger: formatContactButtonsMessenger,
   chainPromises: chainPromises
 };
