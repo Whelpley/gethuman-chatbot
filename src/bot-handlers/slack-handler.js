@@ -64,7 +64,7 @@ function translateCommonResponseToPlatform(commonResponse) {
   var otherCompanies = commonResponse.data.otherCompanies;
   var colors = utilities.colors;
 
-  var contactInfo = utilities.extractContactInfo(company);
+  var contactInfo = utilities.extractContactInfo(commonResponse.data);
   var topContacts = utilities.formatTextFieldSlack(contactInfo);
 
   var payloads = [{
