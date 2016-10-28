@@ -15,7 +15,7 @@ function processRequest(commonRequest) {
 
 // should this be a Promise?
   if (!userInput) {
-    return commonResponse;
+    return Q.when(commonResponse);
   }
 
   return Q.when(companySearch.findAllByText(userInput))
