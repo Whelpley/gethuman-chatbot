@@ -31,6 +31,7 @@ function translateRequestToCommonFormat(context) {
 }
 
 function translateCommonResponseToPlatform(commonResponse) {
+  console.log("About to translate this Common Response from within Slack handler function: " + JSON.stringify(commonResponse).substring(0,400));
   var botSpecificResponse = {
     payloads:  [],
     context: commonResponse.context

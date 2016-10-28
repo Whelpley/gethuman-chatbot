@@ -49,23 +49,24 @@ function processRequest(commonRequest) {
     });
     console.log("Other companies filtered from input:" + JSON.stringify(company.otherCompanies));
 
-    return attachPostsToCompany(company)
+    // return attachPostsToCompany(company)
+    return postSearch.findPostsofCompany(company)
   })
-// passes down a Company object
-  .then(function (company) {
+  .then(function (posts) {
+    company.posts = posts;
     commonResponse.data = company,
-    console.log("About the return a Common Response from action handler: " +JSON.stringify(commonResponse).substring(0,400));
+    console.log("About to return a Common Response from action handler: " +JSON.stringify(commonResponse).substring(0,400));
     return commonResponse;
   });
 }
 
-function attachPostsToCompany(company) {
-  return Q.when(postSearch.findPostsofCompany(company))
-    .then(function (posts) {
-      company.posts = posts;
-      return company;
-    })
-}
+// function attachPostsToCompany(company) {
+//   return Q.when(postSearch.findPostsofCompany(company))
+//     .then(function (posts) {
+//       company.posts = posts;
+//       return company;
+//     })
+// }
 
 module.exports = {
   processRequest: processRequest
