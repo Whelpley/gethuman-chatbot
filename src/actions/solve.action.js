@@ -14,7 +14,7 @@ const utilities = require('../brain/utilities');
  */
 function processRequest(genericRequest) {
   var genericResponse = {
-    context: commonRequest.context
+    context: genericRequest.context
   };
   var userInput = genericRequest.userInput;
 
