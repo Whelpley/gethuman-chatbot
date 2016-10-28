@@ -45,17 +45,19 @@ function translateCommonResponseToPlatform(commonResponse) {
         response_type: 'ephemeral',
         icon_emoji: ':gethuman:'
     }]);
+    console.log("About to return a Bot-Specific Response for No Input");
     return botSpecificResponse;
   }
 // Case: nothing returned from Companies search
   else if (commonResponse.data === {}) {
     var textInput = commonResponse.context.userRequest.text;
-    botSpecificResponse.payloads = [{
+    botSpecificResponse.payloads.push([{
         username: 'GetHuman',
         text: "I couldn't tell what you meant by \"" + textInput + "\". Please tell me company you are looking for. (ex: \"/gethuman Verizon Wireless\")",
         icon_emoji: ':gethuman:',
         response_type: 'ephemeral'
-    }];
+    }]);
+    console.log("About to return a Bot-Specific Response for No Results");
     return botSpecificResponse;
   }
 
@@ -128,6 +130,7 @@ function translateCommonResponseToPlatform(commonResponse) {
   }
 
   botSpecificResponse.payloads = payloads;
+  console.log("About to return a Bot-Specific Response for Results Found!");
   return botSpecificResponse;
 }
 
