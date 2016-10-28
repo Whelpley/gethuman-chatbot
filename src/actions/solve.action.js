@@ -4,7 +4,7 @@ const request = require('request');
 const Q = require('q');
 const companySearch = require('../services/company-api-gh');
 const postSearch = require('../services/post-api-gh');
-const utilities = require('../services/utilities');
+const utilities = require('../brain/utilities');
 
 /**
  * Processes generic request
