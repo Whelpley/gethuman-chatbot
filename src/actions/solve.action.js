@@ -73,7 +73,7 @@ function processRequest(genericRequest) {
     console.log("Check-in AFTER querying Posts of Company, within Promise chain.");
     company.posts = posts;
     genericResponse.data = company;
-    console.log("About to return a Generic Response from action handler: " +JSON.stringify(genericResponse).substring(0,200));
+    console.log("About to return a Generic Response from within action handler 1/2: " + JSON.stringify(genericResponse));
     return genericResponse;
   });
 }
