@@ -1,3 +1,5 @@
+'use strict'
+
 const request = require('request');
 const Q = require('q');
 const companySearch = require('../services/company-api-gh');

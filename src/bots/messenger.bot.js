@@ -1,3 +1,5 @@
+'use strict'
+
 const config = require('../config/config');
 const token = config.facebookAccessToken;
 

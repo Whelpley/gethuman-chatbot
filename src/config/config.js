@@ -1,3 +1,6 @@
+'use strict'
+
+
 var envName = process.env.NODE_ENV || 'dev';
 var envVars = process.env;
 

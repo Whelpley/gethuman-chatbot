@@ -1,3 +1,6 @@
+'use strict'
+
+
 const Q = require('q');
 const request = require('request');
 const config = require('../config/config');

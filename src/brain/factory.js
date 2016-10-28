@@ -1,3 +1,4 @@
+'use strict'
 
 // is unit testable
 function getBotHandler(handlers, context) {
