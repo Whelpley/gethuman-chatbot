@@ -16,13 +16,13 @@ function processRequest(genericRequest) {
   var genericResponse = {
     context: commonRequest.context
   };
-  var userInput = commonRequest.userInput;
+  var userInput = genericRequest.userInput;
 
   // todo: do pre-response here
-  utilities.preResponse(commonRequest.context);
+  utilities.preResponse(genericRequest.context);
 
   if (!userInput) {
-    return Q.when(commonResponse);
+    return Q.when(genericResponse);
   }
 
 // this is where things get hairy ...
