@@ -185,6 +185,6 @@ module.exports = {
   sendResponseToPlatform: sendResponseToPlatform,
   sendErrorResponse: sendErrorResponse,
   verify: verify,
-  translateRequestToGenericFormat: translateRequestToGenericFormat,
+  translateRequestToGenericFormats: translateRequestToGenericFormats,
   generateResponsePayloads: generateResponsePayloads
 };
