@@ -81,7 +81,9 @@ function handleRequest(botHandlers, actionHandlers) {
       actionHandler.processRequest(commonRequest)
         .then(function (commonResponse) {
           // form up the payloads
+          console.log("Common Response about to be passed in to bot handler for translation to Platorm response.");
           var botSpecificResponse = botHandler.translateCommonResponseToPlatform(commonResponse);
+          console.log("Successful translation to Platorm response.");
           // may not be necessary.... already is an array
           var payloads = [].concat(botSpecificResponse.payloads || []);
           var context = botSpecificResponse.context;

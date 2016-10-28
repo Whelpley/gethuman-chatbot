@@ -48,6 +48,7 @@ function processRequest(commonRequest) {
       return name.toLowerCase() !== userInput.toLowerCase();
     });
     console.log("Other companies filtered from input:" + JSON.stringify(company.otherCompanies));
+
     return attachPostsToCompany(company)
   })
 // passes down a Company object

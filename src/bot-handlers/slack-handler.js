@@ -176,11 +176,11 @@ function sendRequestAsReply(payload, context) {
 
 function sendErrorResponse(err, context) {
   console.log("Ran into an error: " + err);
-  var payload = {
+  var payload = [{
         username: 'GetHuman',
         text: error,
         icon_emoji: ':gethuman:'
-  };
+  }];
   sendRequestsAsReply(payload, context);
 }
 
