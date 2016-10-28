@@ -39,7 +39,7 @@ function processRequest(genericRequest) {
     });
     if (!companySearchResults.length) {
       console.log("Nothing found in initial Company search");
-      commonResponse.data = {},
+      genericResponse.data = {};
       // returning an empty object as Posts for the next step in chain
       return Q.when({});
     }
