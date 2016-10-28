@@ -1,9 +1,6 @@
 'use strict'
 
-const request = require('request');
-const Q = require('q');
-const utilities = require('../services/utilities');
-const config = require('../config/config');
+const utilities = require('../brain/utilities');
 
 // unit testable
 function isHandlerForRequest(context) {
@@ -18,48 +15,45 @@ function verify() {
 }
 
 // what needs to be known before processing?
-// should this extract more from the context rather than keep passing it around?{}
-function translateRequestToCommonFormat(context) {
-  var commonRequest = {
+// should this extract more from the context rather than keep passing it around?
+function translateRequestToGenericFormats(context) {
+  var genericRequests = [{
     context: context
-  };
+  }];
   var text = context.userRequest.text
   if (text) {
-    commonRequest.userInput = text;
+    genericRequests[0].userInput = text;
   }
-  return commonRequest;
+  return genericRequests;
 }
 
-function translateCommonResponseToPlatform(commonResponse) {
-  console.log("About to translate this Common Response from within Slack handler function: " + JSON.stringify(commonResponse.data).substring(0,400));
-  var botSpecificResponse = {
-    payloads:  [],
-    context: commonResponse.context
-  }
+function generateResponsePayloads(genericResponse) {
+  var payloads =  [];
 
 // Case: no user input
-  if (!commonResponse.data) {
+  if (!genericResponse.data) {
+    console.log("No data detected in genericResponse.");
     // is this the right way to load the payload?
-    botSpecificResponse.payloads.push([{
+    payloads.push([{
         username: 'GetHuman',
         text: "Tell me the company you would like to contact.",
         response_type: 'ephemeral',
         icon_emoji: ':gethuman:'
     }]);
-    console.log("About to return a Bot-Specific Response for No Input");
     return botSpecificResponse;
   }
 // Case: nothing returned from Companies search
-  else if (commonResponse.data === {}) {
-    var textInput = commonResponse.context.userRequest.text;
-    botSpecificResponse.payloads.push([{
+// How to tell?
+  else if (genericResponse.data.posts === {}) {
+    console.log("No posts detected in data of genericResponse.");
+    var textInput = genericResponse.context.userRequest.text;
+    payloads.push([{
         username: 'GetHuman',
         text: "I couldn't tell what you meant by \"" + textInput + "\". Please tell me company you are looking for. (ex: \"/gethuman Verizon Wireless\")",
         icon_emoji: ':gethuman:',
         response_type: 'ephemeral'
     }]);
-    console.log("About to return a Bot-Specific Response for No Results");
-    return botSpecificResponse;
+    return payloads;
   }
 
   var name = commonResponse.data.name;
@@ -70,7 +64,7 @@ function translateCommonResponseToPlatform(commonResponse) {
   var contactInfo = utilities.extractContactInfo(commonResponse.data);
   var topContacts = utilities.formatTextFieldSlack(contactInfo);
 
-  var payloads = [{
+  payloads.push([{
     // may not need to set these
       username: 'GetHuman',
       icon_emoji: ':gethuman:',
@@ -78,7 +72,7 @@ function translateCommonResponseToPlatform(commonResponse) {
       // doesn't work like that though!
       response_type: 'ephemeral',
       attachments: []
-  }];
+  }]);
 
 // get payload-loaders into sub-functions for testing
   if (posts && posts.length) {
@@ -130,9 +124,8 @@ function translateCommonResponseToPlatform(commonResponse) {
       payloads[0].text = "I couldn't find anything for \"" + name + "\". Please tell me which company you are looking for. (ex: \"/gethuman Verizon Wireless\")"
   }
 
-  botSpecificResponse.payloads = payloads;
-  console.log("About to return a Bot-Specific Response for Results Found!");
-  return botSpecificResponse;
+  console.log("Payloads processed from genericResponse: " + JSON.stringify(payloads));
+  return payloads;
 }
 
 function sendResponseToPlatform(payload, context) {
@@ -152,7 +145,6 @@ function sendResponseToPlatform(payload, context) {
 }
 
 // unique function
-
 function sendRequestAsReply(payload, context) {
   console.log("Last step before sending this payload: " + JSON.stringify(payload));
   var deferred = Q.defer();
@@ -160,13 +152,13 @@ function sendRequestAsReply(payload, context) {
   var uri = 'https://hooks.slack.com/services/' + path;
 
 // should this be extracted elsewhere? Any other reason to keep context this far?
-  payload[0].channel = context.userRequest.channel_id;
+  payload.channel = context.userRequest.channel_id;
 
 // eventually want to send this as the response to original request
   request({
     uri: uri,
     method: 'POST',
-    body: JSON.stringify(payload[0])
+    body: JSON.stringify(payload)
   }, function (error, response, body) {
     if (error) {
       deferred.reject(error);
@@ -180,11 +172,11 @@ function sendRequestAsReply(payload, context) {
 
 function sendErrorResponse(err, context) {
   console.log("Ran into an error: " + err);
-  var payload = [{
+  var payload = {
         username: 'GetHuman',
         text: error,
         icon_emoji: ':gethuman:'
-  }];
+  };
   sendRequestsAsReply(payload, context);
 }
 
@@ -193,6 +185,6 @@ module.exports = {
   sendResponseToPlatform: sendResponseToPlatform,
   sendErrorResponse: sendErrorResponse,
   verify: verify,
-  translateRequestToCommonFormat: translateRequestToCommonFormat,
-  translateCommonResponseToPlatform: translateCommonResponseToPlatform
-}
+  translateRequestToGenericFormat: translateRequestToGenericFormat,
+  generateResponsePayloads: generateResponsePayloads
+};

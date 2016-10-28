@@ -1,14 +1,16 @@
-'use strict'
+var brainServer = require('./brain/server');
+var config = require('./config/config');
 
-var chatServer = require('./chat-server');
-
+// each target bot has its own handler
 var botHandlers = [
-  require('./bot-handlers/slack-handler'),
-  require('./bot-handlers/messenger-handler')
+  require('./bots/slack.bot'),
+  require('./bots/messenger.bot')
 ];
 
+// each type of action has its own handler
 var actionHandlers = [
-  require('./actions/action-problem-lookup')
+  require('./actions/solve.action')
 ];
 
-chatServer.startServer(botHandlers, actionHandlers);
+// start the chat server
+brainServer.start(botHandlers, actionHandlers, config);

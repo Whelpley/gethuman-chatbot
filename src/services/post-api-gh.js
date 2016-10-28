@@ -1,14 +1,18 @@
-'use strict'
-
 const Q = require('q');
 const request = require('request');
 const config = require('../config/config');
 
-function findPostsofCompany(company) {
+/**
+ * Find top 5 Posts that match given Company object
+ *
+ * @param company
+ * @returns {*|promise}
+ */
+
+function findByCompany(company) {
   var deferred = Q.defer();
   // var url = process.env.API_BASE_URL + '/posts';
   var url = config.ghApiBaseUrl + '/posts';
-  console.log('URL for findPostsofCompany search: ' + url);
   var limit = 5;
   var params = encodeURIComponent(JSON.stringify({
     type: 'question',
@@ -16,6 +20,7 @@ function findPostsofCompany(company) {
     guideId: { '$exists': true },
     companyId: company._id
   }));
+  console.log("About to make request to query Posts");
   request(url
     + '?limit='
     + limit
@@ -34,6 +39,5 @@ function findPostsofCompany(company) {
 }
 
 module.exports = {
-  findPostsofCompany: findPostsofCompany
-}
-
+  findByCompany: findByCompany
+};

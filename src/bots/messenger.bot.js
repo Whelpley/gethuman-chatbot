@@ -1,10 +1,4 @@
-'use strict'
-
-const request = require('request');
-const Q = require('q');
-const utilities = require('../services/utilities');
 const config = require('../config/config');
-
 const token = config.facebookAccessToken;
 
 function isHandlerForRequest(context) {
@@ -21,7 +15,7 @@ function verify(req, res) {
     res.send('Error, wrong token');
 }
 
-function translateRequestToCommonFormat(context) {
+function translateRequestToGenericFormat(context) {
   var commonRequest = {
     context: context
   };
@@ -46,7 +40,7 @@ function translateRequestToCommonFormat(context) {
   }
 }
 
-function translateCommonResponseToPlatform(commonResponse) {
+function translateGenericResponseToPlatform(commonResponse) {
   var botSpecificResponse = {
     payloads:  [],
     context: commonResponse.context
@@ -102,7 +96,7 @@ function translateCommonResponseToPlatform(commonResponse) {
   var companyInfoElement = [{
       "title": "Best ways to contact " + name + ":",
       // this function should live in this file instead of utilities
-      'buttons': utilities.formatContactButtonsMessenger(contactInfo)
+      'buttons': formatContactButtonsMessenger(contactInfo)
   }];
   if (contactInfo.email) {
       companyInfoElement[0].subtitle = contactInfo.email;
@@ -219,12 +213,72 @@ function sendRequestAsReply(payload, context) {
   return deferred.promise;
 }
 
+
+//  should exist in Messenger Handler
+function formatContactButtonsMessenger(contactInfo) {
+    var buttons = [];
+    var counter = 1;
+    for(var key in contactInfo) {
+        if ((counter <= 3) && (contactInfo[key])) {
+            var button = {};
+            switch(key) {
+                case 'twitter':
+                    button = {
+                        "type": "web_url",
+                        "url": 'https://twitter.com/' + contactInfo[key],
+                        "title": "Twitter"
+                    };
+                    break;
+                case 'web':
+                    button = {
+                        "type": "web_url",
+                        "url": contactInfo[key],
+                        "title": "Web"
+                    };
+                    break;
+                case 'chat':
+                    button = {
+                        "type": "web_url",
+                        "url": contactInfo[key],
+                        "title": "Chat"
+                    };
+                    break;
+                case 'facebook':
+                    button = {
+                        "type": "web_url",
+                        "url": contactInfo[key],
+                        "title": "Facebook"
+                    };
+                    break;
+                case 'phone':
+                    button = {
+                        "type": "phone_number",
+                        "payload": phoneFormatter.format(contactInfo[key], "+1NNNNNNNNNN"),
+                        "title": contactInfo[key]
+                    }
+                    break;
+                case 'email':
+                    console.log("Email detected, not creating button for it because Messenger won't let us.");
+                    break;
+                default:
+                    console.log("Something went wrong in Facebook contact button formatting");
+            }
+            if (button.type) {
+                buttons.push(button);
+                counter += 1;
+            }
+        }
+    }
+    console.log("Buttons formatted from contact info: " + JSON.stringify(buttons));
+    return buttons;
+}
+
 module.exports = {
-  // getResponseObj: getResponseObj,
   sendResponseToPlatform: sendResponseToPlatform,
   isHandlerForRequest: isHandlerForRequest,
   sendErrorResponse: sendErrorResponse,
   verify: verify,
-  translateRequestToCommonFormat: translateRequestToCommonFormat,
-  translateCommonResponseToPlatform: translateCommonResponseToPlatform
-}
+  translateRequestToGenericFormat: translateRequestToGenericFormat,
+  translateGenericResponseToPlatform: translateGenericResponseToPlatform,
+  formatContactButtonsMessenger: formatContactButtonsMessenger
+};
