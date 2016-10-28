@@ -56,12 +56,12 @@ function generateResponsePayloads(genericResponse) {
     return payloads;
   }
 
-  var name = commonResponse.data.name;
-  var posts = commonResponse.data.posts;
-  var otherCompanies = commonResponse.data.otherCompanies;
+  var name = genericResponse.data.name;
+  var posts = genericResponse.data.posts;
+  var otherCompanies = genericResponse.data.otherCompanies;
   var colors = utilities.colors;
 
-  var contactInfo = utilities.extractContactInfo(commonResponse.data);
+  var contactInfo = utilities.extractContactInfo(genericResponse.data);
   var topContacts = utilities.formatTextFieldSlack(contactInfo);
 
   payloads.push([{
