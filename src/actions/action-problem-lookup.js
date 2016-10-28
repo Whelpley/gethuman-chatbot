@@ -57,7 +57,7 @@ function processRequest(commonRequest) {
   .then(function (posts) {
     company.posts = posts;
     commonResponse.data = company,
-    console.log("About to return a Common Response from action handler: " +JSON.stringify(commonResponse).substring(0,400));
+    console.log("About to return a Common Response from action handler: " +JSON.stringify(commonResponse.data));
     return commonResponse;
   });
 }
