@@ -23,7 +23,6 @@ function processRequest(commonRequest) {
   return Q.when(companySearch.findAllByText(userInput))
   .then(function (companySearchResults) {
 
-
     // separate out this as function for testing
     var exactMatch = companySearchResults.filter(function(eachCompany) {
       return eachCompany.name.toLowerCase() === userInput.toLowerCase();
@@ -57,7 +56,7 @@ function processRequest(commonRequest) {
   .then(function (posts) {
     company.posts = posts;
     commonResponse.data = company,
-    console.log("About to return a Common Response from action handler: " +JSON.stringify(commonResponse.data));
+    console.log("About to return a Common Response from action handler: " +JSON.stringify(commonResponse.data).substring(0,400));
     return commonResponse;
   });
 }
