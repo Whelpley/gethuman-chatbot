@@ -225,6 +225,6 @@ module.exports = {
   isHandlerForRequest: isHandlerForRequest,
   sendErrorResponse: sendErrorResponse,
   verify: verify,
-  translateRequestToCommonFormat: translateRequestToCommonFormat
+  translateRequestToCommonFormat: translateRequestToCommonFormat,
   translateCommonResponseToPlatform: translateCommonResponseToPlatform
 }

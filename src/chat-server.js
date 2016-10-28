@@ -30,7 +30,6 @@ function startServer(botHandlers, actionHandlers) {
   app.post('/roll', require('./deprecated/dicebot.js'));
   // for Facebook verification
   app.get('/v3/gethuman', function (req, res) {
-    // console.log("Receiving verification request from Facebook.");
     // var context = getContextFromExpressReqRes(req, res);
     // var botHandler = brain.getBotHandler(context);
     // botHandler.verify(req, res);
