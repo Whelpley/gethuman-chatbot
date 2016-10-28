@@ -29,7 +29,7 @@ function translateRequestToGenericFormats(context) {
 
 function generateResponsePayloads(genericResponse) {
   var payloads =  [];
-
+  console.log("About to begin generating payloads from genericResponse.");
 // Case: no user input
   if (!genericResponse.data) {
     console.log("No data detected in genericResponse.");
