@@ -1,3 +1,5 @@
+'use strict'
+
 const Q = require('q');
 const phoneFormatter = require('phone-formatter');
 
