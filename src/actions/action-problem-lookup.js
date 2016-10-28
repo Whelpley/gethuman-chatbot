@@ -13,6 +13,7 @@ function processRequest(commonRequest) {
   };
   var userInput = commonRequest.userInput;
 
+// should this be a Promise?
   if (!userInput) {
     return commonResponse;
   }
@@ -27,8 +28,7 @@ function processRequest(commonRequest) {
     });
     if (!companySearchResults.length) {
       console.log("Nothing found in initial Company search");
-      commonResponse.data = {};
-      return commonResponse;
+      return Q.when(company);
     }
     else if (exactMatch && exactMatch.length) {
       company = exactMatch[0];
@@ -48,14 +48,12 @@ function processRequest(commonRequest) {
       return name.toLowerCase() !== userInput.toLowerCase();
     });
     console.log("Other companies filtered from input:" + JSON.stringify(company.otherCompanies));
-
-    // attach Posts to company
-    // may be Promise-related trickery...
-    company = attachPostsToCompany(company)
-
-    commonResponse.type = 'Standard',
+    return attachPostsToCompany(company)
+  })
+// passes down a Company object
+  .then(function (company) {
     commonResponse.data = company,
-    console.log("About the return a Common Response from action handler: " +JSON.stringify(commonResponse).substring(0,200));
+    console.log("About the return a Common Response from action handler: " +JSON.stringify(commonResponse));
     return commonResponse;
   });
 }
