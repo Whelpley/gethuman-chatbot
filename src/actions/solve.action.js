@@ -28,7 +28,7 @@ function processRequest(genericRequest) {
 // this is where things get hairy ...
   var company = {};
 
-  return Q.when(companySearch.findAllByText(userInput))
+  return Q.when(companySearch.findByText(userInput))
   .then(function (companySearchResults) {
 
     // ----------------
