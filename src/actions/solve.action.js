@@ -67,7 +67,7 @@ function processRequest(genericRequest) {
 
     // TROUBLE STARTING HERE - Async trickiness ...
     console.log("Check-in BEFORE querying Posts of Company");
-    return postSearch.findPostsofCompany(company)
+    return postSearch.findByCompany(company)
   })
   .then(function (posts) {
     console.log("Check-in AFTER querying Posts of Company, within Promise chain.");
