@@ -18,9 +18,11 @@ function processRequest(commonRequest) {
     return Q.when(commonResponse);
   }
 
+  var company = {};
+
   return Q.when(companySearch.findAllByText(userInput))
   .then(function (companySearchResults) {
-    var company = {};
+
 
     // separate out this as function for testing
     var exactMatch = companySearchResults.filter(function(eachCompany) {
