@@ -45,10 +45,11 @@ function addMiddleware(app) {
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
 
-  app.use(function (err, req, res) {
-    console.error(err.stack);
-    res.status(400).send(err.message);
-  });
+//what does this do - returns an error: "res.status is not a function"
+  // app.use(function (err, req, res) {
+  //   console.error(err.stack);
+  //   res.status(400).send(err.message);
+  // });
 }
 
 /**
