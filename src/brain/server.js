@@ -107,7 +107,7 @@ function handleRequest(botHandlers, actionHandlers, config) {
             var payloads = botHandler.generateResponsePayloads(genericResponse);
             console.log("About to invoke sendResponse")
             // finally send the payloads back to the platform
-            return sendResponse(genericResponse, payloads);
+            return sendResponse(genericResponse, payloads, botHandler);
           })
           .catch(function (err) {
             // generically send error response back to client
@@ -126,7 +126,7 @@ function handleRequest(botHandlers, actionHandlers, config) {
  * @param payloads
  * @returns {Promise}
  */
-function sendResponse(genericResponse, payloads) {
+function sendResponse(genericResponse, payloads, botHandler) {
 
   // may not be necessary.... already is an array
   payloads = [].concat(payloads || []);
