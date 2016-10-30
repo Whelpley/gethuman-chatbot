@@ -171,8 +171,8 @@ function sendRequestAsReply(payload, context) {
   var uri = 'https://hooks.slack.com/services/' + path;
 
 // should this be extracted elsewhere? Any other reason to keep context this far?
-  payload.channel = context.userRequest.channel_id;
-  console.log("Payload channel: " + payload.channel);
+  payload[0].channel = context.userRequest.channel_id;
+  console.log("Payload channel: " + payload[0].channel);
 
   console.log("Last step before sending this payload: " + JSON.stringify(payload));
 // eventually want to send this as the response to original request
@@ -181,7 +181,7 @@ function sendRequestAsReply(payload, context) {
   request({
     uri: uri,
     method: 'POST',
-    body: JSON.stringify(payload)
+    body: JSON.stringify(payload[0])
   }, function (error, response, body) {
     if (error) {
       console.log("Ran into error while making request to send Slack payload: " + error);
