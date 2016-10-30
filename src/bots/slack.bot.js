@@ -56,13 +56,19 @@ function generateResponsePayloads(genericResponse) {
     return payloads;
   }
 
+  console.log("Passed first two checks in generateResponsePayloads function.")
+
   var name = genericResponse.data.name;
   var posts = genericResponse.data.posts;
   var otherCompanies = genericResponse.data.otherCompanies;
   var colors = utilities.colors;
 
+  console.log("About to extract contact info from genericResponse.");
+
   var contactInfo = utilities.extractContactInfo(genericResponse.data);
   var topContacts = utilities.formatTextFieldSlack(contactInfo);
+
+  console.log("About to start pushing info into payloads.");
 
   payloads.push([{
     // may not need to set these
