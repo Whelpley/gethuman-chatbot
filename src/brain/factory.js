@@ -15,6 +15,7 @@ function getBotHandler(handlers, context) {
 // not yet in use
 function getActionHandler(actionHandlers, genericRequest) {
 
+  //what is getting filtered out here?
   if (genericRequest) {
 
   }

@@ -170,8 +170,8 @@ function sendRequestAsReply(payload, context) {
   return deferred.promise;
 }
 
-function sendErrorResponse(err, context) {
-  console.log("Ran into an error: " + err);
+function sendErrorResponse(error, context) {
+  console.log("Ran into an error, sending from Bot Handler: " + error);
   var payload = {
         username: 'GetHuman',
         text: error,
