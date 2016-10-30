@@ -27,7 +27,7 @@ function preResponse(context) {
 }
 
 // takes Company object, puts associated info into an result object
-function extractContactInfo(commonResponse) {
+function extractContactInfo(genericResponseData) {
   var contactInfo = {
     phone: '',
     email: '',
@@ -36,7 +36,7 @@ function extractContactInfo(commonResponse) {
     chat: '',
     facebook: ''
   };
-  var company = commonResponse.data;
+  var company = genericResponseData;
   contactInfo.phone = company.callback.phone || '';
 
   let emailContactMethods = company.contactMethods.filter(function (method) {

@@ -65,6 +65,7 @@ function generateResponsePayloads(genericResponse) {
 
   console.log("About to extract contact info from genericResponse.");
 
+// *** breaks here ***
   var contactInfo = utilities.extractContactInfo(genericResponse.data);
   var topContacts = utilities.formatTextFieldSlack(contactInfo);
 
