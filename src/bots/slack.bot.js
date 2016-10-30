@@ -1,6 +1,8 @@
 'use strict'
 
 const utilities = require('../brain/utilities');
+const Q = require('q');
+
 
 // unit testable
 function isHandlerForRequest(context) {
