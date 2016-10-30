@@ -165,7 +165,7 @@ function sendResponseToPlatform(payload, context) {
 
 // unique function
 function sendRequestAsReply(payload, context) {
-
+//have to access Payload index 0 for Slack send
   var deferred = Q.defer();
   var path = config.slackAccessToken;
   var uri = 'https://hooks.slack.com/services/' + path;
@@ -177,7 +177,6 @@ function sendRequestAsReply(payload, context) {
   console.log("Last step before sending this payload: " + JSON.stringify(payload));
 // eventually want to send this as the response to original request
 
-//  *** Breaks right here ***
   request({
     uri: uri,
     method: 'POST',
