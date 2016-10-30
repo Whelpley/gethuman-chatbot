@@ -65,12 +65,12 @@ function generateResponsePayloads(genericResponse) {
 
   console.log("About to extract contact info from genericResponse.");
 
-// *** breaks here ***
   var contactInfo = utilities.extractContactInfo(genericResponse.data);
   var topContacts = utilities.formatTextFieldSlack(contactInfo);
 
   console.log("About to start pushing info into payloads.");
 
+// *** breaks here ***
   payloads.push([{
     // may not need to set these
       username: 'GetHuman',
@@ -80,6 +80,8 @@ function generateResponsePayloads(genericResponse) {
       response_type: 'ephemeral',
       attachments: []
   }]);
+
+  console.log("Basic info pushed into Payloads:" + JSON.stringify(payloads));
 
 // get payload-loaders into sub-functions for testing
   if (posts && posts.length) {
