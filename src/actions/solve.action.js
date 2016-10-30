@@ -17,6 +17,7 @@ function processRequest(genericRequest) {
     context: genericRequest.context
   };
   var userInput = genericRequest.userInput;
+  var company = {};
 
   // todo: do pre-response here
   utilities.preResponse(genericRequest.context);
@@ -26,19 +27,19 @@ function processRequest(genericRequest) {
   }
 
 // this is where things get hairy ...
-  var company = {};
 
   return Q.when(companySearch.findByText(userInput))
   .then(function (companySearchResults) {
 
     // ----------------
     // Pick out Company of interest from search results
-    // (separate out this as function for testing - MAYBE?
+    // (separate out this as function for testing - MAYBE?)
     var exactMatch = companySearchResults.filter(function(eachCompany) {
       return eachCompany.name.toLowerCase() === userInput.toLowerCase();
     });
     if (!companySearchResults.length) {
       console.log("Nothing found in initial Company search");
+      // does this break the "pure function" pattern?
       genericResponse.data = {};
       // returning an empty object as Posts for the next step in chain
       return Q.when({});
@@ -70,10 +71,10 @@ function processRequest(genericRequest) {
     return postSearch.findByCompany(company)
   })
   .then(function (posts) {
-    console.log("Check-in AFTER querying Posts of Company, within Promise chain.");
+    console.log("Check-in AFTER querying Posts of Company, within next step of Promise chain.");
     company.posts = posts;
     genericResponse.data = company;
-    console.log("About to return a Generic Response from within action handler 1/2: " + JSON.stringify(genericResponse).substring(0,200));
+    console.log("About to return a Generic Response from within action handler 1/2: " + JSON.stringify(genericResponse).substring(0,600));
     return genericResponse;
   });
 }

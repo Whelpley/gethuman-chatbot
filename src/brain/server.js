@@ -101,8 +101,9 @@ function handleRequest(botHandlers, actionHandlers, config) {
       // use the action handler to process the request (i.e. call GH API, etc.)
       actionHandler.processRequest(genericRequest)
           .then(function (genericResponse) {
-            console.log("Generic Response returned in Server: 2/2: " + JSON.stringify(genericResponse).substring(0,200));
+            console.log("Generic Response returned in Server: 2/2: " + JSON.stringify(genericResponse).substring(0,600));
             // create payloads to be sent back to the platform from the generic response
+            // *** seems to break after this step ***
             var payloads = botHandler.generateResponsePayloads(genericResponse);
             console.log("About to invoke sendResponse")
             // finally send the payloads back to the platform
