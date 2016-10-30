@@ -166,7 +166,7 @@ function sendResponseToPlatform(payload, context) {
 
 // unique function
 function sendRequestAsReply(payload, context) {
-  console.log("Last step before sending this payload: " + JSON.stringify(payload));
+
   var deferred = Q.defer();
   var path = config.slackAccessToken;
   var uri = 'https://hooks.slack.com/services/' + path;
@@ -174,6 +174,7 @@ function sendRequestAsReply(payload, context) {
 // should this be extracted elsewhere? Any other reason to keep context this far?
   payload.channel = context.userRequest.channel_id;
 
+  console.log("Last step before sending this payload: " + JSON.stringify(payload));
 // eventually want to send this as the response to original request
   request({
     uri: uri,
@@ -181,6 +182,7 @@ function sendRequestAsReply(payload, context) {
     body: JSON.stringify(payload)
   }, function (error, response, body) {
     if (error) {
+      console.log("Ran into error while making request to send Slack payload: " + error);
       deferred.reject(error);
     }
     else {
