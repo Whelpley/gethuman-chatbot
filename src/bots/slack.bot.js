@@ -70,7 +70,6 @@ function generateResponsePayloads(genericResponse) {
 
   console.log("About to start pushing info into payloads.");
 
-// *** breaks here ***
   payloads.push([{
     // may not need to set these
       username: 'GetHuman',
@@ -105,14 +104,15 @@ function generateResponsePayloads(genericResponse) {
                   }
               ]
           };
-          payloads[0].attachments.push(singleAttachment);
+          //  *** Breaks right here ***
+          payloads[0][0].attachments.push(singleAttachment);
       };
     console.log("Posts info pushed into Payloads:" + JSON.stringify(payloads));
   }
 
 
   // attach Company contact info:
-  payloads[0].attachments.push({
+  payloads[0][0].attachments.push({
       "fallback": "Contact info for " + name,
       "title": "Best ways to contact " + name + ":",
       "color": '#999999',
@@ -125,7 +125,7 @@ function generateResponsePayloads(genericResponse) {
   // attach Other Companies info if they exist
   if (otherCompanies && otherCompanies.length) {
       var otherCompaniesList = utilities.convertArrayToBoldList(otherCompanies);
-      payloads[0].attachments.push({
+      payloads[0][0].attachments.push({
           "fallback": "Other solutions",
           "title": "Were you talking about " + name + "?",
           "color": '#BBBBBB',
@@ -135,8 +135,8 @@ function generateResponsePayloads(genericResponse) {
       console.log("Other Companies info pushed into Payloads:" + JSON.stringify(payloads));
   }
 
-  if (!payloads[0].attachments.length) {
-      payloads[0].text = "I couldn't find anything for \"" + name + "\". Please tell me which company you are looking for. (ex: \"/gethuman Verizon Wireless\")"
+  if (!payloads[0][0].attachments.length) {
+      payloads[0][0].text = "I couldn't find anything for \"" + name + "\". Please tell me which company you are looking for. (ex: \"/gethuman Verizon Wireless\")"
   }
 
   console.log("Payloads processed from genericResponse: " + JSON.stringify(payloads));
