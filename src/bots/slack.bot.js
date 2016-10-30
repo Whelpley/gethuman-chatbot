@@ -107,7 +107,9 @@ function generateResponsePayloads(genericResponse) {
           };
           payloads[0].attachments.push(singleAttachment);
       };
+    console.log("Posts info pushed into Payloads:" + JSON.stringify(payloads));
   }
+
 
   // attach Company contact info:
   payloads[0].attachments.push({
@@ -116,6 +118,9 @@ function generateResponsePayloads(genericResponse) {
       "color": '#999999',
       "text": topContacts,
   });
+
+  console.log("Company Contact Info pushed into Payloads:" + JSON.stringify(payloads));
+
 
   // attach Other Companies info if they exist
   if (otherCompanies && otherCompanies.length) {
@@ -127,6 +132,7 @@ function generateResponsePayloads(genericResponse) {
           "text": "Or maybe you meant " + otherCompaniesList + "?",
           "mrkdwn_in": ["text"]
       });
+      console.log("Other Companies info pushed into Payloads:" + JSON.stringify(payloads));
   }
 
   if (!payloads[0].attachments.length) {
