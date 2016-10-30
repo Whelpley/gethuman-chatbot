@@ -109,7 +109,6 @@ function generateResponsePayloads(genericResponse) {
                   }
               ]
           };
-          //  *** Breaks right here ***
           payloads[0][0].attachments.push(singleAttachment);
       };
     console.log("Posts info pushed into Payloads:" + JSON.stringify(payloads));
@@ -173,9 +172,12 @@ function sendRequestAsReply(payload, context) {
 
 // should this be extracted elsewhere? Any other reason to keep context this far?
   payload.channel = context.userRequest.channel_id;
+  console.log("Payload channel: " + payload.channel);
 
   console.log("Last step before sending this payload: " + JSON.stringify(payload));
 // eventually want to send this as the response to original request
+
+//  *** Breaks right here ***
   request({
     uri: uri,
     method: 'POST',
