@@ -2,7 +2,7 @@
 
 const utilities = require('../brain/utilities');
 const Q = require('q');
-
+var config = require('../config/config');
 
 // unit testable
 function isHandlerForRequest(context) {
