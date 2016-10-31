@@ -6,39 +6,50 @@ var companySearch = require('../services/company-api-gh');
 var postSearch = require('../services/post-api-gh');
 var utilities = require('../brain/utilities');
 
+function processRequest(genericRequest) {
+  queryResult = queryCompany(genericRequest);
+  genericResponse = structureResponse(queryResult);
+  return genericResponse;
+}
+
 /**
  * Processes generic request
  *
  * @param genericRequest
- * @return {genericResponse}
+ * @return {queryResult}
  */
-function processRequest(genericRequest) {
-  var genericResponse = {
+function queryCompany(genericRequest) {
+  var queryResult = {
+    userInput: genericRequest.userInput,
+    // Company object, with Posts and Other Companies attached
+    data: {},
+    // types: 'standard', 'no-input', 'not-found'
+    type: '',
     context: genericRequest.context
   };
   var userInput = genericRequest.userInput;
-  var company = {noresults: true};
+  var company = {};
 
-  // todo: do pre-response here
+  // todo: do pre-response here (is this where it belongs?)
   utilities.preResponse(genericRequest.context);
 
   if (!userInput) {
-    return Q.when(genericResponse);
+    queryResult.type = 'no-input';
+    return Q.when(queryResult);
   }
-
-// this is where things get hairy ...
 
   return Q.when(companySearch.findByText(userInput))
   .then(function(companySearchResults) {
     // ----------------
     // Pick out Company of interest from search results
-    // (separate out this as function for testing - MAYBE?)
+    // ( can we separate out this as function?)
     var exactMatch = companySearchResults.filter(function(eachCompany) {
       return eachCompany.name.toLowerCase() === userInput.toLowerCase();
     });
 
     if (!companySearchResults.length) {
       console.log('Nothing found in initial Company search');
+      queryResult.type = 'nothing-found';
       // returning an empty object as Posts for the next step in chain
       return Q.when({});
     }
@@ -52,40 +63,108 @@ function processRequest(genericRequest) {
     };
     // ----------------
 
-    // ----------------
-    // attach Other Companies to Company object
-    // (separate out this as function for testing)
-    // ??? should this be here in the chain ???
+    company = attachOtherCompanies(company, companySearchResults);
+
+    console.log('Check-in BEFORE querying Posts of Company');
+    return postSearch.findByCompany(company)
+  })
+  .then(function(posts) {
+    console.log('Posts of Company returned in action handler');
+    queryResult.type = 'standard';
+    company.posts = posts;
+    queryResult.data = company;
+    return queryResult;
+  });
+}
+
+function genericResponse(queryResult) {
+  var genericResponse = {
+    userInput: queryResult.userInput,
+    data: {
+      name: queryResult.data.name || '' ,
+      contactMethods: {
+        phone: '',
+        email: '',
+        twitter: '',
+        web: '',
+        chat: '',
+        facebook: ''
+      },
+      posts: [],
+      otherCompanies: queryResult.data.otherCompanies
+    },
+    type: queryResult.type || '',
+    context: queryResult.context || ''
+  }
+
+// Extract contact methods:
+  genericResponse.data.contactMethods = utilities.extractContactMethods(queryResult.data);
+//Extract Posts info - iterate through with Map
+  var posts = queryResult.data.posts;
+  if (posts && posts.length) {
+    genericResponse.data.posts = posts.map((post) => {
+      return {
+        title: post.title || '',
+        urlId: post.urlId || '',
+      };
+    })
+  };
+  return genericResponse;
+}
+
+// Should this exist in another module?
+function attachOtherCompanies(company, companySearchResults) {
     var companyNames = companySearchResults.map(function(eachCompany) {
       return eachCompany.name;
     });
     company.otherCompanies = companyNames.filter(function(name){
       return name.toLowerCase() !== userInput.toLowerCase();
     });
-    // ----------------
+    return company;
+};
 
-    // TROUBLE STARTING HERE - Async trickiness ...
-    console.log('Check-in BEFORE querying Posts of Company');
-    return postSearch.findByCompany(company)
-  })
-  .then(function(posts) {
-    console.log('Posts of Company returned in next step of Promise chain');
-    if (!company.noresults) {
-      company.posts = posts
-    };
-    genericResponse.data = company;
-    console.log('About to return a Generic Response from within action handler, step 1 of 2');
-    return genericResponse;
-  });
+// takes Company object, puts associated info into an result object
+// should this exist in another module?
+function extractContactMethods(queryResultData) {
+  var contactInfo = {
+    phone: '',
+    email: '',
+    twitter: '',
+    web: '',
+    chat: '',
+    facebook: ''
+  };
+  var company = queryResultData;
+  contactInfo.phone = company.callback.phone || '';
+
+  let emailContactMethods = company.contactMethods.filter(function (method) {
+        return method.type === "email";
+    });
+  contactInfo.email = (emailContactMethods && emailContactMethods.length) ? emailContactMethods[0].target : '';
+
+  let twitterContactMethods = company.contactMethods.filter(function (method) {
+        return method.type === "twitter";
+    });
+  contactInfo.twitter = (twitterContactMethods && twitterContactMethods.length) ? twitterContactMethods[0].target : '';
+
+  let webContactMethods = company.contactMethods.filter(function (method) {
+        return method.type === "web";
+    });
+  contactInfo.web = (webContactMethods && webContactMethods.length) ? webContactMethods[0].target : '';
+
+  let chatContactMethods = company.contactMethods.filter(function (method) {
+        return method.type === "chat";
+    });
+  contactInfo.chat = (chatContactMethods && chatContactMethods.length) ? chatContactMethods[0].target : '';
+
+  let facebookContactMethods = company.contactMethods.filter(function (method) {
+        return method.type === "facebook";
+    });
+  contactInfo.facebook = (facebookContactMethods && facebookContactMethods.length) ? facebookContactMethods[0].target : '';
+
+  console.log("Extracted contact info from company: " + JSON.stringify(contactInfo));
+  return contactInfo;
 }
-
-// function attachPostsToCompany(company) {
-//   return Q.when(postSearch.findPostsofCompany(company))
-//     .then(function (posts) {
-//       company.posts = posts;
-//       return company;
-//     })
-// }
 
 module.exports = {
   processRequest: processRequest

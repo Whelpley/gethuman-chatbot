@@ -26,88 +26,9 @@ function preResponse(context) {
   }
 }
 
-// takes Company object, puts associated info into an result object
-function extractContactInfo(genericResponseData) {
-  var contactInfo = {
-    phone: '',
-    email: '',
-    twitter: '',
-    web: '',
-    chat: '',
-    facebook: ''
-  };
-  var company = genericResponseData;
-  contactInfo.phone = company.callback.phone || '';
-
-  let emailContactMethods = company.contactMethods.filter(function (method) {
-        return method.type === "email";
-    });
-  contactInfo.email = (emailContactMethods && emailContactMethods.length) ? emailContactMethods[0].target : '';
-
-  let twitterContactMethods = company.contactMethods.filter(function (method) {
-        return method.type === "twitter";
-    });
-  contactInfo.twitter = (twitterContactMethods && twitterContactMethods.length) ? twitterContactMethods[0].target : '';
-
-  let webContactMethods = company.contactMethods.filter(function (method) {
-        return method.type === "web";
-    });
-  contactInfo.web = (webContactMethods && webContactMethods.length) ? webContactMethods[0].target : '';
-
-  let chatContactMethods = company.contactMethods.filter(function (method) {
-        return method.type === "chat";
-    });
-  contactInfo.chat = (chatContactMethods && chatContactMethods.length) ? chatContactMethods[0].target : '';
-
-  let facebookContactMethods = company.contactMethods.filter(function (method) {
-        return method.type === "facebook";
-    });
-  contactInfo.facebook = (facebookContactMethods && facebookContactMethods.length) ? facebookContactMethods[0].target : '';
-
-  console.log("Extracted contact info from company: " + JSON.stringify(contactInfo));
-  return contactInfo;
-}
 
 
-//  should exist in Slack Handler
-function formatTextFieldSlack(contactInfo) {
-  var result = '';
-  var counter = 1;
-  for(var key in contactInfo) {
-    if (contactInfo.hasOwnProperty(key) && (counter <= 3) && (contactInfo[key])) {
-      switch(key) {
-          case 'twitter':
-              result = result + '<https://twitter.com/' + contactInfo[key] +'|Twitter> | ';
-              break;
-          case 'web':
-              result = result + '<' + contactInfo[key] +'|Web> | ';
-              break;
-          case 'chat':
-              result = result + '<' + contactInfo[key] +'|Chat> | ';
-              break;
-          case 'facebook':
-              result = result + '<' + contactInfo[key] +'|Facebook> | ';
-              break;
-          default:
-              result = result + contactInfo[key] + ' | ';
-      }
-      counter += 1;
-    }
-  }
-  if (result) {
-    result = result.slice(0,-3);
-  }
-  console.log("Formatted string from contact info: " + result);
-  return result;
-};
 
-
-// convert an array of strings to one string separated by commas, with each entry *bolded*
-function convertArrayToBoldList(arrayOfStrings) {
-  var result = '*';
-  result = result + arrayOfStrings.join('*, *') + "*";
-  return result;
-}
 
 /**
  * Chain promises together in a sequence
@@ -126,9 +47,5 @@ function chainPromises(calls, val) {
 module.exports = {
   colors: colors,
   preResponse: preResponse,
-  convertArrayToBoldList: convertArrayToBoldList,
-  extractContactInfo: extractContactInfo,
-  formatTextFieldSlack: formatTextFieldSlack,
-  // formatContactButtonsMessenger: formatContactButtonsMessenger,
   chainPromises: chainPromises
 };

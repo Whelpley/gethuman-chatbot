@@ -82,31 +82,23 @@ function handleRequest(botHandlers, actionHandlers, config) {
     console.log('Context captured from request: ' + JSON.stringify(context));
 
     var botHandler = getBotHandler(botHandlers, context);
-
-    // use the bot handler to translate the context into a generic request format
-    // what do we want in generic request?
-      // -message from platform
-      // -sender ID
-      // -status/type of request: is it a new message, a confirmation, ???
     var genericRequests = botHandler.translateRequestToGenericFormats(context);
 
     genericRequests.forEach((genericRequest) => {
-      // figure out which action handler to use based on the generic request
-      // ex: if a confirmation message, returns No-Op actionhandler
       var actionHandler = factory.getActionHandler(actionHandlers, genericRequest);
       try {
         // use the action handler to process the request (i.e. call GH API, etc.)
         actionHandler.processRequest(genericRequest)
             .then(function (genericResponse) {
-              console.log("Generic Response returned in Server: ");
+              console.log("Generic Response returned in Server: " + JSON.stringify(genericResponse).substring(0,200));
               var payloads = botHandler.generateResponsePayloads(genericResponse);
-              console.log("About to invoke sendResponse")
+              console.log("Payloads generated: " + JSON.stringify(payloads).substring(0,200));
               return sendResponse(genericResponse, payloads, botHandler);
             })
             .done();
       }
       catch(error) {
-        console.log('Catching an error in Catch of Try in server: ' + error);
+        console.log('Catching an error in Try/Catch in server: ' + error);
       }
     });
 
@@ -131,13 +123,12 @@ function sendResponse(genericResponse, payloads, botHandler) {
       // for now:
       return botHandler.sendResponseToPlatform(payload, context)
           .catch(function (err) {
-            console.log('err is ' + err);
+            console.log('Error from send to platform: ' + err);
           });
 
       // TO-DO: do generic way of sending to platform
     }
   });
-
   return utilities.chainPromises(calls);
 }
 

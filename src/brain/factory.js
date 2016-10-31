@@ -2,11 +2,16 @@
 
 // not yet in use
 function getActionHandler(actionHandlers, genericRequest) {
-  // what is getting filtered out here?
-  if (genericRequest) {
-
+  // can examine genericRequest.reqType to see
+  // use switch statement if reqTypes become many
+  if (genericRequest.reqType === 'user-input') {
+    console.log('Receiving a user input')
+    return actionHandlers && actionHandlers.length && actionHandlers[0];
   }
-  return actionHandlers && actionHandlers.length && actionHandlers[0];
+  else if (genericRequest.reqType === 'confirmation') {
+    console.log('Receiving a confirmation message');
+    // return actionHandlers && actionHandlers.length && actionHandlers[1];
+  };
 }
 
 module.exports = {
