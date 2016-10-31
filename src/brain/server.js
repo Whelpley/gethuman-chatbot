@@ -187,7 +187,7 @@ function getContextFromReqRes(req, res, config) {
   return {
     config: config,
     userRequest: req.body,
-    isTest: !!req.params.isTest,,
+    isTest: !!req.params.isTest,
     bot: req.bot,
     sendResponse: function (payload) {
       res.send(payload);
