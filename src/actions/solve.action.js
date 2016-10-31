@@ -63,7 +63,7 @@ function queryCompany(genericRequest) {
     };
     // ----------------
 
-    console.log("About to attach other companies list");
+    console.log('About to attach other companies list');
     company = attachOtherCompanies(company, companySearchResults, userInput);
 
     console.log('Other companies attached, about to query Posts of Company');
@@ -74,7 +74,7 @@ function queryCompany(genericRequest) {
     queryResult.type = 'standard';
     company.posts = posts;
     queryResult.data = company;
-    console.log('Result of API queries: ' + JSON.stringify(queryResult));
+    // console.log('Result of API queries: ' + JSON.stringify(queryResult));
     return queryResult;
   });
 }
