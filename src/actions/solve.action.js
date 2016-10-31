@@ -1,10 +1,10 @@
 'use strict'
 
-const request = require('request');
-const Q = require('q');
-const companySearch = require('../services/company-api-gh');
-const postSearch = require('../services/post-api-gh');
-const utilities = require('../brain/utilities');
+var request = require('request');
+var Q = require('q');
+var companySearch = require('../services/company-api-gh');
+var postSearch = require('../services/post-api-gh');
+var utilities = require('../brain/utilities');
 
 /**
  * Processes generic request

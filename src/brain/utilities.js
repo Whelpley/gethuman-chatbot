@@ -1,7 +1,7 @@
 'use strict'
 
-const Q = require('q');
-const phoneFormatter = require('phone-formatter');
+var Q = require('q');
+var phoneFormatter = require('phone-formatter');
 
 // GetHuman green palette
 var colors = [

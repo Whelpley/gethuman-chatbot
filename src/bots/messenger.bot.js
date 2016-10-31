@@ -1,7 +1,7 @@
 'use strict'
 
-const config = require('../config/config');
-const token = config.facebookAccessToken;
+var config = require('../config/config');
+var token = config.facebookAccessToken;
 
 function isHandlerForRequest(context) {
   var object = context.userRequest.object || '';

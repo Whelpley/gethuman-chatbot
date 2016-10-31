@@ -1,9 +1,9 @@
 'use strict'
 
 
-const Q = require('q');
-const request = require('request');
-const config = require('../config/config');
+var Q = require('q');
+var request = require('request');
+var config = require('../config/config');
 
 /**
  * Find top 5 Posts that match given Company object

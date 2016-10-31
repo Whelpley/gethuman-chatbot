@@ -1,8 +1,8 @@
 'use strict'
 
 // Send-related Requires should get moved out
-const utilities = require('../brain/utilities');
-const Q = require('q');
+var utilities = require('../brain/utilities');
+var Q = require('q');
 var config = require('../config/config');
 var request = require('request');
 
