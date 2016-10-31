@@ -8,12 +8,12 @@ var utilities = require('../brain/utilities');
 
 function processRequest(genericRequest) {
   var queryResult = queryCompany(genericRequest);
-  var genericResponse = structureResponse(queryResult);
+  var genericResponse = structureGenericResponse(queryResult);
   return genericResponse;
 }
 
 /**
- * Processes generic request
+ * Processes generic request into Company object, with attached data
  *
  * @param genericRequest
  * @return {queryResult}
@@ -73,11 +73,12 @@ function queryCompany(genericRequest) {
     queryResult.type = 'standard';
     company.posts = posts;
     queryResult.data = company;
+    console.log('Result of API queries: ' + JSON.stringify(queryResult));
     return queryResult;
   });
 }
 
-function structureResponse(queryResult) {
+function structureGenericResponse(queryResult) {
   var genericResponse = {
     userInput: queryResult.userInput,
     data: {
