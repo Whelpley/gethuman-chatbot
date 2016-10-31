@@ -63,9 +63,10 @@ function queryCompany(genericRequest) {
     };
     // ----------------
 
+    console.log("About to attach other companies list");
     company = attachOtherCompanies(company, companySearchResults);
 
-    console.log('Check-in BEFORE querying Posts of Company');
+    console.log('Other companies attached, about to query Posts of Company');
     return postSearch.findByCompany(company)
   })
   .then(function(posts) {
