@@ -37,7 +37,7 @@ function generateResponsePayloads(genericResponse) {
   console.log("About to begin generating payloads from genericResponse.");
 // Case: no user input
   if (!genericResponse.data) {
-    console.log("No data detected in genericResponse.");
+    console.log("No data object detected in genericResponse.");
     payloads.push([{
         username: 'GetHuman',
         text: "Tell me the company you would like to contact.",
@@ -46,10 +46,9 @@ function generateResponsePayloads(genericResponse) {
     }]);
     return payloads;
   }
-// Case: nothing returned from Companies search
-// How to tell?
-  else if (genericResponse.data.posts === {}) {
-    console.log("No posts detected in data of genericResponse.");
+// Case: nothing returned from Companies search / junk input
+  else if (genericResponse.data === {}) {
+    console.log("Empty data object detected in genericResponse.");
     var textInput = genericResponse.context.userRequest.text;
     payloads.push([{
         username: 'GetHuman',
@@ -59,6 +58,18 @@ function generateResponsePayloads(genericResponse) {
     }]);
     return payloads;
   }
+// // Case: nothing returned from Posts search
+//   else if (genericResponse.data.posts === {}) {
+//     console.log("No posts detected in data of genericResponse.");
+//     var textInput = genericResponse.context.userRequest.text;
+//     payloads.push([{
+//         username: 'GetHuman',
+//         text: "I couldn't tell what you meant by \"" + textInput + "\". Please tell me company you are looking for. (ex: \"/gethuman Verizon Wireless\")",
+//         icon_emoji: ':gethuman:',
+//         response_type: 'ephemeral'
+//     }]);
+//     return payloads;
+//   }
 
   console.log("Passed first two checks in generateResponsePayloads function.")
 
@@ -75,11 +86,9 @@ function generateResponsePayloads(genericResponse) {
   console.log("About to start pushing info into payloads.");
 
   payloads.push([{
-    // may not need to set these
+    // may not need to set these params - can auto-set in Slack settings
       username: 'GetHuman',
       icon_emoji: ':gethuman:',
-      // set response_type to 'in_channel' if we want all to see it
-      // doesn't work like that though!
       response_type: 'ephemeral',
       attachments: []
   }]);
