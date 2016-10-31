@@ -1,6 +1,6 @@
 'use strict'
 
-var request = require('request');
+// var request = require('request');
 var Q = require('q');
 var companySearch = require('../services/company-api-gh');
 var postSearch = require('../services/post-api-gh');
@@ -10,7 +10,7 @@ var utilities = require('../brain/utilities');
  * Processes generic request
  *
  * @param genericRequest
- * @returns {genericResponse}
+ * @return {genericResponse}
  */
 function processRequest(genericRequest) {
   var genericResponse = {
@@ -29,8 +29,7 @@ function processRequest(genericRequest) {
 // this is where things get hairy ...
 
   return Q.when(companySearch.findByText(userInput))
-  .then(function (companySearchResults) {
-
+  .then(function(companySearchResults) {
     // ----------------
     // Pick out Company of interest from search results
     // (separate out this as function for testing - MAYBE?)
@@ -39,13 +38,13 @@ function processRequest(genericRequest) {
     });
 
     if (!companySearchResults.length) {
-      console.log("Nothing found in initial Company search");
+      console.log('Nothing found in initial Company search');
       // returning an empty object as Posts for the next step in chain
       return Q.when({});
     }
     else if (exactMatch && exactMatch.length) {
       company = exactMatch[0];
-      console.log("Found an exact match from Companies search");
+      console.log('Found an exact match from Companies search');
     }
     else {
       company = companySearchResults[0];
@@ -59,23 +58,23 @@ function processRequest(genericRequest) {
     // ??? should this be here in the chain ???
     var companyNames = companySearchResults.map(function(eachCompany) {
       return eachCompany.name;
-    })
+    });
     company.otherCompanies = companyNames.filter(function(name){
       return name.toLowerCase() !== userInput.toLowerCase();
     });
     // ----------------
 
     // TROUBLE STARTING HERE - Async trickiness ...
-    console.log("Check-in BEFORE querying Posts of Company");
+    console.log('Check-in BEFORE querying Posts of Company');
     return postSearch.findByCompany(company)
   })
-  .then(function (posts) {
-    console.log("Posts of Company returned in next step of Promise chain");
+  .then(function(posts) {
+    console.log('Posts of Company returned in next step of Promise chain');
     if (!company.noresults) {
       company.posts = posts
     };
     genericResponse.data = company;
-    console.log("About to return a Generic Response from within action handler, step 1 of 2");
+    console.log('About to return a Generic Response from within action handler, step 1 of 2');
     return genericResponse;
   });
 }

@@ -1,6 +1,5 @@
 'use strict'
 
-
 var Q = require('q');
 var request = require('request');
 var config = require('../config/config');
@@ -11,14 +10,12 @@ var config = require('../config/config');
  * @param textInput
  * @returns {*|promise}
  */
-
 function findByText(textInput) {
   var deferred = Q.defer();
-  // var url = process.env.API_BASE_URL + '/companies/search';
   var url = config.ghApiBaseUrl + '/companies/search';
   var match = encodeURIComponent(textInput);
 
-  console.log('trying to match user input: ' + match)
+  console.log('trying to match user input: ' + match);
 
   request(url
     + '?match='
