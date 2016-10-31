@@ -47,8 +47,8 @@ function generateResponsePayloads(genericResponse) {
     return payloads;
   }
 // Case: nothing returned from Companies search / junk input
-  else if (!genericResponse.data.found) {
-    console.log("Empty data object detected in genericResponse.");
+  else if (genericResponse.data.noresults) {
+    console.log("No Company Results flag detected in genericResponse.");
     var textInput = genericResponse.context.userRequest.text;
     payloads.push([{
         username: 'GetHuman',
