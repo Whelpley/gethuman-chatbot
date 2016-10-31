@@ -27,6 +27,7 @@ function start(botHandlers, actionHandlers, config) {
   app.post('/:bot', handleRequest(botHandlers, actionHandlers, config));
 
     //    yourapi.com/messenger  yourapi.com/gethuman - slack
+    //chance Slack to /slack
 
   // FB version (switch facebook to just /gethuman)
   // app.post('/v3/gethuman', handleRequest(botHandlers, actionHandlers));
@@ -78,6 +79,13 @@ function addTestRoutes(app) {
  * @param config
  * @returns {Function}
  */
+
+ // TO-DO: Remove .error(), replace with .done()
+ //      wrap in try{}catch{}
+
+ // can reference req.bot from incoming Post - set that in the context
+ //   do this instead of piecing apart request to determine which bot
+ //   also useful for veri
 function handleRequest(botHandlers, actionHandlers, config) {
   return function (req, res) {
 
@@ -86,8 +94,22 @@ function handleRequest(botHandlers, actionHandlers, config) {
 
     // figure out which bot handler to use based on the context
     var botHandler = factory.getBotHandler(botHandlers, context);
+// instead:
+// function getBotHandler(handlers, context) {
+//  var handler = handlers[context.bot];
 
+//  if (handler) {
+//    return handler;
+//  }
+//  throw new Error('No bot handler for ' + context.bot);
+// }
     // use the bot handler to translate the context into a generic request format
+    // what do we want in generic request?
+      // -message from platform
+      // -sender ID
+      // -status/type of request: is it a new message, a confirmation, ???
+
+
     var genericRequests = botHandler.translateRequestToGenericFormats(context);
 
 // is this shorthand for:
@@ -96,14 +118,18 @@ function handleRequest(botHandlers, actionHandlers, config) {
     genericRequests.forEach((genericRequest) => {
 
       // figure out which action handler to use based on the generic request
+      // ex: if a confirmation message, returns No-Op actionhandler
       var actionHandler = factory.getActionHandler(actionHandlers, genericRequest);
 
       // use the action handler to process the request (i.e. call GH API, etc.)
       actionHandler.processRequest(genericRequest)
           .then(function (genericResponse) {
+            //GR should have everything needed to talk to all platforms
+            //    action type
+            //
             console.log("Generic Response returned in Server: 2/2: " + JSON.stringify(genericResponse).substring(0,600));
             // create payloads to be sent back to the platform from the generic response
-            // *** seems to break after this step ***
+
             var payloads = botHandler.generateResponsePayloads(genericResponse);
             console.log("About to invoke sendResponse")
             // finally send the payloads back to the platform

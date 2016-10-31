@@ -1,6 +1,8 @@
 'use strict'
 
 // is unit testable
+
+// change: var handler = handlers.bot
 function getBotHandler(handlers, context) {
   for (var i = 0; i < handlers.length; i++) {
     if (handlers[i].isHandlerForRequest(context)) {

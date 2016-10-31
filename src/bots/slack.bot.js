@@ -38,14 +38,13 @@ function generateResponsePayloads(genericResponse) {
 // Case: no user input
   if (!genericResponse.data) {
     console.log("No data detected in genericResponse.");
-    // is this the right way to load the payload?
     payloads.push([{
         username: 'GetHuman',
         text: "Tell me the company you would like to contact.",
         response_type: 'ephemeral',
         icon_emoji: ':gethuman:'
     }]);
-    return botSpecificResponse;
+    return payloads;
   }
 // Case: nothing returned from Companies search
 // How to tell?
