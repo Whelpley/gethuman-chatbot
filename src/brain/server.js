@@ -127,7 +127,7 @@ function handleRequest(botHandlers, actionHandlers, config) {
             //GR should have everything needed to talk to all platforms
             //    action type
             //
-            console.log("Generic Response returned in Server: 2/2: " + JSON.stringify(genericResponse).substring(0,200));
+            console.log("Generic Response returned in Server: 2/2: " + JSON.stringify(genericResponse));
             // create payloads to be sent back to the platform from the generic response
 
             var payloads = botHandler.generateResponsePayloads(genericResponse);
