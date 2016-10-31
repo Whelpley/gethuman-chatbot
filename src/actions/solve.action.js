@@ -64,7 +64,7 @@ function queryCompany(genericRequest) {
     // ----------------
 
     console.log("About to attach other companies list");
-    company = attachOtherCompanies(company, companySearchResults);
+    company = attachOtherCompanies(company, companySearchResults, userInput);
 
     console.log('Other companies attached, about to query Posts of Company');
     return postSearch.findByCompany(company)
@@ -114,11 +114,12 @@ function structureGenericResponse(queryResult) {
 }
 
 // Should this exist in another module?
-function attachOtherCompanies(company, companySearchResults) {
-    var companyNames = companySearchResults.map(function(eachCompany) {
+function attachOtherCompanies(company, companySearchResults, userInput) {
+    var companyNames = companySearchResults.map((eachCompany) => {
       return eachCompany.name;
     });
-    company.otherCompanies = companyNames.filter(function(name){
+    console.log("List of company names: " + JSON.stringify(companyNames));
+    company.otherCompanies = companyNames.filter((name) => {
       return name.toLowerCase() !== userInput.toLowerCase();
     });
     return company;
