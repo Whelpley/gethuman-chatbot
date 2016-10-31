@@ -7,12 +7,6 @@ var config = require('../config/config');
 var request = require('request');
 
 
-// unit testable
-function isHandlerForRequest(context) {
-  var responseUrl = context.userRequest.response_url || '';
-  return (responseUrl && responseUrl.includes('hooks.slack.com')) ? true : false;
-}
-
 // not needed?
 // will delete this if won't cause problems when missing
 function verify() {
@@ -210,7 +204,6 @@ function sendErrorResponse(error, context) {
 }
 
 module.exports = {
-  // isHandlerForRequest: isHandlerForRequest,
   sendResponseToPlatform: sendResponseToPlatform,
   sendErrorResponse: sendErrorResponse,
   verify: verify,

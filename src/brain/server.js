@@ -80,17 +80,11 @@ function addTestRoutes(app) {
  // TO-DO: Remove .error(), replace with .done()
  //      wrap in try{}catch{}
 
- // can reference req.bot from incoming Post - set that in the context
- //   do this instead of piecing apart request to determine which bot
- //   also useful for veri
 function handleRequest(botHandlers, actionHandlers, config) {
   return function (req, res) {
-    console.log('Incoming params: ' + JSON.stringify(req.params));
-    // get context object from request/response/config that can be passed around
-    var context = getContextFromReqRes(req, res, config);
+    var context = getContext(req, res, config);
     console.log('Context captured from request: ' + JSON.stringify(context));
 
-    // figure out which bot handler to use based on the context
     var botHandler = getBotHandler(botHandlers, context);
 
     // use the bot handler to translate the context into a generic request format
@@ -98,8 +92,6 @@ function handleRequest(botHandlers, actionHandlers, config) {
       // -message from platform
       // -sender ID
       // -status/type of request: is it a new message, a confirmation, ???
-
-
     var genericRequests = botHandler.translateRequestToGenericFormats(context);
 
 // is this shorthand for:
@@ -110,26 +102,25 @@ function handleRequest(botHandlers, actionHandlers, config) {
       // figure out which action handler to use based on the generic request
       // ex: if a confirmation message, returns No-Op actionhandler
       var actionHandler = factory.getActionHandler(actionHandlers, genericRequest);
-
-      // use the action handler to process the request (i.e. call GH API, etc.)
-      actionHandler.processRequest(genericRequest)
-          .then(function (genericResponse) {
-            //GR should have everything needed to talk to all platforms
-            //    action type
-            //
-            console.log("Generic Response returned in Server: 2/2: ");
-            // create payloads to be sent back to the platform from the generic response
-
-            var payloads = botHandler.generateResponsePayloads(genericResponse);
-            console.log("About to invoke sendResponse")
-            // finally send the payloads back to the platform
-            return sendResponse(genericResponse, payloads, botHandler);
-          })
-          .catch(function (err) {
-            // generically send error response back to client
-            // sendErrorResponse(err, context);
-            botHandler.sendErrorResponse(err, context);
-          });
+      try {
+        // use the action handler to process the request (i.e. call GH API, etc.)
+        actionHandler.processRequest(genericRequest)
+            .then(function (genericResponse) {
+              console.log("Generic Response returned in Server: ");
+              var payloads = botHandler.generateResponsePayloads(genericResponse);
+              console.log("About to invoke sendResponse")
+              return sendResponse(genericResponse, payloads, botHandler);
+            })
+            .done();
+            // .catch(function (err) {
+            //   // generically send error response back to client
+            //   // sendErrorResponse(err, context);
+            //   botHandler.sendErrorResponse(err, context);
+            // });
+      }
+      catch(error) {
+        console.log('Catching an error in Catch of Try in server: ' + error);
+      }
     });
 
   }
@@ -170,8 +161,9 @@ function sendResponse(genericResponse, payloads, botHandler) {
  * @param req
  * @param res
  * @param config
+ * @returns {context}
  */
-function getContextFromReqRes(req, res, config) {
+function getContext(req, res, config) {
   return {
     config: config,
     userRequest: req.body,
@@ -186,7 +178,13 @@ function getContextFromReqRes(req, res, config) {
   };
 }
 
-// instead:
+/**
+ * Select Bot Handler based on parameters of incoming Post
+ *
+ * @param handlers
+ * @param context
+ * @returns handler
+ */
 function getBotHandler(handlers, context) {
  var handler = handlers[context.bot];
  if (handler) {
@@ -200,5 +198,5 @@ module.exports = {
   addMiddleware: addMiddleware,
   addTestRoutes: addTestRoutes,
   handleRequest: handleRequest,
-  getContextFromReqRes: getContextFromReqRes
+  getContext: getContext
 };
