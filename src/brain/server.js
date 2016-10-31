@@ -85,8 +85,9 @@ function addTestRoutes(app) {
  //   also useful for veri
 function handleRequest(botHandlers, actionHandlers, config) {
   return function (req, res) {
+    console.log('Incoming params: ' + JSON.stringify(req.params));
     var bot = req.params.bot;
-    console.log('Incoming params: ' + req.params);
+    console.log('Bot detected: ' + bot);
     // get context object from request/response/config that can be passed around
     var context = getContextFromReqRes(req, res, config);
     console.log('Context captured from request: ' + JSON.stringify(context));
