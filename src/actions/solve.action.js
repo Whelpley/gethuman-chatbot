@@ -71,7 +71,9 @@ function processRequest(genericRequest) {
   })
   .then(function (posts) {
     console.log("Posts of Company returned in next step of Promise chain: " +JSON.stringify(posts));
-    if (!(company === {})) company.posts = posts;
+    if (!(company === {})) {
+      company.posts = posts
+    };
     genericResponse.data = company;
     console.log("About to return a Generic Response from within action handler 1/2: " + JSON.stringify(genericResponse).substring(0,200));
     return genericResponse;
