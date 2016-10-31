@@ -77,7 +77,7 @@ function queryCompany(genericRequest) {
   });
 }
 
-function genericResponse(queryResult) {
+function structureResponse(queryResult) {
   var genericResponse = {
     userInput: queryResult.userInput,
     data: {
@@ -96,10 +96,9 @@ function genericResponse(queryResult) {
     type: queryResult.type || '',
     context: queryResult.context || ''
   }
-
 // Extract contact methods:
   genericResponse.data.contactMethods = utilities.extractContactMethods(queryResult.data);
-//Extract Posts info - iterate through with Map
+// Extract Posts info
   var posts = queryResult.data.posts;
   if (posts && posts.length) {
     genericResponse.data.posts = posts.map((post) => {
