@@ -86,23 +86,13 @@ function addTestRoutes(app) {
 function handleRequest(botHandlers, actionHandlers, config) {
   return function (req, res) {
     console.log('Incoming params: ' + JSON.stringify(req.params));
-    var bot = req.params.bot;
-    console.log('Bot detected: ' + bot);
     // get context object from request/response/config that can be passed around
     var context = getContextFromReqRes(req, res, config);
     console.log('Context captured from request: ' + JSON.stringify(context));
 
     // figure out which bot handler to use based on the context
-    var botHandler = factory.getBotHandler(botHandlers, context);
-// instead:
-// function getBotHandler(handlers, context) {
-//  var handler = handlers[context.bot];
+    var botHandler = getBotHandler(botHandlers, context);
 
-//  if (handler) {
-//    return handler;
-//  }
-//  throw new Error('No bot handler for ' + context.bot);
-// }
     // use the bot handler to translate the context into a generic request format
     // what do we want in generic request?
       // -message from platform
@@ -186,7 +176,7 @@ function getContextFromReqRes(req, res, config) {
     config: config,
     userRequest: req.body,
     isTest: !!req.params.isTest,
-    bot: req.bot,
+    bot: req.params.bot,
     sendResponse: function (payload) {
       res.send(payload);
     },
@@ -194,6 +184,15 @@ function getContextFromReqRes(req, res, config) {
       res.status(200).end();
     }
   };
+}
+
+// instead:
+function getBotHandler(handlers, context) {
+ var handler = handlers[context.bot];
+ if (handler) {
+   return handler;
+ }
+ throw new Error('No bot handler for ' + context.bot);
 }
 
 module.exports = {

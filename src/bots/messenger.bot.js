@@ -3,10 +3,10 @@
 var config = require('../config/config');
 var token = config.facebookAccessToken;
 
-function isHandlerForRequest(context) {
-  var object = context.userRequest.object || '';
-  return (object === 'page') ? true : false;
-}
+// function isHandlerForRequest(context) {
+//   var object = context.userRequest.object || '';
+//   return (object === 'page') ? true : false;
+// }
 
 // no working just yet - needs to account for different structure of verification request
 function verify(req, res) {
