@@ -53,7 +53,7 @@ function generateResponsePayloads(genericResponse) {
     var name = genericResponse.data.name;
     var posts = genericResponse.data.posts;
     var otherCompanies = genericResponse.data.otherCompanies;
-    var topContacts = utilities.formatTextField(genericResponse.data.contactMethods);
+    var topContacts = formatTextField(genericResponse.data.contactMethods);
     var colors = utilities.colors;
 
     payloads.push([{
