@@ -193,19 +193,19 @@ function sendRequestAsReply(payload, context) {
   return deferred.promise;
 }
 
-function sendErrorResponse(error, context) {
-  console.log("Ran into an error, sending from Bot Handler: " + error);
-  var payload = {
-        username: 'GetHuman',
-        text: error,
-        icon_emoji: ':gethuman:'
-  };
-  sendRequestsAsReply(payload, context);
-}
+// function sendErrorResponse(error, context) {
+//   console.log("Ran into an error, sending from Bot Handler: " + error);
+//   var payload = {
+//         username: 'GetHuman',
+//         text: error,
+//         icon_emoji: ':gethuman:'
+//   };
+//   sendRequestsAsReply(payload, context);
+// }
 
 module.exports = {
   sendResponseToPlatform: sendResponseToPlatform,
-  sendErrorResponse: sendErrorResponse,
+  // sendErrorResponse: sendErrorResponse,
   verify: verify,
   translateRequestToGenericFormats: translateRequestToGenericFormats,
   generateResponsePayloads: generateResponsePayloads

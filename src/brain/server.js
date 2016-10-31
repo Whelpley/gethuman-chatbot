@@ -76,10 +76,6 @@ function addTestRoutes(app) {
  * @param config
  * @returns {Function}
  */
-
- // TO-DO: Remove .error(), replace with .done()
- //      wrap in try{}catch{}
-
 function handleRequest(botHandlers, actionHandlers, config) {
   return function (req, res) {
     var context = getContext(req, res, config);
@@ -94,11 +90,7 @@ function handleRequest(botHandlers, actionHandlers, config) {
       // -status/type of request: is it a new message, a confirmation, ???
     var genericRequests = botHandler.translateRequestToGenericFormats(context);
 
-// is this shorthand for:
-    // genericRequests.forEach(function (genericRequest) {
-      // ?
     genericRequests.forEach((genericRequest) => {
-
       // figure out which action handler to use based on the generic request
       // ex: if a confirmation message, returns No-Op actionhandler
       var actionHandler = factory.getActionHandler(actionHandlers, genericRequest);
@@ -112,11 +104,6 @@ function handleRequest(botHandlers, actionHandlers, config) {
               return sendResponse(genericResponse, payloads, botHandler);
             })
             .done();
-            // .catch(function (err) {
-            //   // generically send error response back to client
-            //   // sendErrorResponse(err, context);
-            //   botHandler.sendErrorResponse(err, context);
-            // });
       }
       catch(error) {
         console.log('Catching an error in Catch of Try in server: ' + error);

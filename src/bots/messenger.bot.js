@@ -140,20 +140,20 @@ function translateGenericResponseToPlatform(commonResponse) {
   return botSpecificResponse;
 }
 
-// duplicated in Slack/etc? export to module!
-function sendErrorResponse(err, context) {
-  console.log("Ran into an error: " + err);
-  var payload = [{
-        "title": "We ran into an error!",
-        "subtitle": JSON.stringify(error),
-        "buttons": [{
-            "type": "web_url",
-            "url": "https://gethuman.com",
-            "title": "Go to GetHuman"
-        }],
-    }];
-  sendRequestsAsReply(payload, context);
-}
+// // duplicated in Slack/etc? export to module!
+// function sendErrorResponse(err, context) {
+//   console.log("Ran into an error: " + err);
+//   var payload = [{
+//         "title": "We ran into an error!",
+//         "subtitle": JSON.stringify(error),
+//         "buttons": [{
+//             "type": "web_url",
+//             "url": "https://gethuman.com",
+//             "title": "Go to GetHuman"
+//         }],
+//     }];
+//   sendRequestsAsReply(payload, context);
+// }
 
 // duplicate function - live elsewhere?
 function sendResponseToPlatform(payload, context) {
@@ -272,7 +272,7 @@ function formatContactButtonsMessenger(contactInfo) {
 
 module.exports = {
   sendResponseToPlatform: sendResponseToPlatform,
-  sendErrorResponse: sendErrorResponse,
+  // sendErrorResponse: sendErrorResponse,
   verify: verify,
   translateRequestToGenericFormat: translateRequestToGenericFormat,
   translateGenericResponseToPlatform: translateGenericResponseToPlatform,
