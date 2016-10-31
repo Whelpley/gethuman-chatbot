@@ -24,6 +24,6 @@ function getActionHandler(actionHandlers, genericRequest) {
 }
 
 module.exports = {
-  getBotHandler: getBotHandler,
+  // getBotHandler: getBotHandler,
   getActionHandler: getActionHandler
 };
