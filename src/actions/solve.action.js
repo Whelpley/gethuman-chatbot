@@ -17,7 +17,7 @@ function processRequest(genericRequest) {
     context: genericRequest.context
   };
   var userInput = genericRequest.userInput;
-  var company = {};
+  var company = {found: false};
 
   // todo: do pre-response here
   utilities.preResponse(genericRequest.context);
@@ -41,7 +41,7 @@ function processRequest(genericRequest) {
     if (!companySearchResults.length) {
       console.log("Nothing found in initial Company search");
       // returning an empty object as Posts for the next step in chain
-      return Q.when({nocompany: true});
+      return Q.when({});
     }
     else if (exactMatch && exactMatch.length) {
       company = exactMatch[0];
@@ -71,7 +71,7 @@ function processRequest(genericRequest) {
   })
   .then(function (posts) {
     console.log("Posts of Company returned in next step of Promise chain: " +JSON.stringify(posts));
-    if (!posts.nocompany) {
+    if (!company.found) {
       company.posts = posts
     };
     genericResponse.data = company;
