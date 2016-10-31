@@ -210,7 +210,7 @@ function sendErrorResponse(error, context) {
 }
 
 module.exports = {
-  isHandlerForRequest: isHandlerForRequest,
+  // isHandlerForRequest: isHandlerForRequest,
   sendResponseToPlatform: sendResponseToPlatform,
   sendErrorResponse: sendErrorResponse,
   verify: verify,

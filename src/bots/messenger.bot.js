@@ -277,7 +277,7 @@ function formatContactButtonsMessenger(contactInfo) {
 
 module.exports = {
   sendResponseToPlatform: sendResponseToPlatform,
-  isHandlerForRequest: isHandlerForRequest,
+  // isHandlerForRequest: isHandlerForRequest,
   sendErrorResponse: sendErrorResponse,
   verify: verify,
   translateRequestToGenericFormat: translateRequestToGenericFormat,
