@@ -119,7 +119,7 @@ function generateResponsePayloads(genericResponse) {
           };
           payloads[0][0].attachments.push(singleAttachment);
       };
-    console.log("Posts info pushed into Payloads:" + JSON.stringify(payloads));
+    console.log("Posts info pushed into Payloads");
   }
 
 
@@ -131,7 +131,7 @@ function generateResponsePayloads(genericResponse) {
       "text": topContacts,
   });
 
-  console.log("Company Contact Info pushed into Payloads:" + JSON.stringify(payloads));
+  console.log("Company Contact Info pushed into Payloads");
 
 
   // attach Other Companies info if they exist
@@ -144,14 +144,12 @@ function generateResponsePayloads(genericResponse) {
           "text": "Or maybe you meant " + otherCompaniesList + "?",
           "mrkdwn_in": ["text"]
       });
-      console.log("Other Companies info pushed into Payloads:" + JSON.stringify(payloads));
+      console.log("Other Companies info pushed into Payloads");
   }
 
   if (!payloads[0][0].attachments.length) {
       payloads[0][0].text = "I couldn't find anything for \"" + name + "\". Please tell me which company you are looking for. (ex: \"/gethuman Verizon Wireless\")"
   }
-
-  console.log("Payloads processed from genericResponse: " + JSON.stringify(payloads));
   return payloads;
 }
 

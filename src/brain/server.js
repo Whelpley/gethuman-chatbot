@@ -26,11 +26,7 @@ function start(botHandlers, actionHandlers, config) {
   // all bots go to this route
   app.post('/:bot', handleRequest(botHandlers, actionHandlers, config));
 
-    //    yourapi.com/messenger  yourapi.com/gethuman - slack
-    //chance Slack to /slack
-
-  // FB version (switch facebook to just /gethuman)
-  // app.post('/v3/gethuman', handleRequest(botHandlers, actionHandlers));
+  //    yourapi.com/messenger  yourapi.com/slack
 
   app.listen(port, function () {
     console.log('API listening for bots on port ' + port);
@@ -89,7 +85,8 @@ function addTestRoutes(app) {
  //   also useful for veri
 function handleRequest(botHandlers, actionHandlers, config) {
   return function (req, res) {
-
+    var bot = req.bot;
+    console.log('Incoming bot route: ' + bot);
     // get context object from request/response/config that can be passed around
     var context = getContextFromReqRes(req, res, config);
     console.log('Context captured from request: ' + JSON.stringify(context));
@@ -129,7 +126,7 @@ function handleRequest(botHandlers, actionHandlers, config) {
             //GR should have everything needed to talk to all platforms
             //    action type
             //
-            console.log("Generic Response returned in Server: 2/2: " + JSON.stringify(genericResponse));
+            console.log("Generic Response returned in Server: 2/2: ");
             // create payloads to be sent back to the platform from the generic response
 
             var payloads = botHandler.generateResponsePayloads(genericResponse);

@@ -70,7 +70,7 @@ function processRequest(genericRequest) {
     return postSearch.findByCompany(company)
   })
   .then(function (posts) {
-    console.log("Posts of Company returned in next step of Promise chain: " +JSON.stringify(posts));
+    console.log("Posts of Company returned in next step of Promise chain");
     if (!company.noresults) {
       company.posts = posts
     };
