@@ -100,7 +100,7 @@ function structureGenericResponse(queryResult) {
     context: queryResult.context || ''
   }
 // Extract contact methods:
-  genericResponse.data.contactMethods = utilities.extractContactMethods(queryResult.data);
+  genericResponse.data.contactMethods = extractContactMethods(queryResult.data);
 // Extract Posts info
   var posts = queryResult.data.posts;
   if (posts && posts.length) {
