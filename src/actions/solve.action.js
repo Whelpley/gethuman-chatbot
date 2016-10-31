@@ -41,7 +41,7 @@ function processRequest(genericRequest) {
     if (!companySearchResults.length) {
       console.log("Nothing found in initial Company search");
       // returning an empty object as Posts for the next step in chain
-      return Q.when({});
+      return Q.when({nocompany: true});
     }
     else if (exactMatch && exactMatch.length) {
       company = exactMatch[0];
@@ -71,8 +71,8 @@ function processRequest(genericRequest) {
   })
   .then(function (posts) {
     console.log("Posts of Company returned in next step of Promise chain: " +JSON.stringify(posts));
-    if (!(company.name)) {
-      company.posts = posts;
+    if (!posts.nocompany) {
+      company.posts = posts
     };
     genericResponse.data = company;
     console.log("About to return a Generic Response from within action handler 1/2: " + JSON.stringify(genericResponse).substring(0,200));
