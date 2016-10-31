@@ -99,6 +99,10 @@ function structureGenericResponse(queryResult) {
     type: queryResult.type || '',
     context: queryResult.context || ''
   }
+  // return early if no data or no input
+  if ((queryResult.type === 'no-input') || (queryResult.type === 'nothing-found')) {
+    return genericResponse;
+  }
 // Extract contact methods:
   genericResponse.data.contactMethods = extractContactMethods(queryResult.data);
 // Extract Posts info
