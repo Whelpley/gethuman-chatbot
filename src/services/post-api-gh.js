@@ -8,7 +8,7 @@ var config = require('../config/config');
  * Find top 5 Posts that match given Company object
  *
  * @param company
- * @returns {*|promise}
+ * @return {*|promise}
  */
 function findByCompany(company) {
   var deferred = Q.defer();

@@ -1,10 +1,10 @@
 'use strict'
 
-var Q = require('q');
-var phoneFormatter = require('phone-formatter');
+// var Q = require('q');
+// var phoneFormatter = require('phone-formatter');
 
 // GetHuman green palette
-var colors = [
+const colors = [
     '#6E9E43',
     '#7BAB50',
     '#88B85D',
@@ -21,21 +21,17 @@ var colors = [
 // anything you want all bots to do before processing request
 function preResponse(context) {
   if (!context.isTest) {
-    console.log("Sending a 200 response to client.");
+    console.log('Sending a 200 response to client.');
     context.finishResponse();
   }
 }
-
-
-
-
 
 /**
  * Chain promises together in a sequence
  *
  * @param calls Array of functions that return a promise
  * @param val Value to pass among chain
- * @returns Promise from the end of the chain
+ * @return Promise from the end of the chain
  */
 function chainPromises(calls, val) {
     if (!calls || !calls.length) {

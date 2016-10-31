@@ -8,19 +8,19 @@ var config = require('../config/config');
  * Find all companies that match given text input
  *
  * @param textInput
- * @returns {*|promise}
+ * @return {*|promise}
  */
 function findByText(textInput) {
   var deferred = Q.defer();
   var url = config.ghApiBaseUrl + '/companies/search';
   var match = encodeURIComponent(textInput);
 
-  console.log('trying to match user input: ' + match);
+  console.log('Trying to match user input: ' + match);
 
   request(url
     + '?match='
     + match,
-    function (error, response, body) {
+    function(error, response, body) {
       if (error) {
           deferred.reject(error);
       } else {
