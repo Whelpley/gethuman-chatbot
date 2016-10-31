@@ -46,7 +46,8 @@ function addMiddleware(app) {
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
 
-//what does this do - returns an error: "res.status is not a function"
+// what does this do - returns an error: "res.status is not a function"
+// to be deleted?
   // app.use(function (err, req, res) {
   //   console.error(err.stack);
   //   res.status(400).send(err.message);
@@ -91,6 +92,7 @@ function handleRequest(botHandlers, actionHandlers, config) {
 
     // get context object from request/response/config that can be passed around
     var context = getContextFromReqRes(req, res, config);
+    console.log('Context captured from request: ' + JSON.stringify(context));
 
     // figure out which bot handler to use based on the context
     var botHandler = factory.getBotHandler(botHandlers, context);
@@ -185,7 +187,8 @@ function getContextFromReqRes(req, res, config) {
   return {
     config: config,
     userRequest: req.body,
-    isTest: !!req.params.isTest,
+    isTest: !!req.params.isTest,,
+    bot: req.bot,
     sendResponse: function (payload) {
       res.send(payload);
     },
