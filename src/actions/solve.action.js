@@ -7,8 +7,8 @@ var postSearch = require('../services/post-api-gh');
 var utilities = require('../brain/utilities');
 
 function processRequest(genericRequest) {
-  queryResult = queryCompany(genericRequest);
-  genericResponse = structureResponse(queryResult);
+  var queryResult = queryCompany(genericRequest);
+  var genericResponse = structureResponse(queryResult);
   return genericResponse;
 }
 
