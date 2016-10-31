@@ -37,10 +37,9 @@ function processRequest(genericRequest) {
     var exactMatch = companySearchResults.filter(function(eachCompany) {
       return eachCompany.name.toLowerCase() === userInput.toLowerCase();
     });
+
     if (!companySearchResults.length) {
       console.log("Nothing found in initial Company search");
-      // does this break the "pure function" pattern?
-      genericResponse.data = {};
       // returning an empty object as Posts for the next step in chain
       return Q.when({});
     }
@@ -71,10 +70,10 @@ function processRequest(genericRequest) {
     return postSearch.findByCompany(company)
   })
   .then(function (posts) {
-    console.log("Check-in AFTER querying Posts of Company, within next step of Promise chain.");
+    console.log("Posts of Company returned in next step of Promise chain: " +JSON.stringify(posts));
     company.posts = posts;
     genericResponse.data = company;
-    console.log("About to return a Generic Response from within action handler 1/2: " + JSON.stringify(genericResponse).substring(0,600));
+    console.log("About to return a Generic Response from within action handler 1/2: " + JSON.stringify(genericResponse).substring(0,200));
     return genericResponse;
   });
 }
