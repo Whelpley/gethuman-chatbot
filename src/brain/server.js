@@ -32,7 +32,7 @@ function start(botHandlers, actionHandlers, config) {
   // FB Messenger verification route
   app.get('/messenger', function(req, res) {
     messenger.verify(req, res);
-  };
+  });
 
   app.listen(port, function () {
     console.log('API listening for bots on port ' + port);
