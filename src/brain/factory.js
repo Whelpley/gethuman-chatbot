@@ -10,7 +10,7 @@ function getActionHandler(actionHandlers, genericRequest) {
   }
   else if (genericRequest.reqType === 'confirmation') {
     console.log('Receiving a confirmation message');
-    // return actionHandlers && actionHandlers.length && actionHandlers[1];
+    return actionHandlers && actionHandlers.length && actionHandlers[1];
   };
 }
 

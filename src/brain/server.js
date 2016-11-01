@@ -92,6 +92,12 @@ function handleRequest(botHandlers, actionHandlers, config) {
 
     genericRequests.forEach((genericRequest) => {
       var actionHandler = factory.getActionHandler(actionHandlers, genericRequest);
+      // can this be done in processRequest?
+      if (actionHandler.noResponse()) {
+        utilities.preResponse(context);
+        console.log("Action handler cutting off response");
+        return null;
+      };
       try {
         // use the action handler to process the request (i.e. call GH API, etc.)
         actionHandler.processRequest(genericRequest)

@@ -38,10 +38,10 @@ function translateRequestToGenericFormats(context) {
       singleGenericRequest.reqType = 'postback';
       genericRequests.push(singleGenericRequest);
     }
-    // To-do: detect Message Confirmations and Verification requests
     else {
       console.log("Non-text-input Post detected from FB");
-      return null;
+      singleGenericRequest.reqType = 'confirmation';
+      genericRequests.push(singleGenericRequest);
     }
   }
   return genericRequests;
