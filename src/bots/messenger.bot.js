@@ -111,7 +111,7 @@ function generateResponsePayloads(genericResponse) {
             "buttons": [{
                 "type": "web_url",
                 "url": "https://gethuman.com?company=" + encodeURIComponent(name) ,
-                "title": "Solve this for Me - $20"
+                "title": "Solve for Me - $20"
             },
             {
                 "type": "web_url",
