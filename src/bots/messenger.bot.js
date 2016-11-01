@@ -382,7 +382,7 @@ module.exports = {
   // sendResponseToPlatform: sendResponseToPlatform,
   // sendErrorResponse: sendErrorResponse,
   verify: verify,
-  translateRequestToGenericFormat: translateRequestToGenericFormat,
-  translateGenericResponseToPlatform: translateGenericResponseToPlatform,
+  translateRequestToGenericFormats: translateRequestToGenericFormats,
+  generateResponsePayloads: generateResponsePayloads,
   formatContactButtons: formatContactButtons
 };
