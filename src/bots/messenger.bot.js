@@ -121,23 +121,24 @@ function generateResponsePayloads(genericResponse) {
         };
         postElements.push(singleElement);
       }
-      payloads.push({
-        url: url,
-        qs: {access_token: token},
-        method: 'POST',
-        json: {
-            recipient: {id: sender},
-            message: {
-                "attachment": {
-                    "type": "template",
-                    "payload": {
-                        "template_type": "generic",
-                        "elements": postElements
-                    }
-                }
-            },
-        }
-      });
+      payloads.push(makePayload(token, url, sender, postElements));
+      // payloads.push({
+      //   url: url,
+      //   qs: {access_token: token},
+      //   method: 'POST',
+      //   json: {
+      //       recipient: {id: sender},
+      //       message: {
+      //           "attachment": {
+      //               "type": "template",
+      //               "payload": {
+      //                   "template_type": "generic",
+      //                   "elements": postElements
+      //               }
+      //           }
+      //       },
+      //   }
+      // });
     }
 
     // load Contact Methods card to Payload
@@ -245,61 +246,6 @@ function generateResponsePayloads(genericResponse) {
   return payloads;
 }
 
-// // duplicate function - live elsewhere?
-// function sendResponseToPlatform(payload, context) {
-//   if (!!context.isTest) {
-//     console.log("Test flag detected in payload context.");
-//     context.sendResponse(payload);
-//     return Q.when();
-//   }
-//   else if (!payload || (payload === [])) {
-//     console.log("No payload data detected.");
-//     return Q.when();
-//   }
-//   else {
-//     console.log("Standard data-having payload detected, sending a response");
-//     return sendRequestAsReply(payload, context);
-//   }
-// }
-
-// // unique function
-// function sendRequestAsReply(payload, context) {
-//   console.log("Last step before sending this payload: " + JSON.stringify(payload));
-//   var deferred = Q.defer();
-//   var sender = context.userRequest.entry[0].messaging[0].sender.id;
-//   // console.log("Sender: " + sender);
-//     request({
-//         url: 'https://graph.facebook.com/v2.6/me/messages',
-//         qs: {access_token: token},
-//         method: 'POST',
-//         json: {
-//             recipient: {id: sender},
-//             message: {
-//                 "attachment": {
-//                     "type": "template",
-//                     "payload": {
-//                         "template_type": "generic",
-//                         "elements": payload
-//                     }
-//                 }
-//             },
-//         }
-//     }, function(error, response, body) {
-//       // console.log('Response from our request: ' + JSON.stringify(response));
-//       console.log('Body of response from our request: ' + JSON.stringify(body));
-
-//       if (error) {
-//         console.log('Error from our request: ' + JSON.stringify(error));
-//         deferred.reject(error);
-//       }
-//       else {
-//         deferred.resolve();
-//       }
-//     });
-
-//   return deferred.promise;
-// }
-
 function formatContactButtons(contactMethods) {
     var buttons = [];
     var counter = 1;
@@ -381,8 +327,6 @@ function makePayload(token, url, sender, elements) {
 
 
 module.exports = {
-  // sendResponseToPlatform: sendResponseToPlatform,
-  // sendErrorResponse: sendErrorResponse,
   verify: verify,
   translateRequestToGenericFormats: translateRequestToGenericFormats,
   generateResponsePayloads: generateResponsePayloads,
