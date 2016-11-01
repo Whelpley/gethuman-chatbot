@@ -8,6 +8,7 @@ var request = require('request');
 
 var utilities = require('./utilities');
 var factory = require('./factory');
+var messenger = require('../bots/messenger.bot');
 
 /**
  * Main entry point for the bot server
@@ -27,7 +28,9 @@ function start(botHandlers, actionHandlers, config) {
 
   // all bots go to this route
   app.post('/:bot', handleRequest(botHandlers, actionHandlers, config));
-  //    yourapi.com/messenger  yourapi.com/slack
+
+  // FB Messenger verification route
+  app.get('/messenger', messenger.verify(req, res));
 
   app.listen(port, function () {
     console.log('API listening for bots on port ' + port);

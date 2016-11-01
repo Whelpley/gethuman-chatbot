@@ -3,8 +3,8 @@
 var utilities = require('../brain/utilities');
 var config = require('../config/config');
 
-// no working just yet - needs to account for different structure of verification request
 function verify(req, res) {
+  // verify token should probably be in Config vars
     console.log("Receiving webhook verification from FB.");
     if (req.query['hub.verify_token'] === 'cmon_verify_me') {
         res.send(req.query['hub.challenge'])
