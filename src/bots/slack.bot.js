@@ -2,12 +2,13 @@
 
 // Send-related Requires should get moved out
 var utilities = require('../brain/utilities');
-var Q = require('q');
+// var Q = require('q');
 var config = require('../config/config');
-var request = require('request');
+// var request = require('request');
 
 // not needed?
 // will delete this if won't cause problems when missing
+// may be necessary if we want to verify that request actually coming from Slack
 function verify() {
   console.log("Nothing to see here.")
 }
@@ -57,7 +58,7 @@ function generateResponsePayloads(genericResponse) {
     payloads[0].json.text = 'I couldn\'t tell what you meant by \"' + genericResponse.userInput + '\". Please tell me company you are looking for. (ex: \"/gethuman Verizon Wireless\")'
     return payloads;
   }
-  // do we need the explicit type check after the first two?
+  // do we need the explicit type check after the first two, or just 'else'?
   else if (genericResponse.type === 'standard') {
     var name = genericResponse.data.name;
     var posts = genericResponse.data.posts;

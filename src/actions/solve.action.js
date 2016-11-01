@@ -13,6 +13,9 @@ var utilities = require('../brain/utilities');
  * @return {genericResponse} Promise
  */
 function processRequest(genericRequest) {
+  // send back a 200 response immediately
+  utilities.preResponse(genericRequest.context);
+  // get data from Gethuman, then process into generic response
   return Q.when(queryCompany(genericRequest))
     .then((queryResult) => {
       return structureGenericResponse(queryResult)
@@ -36,9 +39,6 @@ function queryCompany(genericRequest) {
   };
   var userInput = genericRequest.userInput;
   var company = {};
-
-  // todo: do pre-response here (is this where it belongs?)
-  utilities.preResponse(genericRequest.context);
 
   if (!userInput) {
     queryResult.type = 'no-input';
@@ -141,7 +141,7 @@ function attachOtherCompanies(company, companySearchResults, userInput) {
 // takes Company object, puts associated info into an result object
 // should this exist in another module?
 function extractContactMethods(queryResultData) {
-  var contactInfo = {
+  var contactMethods = {
     phone: '',
     email: '',
     twitter: '',
@@ -150,35 +150,35 @@ function extractContactMethods(queryResultData) {
     facebook: ''
   };
   var company = queryResultData;
-  contactInfo.phone = company.callback.phone || '';
-
+  contactMethods.phone = company.callback.phone || '';
+// can this be refactored into a Map function?
   let emailContactMethods = company.contactMethods.filter(function (method) {
         return method.type === "email";
     });
-  contactInfo.email = (emailContactMethods && emailContactMethods.length) ? emailContactMethods[0].target : '';
+  contactMethods.email = (emailContactMethods && emailContactMethods.length) ? emailContactMethods[0].target : '';
 
   let twitterContactMethods = company.contactMethods.filter(function (method) {
         return method.type === "twitter";
     });
-  contactInfo.twitter = (twitterContactMethods && twitterContactMethods.length) ? twitterContactMethods[0].target : '';
+  contactMethods.twitter = (twitterContactMethods && twitterContactMethods.length) ? twitterContactMethods[0].target : '';
 
   let webContactMethods = company.contactMethods.filter(function (method) {
         return method.type === "web";
     });
-  contactInfo.web = (webContactMethods && webContactMethods.length) ? webContactMethods[0].target : '';
+  contactMethods.web = (webContactMethods && webContactMethods.length) ? webContactMethods[0].target : '';
 
   let chatContactMethods = company.contactMethods.filter(function (method) {
         return method.type === "chat";
     });
-  contactInfo.chat = (chatContactMethods && chatContactMethods.length) ? chatContactMethods[0].target : '';
+  contactMethods.chat = (chatContactMethods && chatContactMethods.length) ? chatContactMethods[0].target : '';
 
   let facebookContactMethods = company.contactMethods.filter(function (method) {
         return method.type === "facebook";
     });
-  contactInfo.facebook = (facebookContactMethods && facebookContactMethods.length) ? facebookContactMethods[0].target : '';
+  contactMethods.facebook = (facebookContactMethods && facebookContactMethods.length) ? facebookContactMethods[0].target : '';
 
-  console.log("Extracted contact info from company: " + JSON.stringify(contactInfo));
-  return contactInfo;
+  console.log("Extracted contact info from company: " + JSON.stringify(contactMethods));
+  return contactMethods;
 }
 
 module.exports = {

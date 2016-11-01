@@ -193,6 +193,7 @@ function getContext(req, res, config) {
 function getBotHandler(handlers, context) {
  var handler = handlers[context.bot];
  if (handler) {
+   console.log('Found bot handler for ' + context.bot + '!');
    return handler;
  }
  throw new Error('No bot handler for ' + context.bot);
