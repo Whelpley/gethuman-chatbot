@@ -23,7 +23,7 @@ function translateRequestToGenericFormats(context) {
   }
   return genericRequests;
 }
-s
+
 function generateResponsePayloads(genericResponse) {
   console.log("About to begin generating payloads from genericResponse.");
   // form basic payload - separate into function?
