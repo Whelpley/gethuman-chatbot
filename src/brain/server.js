@@ -47,13 +47,6 @@ function start(botHandlers, actionHandlers, config) {
 function addMiddleware(app) {
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
-
-// what does this do - returns an error: "res.status is not a function"
-// to be deleted?
-  // app.use(function (err, req, res) {
-  //   console.error(err.stack);
-  //   res.status(400).send(err.message);
-  // });
 }
 
 /**
@@ -92,21 +85,19 @@ function handleRequest(botHandlers, actionHandlers, config) {
 
     genericRequests.forEach((genericRequest) => {
       var actionHandler = factory.getActionHandler(actionHandlers, genericRequest);
-      // can this be done in processRequest?
-      if (actionHandler.noResponse()) {
-        utilities.preResponse(context);
-        console.log("Action handler cutting off response");
-        return null;
-      };
       try {
-        // use the action handler to process the request (i.e. call GH API, etc.)
         actionHandler.processRequest(genericRequest)
             .then(function (genericResponse) {
-              console.log("Generic Response returned in Server: " + JSON.stringify(genericResponse).substring(0,200));
-              // payloads now have entire Request objects
-              var payloads = botHandler.generateResponsePayloads(genericResponse);
-              console.log("Payloads generated: " + JSON.stringify(payloads));
-              return sendResponses(context, payloads);
+              console.log("Generic Response returned in Server.");
+              if (!genericResponse) {
+                console.log("Cutting off response.")
+                return null;
+              }
+              else {
+                var payloads = botHandler.generateResponsePayloads(genericResponse);
+                console.log("Payloads generated: " + JSON.stringify(payloads));
+                return sendResponses(context, payloads);
+              }
             })
             .done();
       }

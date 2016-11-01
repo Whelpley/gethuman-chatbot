@@ -1,20 +1,16 @@
 'use strict'
 
 var utilities = require('../brain/utilities');
+var Q = require('q');
 
-function processRequest() {
-    // send back a 200 response immediately
+
+function processRequest(genericRequest) {
   utilities.preResponse(genericRequest.context);
-    // do nothing
+  return Q.when(false);
 }
 
-function noResponse() {
-  return true;
-};
-
 module.exports = {
-  processRequest: processRequest,
-  noResponse: noResponse
+  processRequest: processRequest
 };
 
 
