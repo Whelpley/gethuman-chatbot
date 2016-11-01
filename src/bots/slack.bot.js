@@ -156,7 +156,8 @@ function sendRequestAsReply(payload, context) {
   request({
     uri: uri,
     method: 'POST',
-    body: JSON.stringify(payload[0])
+    json: payload[0]
+    // body: JSON.stringify(payload[0])
   }, function (error, response, body) {
     if (error) {
       console.log("Ran into error while making request to send Slack payload: " + error);

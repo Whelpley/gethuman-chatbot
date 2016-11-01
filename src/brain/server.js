@@ -92,7 +92,7 @@ function handleRequest(botHandlers, actionHandlers, config) {
             .then(function (genericResponse) {
               console.log("Generic Response returned in Server: " + JSON.stringify(genericResponse).substring(0,200));
               var payloads = botHandler.generateResponsePayloads(genericResponse);
-              console.log("Payloads generated: " + JSON.stringify(payloads).substring(0,200));
+              console.log("Payloads generated: " + JSON.stringify(payloads));
               return sendResponse(genericResponse, payloads, botHandler);
             })
             .done();
