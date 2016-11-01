@@ -6,9 +6,9 @@ var utilities = require('../brain/utilities');
 var config = require('../config/config');
 
 function verify(req, res) {
-  // verify token should probably be in Config vars
     console.log("Receiving webhook verification from FB.");
-    if (req.query['hub.verify_token'] === 'cmon_verify_me') {
+    var verifyToken = config.facebookVerifyToken;
+    if (req.query['hub.verify_token'] === verifyToken) {
         res.send(req.query['hub.challenge'])
     }
     res.send('Error, wrong token');
@@ -55,7 +55,6 @@ function generateResponsePayloads(genericResponse) {
   var token = config.facebookAccessToken;
   var url = 'https://graph.facebook.com/v2.6/me/messages';
   var sender = genericResponse.context.userRequest.entry[0].messaging[0].sender.id;
-
   var userInput = genericResponse.userInput;
 
 // Case: nothing returned from Companies search / junk input
@@ -70,26 +69,7 @@ function generateResponsePayloads(genericResponse) {
             "title": "Go to GetHuman"
         }],
     }];
-    // refactor target - pop new instances of Request payload template
-    // see function below ...
     payloads.push(makePayload(token, url, sender, elements));
-    // payloads.push({
-    //     url: url,
-    //     qs: {access_token: token},
-    //     method: 'POST',
-    //     json: {
-    //         recipient: {id: sender},
-    //         message: {
-    //             "attachment": {
-    //                 "type": "template",
-    //                 "payload": {
-    //                     "template_type": "generic",
-    //                     "elements": elements
-    //                 }
-    //             }
-    //         },
-    //     }
-    // });
   }
   else if (genericResponse.type === 'standard') {
     console.log('Standard type flag detected in genericResponse.');
@@ -139,23 +119,6 @@ function generateResponsePayloads(genericResponse) {
       // only push in if at least one button exists:
       if (contactMethodsElements[0].subtitle || contactMethodsElements[0].buttons.length) {
           payloads.push(makePayload(token, url, sender, contactMethodsElements));
-          // payloads.push({
-          //   url: url,
-          //   qs: {access_token: token},
-          //   method: 'POST',
-          //   json: {
-          //       recipient: {id: sender},
-          //       message: {
-          //           "attachment": {
-          //               "type": "template",
-          //               "payload": {
-          //                   "template_type": "generic",
-          //                   "elements": contactMethodsElements
-          //               }
-          //           }
-          //       },
-          //   }
-          // });
       };
     }
 
@@ -177,23 +140,6 @@ function generateResponsePayloads(genericResponse) {
           })
       })
       payloads.push(makePayload(token, url, sender, otherCompaniesElements));
-      // payloads.push({
-      //   url: url,
-      //   qs: {access_token: token},
-      //   method: 'POST',
-      //   json: {
-      //       recipient: {id: sender},
-      //       message: {
-      //           "attachment": {
-      //               "type": "template",
-      //               "payload": {
-      //                   "template_type": "generic",
-      //                   "elements": otherCompaniesElements
-      //               }
-      //           }
-      //       },
-      //   }
-      // });
     }
 
     // if no other payload loaded up, send a Nothing-Found reponse
@@ -208,23 +154,6 @@ function generateResponsePayloads(genericResponse) {
           }],
       }];
       payloads.push(makePayload(token, url, sender, elements));
-      // payloads.push({
-      //     url: url,
-      //     qs: {access_token: token},
-      //     method: 'POST',
-      //     json: {
-      //         recipient: {id: sender},
-      //         message: {
-      //             "attachment": {
-      //                 "type": "template",
-      //                 "payload": {
-      //                     "template_type": "generic",
-      //                     "elements": elements
-      //                 }
-      //             }
-      //         },
-      //     }
-      // });
     }
   }
 

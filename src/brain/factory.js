@@ -1,6 +1,5 @@
 'use strict'
 
-// not yet in use
 function getActionHandler(actionHandlers, genericRequest) {
   // can examine genericRequest.reqType to see
   // use switch statement if reqTypes become many
