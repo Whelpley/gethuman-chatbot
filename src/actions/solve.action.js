@@ -6,6 +6,12 @@ var companySearch = require('../services/company-api-gh');
 var postSearch = require('../services/post-api-gh');
 var utilities = require('../brain/utilities');
 
+/**
+ * Processes generic request into Company object, with attached data
+ *
+ * @param genericRequest
+ * @return {genericResponse} Promise
+ */
 function processRequest(genericRequest) {
   return Q.when(queryCompany(genericRequest))
     .then((queryResult) => {
@@ -17,7 +23,7 @@ function processRequest(genericRequest) {
  * Processes generic request into Company object, with attached data
  *
  * @param genericRequest
- * @return {queryResult}
+ * @return {queryResult} Promise
  */
 function queryCompany(genericRequest) {
   var queryResult = {
@@ -64,6 +70,9 @@ function queryCompany(genericRequest) {
     };
     // ----------------
 
+    // If here, there is at least one Company result, which qualifies it for Standard type
+    queryResult.type = 'standard';
+
     console.log('About to attach other companies list');
     company = attachOtherCompanies(company, companySearchResults, userInput);
 
@@ -72,7 +81,6 @@ function queryCompany(genericRequest) {
   })
   .then(function(posts) {
     console.log('Posts of Company returned in action handler');
-    queryResult.type = 'standard';
     company.posts = posts;
     queryResult.data = company;
     // console.log('Result of API queries: ' + JSON.stringify(queryResult));
@@ -102,7 +110,7 @@ function structureGenericResponse(queryResult) {
   // return early if no data or no input
   if ((queryResult.type === 'no-input') || (queryResult.type === 'nothing-found')) {
     return genericResponse;
-  }
+  };
 // Extract contact methods:
   genericResponse.data.contactMethods = extractContactMethods(queryResult.data);
 // Extract Posts info
