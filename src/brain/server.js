@@ -31,7 +31,7 @@ function start(botHandlers, actionHandlers, config) {
 
   // FB Messenger verification route
   app.get('/messenger', function(req, res) {
-    messenger.verify(req, res));
+    messenger.verify(req, res);
   };
 
   app.listen(port, function () {
