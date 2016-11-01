@@ -4,7 +4,7 @@
 function getActionHandler(actionHandlers, genericRequest) {
   // can examine genericRequest.reqType to see
   // use switch statement if reqTypes become many
-  if (genericRequest.reqType === 'user-input') {
+  if ((genericRequest.reqType === 'user-input') || (genericRequest.reqType === 'postback')) {
     console.log('Receiving a user input');
     return actionHandlers && actionHandlers.length && actionHandlers[0];
   }

@@ -4,7 +4,6 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var request = require('request');
 var Q = require('q');
-// var config = require('../config/config');
 var request = require('request');
 
 var utilities = require('./utilities');
@@ -28,7 +27,6 @@ function start(botHandlers, actionHandlers, config) {
 
   // all bots go to this route
   app.post('/:bot', handleRequest(botHandlers, actionHandlers, config));
-
   //    yourapi.com/messenger  yourapi.com/slack
 
   app.listen(port, function () {

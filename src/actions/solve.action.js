@@ -102,7 +102,7 @@ function structureGenericResponse(queryResult) {
         facebook: ''
       },
       posts: [],
-      otherCompanies: queryResult.data.otherCompanies
+      otherCompanies: queryResult.data.otherCompanies || []
     },
     type: queryResult.type || '',
     context: queryResult.context || ''
