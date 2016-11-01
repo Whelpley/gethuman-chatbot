@@ -3,6 +3,10 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var request = require('request');
+var Q = require('q');
+// var config = require('../config/config');
+var request = require('request');
+
 var utilities = require('./utilities');
 var factory = require('./factory');
 
@@ -13,7 +17,6 @@ var factory = require('./factory');
  * @param actionHandlers
  * @param config
  */
-
 function start(botHandlers, actionHandlers, config) {
   var port = process.env.PORT || 3000;
   var app = express();
