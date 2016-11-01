@@ -91,10 +91,10 @@ function handleRequest(botHandlers, actionHandlers, config) {
         actionHandler.processRequest(genericRequest)
             .then(function (genericResponse) {
               console.log("Generic Response returned in Server: " + JSON.stringify(genericResponse).substring(0,200));
+              // payloads now have entire Request objects
               var payloads = botHandler.generateResponsePayloads(genericResponse);
               console.log("Payloads generated: " + JSON.stringify(payloads));
-              // could it just reference the context object?
-              return sendResponse(genericResponse, payloads, botHandler);
+              return sendResponses(context, payloads);
             })
             .done();
       }
@@ -109,27 +109,54 @@ function handleRequest(botHandlers, actionHandlers, config) {
 /**
  * This function should be the exact same each and every time
  *
- * @param genericResponse
+ * @param context
  * @param payloads
  * @returns {Promise}
  */
-function sendResponse(genericResponse, payloads, botHandler) {
-
-  // force payloads into an array
+function sendResponses(context, payloads) {
+  // force payloads into an array (is this necessary?)
   payloads = [].concat(payloads || []);
-  var context = genericResponse.context;
   var calls = payloads.map(function (payload) {
     return function () {
-      // for now:
-      return botHandler.sendResponseToPlatform(payload, context)
+      return sendResponseToPlatform(context, payload)
           .catch(function (err) {
             console.log('Error from send to platform: ' + err);
           });
-
-      // TO-DO: do generic way of sending to platform
     }
   });
   return utilities.chainPromises(calls);
+}
+
+// Checks to see if payload should actually be sent to a platform, or other action
+function sendResponseToPlatform(context, payload) {
+  if (context.isTest) {
+    console.log("Test flag detected in payload context.");
+    context.sendResponse(payload);
+    return Q.when();
+  }
+  // if this part needed?
+  else if (!payload || (payload === {})) {
+    console.log("No payload data detected.");
+    return Q.when();
+  }
+  else {
+    return sendRequestAsReply(payload, context);
+  }
+}
+
+function sendRequestAsReply(payload, context) {
+  var deferred = Q.defer();
+  console.log("Last step before sending this payload: " + JSON.stringify(payload));
+  request(payload, function (error, response, body) {
+    if (error) {
+      console.log("Ran into error while making request to send Slack payload: " + error);
+      deferred.reject(error);
+    }
+    else {
+      deferred.resolve();
+    }
+  });
+  return deferred.promise;
 }
 
 /**

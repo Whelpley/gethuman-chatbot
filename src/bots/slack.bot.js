@@ -226,53 +226,53 @@ function generateResponsePayloads(genericResponse) {
 // old version above
 // --------------------
 
-function sendResponseToPlatform(payload, context) {
-  if (context.isTest) {
-    console.log("Test flag detected in payload context.");
-    context.sendResponse(payload);
-    return Q.when();
-  }
-  // if this part needed?
-  else if (!payload || (payload === [])) {
-    console.log("No payload data detected.");
-    return Q.when();
-  }
-  else {
-    return sendRequestAsReply(payload, context);
-  }
-}
+// function sendResponseToPlatform(payload, context) {
+//   if (context.isTest) {
+//     console.log("Test flag detected in payload context.");
+//     context.sendResponse(payload);
+//     return Q.when();
+//   }
+//   // if this part needed?
+//   else if (!payload || (payload === [])) {
+//     console.log("No payload data detected.");
+//     return Q.when();
+//   }
+//   else {
+//     return sendRequestAsReply(payload, context);
+//   }
+// }
 
-// unique function
-function sendRequestAsReply(payload, context) {
-//have to access Payload index 0 for Slack send
-  var deferred = Q.defer();
-  // TO-DO: access this from context
-  var path = config.slackAccessToken;
-  var uri = 'https://hooks.slack.com/services/' + path;
+// // unique function
+// function sendRequestAsReply(payload, context) {
+// //have to access Payload index 0 for Slack send
+//   var deferred = Q.defer();
+//   // TO-DO: access this from context
+//   var path = config.slackAccessToken;
+//   var uri = 'https://hooks.slack.com/services/' + path;
 
-// should this be extracted elsewhere? Any other reason to keep context this far?
-  payload[0].channel = context.userRequest.channel_id;
-  console.log("Payload channel: " + payload[0].channel);
+// // should this be extracted elsewhere? Any other reason to keep context this far?
+//   payload[0].channel = context.userRequest.channel_id;
+//   console.log("Payload channel: " + payload[0].channel);
 
-  console.log("Last step before sending this payload: " + JSON.stringify(payload));
-// eventually want to send this as the response to original request
+//   console.log("Last step before sending this payload: " + JSON.stringify(payload));
+// // eventually want to send this as the response to original request
 
-  request({
-    uri: uri,
-    method: 'POST',
-    json: payload[0]
-    // body: JSON.stringify(payload[0])
-  }, function (error, response, body) {
-    if (error) {
-      console.log("Ran into error while making request to send Slack payload: " + error);
-      deferred.reject(error);
-    }
-    else {
-      deferred.resolve();
-    }
-  });
-  return deferred.promise;
-}
+//   request({
+//     uri: uri,
+//     method: 'POST',
+//     json: payload[0]
+//     // body: JSON.stringify(payload[0])
+//   }, function (error, response, body) {
+//     if (error) {
+//       console.log("Ran into error while making request to send Slack payload: " + error);
+//       deferred.reject(error);
+//     }
+//     else {
+//       deferred.resolve();
+//     }
+//   });
+//   return deferred.promise;
+// }
 
 function formatTextField(contactMethods) {
   var result = '';
@@ -313,7 +313,7 @@ function convertArrayToBoldList(arrayOfStrings) {
 }
 
 module.exports = {
-  sendResponseToPlatform: sendResponseToPlatform,
+  // sendResponseToPlatform: sendResponseToPlatform,
   // sendErrorResponse: sendErrorResponse,
   verify: verify,
   translateRequestToGenericFormats: translateRequestToGenericFormats,
