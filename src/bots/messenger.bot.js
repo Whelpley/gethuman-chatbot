@@ -148,7 +148,7 @@ function generateResponsePayloads(genericResponse) {
           // this function should live in this file instead of utilities
           'buttons': formatContactButtons(contactMethods)
       }];
-      if (contactInfo.email) {
+      if (contactMethods.email) {
           contactMethodsElements[0].subtitle = contactMethods.email;
       };
       // only push in if at least one button exists:
