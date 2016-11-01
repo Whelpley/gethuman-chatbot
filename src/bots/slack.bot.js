@@ -49,13 +49,13 @@ function generateResponsePayloads(genericResponse) {
 // Case: no user input
   if (genericResponse.type === 'no-input') {
     console.log('No user input flag detected in genericResponse.');
-    payloads[0].json.text = 'Tell me the company you would like to contact.',
+    payloads[0].json.text = 'Tell me the company you would like to contact.';
     return payloads;
   }
 // Case: nothing returned from Companies search / junk input
   else if (genericResponse.type === 'nothing-found') {
     console.log('No Company Results flag detected in genericResponse.');
-    payloads[0].json.text = 'I couldn\'t tell what you meant by \"' + genericResponse.userInput + '\". Please tell me company you are looking for. (ex: \"/gethuman Verizon Wireless\")'
+    payloads[0].json.text = 'I couldn\'t tell what you meant by \"' + genericResponse.userInput + '\". Please tell me company you are looking for. (ex: \"/gethuman Verizon Wireless\")';
     return payloads;
   }
   // do we need the explicit type check after the first two, or just 'else'?
