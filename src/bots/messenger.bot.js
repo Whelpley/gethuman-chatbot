@@ -72,23 +72,24 @@ function generateResponsePayloads(genericResponse) {
     }];
     // refactor target - pop new instances of Request payload template
     // see function below ...
-    payloads.push({
-        url: url,
-        qs: {access_token: token},
-        method: 'POST',
-        json: {
-            recipient: {id: sender},
-            message: {
-                "attachment": {
-                    "type": "template",
-                    "payload": {
-                        "template_type": "generic",
-                        "elements": elements
-                    }
-                }
-            },
-        }
-    });
+    payloads.push(makePayload(token, url, sender, elements));
+    // payloads.push({
+    //     url: url,
+    //     qs: {access_token: token},
+    //     method: 'POST',
+    //     json: {
+    //         recipient: {id: sender},
+    //         message: {
+    //             "attachment": {
+    //                 "type": "template",
+    //                 "payload": {
+    //                     "template_type": "generic",
+    //                     "elements": elements
+    //                 }
+    //             }
+    //         },
+    //     }
+    // });
   }
   else if (genericResponse.type === 'standard') {
     console.log('Standard type flag detected in genericResponse.');
@@ -122,23 +123,6 @@ function generateResponsePayloads(genericResponse) {
         postElements.push(singleElement);
       }
       payloads.push(makePayload(token, url, sender, postElements));
-      // payloads.push({
-      //   url: url,
-      //   qs: {access_token: token},
-      //   method: 'POST',
-      //   json: {
-      //       recipient: {id: sender},
-      //       message: {
-      //           "attachment": {
-      //               "type": "template",
-      //               "payload": {
-      //                   "template_type": "generic",
-      //                   "elements": postElements
-      //               }
-      //           }
-      //       },
-      //   }
-      // });
     }
 
     // load Contact Methods card to Payload
@@ -154,23 +138,24 @@ function generateResponsePayloads(genericResponse) {
       };
       // only push in if at least one button exists:
       if (contactMethodsElements[0].subtitle || contactMethodsElements[0].buttons.length) {
-          payloads.push({
-            url: url,
-            qs: {access_token: token},
-            method: 'POST',
-            json: {
-                recipient: {id: sender},
-                message: {
-                    "attachment": {
-                        "type": "template",
-                        "payload": {
-                            "template_type": "generic",
-                            "elements": contactMethodsElements
-                        }
-                    }
-                },
-            }
-          });
+          payloads.push(makePayload(token, url, sender, contactMethodsElements));
+          // payloads.push({
+          //   url: url,
+          //   qs: {access_token: token},
+          //   method: 'POST',
+          //   json: {
+          //       recipient: {id: sender},
+          //       message: {
+          //           "attachment": {
+          //               "type": "template",
+          //               "payload": {
+          //                   "template_type": "generic",
+          //                   "elements": contactMethodsElements
+          //               }
+          //           }
+          //       },
+          //   }
+          // });
       };
     }
 
@@ -191,23 +176,24 @@ function generateResponsePayloads(genericResponse) {
               "payload": altCompany
           })
       })
-      payloads.push({
-        url: url,
-        qs: {access_token: token},
-        method: 'POST',
-        json: {
-            recipient: {id: sender},
-            message: {
-                "attachment": {
-                    "type": "template",
-                    "payload": {
-                        "template_type": "generic",
-                        "elements": otherCompaniesElements
-                    }
-                }
-            },
-        }
-      });
+      payloads.push(makePayload(token, url, sender, otherCompaniesElements));
+      // payloads.push({
+      //   url: url,
+      //   qs: {access_token: token},
+      //   method: 'POST',
+      //   json: {
+      //       recipient: {id: sender},
+      //       message: {
+      //           "attachment": {
+      //               "type": "template",
+      //               "payload": {
+      //                   "template_type": "generic",
+      //                   "elements": otherCompaniesElements
+      //               }
+      //           }
+      //       },
+      //   }
+      // });
     }
 
     // if no other payload loaded up, send a Nothing-Found reponse
@@ -221,24 +207,24 @@ function generateResponsePayloads(genericResponse) {
               "title": "Go to GetHuman"
           }],
       }];
-      // refactor target - pop new instances of Request payload template
-      payloads.push({
-          url: url,
-          qs: {access_token: token},
-          method: 'POST',
-          json: {
-              recipient: {id: sender},
-              message: {
-                  "attachment": {
-                      "type": "template",
-                      "payload": {
-                          "template_type": "generic",
-                          "elements": elements
-                      }
-                  }
-              },
-          }
-      });
+      payloads.push(makePayload(token, url, sender, elements));
+      // payloads.push({
+      //     url: url,
+      //     qs: {access_token: token},
+      //     method: 'POST',
+      //     json: {
+      //         recipient: {id: sender},
+      //         message: {
+      //             "attachment": {
+      //                 "type": "template",
+      //                 "payload": {
+      //                     "template_type": "generic",
+      //                     "elements": elements
+      //                 }
+      //             }
+      //         },
+      //     }
+      // });
     }
   }
 
