@@ -25,27 +25,36 @@ function translateRequestToGenericFormats(context) {
   return genericRequests;
 }
 
+// new version
+// *******
 function generateResponsePayloads(genericResponse) {
-  var payloads =  [];
   console.log("About to begin generating payloads from genericResponse.");
+  // form basic payload - separate into function?
+  var path = config.slackAccessToken;
+  var uri = 'https://hooks.slack.com/services/' + path;
+  var channel = genericResponse.context.userRequest.channel_id;
+  var payloads =  [{
+    uri: uri,
+    method: 'POST',
+    json: {
+      channel: channel,
+      username: 'GetHuman',
+      icon_emoji: ':gethuman:',
+      text: '',
+      attachments: []
+    }
+  }];
+
 // Case: no user input
   if (genericResponse.type === 'no-input') {
-    console.log("No user input flag detected in genericResponse.");
-    payloads.push([{
-        username: 'GetHuman',
-        text: "Tell me the company you would like to contact.",
-        icon_emoji: ':gethuman:'
-    }]);
+    console.log('No user input flag detected in genericResponse.');
+    payloads[0].json.text = 'Tell me the company you would like to contact.',
     return payloads;
   }
 // Case: nothing returned from Companies search / junk input
   else if (genericResponse.type === 'nothing-found') {
-    console.log("No Company Results flag detected in genericResponse.");
-    payloads.push([{
-        username: 'GetHuman',
-        text: "I couldn't tell what you meant by \"" + genericResponse.userInput + "\". Please tell me company you are looking for. (ex: \"/gethuman Verizon Wireless\")",
-        icon_emoji: ':gethuman:',
-    }]);
+    console.log('No Company Results flag detected in genericResponse.');
+    payloads[0].json.text = 'I couldn\'t tell what you meant by \"' + genericResponse.userInput + '\". Please tell me company you are looking for. (ex: \"/gethuman Verizon Wireless\")'
     return payloads;
   }
   // do we need the explicit type check after the first two?
@@ -56,17 +65,9 @@ function generateResponsePayloads(genericResponse) {
     var topContacts = formatTextField(genericResponse.data.contactMethods);
     var colors = utilities.colors;
 
-    payloads.push([{
-      // may not need to set these params - can auto-set in Slack settings
-        username: 'GetHuman',
-        icon_emoji: ':gethuman:',
-        attachments: []
-    }]);
-    console.log("Basic info pushed into Payloads");
-
   // get payload-loaders into sub-functions for testing
     if (posts && posts.length) {
-        payloads[0][0].text = "Top issues for " + name + ":";
+        payloads[0].json.text = "Top issues for " + name + ":";
         for (let i = 0; i < posts.length; i++) {
             let title = posts[i].title || '';
             let urlId = posts[i].urlId || ''
@@ -86,25 +87,26 @@ function generateResponsePayloads(genericResponse) {
                     }
                 ]
             };
-            payloads[0][0].attachments.push(singleAttachment);
+            payloads[0].json.attachments.push(singleAttachment);
         };
       console.log("Posts info pushed into Payloads");
     }
 
     // attach Company contact info:
-    payloads[0][0].attachments.push({
-        "fallback": "Contact info for " + name,
-        "title": "Best ways to contact " + name + ":",
-        "color": '#999999',
-        "text": topContacts,
-    });
-    console.log("Company Contact Info pushed into Payloads");
-
+    if (topContacts) {
+      payloads[0].json.attachments.push({
+          "fallback": "Contact info for " + name,
+          "title": "Best ways to contact " + name + ":",
+          "color": '#999999',
+          "text": topContacts,
+      });
+      console.log("Company Contact Info pushed into Payloads");
+    };
 
     // attach Other Companies info if they exist
     if (otherCompanies && otherCompanies.length) {
         var otherCompaniesList = convertArrayToBoldList(otherCompanies);
-        payloads[0][0].attachments.push({
+        payloads[0].json.attachments.push({
             "fallback": "Other solutions",
             "title": "Were you talking about " + name + "?",
             "color": '#BBBBBB',
@@ -114,13 +116,115 @@ function generateResponsePayloads(genericResponse) {
         console.log("Other Companies info pushed into Payloads");
     }
 
-    if (!payloads[0][0].attachments.length) {
-        payloads[0][0].text = "I couldn't find anything for \"" + name + "\". Please tell me which company you are looking for. (ex: \"/gethuman Verizon Wireless\")"
+    if (!payloads[0].json.attachments.length) {
+        payloads[0].json.text = 'I couldn\'t find anything for \"' + name + '\". Please tell me which company you are looking for. (ex: \"/gethuman Verizon Wireless\")'
         console.log('No card info found for Companies, returning Nothing Found text.');
     }
     return payloads;
   }
 }
+// **********************
+
+// --------------
+// old version
+// function generateResponsePayloads(genericResponse) {
+//   var payloads =  [];
+//   console.log("About to begin generating payloads from genericResponse.");
+// // Case: no user input
+//   if (genericResponse.type === 'no-input') {
+//     console.log("No user input flag detected in genericResponse.");
+//     payloads.push([{
+//         username: 'GetHuman',
+//         text: "Tell me the company you would like to contact.",
+//         icon_emoji: ':gethuman:'
+//     }]);
+//     return payloads;
+//   }
+// // Case: nothing returned from Companies search / junk input
+//   else if (genericResponse.type === 'nothing-found') {
+//     console.log("No Company Results flag detected in genericResponse.");
+//     payloads.push([{
+//         username: 'GetHuman',
+//         text: "I couldn't tell what you meant by \"" + genericResponse.userInput + "\". Please tell me company you are looking for. (ex: \"/gethuman Verizon Wireless\")",
+//         icon_emoji: ':gethuman:',
+//     }]);
+//     return payloads;
+//   }
+//   // do we need the explicit type check after the first two?
+//   else if (genericResponse.type === 'standard') {
+//     var name = genericResponse.data.name;
+//     var posts = genericResponse.data.posts;
+//     var otherCompanies = genericResponse.data.otherCompanies;
+//     var topContacts = formatTextField(genericResponse.data.contactMethods);
+//     var colors = utilities.colors;
+
+//     payloads.push([{
+//       // may not need to set these params - can auto-set in Slack settings
+//         username: 'GetHuman',
+//         icon_emoji: ':gethuman:',
+//         attachments: []
+//     }]);
+//     console.log("Basic info pushed into Payloads");
+
+//   // get payload-loaders into sub-functions for testing
+//     if (posts && posts.length) {
+//         payloads[0][0].text = "Top issues for " + name + ":";
+//         for (let i = 0; i < posts.length; i++) {
+//             let title = posts[i].title || '';
+//             let urlId = posts[i].urlId || ''
+//             let color = colors[i];
+//             let singleAttachment = {
+//                 "fallback": "Issue for " + name,
+//                 "title": title,
+//                 "color": color,
+//                 "fields": [
+//                     {
+//                         "value": "<https://gethuman.com?company=" + encodeURIComponent(name) + "|Solve for me - $20>",
+//                         "short": true
+//                     },
+//                     {
+//                         "value": "<https://answers.gethuman.co/_" + encodeURIComponent(urlId) + "|More info ...>",
+//                         "short": true
+//                     }
+//                 ]
+//             };
+//             payloads[0][0].attachments.push(singleAttachment);
+//         };
+//       console.log("Posts info pushed into Payloads");
+//     }
+
+//     // attach Company contact info:
+//     payloads[0][0].attachments.push({
+//         "fallback": "Contact info for " + name,
+//         "title": "Best ways to contact " + name + ":",
+//         "color": '#999999',
+//         "text": topContacts,
+//     });
+//     console.log("Company Contact Info pushed into Payloads");
+
+
+//     // attach Other Companies info if they exist
+//     if (otherCompanies && otherCompanies.length) {
+//         var otherCompaniesList = convertArrayToBoldList(otherCompanies);
+//         payloads[0][0].attachments.push({
+//             "fallback": "Other solutions",
+//             "title": "Were you talking about " + name + "?",
+//             "color": '#BBBBBB',
+//             "text": "Or maybe you meant " + otherCompaniesList + "?",
+//             "mrkdwn_in": ["text"]
+//         });
+//         console.log("Other Companies info pushed into Payloads");
+//     }
+
+//     if (!payloads[0][0].attachments.length) {
+//         payloads[0][0].text = "I couldn't find anything for \"" + name + "\". Please tell me which company you are looking for. (ex: \"/gethuman Verizon Wireless\")"
+//         console.log('No card info found for Companies, returning Nothing Found text.');
+//     }
+//     return payloads;
+//   }
+// }
+// old version above
+// --------------------
 
 function sendResponseToPlatform(payload, context) {
   if (context.isTest) {
@@ -197,7 +301,7 @@ function formatTextField(contactMethods) {
   if (result) {
     result = result.slice(0,-3);
   }
-  console.log("Formatted string from contact methods: " + result);
+  console.log("Formatted string for Slack contact methods: " + result);
   return result;
 };
 

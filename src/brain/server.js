@@ -93,6 +93,7 @@ function handleRequest(botHandlers, actionHandlers, config) {
               console.log("Generic Response returned in Server: " + JSON.stringify(genericResponse).substring(0,200));
               var payloads = botHandler.generateResponsePayloads(genericResponse);
               console.log("Payloads generated: " + JSON.stringify(payloads));
+              // could it just reference the context object?
               return sendResponse(genericResponse, payloads, botHandler);
             })
             .done();
@@ -114,10 +115,9 @@ function handleRequest(botHandlers, actionHandlers, config) {
  */
 function sendResponse(genericResponse, payloads, botHandler) {
 
-  // may not be necessary.... already is an array
+  // force payloads into an array
   payloads = [].concat(payloads || []);
   var context = genericResponse.context;
-  // make an array of call functions
   var calls = payloads.map(function (payload) {
     return function () {
       // for now:
