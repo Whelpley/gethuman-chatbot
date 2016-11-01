@@ -29,6 +29,9 @@ function start(botHandlers, actionHandlers, config) {
   // all bots go to this route
   app.post('/:bot', handleRequest(botHandlers, actionHandlers, config));
 
+  // look up Express - app.all - figure out how to process FBM verification
+    // should be able to see if it's a Get or Post
+
   // FB Messenger verification route
   app.get('/messenger', function(req, res) {
     messenger.verify(req, res);
@@ -80,12 +83,13 @@ function handleRequest(botHandlers, actionHandlers, config) {
     var context = getContext(req, res, config);
     console.log('Context captured from request: ' + JSON.stringify(context));
 
-    var botHandler = getBotHandler(botHandlers, context);
+    var botHandler = factory.getBotHandler(botHandlers, context);
     var genericRequests = botHandler.translateRequestToGenericFormats(context);
 
     genericRequests.forEach((genericRequest) => {
       var actionHandler = factory.getActionHandler(actionHandlers, genericRequest);
       try {
+        // refactor functions to handle no-op pass down (eliminate conditional)
         actionHandler.processRequest(genericRequest)
             .then(function (genericResponse) {
               console.log("Generic Response returned in Server.");
@@ -184,22 +188,6 @@ function getContext(req, res, config) {
       res.status(200).end();
     }
   };
-}
-
-/**
- * Select Bot Handler based on parameters of incoming Post
- *
- * @param handlers
- * @param context
- * @returns handler
- */
-function getBotHandler(handlers, context) {
- var handler = handlers[context.bot];
- if (handler) {
-   console.log('Found bot handler for ' + context.bot + '!');
-   return handler;
- }
- throw new Error('No bot handler for ' + context.bot);
 }
 
 module.exports = {

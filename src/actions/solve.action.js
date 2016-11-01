@@ -70,17 +70,12 @@ function queryCompany(genericRequest) {
     };
     // ----------------
 
-    // If here, there is at least one Company result, which qualifies it for Standard type
     queryResult.type = 'standard';
-
-    console.log('About to attach other companies list');
     company = attachOtherCompanies(company, companySearchResults, userInput);
-
-    console.log('Other companies attached, about to query Posts of Company');
     return postSearch.findByCompany(company)
   })
   .then(function(posts) {
-    console.log('Posts of Company returned in action handler');
+    // console.log('Posts of Company returned in action handler');
     company.posts = posts;
     queryResult.data = company;
     // console.log('Result of API queries: ' + JSON.stringify(queryResult));

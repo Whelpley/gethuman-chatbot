@@ -1,7 +1,6 @@
 'use strict'
 
 var Q = require('q');
-// var phoneFormatter = require('phone-formatter');
 
 // GetHuman green palette
 const colors = [
@@ -18,7 +17,11 @@ const colors = [
     '#EEFFC3'
 ];
 
-// anything you want all bots to do before processing request
+/**
+ * Sends back 200 response to client if not a test message
+ *
+ * @param context Incoming request information
+ */
 function preResponse(context) {
   if (!context.isTest) {
     console.log('Sending a 200 response to client.');

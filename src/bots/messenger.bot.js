@@ -2,7 +2,7 @@
 
 const phoneFormatter = require('phone-formatter');
 
-var utilities = require('../brain/utilities');
+// var utilities = require('../brain/utilities');
 var config = require('../config/config');
 
 function verify(req, res) {
@@ -238,8 +238,6 @@ function makePayload(token, url, sender, elements) {
     }
   };
 };
-
-
 
 module.exports = {
   verify: verify,

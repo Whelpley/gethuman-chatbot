@@ -65,7 +65,7 @@ function generateResponsePayloads(genericResponse) {
 
   // get payload-loaders into sub-functions for testing
     if (posts && posts.length) {
-        payloads[0].json.text = "Top issues for " + name + ":";
+        payloads[0].json.text = 'Top issues for ' + name + ':';
         for (let i = 0; i < posts.length; i++) {
             let title = posts[i].title || '';
             let urlId = posts[i].urlId || ''
@@ -87,31 +87,31 @@ function generateResponsePayloads(genericResponse) {
             };
             payloads[0].json.attachments.push(singleAttachment);
         };
-      console.log("Posts info pushed into Payloads");
+      console.log('Posts info pushed into Payloads');
     }
 
     // attach Company contact info:
     if (topContacts) {
       payloads[0].json.attachments.push({
-          "fallback": "Contact info for " + name,
-          "title": "Best ways to contact " + name + ":",
-          "color": '#999999',
-          "text": topContacts,
+          fallback: 'Contact info for ' + name,
+          title: 'Best ways to contact ' + name + ':',
+          color: '#999999',
+          text: topContacts,
       });
-      console.log("Company Contact Info pushed into Payloads");
+      console.log('Company Contact Info pushed into Payloads');
     };
 
     // attach Other Companies info if they exist
     if (otherCompanies && otherCompanies.length) {
         var otherCompaniesList = convertArrayToBoldList(otherCompanies);
         payloads[0].json.attachments.push({
-            "fallback": "Other solutions",
-            "title": "Were you talking about " + name + "?",
-            "color": '#BBBBBB',
-            "text": "Or maybe you meant " + otherCompaniesList + "?",
-            "mrkdwn_in": ["text"]
+            fallback: 'Other solutions',
+            title: 'Were you talking about ' + name + '?',
+            color: '#BBBBBB',
+            text: 'Or maybe you meant ' + otherCompaniesList + '?',
+            mrkdwn_in: ["text"]
         });
-        console.log("Other Companies info pushed into Payloads");
+        console.log('Other Companies info pushed into Payloads');
     }
 
     if (!payloads[0].json.attachments.length) {
@@ -161,8 +161,6 @@ function convertArrayToBoldList(arrayOfStrings) {
 }
 
 module.exports = {
-  // sendResponseToPlatform: sendResponseToPlatform,
-  // sendErrorResponse: sendErrorResponse,
   verify: verify,
   translateRequestToGenericFormats: translateRequestToGenericFormats,
   generateResponsePayloads: generateResponsePayloads
