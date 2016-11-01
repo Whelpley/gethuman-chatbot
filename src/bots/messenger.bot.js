@@ -1,5 +1,7 @@
 'use strict'
 
+const phoneFormatter = require('phone-formatter');
+
 var utilities = require('../brain/utilities');
 var config = require('../config/config');
 
