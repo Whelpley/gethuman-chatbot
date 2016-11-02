@@ -7,7 +7,7 @@ var Q = require('q');
  * Processes a Confirmation message - sends 200, does nothing else
  *
  * @param genericRequest
- * @param config
+ * @return {Promise}
  */
 function processRequest(genericRequest) {
   utilities.preResponse(genericRequest.context);
@@ -17,6 +17,3 @@ function processRequest(genericRequest) {
 module.exports = {
   processRequest: processRequest
 };
-
-
-

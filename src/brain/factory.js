@@ -6,7 +6,7 @@
  *
  * @param actionHandlers
  * @param genericRequest
- * @returns actionHandler
+ * @return actionHandler
  */
 function getActionHandler(actionHandlers, genericRequest) {
   // can examine genericRequest.reqType to see
@@ -25,7 +25,7 @@ function getActionHandler(actionHandlers, genericRequest) {
  *
  * @param botHandlers
  * @param context
- * @returns handler
+ * @return handler
  */
 function getBotHandler(botHandlers, context) {
  var handler = botHandlers[context.bot];
