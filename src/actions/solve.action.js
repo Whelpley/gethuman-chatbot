@@ -35,6 +35,7 @@ function queryCompany(genericRequest) {
     type: '',
     context: genericRequest.context
   };
+  var company = {};
   var userInput = genericRequest.userInput;
   if (!userInput) {
     queryResult.type = 'no-input';
@@ -52,7 +53,7 @@ function queryCompany(genericRequest) {
     var exactMatch = companySearchResults.filter(function(eachCompany) {
       return eachCompany.name.toLowerCase() === userInput.toLowerCase();
     });
-    var company = (exactMatch && exactMatch.length) ? exactMatch[0] : companySearchResults[0];
+    company = (exactMatch && exactMatch.length) ? exactMatch[0] : companySearchResults[0];
 
     // if (exactMatch && exactMatch.length) {
     //   company = exactMatch[0];
