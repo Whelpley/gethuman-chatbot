@@ -111,7 +111,7 @@ function generateResponsePayloads(genericResponse) {
     // load Contact Methods card to Payload
     // export to a function?
     if (contactMethods) {
-      var contactMethodsElements = loadContactMethodsElements(contactMethods);
+      var contactMethodsElements = loadContactMethodsElements(contactMethods, name);
       // var contactMethodsElements = [{
       //     title: 'Best ways to contact ' + name + ':',
       //     buttons: formatContactButtons(contactMethods)
@@ -202,7 +202,7 @@ function loadPostElements(posts, name) {
   return postElements;
 };
 
-function loadContactMethodsElements(contactMethods) {
+function loadContactMethodsElements(contactMethods, name) {
   var contactMethodsElements = [{
       title: 'Best ways to contact ' + name + ':',
       buttons: formatContactButtons(contactMethods)
