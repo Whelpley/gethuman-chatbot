@@ -30,42 +30,38 @@ function processRequest(genericRequest) {
 function queryCompany(genericRequest) {
   var queryResult = {
     userInput: genericRequest.userInput,
-    // Company object, with Posts and Other Companies attached
     data: {},
     // types: 'standard', 'no-input', 'not-found'
     type: '',
     context: genericRequest.context
   };
   var userInput = genericRequest.userInput;
-  var company = {};
-
   if (!userInput) {
     queryResult.type = 'no-input';
     return Q.when(queryResult);
   }
-
   return Q.when(companySearch.findByText(userInput))
   .then(function(companySearchResults) {
-    // ----------------
-    // Pick out Company of interest from search results
-    // ( can we separate out this as function?)
-    var exactMatch = companySearchResults.filter(function(eachCompany) {
-      return eachCompany.name.toLowerCase() === userInput.toLowerCase();
-    });
+    // If nothing passed in, return an empty object in place of Posts
+    // to next step in Promise chain
     if (!companySearchResults.length) {
       console.log('Nothing found in initial Company search');
       queryResult.type = 'nothing-found';
-      // returning an empty object as Posts for the next step in chain
       return Q.when({});
     }
-    else if (exactMatch && exactMatch.length) {
-      company = exactMatch[0];
-      console.log('Found an exact match from Companies search');
-    }
-    else {
-      company = companySearchResults[0];
-      console.log("Going with first result from Companies search");
-    };
+    var exactMatch = companySearchResults.filter(function(eachCompany) {
+      return eachCompany.name.toLowerCase() === userInput.toLowerCase();
+    });
+    var company = (exactMatch && exactMatch.length) ? exactMatch[0] : companySearchResults[0];
+
+    // if (exactMatch && exactMatch.length) {
+    //   company = exactMatch[0];
+    //   console.log('Found an exact match from Companies search');
+    // }
+    // else {
+    //   company = companySearchResults[0];
+    //   console.log('Going with first result from Companies search');
+    // };
     // ----------------
     queryResult.type = 'standard';
     company = attachOtherCompanies(company, companySearchResults, userInput);
@@ -159,39 +155,9 @@ function extractContactMethods(queryResultData) {
     facebook: ''
   };
   var company = queryResultData;
-
-  // var values = {}
   company.contactMethods.forEach(function(method){
       contactMethods[method.type] = method.target;
   })
-
-  // contactMethods.phone = company.callback.phone || '';
-  // // can this be refactored into a Map function?
-  // let emailContactMethods = company.contactMethods.filter(function (method) {
-  //       return method.type === "email";
-  //   });
-  // contactMethods.email = (emailContactMethods && emailContactMethods.length) ? emailContactMethods[0].target : '';
-
-  // let twitterContactMethods = company.contactMethods.filter(function (method) {
-  //       return method.type === "twitter";
-  //   });
-  // contactMethods.twitter = (twitterContactMethods && twitterContactMethods.length) ? twitterContactMethods[0].target : '';
-
-  // let webContactMethods = company.contactMethods.filter(function (method) {
-  //       return method.type === "web";
-  //   });
-  // contactMethods.web = (webContactMethods && webContactMethods.length) ? webContactMethods[0].target : '';
-
-  // let chatContactMethods = company.contactMethods.filter(function (method) {
-  //       return method.type === "chat";
-  //   });
-  // contactMethods.chat = (chatContactMethods && chatContactMethods.length) ? chatContactMethods[0].target : '';
-
-  // let facebookContactMethods = company.contactMethods.filter(function (method) {
-  //       return method.type === "facebook";
-  //   });
-  // contactMethods.facebook = (facebookContactMethods && facebookContactMethods.length) ? facebookContactMethods[0].target : '';
-
   console.log("Extracted contact info from company: " + JSON.stringify(contactMethods));
   return contactMethods;
 }
@@ -203,8 +169,4 @@ module.exports = {
   structureGenericResponse: structureGenericResponse,
   queryCompany: queryCompany,
   structureGenericResponse: structureGenericResponse
-
-
-
-
 };
