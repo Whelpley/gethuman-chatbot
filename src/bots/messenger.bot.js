@@ -120,6 +120,12 @@ function generateResponsePayloads(genericResponse) {
   return payloads;
 }
 
+/**
+ * Loads response elements for Case: nothing found
+ *
+ * @param userInput
+ * @return {elements}
+ */
 function loadNothingFoundElements(userInput) {
   return [{
       "title": "Nothing found!",
@@ -132,6 +138,13 @@ function loadNothingFoundElements(userInput) {
   }];
 }
 
+/**
+ * Loads response elements for Posts cards
+ *
+ * @param posts
+ * @param name
+ * @return {postElements}
+ */
 function loadPostElements(posts, name) {
   var postElements = [];
   for (let i = 0; i < posts.length; i++) {
@@ -156,6 +169,13 @@ function loadPostElements(posts, name) {
   return postElements;
 };
 
+/**
+ * Loads response elements for Contact Methods cards
+ *
+ * @param contactMethods
+ * @param name
+ * @return {contactMethodsElements}
+ */
 function loadContactMethodsElements(contactMethods, name) {
   var contactMethodsElements = [{
       title: 'Best ways to contact ' + name + ':',
@@ -167,6 +187,13 @@ function loadContactMethodsElements(contactMethods, name) {
   return contactMethodsElements;
 };
 
+/**
+ * Loads response elements for Other Companies cards
+ *
+ * @param otherCompanies
+ * @param name
+ * @return {otherCompaniesElements}
+ */
 function loadOtherCompaniesElements(otherCompanies, name) {
   var otherCompaniesElements = [{
       "title": "Were you trying to reach " + name + "?",
@@ -283,5 +310,9 @@ module.exports = {
   translateRequestToGenericFormats: translateRequestToGenericFormats,
   generateResponsePayloads: generateResponsePayloads,
   formatContactButtons: formatContactButtons,
-  makePayload: makePayload
+  makePayload: makePayload,
+  loadOtherCompaniesElements: loadOtherCompaniesElements,
+  loadContactMethodsElements: loadContactMethodsElements,
+  loadPostElements: loadPostElements,
+  loadNothingFoundElements: loadNothingFoundElements
 };

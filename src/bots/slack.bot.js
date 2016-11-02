@@ -82,32 +82,32 @@ function generateResponsePayloads(genericResponse) {
     var posts = genericResponse.data.posts || [];
     var otherCompanies = genericResponse.data.otherCompanies || [];
     var topContacts = formatContacts(genericResponse.data.contactMethods);
-    var colors = utilities.colors;
 
   // get payload-loaders into sub-functions for testing
     if (posts && posts.length) {
-        payloads[0].json.text = 'Top issues for ' + name + ':';
-        for (let i = 0; i < posts.length; i++) {
-            let title = posts[i].title || '';
-            let urlId = posts[i].urlId || ''
-            let color = colors[i];
-            let singleAttachment = {
-                "fallback": "Issue for " + name,
-                "title": title,
-                "color": color,
-                "fields": [
-                    {
-                        "value": "<https://gethuman.com?company=" + encodeURIComponent(name) + "|Solve for me - $20>",
-                        "short": true
-                    },
-                    {
-                        "value": "<https://answers.gethuman.co/_" + encodeURIComponent(urlId) + "|More info ...>",
-                        "short": true
-                    }
-                ]
-            };
-            payloads[0].json.attachments.push(singleAttachment);
-        };
+        payloads = loadPostsAttachments(payloads, posts, name);
+        // payloads[0].json.text = 'Top issues for ' + name + ':';
+        // for (let i = 0; i < posts.length; i++) {
+        //     let title = posts[i].title || '';
+        //     let urlId = posts[i].urlId || ''
+        //     let color = colors[i];
+        //     let singleAttachment = {
+        //         "fallback": "Issue for " + name,
+        //         "title": title,
+        //         "color": color,
+        //         "fields": [
+        //             {
+        //                 "value": "<https://gethuman.com?company=" + encodeURIComponent(name) + "|Solve for me - $20>",
+        //                 "short": true
+        //             },
+        //             {
+        //                 "value": "<https://answers.gethuman.co/_" + encodeURIComponent(urlId) + "|More info ...>",
+        //                 "short": true
+        //             }
+        //         ]
+        //     };
+        //     payloads[0].json.attachments.push(singleAttachment);
+        // };
       console.log('Posts info pushed into Payloads');
     }
 
@@ -142,6 +142,33 @@ function generateResponsePayloads(genericResponse) {
     return payloads;
   }
 }
+
+function loadPostsAttachments(payloads, posts, name) {
+  var colors = utilities.colors;
+  payloads[0].json.text = 'Top issues for ' + name + ':';
+  for (let i = 0; i < posts.length; i++) {
+      let title = posts[i].title || '';
+      let urlId = posts[i].urlId || ''
+      let color = colors[i];
+      let singleAttachment = {
+          "fallback": "Issue for " + name,
+          "title": title,
+          "color": color,
+          "fields": [
+              {
+                  "value": "<https://gethuman.com?company=" + encodeURIComponent(name) + "|Solve for me - $20>",
+                  "short": true
+              },
+              {
+                  "value": "<https://answers.gethuman.co/_" + encodeURIComponent(urlId) + "|More info ...>",
+                  "short": true
+              }
+          ]
+      };
+      payloads[0].json.attachments.push(singleAttachment);
+  };
+  return payloads;
+};
 
 /**
  * Takes contact methods, forms a structured string of <= 3 items for display
