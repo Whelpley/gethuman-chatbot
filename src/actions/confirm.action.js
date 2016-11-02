@@ -4,7 +4,7 @@ var utilities = require('../brain/utilities');
 var Q = require('q');
 
 /**
- * Processes a Confirmation message - sends 200, does nothing else
+ * Processes a Confirmation message - sends 200, returns False boolean
  *
  * @param genericRequest
  * @return {Promise}

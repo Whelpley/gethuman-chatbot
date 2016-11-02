@@ -82,7 +82,6 @@ function handleRequest(botHandlers, actionHandlers, config) {
   return function (req, res) {
     var context = getContext(req, res, config);
     console.log('Context captured from request: ' + JSON.stringify(context));
-
     var botHandler = factory.getBotHandler(botHandlers, context);
     var genericRequests = botHandler.translateRequestToGenericFormats(context);
 
@@ -92,16 +91,16 @@ function handleRequest(botHandlers, actionHandlers, config) {
         // refactor functions to handle no-op pass down (eliminate conditional)
         actionHandler.processRequest(genericRequest)
             .then(function (genericResponse) {
-              console.log("Generic Response returned in Server.");
-              if (!genericResponse) {
-                console.log("Cutting off response.")
-                return null;
-              }
-              else {
+              console.log("Generic Response returned in Server: " + genericResponse);
+              // if (!genericResponse) {
+              //   console.log("Cutting off response.")
+              //   return null;
+              // }
+              // else {
                 var payloads = botHandler.generateResponsePayloads(genericResponse);
                 console.log("Payloads generated: " + JSON.stringify(payloads));
                 return sendResponses(context, payloads);
-              }
+              // }
             })
             .done();
       }
@@ -121,6 +120,12 @@ function handleRequest(botHandlers, actionHandlers, config) {
  * @returns {Promise}
  */
 function sendResponses(context, payloads) {
+
+  // cut off function if no payloads
+  if (!payloads) {
+    return null
+  };
+
   // force payloads into an array (is this necessary?)
   payloads = [].concat(payloads || []);
   var calls = payloads.map(function (payload) {

@@ -69,6 +69,12 @@ function generateResponsePayloads(genericResponse) {
 
   var payloads = [];
 
+  // if a False object passed in (eg from a confirmation, returns blank payload)
+  if (!genericResponse) {
+    payloads = false;
+    return payloads;
+  };
+
   var token = config.facebookAccessToken;
   var url = 'https://graph.facebook.com/v2.6/me/messages';
   var sender = genericResponse.context.userRequest.entry[0].messaging[0].sender.id;
