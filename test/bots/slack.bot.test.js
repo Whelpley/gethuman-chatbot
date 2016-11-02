@@ -63,8 +63,10 @@ describe('Bots: Slack', function() {
   });
 
   describe('convertArrayToBoldList(arrayOfStrings)', function() {
-    it('dummy test', function() {
-      assert.equal(2, 2);
+    it('happy path', function() {
+      let arrayOfStrings = mockData.getArrayOfStrings();
+      let convertedArray = slackBot.convertArrayToBoldList(arrayOfStrings)
+      assert.equal(convertedArray, '*check*, *it*, *out*');
     })
   });
 

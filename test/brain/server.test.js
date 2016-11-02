@@ -15,7 +15,7 @@ var assert = chai.assert;
 var expect = chai.expect;
 var mockData = require('../mockdata.js');
 
-var serverBrain = require('../bots/messenger.bot');
+var serverBrain = require('../../src/brain/server');
 
 
 describe('Brain: Server', function() {

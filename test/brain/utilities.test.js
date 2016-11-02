@@ -9,10 +9,10 @@ var assert = chai.assert;
 var expect = chai.expect;
 var mockData = require('../mockData.js');
 
-var utilitiesBrain = require('../bots/messenger.bot');
+var utilitiesBrain = require('../../src/brain/utilities');
 
 
-describe('Utilities', function() {
+describe('Brain: Utilities', function() {
 
   describe('preResponse(context)', function() {
     it('dummy test', function() {
