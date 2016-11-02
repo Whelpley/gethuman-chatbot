@@ -29,16 +29,16 @@ function start(botHandlers, actionHandlers, config) {
   // addTestRoutes(app);
 
   // all bots go to this route
-  // app.post('/:bot', handleRequest(botHandlers, actionHandlers, config));
-  app.all('/:bot', handleRequest(botHandlers, actionHandlers, config));
+  app.post('/:bot', handleRequest(botHandlers, actionHandlers, config));
+  // app.all('/:bot', handleRequest(botHandlers, actionHandlers, config));
 
   // look up Express - app.all - figure out how to process FBM verification
     // should be able to see if it's a Get or Post
 
   // FB Messenger verification route
-  // app.get('/messenger', function(req, res) {
-  //   messenger.verify(req, res);
-  // });
+  app.get('/messenger', function(req, res) {
+    messenger.verify(req, res);
+  });
 
   app.listen(port, function () {
     console.log('API listening for bots on port ' + port);
