@@ -85,56 +85,34 @@ function generateResponsePayloads(genericResponse) {
 
   // get payload-loaders into sub-functions for testing
     if (posts && posts.length) {
-        payloads = loadPostsAttachments(payloads, posts, name);
-        // payloads[0].json.text = 'Top issues for ' + name + ':';
-        // for (let i = 0; i < posts.length; i++) {
-        //     let title = posts[i].title || '';
-        //     let urlId = posts[i].urlId || ''
-        //     let color = colors[i];
-        //     let singleAttachment = {
-        //         "fallback": "Issue for " + name,
-        //         "title": title,
-        //         "color": color,
-        //         "fields": [
-        //             {
-        //                 "value": "<https://gethuman.com?company=" + encodeURIComponent(name) + "|Solve for me - $20>",
-        //                 "short": true
-        //             },
-        //             {
-        //                 "value": "<https://answers.gethuman.co/_" + encodeURIComponent(urlId) + "|More info ...>",
-        //                 "short": true
-        //             }
-        //         ]
-        //     };
-        //     payloads[0].json.attachments.push(singleAttachment);
-        // };
+      payloads = loadPostsAttachments(payloads, posts, name);
       console.log('Posts info pushed into Payloads');
-    }
-
+    };
     // attach Company contact info:
     if (topContacts) {
-      payloads[0].json.attachments.push({
-          fallback: 'Contact info for ' + name,
-          title: 'Best ways to contact ' + name + ':',
-          color: '#999999',
-          text: topContacts,
-      });
+      payloads = loadContactsAttachments(payloads, topContacts, name);
+      // payloads[0].json.attachments.push({
+      //     fallback: 'Contact info for ' + name,
+      //     title: 'Best ways to contact ' + name + ':',
+      //     color: '#999999',
+      //     text: topContacts,
+      // });
       console.log('Company Contact Info pushed into Payloads');
     };
-
     // attach Other Companies info if they exist
     if (otherCompanies && otherCompanies.length) {
-        var otherCompaniesList = convertArrayToBoldList(otherCompanies);
-        payloads[0].json.attachments.push({
-            fallback: 'Other solutions',
-            title: 'Were you talking about ' + name + '?',
-            color: '#BBBBBB',
-            text: 'Or maybe you meant ' + otherCompaniesList + '?',
-            mrkdwn_in: ["text"]
-        });
-        console.log('Other Companies info pushed into Payloads');
-    }
+      payloads = loadOtherCompaniesAttachments(payloads, otherCompanies, name);
 
+        // var otherCompaniesList = convertArrayToBoldList(otherCompanies);
+        // payloads[0].json.attachments.push({
+        //     fallback: 'Other solutions',
+        //     title: 'Were you talking about ' + name + '?',
+        //     color: '#BBBBBB',
+        //     text: 'Or maybe you meant ' + otherCompaniesList + '?',
+        //     mrkdwn_in: ["text"]
+        // });
+        console.log('Other Companies info pushed into Payloads');
+    };
     if (!payloads[0].json.attachments.length) {
         payloads[0].json.text = 'I couldn\'t find anything for \"' + name + '\". Please tell me which company you are looking for. (ex: \"/gethuman Verizon Wireless\")'
         console.log('No card info found for Companies, returning Nothing Found text.');
@@ -169,6 +147,28 @@ function loadPostsAttachments(payloads, posts, name) {
   };
   return payloads;
 };
+
+function loadContactsAttachments(payloads, topContacts, name) {
+  payloads[0].json.attachments.push({
+      fallback: 'Contact info for ' + name,
+      title: 'Best ways to contact ' + name + ':',
+      color: '#999999',
+      text: topContacts,
+  });
+  return payloads;
+}
+
+function loadOtherCompaniesAttachments(payloads, otherCompanies, name) {
+  var otherCompaniesList = convertArrayToBoldList(otherCompanies);
+  payloads[0].json.attachments.push({
+      fallback: 'Other solutions',
+      title: 'Were you talking about ' + name + '?',
+      color: '#BBBBBB',
+      text: 'Or maybe you meant ' + otherCompaniesList + '?',
+      mrkdwn_in: ["text"]
+  });
+  return payloads;
+}
 
 /**
  * Takes contact methods, forms a structured string of <= 3 items for display
