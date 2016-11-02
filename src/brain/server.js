@@ -116,12 +116,10 @@ function handleRequest(botHandlers, actionHandlers, config) {
  * @returns {Promise}
  */
 function sendResponses(context, payloads) {
-
   // cut off function if no payloads
   if (!payloads) {
     return null
   };
-
   // force payloads into an array (is this necessary?)
   payloads = [].concat(payloads || []);
   var calls = payloads.map(function (payload) {
@@ -210,7 +208,8 @@ module.exports = {
   addMiddleware: addMiddleware,
   addTestRoutes: addTestRoutes,
   handleRequest: handleRequest,
-  getContext: getContext,
+  sendResponses: sendResponses,
+  sendResponseToPlatform: sendResponseToPlatform,
   sendRequestAsReply: sendRequestAsReply,
-  sendResponseToPlatform: sendResponseToPlatform
+  getContext: getContext
 };

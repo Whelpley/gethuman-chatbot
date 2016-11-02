@@ -1,13 +1,13 @@
 // Checklist:
-//   verify: ,
-//   translateRequestToGenericFormats:
-//   generateResponsePayloads:
-//   formatContactButtons:
-//   makePayload:
-//   loadOtherCompaniesElements:
-//   loadContactMethodsElements:
-//   loadPostElements:
-//   loadNothingFoundElements:
+//   verify: dummy (unsure if testable)
+//   translateRequestToGenericFormats: dummy
+//   generateResponsePayloads: dummy
+//   formatContactButtons: dummy
+//   makePayload: dummy
+//   loadOtherCompaniesElements: dummy
+//   loadContactMethodsElements: dummy
+//   loadPostElements: dummy
+//   loadNothingFoundElements: dummy
 
 'use strict'
 
@@ -15,4 +15,65 @@ var chai = require('chai');
 var assert = chai.assert;
 var expect = chai.expect;
 var mockData = require('../mockData.js');
+
+var messengerBot = require('../../src/bots/messenger.bot');
+
+
+describe('Bots: Messenger', function() {
+
+  describe('verify(req, res)', function() {
+    it('dummy test', function() {
+      assert.equal(2, 2);
+    })
+  });
+
+  describe('translateRequestToGenericFormats(context)', function() {
+    it('dummy test', function() {
+      assert.equal(2, 2);
+    })
+  });
+
+  describe('generateResponsePayloads(genericResponse)', function() {
+    it('dummy test', function() {
+      assert.equal(2, 2);
+    })
+  });
+
+  describe('loadNothingFoundElements(userInput) ', function() {
+    it('dummy test', function() {
+      assert.equal(2, 2);
+    })
+  });
+
+  describe('loadPostElements(posts, name)', function() {
+    it('dummy test', function() {
+      assert.equal(2, 2);
+    })
+  });
+
+  describe('loadContactMethodsElements(contactMethods, name)', function() {
+    it('dummy test', function() {
+      assert.equal(2, 2);
+    })
+  });
+
+  describe('loadOtherCompaniesElements(otherCompanies, name)', function() {
+    it('dummy test', function() {
+      assert.equal(2, 2);
+    })
+  });
+
+  describe('formatContactButtons(contactMethods)', function() {
+    it('dummy test', function() {
+      assert.equal(2, 2);
+    })
+  });
+
+  describe('makePayload(token, url, sender, elements)', function() {
+    it('dummy test', function() {
+      assert.equal(2, 2);
+    })
+  });
+
+})
 

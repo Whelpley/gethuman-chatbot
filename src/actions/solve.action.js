@@ -157,6 +157,5 @@ module.exports = {
   extractContactMethods: extractContactMethods,
   attachOtherCompanies: attachOtherCompanies,
   structureGenericResponse: structureGenericResponse,
-  queryCompany: queryCompany,
-  structureGenericResponse: structureGenericResponse
+  queryCompany: queryCompany
 };

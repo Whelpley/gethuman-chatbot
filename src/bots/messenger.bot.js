@@ -1,7 +1,6 @@
 'use strict'
 
 const phoneFormatter = require('phone-formatter');
-
 var config = require('../config/config');
 
 /**
@@ -309,10 +308,10 @@ module.exports = {
   verify: verify,
   translateRequestToGenericFormats: translateRequestToGenericFormats,
   generateResponsePayloads: generateResponsePayloads,
-  formatContactButtons: formatContactButtons,
-  makePayload: makePayload,
   loadOtherCompaniesElements: loadOtherCompaniesElements,
   loadContactMethodsElements: loadContactMethodsElements,
   loadPostElements: loadPostElements,
-  loadNothingFoundElements: loadNothingFoundElements
+  loadNothingFoundElements: loadNothingFoundElements,
+  formatContactButtons: formatContactButtons,
+  makePayload: makePayload
 };

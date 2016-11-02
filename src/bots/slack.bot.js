@@ -42,27 +42,12 @@ function translateRequestToGenericFormats(context) {
  */
 function generateResponsePayloads(genericResponse) {
   console.log("About to begin generating payloads from genericResponse.");
-  // if a False object passed in (returns blank payload)
+  // if a False object passed in, passes down False to next step
   if (!genericResponse) {
-    payloads = false;
-    return payloads;
+    return false;
   };
   // form basic payload
   var payloads = formBasicPayload(genericResponse);
-  // var path = config.slackAccessToken;
-  // var uri = 'https://hooks.slack.com/services/' + path;
-  // var channel = genericResponse.context.userRequest.channel_id;
-  // var payloads =  [{
-  //   uri: uri,
-  //   method: 'POST',
-  //   json: {
-  //     channel: channel,
-  //     username: 'GetHuman',
-  //     icon_emoji: ':gethuman:',
-  //     text: '',
-  //     attachments: []
-  //   }
-  // }];
   // Case: no user input
   if (genericResponse.type === 'no-input') {
     console.log('No user input flag detected in genericResponse.');
@@ -252,7 +237,10 @@ module.exports = {
   // verify: verify,
   translateRequestToGenericFormats: translateRequestToGenericFormats,
   generateResponsePayloads: generateResponsePayloads,
-  convertArrayToBoldList: convertArrayToBoldList,
+  formBasicPayload: formBasicPayload,
+  loadPostsAttachments: loadPostsAttachments,
+  loadContactsAttachments: loadContactsAttachments,
+  loadOtherCompaniesAttachments: loadOtherCompaniesAttachments,
   formatContacts: formatContacts,
-  formBasicPayload: formBasicPayload
+  convertArrayToBoldList: convertArrayToBoldList
 };
