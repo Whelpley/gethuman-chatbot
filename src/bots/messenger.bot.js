@@ -83,20 +83,10 @@ function generateResponsePayloads(genericResponse) {
   if (genericResponse.type === 'nothing-found') {
     console.log('No Company Results flag detected in genericResponse.');
     let elements = loadNothingFoundElements(userInput);
-    // let elements = [{
-    //     "title": "Nothing found!",
-    //     "subtitle": 'I couldn\'t tell what you meant by \"' + userInput + '\". Please tell me company you are looking for. (ex: \"Verizon Wireless\")',
-    //     "buttons": [{
-    //         "type": "web_url",
-    //         "url": "https://gethuman.com",
-    //         "title": "Go to GetHuman"
-    //     }],
-    // }];
     payloads.push(makePayload(token, url, sender, elements));
   }
   else if (genericResponse.type === 'standard') {
     console.log('Standard type flag detected in genericResponse.');
-
     var name = genericResponse.data.name || '';
     var posts = genericResponse.data.posts || [];
     var contactMethods = genericResponse.data.contactMethods || [];
@@ -107,58 +97,22 @@ function generateResponsePayloads(genericResponse) {
       var postElements = loadPostElements(posts, name);
       payloads.push(makePayload(token, url, sender, postElements));
     }
-
     // load Contact Methods card to Payload
-    // export to a function?
     if (contactMethods) {
       var contactMethodsElements = loadContactMethodsElements(contactMethods, name);
-      // var contactMethodsElements = [{
-      //     title: 'Best ways to contact ' + name + ':',
-      //     buttons: formatContactButtons(contactMethods)
-      // }];
-      // if (contactMethods.email) {
-      //     contactMethodsElements[0].subtitle = contactMethods.email;
-      // };
       // only push in if at least one button exists:
       if (contactMethodsElements[0].subtitle || contactMethodsElements[0].buttons.length) {
           payloads.push(makePayload(token, url, sender, contactMethodsElements));
       };
     }
-
     // make Other Companies Card
-    // export to a function?
     if (otherCompanies && otherCompanies.length) {
       var otherCompaniesElements = loadOtherCompaniesElements(otherCompanies, name);
-
-      // var otherCompaniesElements = [{
-      //     "title": "Were you trying to reach " + name + "?",
-      //     "subtitle": "Perhaps you would like to ask me about these companies:",
-      //     "buttons": [],
-      // }];
-      // var otherCompaniesSubSet = otherCompanies.slice(0,3);
-      // otherCompaniesSubSet.forEach(function(altCompany){
-      //     otherCompaniesElements[0].buttons.push({
-      //         "type": "postback",
-      //         "title": altCompany,
-      //         // payload must be string, max 100 chars
-      //         "payload": altCompany
-      //     })
-      // })
       payloads.push(makePayload(token, url, sender, otherCompaniesElements));
     }
-
     // if no other payload loaded up, send a Nothing-Found reponse
     if (!payloads.length) {
       let elements = loadNothingFoundElements(userInput);
-      // let elements = [{
-      //     "title": "Nothing found!",
-      //     "subtitle": 'I couldn\'t tell what you meant by \"' + userInput + '\". Please tell me company you are looking for. (ex: \"Verizon Wireless\")',
-      //     "buttons": [{
-      //         "type": "web_url",
-      //         "url": "https://gethuman.com",
-      //         "title": "Go to GetHuman"
-      //     }],
-      // }];
       payloads.push(makePayload(token, url, sender, elements));
     }
   }
