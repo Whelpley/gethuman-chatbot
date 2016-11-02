@@ -66,7 +66,6 @@ function translateRequestToGenericFormats(context) {
  */
 function generateResponsePayloads(genericResponse) {
   console.log("About to begin generating payloads from genericResponse.");
-
   var payloads = [];
 
   // if a False object passed in (eg from a confirmation, returns blank payload)
@@ -105,26 +104,27 @@ function generateResponsePayloads(genericResponse) {
     // load Payload cards for Posts
     // export to a function
     if (posts && posts.length) {
-      var postElements = [];
-      for (let i = 0; i < posts.length; i++) {
-        let text = posts[i].title || '';
-        let urlId = posts[i].urlId || ''
-        let singleElement = {
-            "title": "Top issues for " + name + ", #" + (i+1) + " of " + posts.length + ":",
-            "subtitle": text,
-            "buttons": [{
-                "type": "web_url",
-                "url": "https://gethuman.com?company=" + encodeURIComponent(name) ,
-                "title": "Solve for Me - $20"
-            },
-            {
-                "type": "web_url",
-                "url": "https://answers.gethuman.co/_" + encodeURIComponent(urlId) ,
-                "title": "More info ..."
-            }],
-        };
-        postElements.push(singleElement);
-      }
+      var postElements = loadPostElements(posts);
+      // var postElements = [];
+      // for (let i = 0; i < posts.length; i++) {
+      //   let text = posts[i].title || '';
+      //   let urlId = posts[i].urlId || ''
+      //   let singleElement = {
+      //       "title": "Top issues for " + name + ", #" + (i+1) + " of " + posts.length + ":",
+      //       "subtitle": text,
+      //       "buttons": [{
+      //           "type": "web_url",
+      //           "url": "https://gethuman.com?company=" + encodeURIComponent(name) ,
+      //           "title": "Solve for Me - $20"
+      //       },
+      //       {
+      //           "type": "web_url",
+      //           "url": "https://answers.gethuman.co/_" + encodeURIComponent(urlId) ,
+      //           "title": "More info ..."
+      //       }],
+      //   };
+      //   postElements.push(singleElement);
+      // }
       payloads.push(makePayload(token, url, sender, postElements));
     }
 
@@ -181,6 +181,29 @@ function generateResponsePayloads(genericResponse) {
   console.log('Payloads prepared by Messenger bot.');
   return payloads;
 }
+
+function loadPostElements(posts, name) {
+  var postElements = [];
+  for (let i = 0; i < posts.length; i++) {
+    let text = posts[i].title || '';
+    let urlId = posts[i].urlId || ''
+    let singleElement = {
+        "title": "Top issues for " + name + ", #" + (i+1) + " of " + posts.length + ":",
+        "subtitle": text,
+        "buttons": [{
+            "type": "web_url",
+            "url": "https://gethuman.com?company=" + encodeURIComponent(name) ,
+            "title": "Solve for Me - $20"
+        },
+        {
+            "type": "web_url",
+            "url": "https://answers.gethuman.co/_" + encodeURIComponent(urlId) ,
+            "title": "More info ..."
+        }],
+    };
+    postElements.push(singleElement);
+  }
+};
 
 /**
  * Takes contact methods, formats associated buttons for Messenger card

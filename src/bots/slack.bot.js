@@ -58,13 +58,11 @@ function generateResponsePayloads(genericResponse) {
     }
   }];
 
-
-  // if a False object passed in (eg from a confirmation, returns blank payload)
+  // if a False object passed in (returns blank payload)
   if (!genericResponse) {
     payloads = false;
     return payloads;
   };
-
   // Case: no user input
   if (genericResponse.type === 'no-input') {
     console.log('No user input flag detected in genericResponse.');

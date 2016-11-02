@@ -50,26 +50,15 @@ function queryCompany(genericRequest) {
       queryResult.type = 'nothing-found';
       return Q.when({});
     }
+    queryResult.type = 'standard';
     var exactMatch = companySearchResults.filter(function(eachCompany) {
       return eachCompany.name.toLowerCase() === userInput.toLowerCase();
     });
     company = (exactMatch && exactMatch.length) ? exactMatch[0] : companySearchResults[0];
-
-    // if (exactMatch && exactMatch.length) {
-    //   company = exactMatch[0];
-    //   console.log('Found an exact match from Companies search');
-    // }
-    // else {
-    //   company = companySearchResults[0];
-    //   console.log('Going with first result from Companies search');
-    // };
-    // ----------------
-    queryResult.type = 'standard';
     company = attachOtherCompanies(company, companySearchResults, userInput);
     return postSearch.findByCompany(company)
   })
   .then(function(posts) {
-    // console.log('Posts of Company returned in action handler');
     company.posts = posts;
     queryResult.data = company;
     // console.log('Result of API queries: ' + JSON.stringify(queryResult));
