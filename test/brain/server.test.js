@@ -1,0 +1,16 @@
+// Checklist:
+//   start: ,
+//   addMiddleware:
+//   addTestRoutes:
+//   handleRequest:
+//   getContext:
+//   sendRequestAsReply:
+//   sendResponseToPlatform:
+
+'use strict'
+
+var chai = require('chai');
+var assert = chai.assert;
+var expect = chai.expect;
+var mockData = require('../mockData.js');
+

@@ -42,27 +42,27 @@ function translateRequestToGenericFormats(context) {
  */
 function generateResponsePayloads(genericResponse) {
   console.log("About to begin generating payloads from genericResponse.");
-  // form basic payload - separate into function?
-  var path = config.slackAccessToken;
-  var uri = 'https://hooks.slack.com/services/' + path;
-  var channel = genericResponse.context.userRequest.channel_id;
-  var payloads =  [{
-    uri: uri,
-    method: 'POST',
-    json: {
-      channel: channel,
-      username: 'GetHuman',
-      icon_emoji: ':gethuman:',
-      text: '',
-      attachments: []
-    }
-  }];
-
   // if a False object passed in (returns blank payload)
   if (!genericResponse) {
     payloads = false;
     return payloads;
   };
+  // form basic payload
+  var payloads = formBasicPayload(genericResponse);
+  // var path = config.slackAccessToken;
+  // var uri = 'https://hooks.slack.com/services/' + path;
+  // var channel = genericResponse.context.userRequest.channel_id;
+  // var payloads =  [{
+  //   uri: uri,
+  //   method: 'POST',
+  //   json: {
+  //     channel: channel,
+  //     username: 'GetHuman',
+  //     icon_emoji: ':gethuman:',
+  //     text: '',
+  //     attachments: []
+  //   }
+  // }];
   // Case: no user input
   if (genericResponse.type === 'no-input') {
     console.log('No user input flag detected in genericResponse.');
@@ -82,36 +82,17 @@ function generateResponsePayloads(genericResponse) {
     var posts = genericResponse.data.posts || [];
     var otherCompanies = genericResponse.data.otherCompanies || [];
     var topContacts = formatContacts(genericResponse.data.contactMethods);
-
-  // get payload-loaders into sub-functions for testing
     if (posts && posts.length) {
       payloads = loadPostsAttachments(payloads, posts, name);
       console.log('Posts info pushed into Payloads');
     };
-    // attach Company contact info:
     if (topContacts) {
       payloads = loadContactsAttachments(payloads, topContacts, name);
-      // payloads[0].json.attachments.push({
-      //     fallback: 'Contact info for ' + name,
-      //     title: 'Best ways to contact ' + name + ':',
-      //     color: '#999999',
-      //     text: topContacts,
-      // });
       console.log('Company Contact Info pushed into Payloads');
     };
-    // attach Other Companies info if they exist
     if (otherCompanies && otherCompanies.length) {
       payloads = loadOtherCompaniesAttachments(payloads, otherCompanies, name);
-
-        // var otherCompaniesList = convertArrayToBoldList(otherCompanies);
-        // payloads[0].json.attachments.push({
-        //     fallback: 'Other solutions',
-        //     title: 'Were you talking about ' + name + '?',
-        //     color: '#BBBBBB',
-        //     text: 'Or maybe you meant ' + otherCompaniesList + '?',
-        //     mrkdwn_in: ["text"]
-        // });
-        console.log('Other Companies info pushed into Payloads');
+      console.log('Other Companies info pushed into Payloads');
     };
     if (!payloads[0].json.attachments.length) {
         payloads[0].json.text = 'I couldn\'t find anything for \"' + name + '\". Please tell me which company you are looking for. (ex: \"/gethuman Verizon Wireless\")'
@@ -121,6 +102,38 @@ function generateResponsePayloads(genericResponse) {
   }
 }
 
+/**
+ * Forms base payload for Slack response
+ *
+ * @param genericResponse
+ * @return {payloads}
+ */
+function formBasicPayload(genericResponse) {
+  var path = config.slackAccessToken;
+  var uri = 'https://hooks.slack.com/services/' + path;
+  var channel = genericResponse.context.userRequest.channel_id;
+  var payloads =  [{
+    uri: uri,
+    method: 'POST',
+    json: {
+      channel: channel,
+      username: 'GetHuman',
+      icon_emoji: ':gethuman:',
+      text: '',
+      attachments: []
+    }
+  }];
+  return payloads;
+};
+
+/**
+ * Forms payload attachment for Posts information
+ *
+ * @param payloads
+ * @param posts
+ * @param name
+ * @return {payloads}
+ */
 function loadPostsAttachments(payloads, posts, name) {
   var colors = utilities.colors;
   payloads[0].json.text = 'Top issues for ' + name + ':';
@@ -148,6 +161,14 @@ function loadPostsAttachments(payloads, posts, name) {
   return payloads;
 };
 
+/**
+ * Forms payload attachment for Contact information
+ *
+ * @param payloads
+ * @param topContacts
+ * @param name
+ * @return {payloads}
+ */
 function loadContactsAttachments(payloads, topContacts, name) {
   payloads[0].json.attachments.push({
       fallback: 'Contact info for ' + name,
@@ -158,6 +179,14 @@ function loadContactsAttachments(payloads, topContacts, name) {
   return payloads;
 }
 
+/**
+ * Forms payload attachment for Other Companies information
+ *
+ * @param payloads
+ * @param otherCompanies
+ * @param name
+ * @return {payloads}
+ */
 function loadOtherCompaniesAttachments(payloads, otherCompanies, name) {
   var otherCompaniesList = convertArrayToBoldList(otherCompanies);
   payloads[0].json.attachments.push({
@@ -224,5 +253,6 @@ module.exports = {
   translateRequestToGenericFormats: translateRequestToGenericFormats,
   generateResponsePayloads: generateResponsePayloads,
   convertArrayToBoldList: convertArrayToBoldList,
-  formatContacts: formatContacts
+  formatContacts: formatContacts,
+  formBasicPayload: formBasicPayload
 };

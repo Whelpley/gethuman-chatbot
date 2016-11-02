@@ -1,8 +1,6 @@
 'use strict'
 
-function getColors() {
-  return ['#1c4fff', '#e84778', '#ffc229', '#1ae827', '#5389ff'];
-}
+// need to renew this
 
 function getPosts() {
   return [
