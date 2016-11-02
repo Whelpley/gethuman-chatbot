@@ -26,7 +26,7 @@ function start(botHandlers, actionHandlers, config) {
   addMiddleware(app);
 
   // remove these
-  addTestRoutes(app);
+  // addTestRoutes(app);
 
   // all bots go to this route
   app.post('/:bot', handleRequest(botHandlers, actionHandlers, config));
@@ -59,18 +59,18 @@ function addMiddleware(app) {
  *
  * @param app The express server
  */
-function addTestRoutes(app) {
+// function addTestRoutes(app) {
 
-  // test route
-  app.get('/', function (req, res) {
-    res.status(200).send('Hello world!')
-  });
+//   // test route
+//   app.get('/', function (req, res) {
+//     res.status(200).send('Hello world!')
+//   });
 
-  // Slack hellobot - keep for testing
-  app.post('/hello', require('../deprecated/hellobot.js'));
-  // Slack dicebot - keep for testing
-  app.post('/roll', require('../deprecated/dicebot.js'));
-}
+//   // Slack hellobot - keep for testing
+//   app.post('/hello', require('../deprecated/hellobot.js'));
+//   // Slack dicebot - keep for testing
+//   app.post('/roll', require('../deprecated/dicebot.js'));
+// }
 
 /**
  * Handle requests from the bots to our api
@@ -86,11 +86,9 @@ function handleRequest(botHandlers, actionHandlers, config) {
     console.log('Context captured from request: ' + JSON.stringify(context));
     var botHandler = factory.getBotHandler(botHandlers, context);
     var genericRequests = botHandler.translateRequestToGenericFormats(context);
-
     genericRequests.forEach((genericRequest) => {
       var actionHandler = factory.getActionHandler(actionHandlers, genericRequest);
       try {
-        // refactor functions to handle no-op pass down (eliminate conditional)
         actionHandler.processRequest(genericRequest)
             .then(function (genericResponse) {
               // console.log("Generic Response returned in Server: " + genericResponse);
@@ -206,7 +204,7 @@ function getContext(req, res, config) {
 module.exports = {
   start: start,
   addMiddleware: addMiddleware,
-  addTestRoutes: addTestRoutes,
+  // addTestRoutes: addTestRoutes,
   handleRequest: handleRequest,
   sendResponses: sendResponses,
   sendResponseToPlatform: sendResponseToPlatform,

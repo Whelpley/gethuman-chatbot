@@ -4,7 +4,7 @@ var brainServer = require('./brain/server');
 var config = require('./config/config');
 
 var botHandlers = {
-  slack:  require('./bots/slack.bot'),
+  slack: require('./bots/slack.bot'),
   messenger: require('./bots/messenger.bot')
 }
 
