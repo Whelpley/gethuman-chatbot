@@ -203,6 +203,7 @@ function loadPostElements(posts, name) {
     };
     postElements.push(singleElement);
   }
+  return postElements;
 };
 
 /**
