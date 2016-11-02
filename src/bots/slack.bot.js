@@ -195,7 +195,7 @@ function convertArrayToBoldList(arrayOfStrings) {
 }
 
 module.exports = {
-  verify: verify,
+  // verify: verify,
   translateRequestToGenericFormats: translateRequestToGenericFormats,
   generateResponsePayloads: generateResponsePayloads,
   convertArrayToBoldList: convertArrayToBoldList,
