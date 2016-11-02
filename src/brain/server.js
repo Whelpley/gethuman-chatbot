@@ -114,7 +114,7 @@ function handleRequest(botHandlers, actionHandlers, config) {
 }
 
 /**
- * This function should be the exact same each and every time
+ * Lines up payloads and sequentially calls Send for each
  *
  * @param context
  * @param payloads
@@ -134,7 +134,14 @@ function sendResponses(context, payloads) {
   return utilities.chainPromises(calls);
 }
 
-// Checks to see if payload should actually be sent to a platform, or other action
+/**
+ * Checks to see if payload should actually be sent to a platform
+ * If so, passes it to Send fuction
+ *
+ * @param context
+ * @param payload
+ * @return {sendRequestAsReply}
+ */
 function sendResponseToPlatform(context, payload) {
   if (context.isTest) {
     console.log("Test flag detected in payload context.");
@@ -151,6 +158,13 @@ function sendResponseToPlatform(context, payload) {
   }
 }
 
+/**
+ * Makes the request to send to payload
+ *
+ * @param context
+ * @param payload
+ * @return {Promise}
+ */
 function sendRequestAsReply(payload, context) {
   var deferred = Q.defer();
   console.log("Last step before sending this payload: " + JSON.stringify(payload));
@@ -195,5 +209,7 @@ module.exports = {
   addMiddleware: addMiddleware,
   addTestRoutes: addTestRoutes,
   handleRequest: handleRequest,
-  getContext: getContext
+  getContext: getContext,
+  sendRequestAsReply: sendRequestAsReply,
+  sendResponseToPlatform: sendResponseToPlatform
 };

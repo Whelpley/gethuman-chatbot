@@ -3,13 +3,23 @@
 var utilities = require('../brain/utilities');
 var config = require('../config/config');
 
-// not needed?
-// will delete this if won't cause problems when missing
-// may be necessary if we want to verify that request actually coming from Slack
-function verify() {
-  console.log("Nothing to see here.")
-}
+/**
+ * Verifies that request actually coming from Slack
+ * not currently in use
+ *
+ * @param req
+ * @param res
+ */
+// function verify() {
+//   console.log("Nothing to see here.")
+// }
 
+/**
+ * Makes array of generic request objects from incoming context
+ *
+ * @param context
+ * @return {genericRequests}
+ */
 function translateRequestToGenericFormats(context) {
   // do any other kinds of Request come from Slack?
   var genericRequests = [{
@@ -24,6 +34,12 @@ function translateRequestToGenericFormats(context) {
   return genericRequests;
 }
 
+/**
+ * Takes generic response data and structures payloads for Slack sending
+ *
+ * @param genericResponse
+ * @return {payloads}
+ */
 function generateResponsePayloads(genericResponse) {
   console.log("About to begin generating payloads from genericResponse.");
   // form basic payload - separate into function?
@@ -42,13 +58,13 @@ function generateResponsePayloads(genericResponse) {
     }
   }];
 
-// Case: no user input
+  // Case: no user input
   if (genericResponse.type === 'no-input') {
     console.log('No user input flag detected in genericResponse.');
     payloads[0].json.text = 'Tell me the company you would like to contact.';
     return payloads;
   }
-// Case: nothing returned from Companies search / junk input
+  // Case: nothing returned from Companies search / junk input
   else if (genericResponse.type === 'nothing-found') {
     console.log('No Company Results flag detected in genericResponse.');
     payloads[0].json.text = 'I couldn\'t tell what you meant by \"' + genericResponse.userInput + '\". Please tell me company you are looking for. (ex: \"/gethuman Verizon Wireless\")';
@@ -60,7 +76,7 @@ function generateResponsePayloads(genericResponse) {
     var name = genericResponse.data.name || '';
     var posts = genericResponse.data.posts || [];
     var otherCompanies = genericResponse.data.otherCompanies || [];
-    var topContacts = formatTextField(genericResponse.data.contactMethods);
+    var topContacts = formatContacts(genericResponse.data.contactMethods);
     var colors = utilities.colors;
 
   // get payload-loaders into sub-functions for testing
@@ -122,46 +138,59 @@ function generateResponsePayloads(genericResponse) {
   }
 }
 
-function formatTextField(contactMethods) {
-  var result = '';
+/**
+ * Takes contact methods, forms a structured string of <= 3 items for display
+ *
+ * @param contactMethods
+ * @return {topContacts}
+ */
+function formatContacts(contactMethods) {
+  var topContacts = '';
   var counter = 1;
   for(var key in contactMethods) {
     if (contactMethods.hasOwnProperty(key) && (counter <= 3) && (contactMethods[key])) {
       switch(key) {
           case 'twitter':
-              result = result + '<https://twitter.com/' + contactMethods[key] +'|Twitter> | ';
+              topContacts = topContacts + '<https://twitter.com/' + contactMethods[key] +'|Twitter> | ';
               break;
           case 'web':
-              result = result + '<' + contactMethods[key] +'|Web> | ';
+              topContacts = topContacts + '<' + contactMethods[key] +'|Web> | ';
               break;
           case 'chat':
-              result = result + '<' + contactMethods[key] +'|Chat> | ';
+              topContacts = topContacts + '<' + contactMethods[key] +'|Chat> | ';
               break;
           case 'facebook':
-              result = result + '<' + contactMethods[key] +'|Facebook> | ';
+              topContacts = topContacts + '<' + contactMethods[key] +'|Facebook> | ';
               break;
           default:
-              result = result + contactMethods[key] + ' | ';
+              topContacts = topContacts + contactMethods[key] + ' | ';
       }
       counter += 1;
     }
   }
-  if (result) {
-    result = result.slice(0,-3);
+  if (topContacts) {
+    topContacts = topContacts.slice(0,-3);
   }
-  console.log("Formatted string for Slack contact methods: " + result);
-  return result;
+  console.log("Formatted string for Slack contact methods: " + topContacts);
+  return topContacts;
 };
 
-// convert an array of strings to one string separated by commas, with each entry *bolded*
+/**
+ * convert an array of strings to one string separated by commas, with each entry *bolded*
+ *
+ * @param arrayOfStrings
+ * @return {otherCompaniesList}
+ */
 function convertArrayToBoldList(arrayOfStrings) {
-  var result = '*';
-  result = result + arrayOfStrings.join('*, *') + "*";
-  return result;
+  var otherCompaniesList = '*';
+  otherCompaniesList = otherCompaniesList + arrayOfStrings.join('*, *') + "*";
+  return otherCompaniesList;
 }
 
 module.exports = {
   verify: verify,
   translateRequestToGenericFormats: translateRequestToGenericFormats,
-  generateResponsePayloads: generateResponsePayloads
+  generateResponsePayloads: generateResponsePayloads,
+  convertArrayToBoldList: convertArrayToBoldList,
+  formatContacts: formatContacts
 };

@@ -1,6 +1,5 @@
 'use strict'
 
-// var request = require('request');
 var Q = require('q');
 var companySearch = require('../services/company-api-gh');
 var postSearch = require('../services/post-api-gh');
@@ -53,7 +52,6 @@ function queryCompany(genericRequest) {
     var exactMatch = companySearchResults.filter(function(eachCompany) {
       return eachCompany.name.toLowerCase() === userInput.toLowerCase();
     });
-
     if (!companySearchResults.length) {
       console.log('Nothing found in initial Company search');
       queryResult.type = 'nothing-found';
@@ -69,7 +67,6 @@ function queryCompany(genericRequest) {
       console.log("Going with first result from Companies search");
     };
     // ----------------
-
     queryResult.type = 'standard';
     company = attachOtherCompanies(company, companySearchResults, userInput);
     return postSearch.findByCompany(company)
@@ -83,6 +80,12 @@ function queryCompany(genericRequest) {
   });
 }
 
+/**
+ * Processes result of API query into common structured data object
+ *
+ * @param queryResult
+ * @return {genericResponse} Promise
+ */
 function structureGenericResponse(queryResult) {
   var genericResponse = {
     userInput: queryResult.userInput,
@@ -121,7 +124,14 @@ function structureGenericResponse(queryResult) {
   return genericResponse;
 }
 
-// Should this exist in another module?
+/**
+ * Attaches other companies returned from GetHuman query to main company
+ *
+ * @param company
+ * @param companySearchResults
+ * @param userInput
+ * @return {company}
+ */
 function attachOtherCompanies(company, companySearchResults, userInput) {
     var companyNames = companySearchResults.map((eachCompany) => {
       return eachCompany.name;
@@ -133,8 +143,12 @@ function attachOtherCompanies(company, companySearchResults, userInput) {
     return company;
 };
 
-// takes Company object, puts associated info into an result object
-// should this exist in another module?
+/**
+ * Obtains contact methods from result of GetHuman queries
+ *
+ * @param queryResultData
+ * @return {contactMethods}
+ */
 function extractContactMethods(queryResultData) {
   var contactMethods = {
     phone: '',
@@ -177,5 +191,14 @@ function extractContactMethods(queryResultData) {
 }
 
 module.exports = {
-  processRequest: processRequest
+  processRequest: processRequest,
+  extractContactMethods: extractContactMethods,
+  attachOtherCompanies: attachOtherCompanies,
+  structureGenericResponse: structureGenericResponse,
+  queryCompany: queryCompany,
+  structureGenericResponse: structureGenericResponse
+
+
+
+
 };

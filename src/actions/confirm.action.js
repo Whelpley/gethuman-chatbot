@@ -3,7 +3,12 @@
 var utilities = require('../brain/utilities');
 var Q = require('q');
 
-// processing a Confirmation message - sends 200, does nothing else
+/**
+ * Processes a Confirmation message - sends 200, does nothing else
+ *
+ * @param genericRequest
+ * @param config
+ */
 function processRequest(genericRequest) {
   utilities.preResponse(genericRequest.context);
   return Q.when(false);

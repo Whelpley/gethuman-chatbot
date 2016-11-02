@@ -2,9 +2,14 @@
 
 const phoneFormatter = require('phone-formatter');
 
-// var utilities = require('../brain/utilities');
 var config = require('../config/config');
 
+/**
+ * Verifies new webhook when setting up Messenger app
+ *
+ * @param req
+ * @param res
+ */
 function verify(req, res) {
     console.log("Receiving webhook verification from FB.");
     var verifyToken = config.facebookVerifyToken;
@@ -14,6 +19,12 @@ function verify(req, res) {
     res.send('Error, wrong token');
 }
 
+/**
+ * Makes array of generic request objects from incoming context
+ *
+ * @param context
+ * @return {genericRequests}
+ */
 function translateRequestToGenericFormats(context) {
   var genericRequests = [];
   // iterate over messaging events - FBM uses batch processing
@@ -47,6 +58,12 @@ function translateRequestToGenericFormats(context) {
   return genericRequests;
 }
 
+/**
+ * Takes generic response data and structures payloads for Messenger sending
+ *
+ * @param genericResponse
+ * @return {payloads}
+ */
 function generateResponsePayloads(genericResponse) {
   console.log("About to begin generating payloads from genericResponse.");
 
@@ -57,7 +74,7 @@ function generateResponsePayloads(genericResponse) {
   var sender = genericResponse.context.userRequest.entry[0].messaging[0].sender.id;
   var userInput = genericResponse.userInput;
 
-// Case: nothing returned from Companies search / junk input
+  // Case: nothing returned from Companies search / junk input
   if (genericResponse.type === 'nothing-found') {
     console.log('No Company Results flag detected in genericResponse.');
     let elements = [{
@@ -106,11 +123,10 @@ function generateResponsePayloads(genericResponse) {
     }
 
     // load Contact Methods card to Payload
-    // export to a function
+    // export to a function?
     if (contactMethods) {
       var contactMethodsElements = [{
           "title": "Best ways to contact " + name + ":",
-          // this function should live in this file instead of utilities
           'buttons': formatContactButtons(contactMethods)
       }];
       if (contactMethods.email) {
@@ -123,7 +139,7 @@ function generateResponsePayloads(genericResponse) {
     }
 
     // make Other Companies Card
-    // export to a function
+    // export to a function?
     if (otherCompanies && otherCompanies.length) {
       var otherCompaniesElements = [{
           "title": "Were you trying to reach " + name + "?",
@@ -161,6 +177,12 @@ function generateResponsePayloads(genericResponse) {
   return payloads;
 }
 
+/**
+ * Takes contact methods, formats associated buttons for Messenger card
+ *
+ * @param contactMethods
+ * @return {buttons}
+ */
 function formatContactButtons(contactMethods) {
     var buttons = [];
     var counter = 1;
@@ -219,6 +241,15 @@ function formatContactButtons(contactMethods) {
     return buttons;
 }
 
+/**
+ * Forms payload for sending to Messenger
+ *
+ * @param token
+ * @param url
+ * @param sender
+ * @param elements
+ * @return {payload}
+ */
 function makePayload(token, url, sender, elements) {
   return {
     url: url,
@@ -243,5 +274,6 @@ module.exports = {
   verify: verify,
   translateRequestToGenericFormats: translateRequestToGenericFormats,
   generateResponsePayloads: generateResponsePayloads,
-  formatContactButtons: formatContactButtons
+  formatContactButtons: formatContactButtons,
+  makePayload: makePayload
 };
