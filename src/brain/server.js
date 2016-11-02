@@ -24,6 +24,8 @@ function start(botHandlers, actionHandlers, config) {
   console.log('Starting server');
 
   addMiddleware(app);
+
+  // remove these
   addTestRoutes(app);
 
   // all bots go to this route
@@ -91,16 +93,10 @@ function handleRequest(botHandlers, actionHandlers, config) {
         // refactor functions to handle no-op pass down (eliminate conditional)
         actionHandler.processRequest(genericRequest)
             .then(function (genericResponse) {
-              console.log("Generic Response returned in Server: " + genericResponse);
-              // if (!genericResponse) {
-              //   console.log("Cutting off response.")
-              //   return null;
-              // }
-              // else {
-                var payloads = botHandler.generateResponsePayloads(genericResponse);
-                console.log("Payloads generated: " + JSON.stringify(payloads));
-                return sendResponses(context, payloads);
-              // }
+              // console.log("Generic Response returned in Server: " + genericResponse);
+              var payloads = botHandler.generateResponsePayloads(genericResponse);
+              // console.log("Payloads generated: " + JSON.stringify(payloads));
+              return sendResponses(context, payloads);
             })
             .done();
       }

@@ -159,32 +159,38 @@ function extractContactMethods(queryResultData) {
     facebook: ''
   };
   var company = queryResultData;
-  contactMethods.phone = company.callback.phone || '';
-// can this be refactored into a Map function?
-  let emailContactMethods = company.contactMethods.filter(function (method) {
-        return method.type === "email";
-    });
-  contactMethods.email = (emailContactMethods && emailContactMethods.length) ? emailContactMethods[0].target : '';
 
-  let twitterContactMethods = company.contactMethods.filter(function (method) {
-        return method.type === "twitter";
-    });
-  contactMethods.twitter = (twitterContactMethods && twitterContactMethods.length) ? twitterContactMethods[0].target : '';
+  // var values = {}
+  company.contactMethods.forEach(function(method){
+      contactMethods[method.type] = method.target;
+  })
 
-  let webContactMethods = company.contactMethods.filter(function (method) {
-        return method.type === "web";
-    });
-  contactMethods.web = (webContactMethods && webContactMethods.length) ? webContactMethods[0].target : '';
+  // contactMethods.phone = company.callback.phone || '';
+  // // can this be refactored into a Map function?
+  // let emailContactMethods = company.contactMethods.filter(function (method) {
+  //       return method.type === "email";
+  //   });
+  // contactMethods.email = (emailContactMethods && emailContactMethods.length) ? emailContactMethods[0].target : '';
 
-  let chatContactMethods = company.contactMethods.filter(function (method) {
-        return method.type === "chat";
-    });
-  contactMethods.chat = (chatContactMethods && chatContactMethods.length) ? chatContactMethods[0].target : '';
+  // let twitterContactMethods = company.contactMethods.filter(function (method) {
+  //       return method.type === "twitter";
+  //   });
+  // contactMethods.twitter = (twitterContactMethods && twitterContactMethods.length) ? twitterContactMethods[0].target : '';
 
-  let facebookContactMethods = company.contactMethods.filter(function (method) {
-        return method.type === "facebook";
-    });
-  contactMethods.facebook = (facebookContactMethods && facebookContactMethods.length) ? facebookContactMethods[0].target : '';
+  // let webContactMethods = company.contactMethods.filter(function (method) {
+  //       return method.type === "web";
+  //   });
+  // contactMethods.web = (webContactMethods && webContactMethods.length) ? webContactMethods[0].target : '';
+
+  // let chatContactMethods = company.contactMethods.filter(function (method) {
+  //       return method.type === "chat";
+  //   });
+  // contactMethods.chat = (chatContactMethods && chatContactMethods.length) ? chatContactMethods[0].target : '';
+
+  // let facebookContactMethods = company.contactMethods.filter(function (method) {
+  //       return method.type === "facebook";
+  //   });
+  // contactMethods.facebook = (facebookContactMethods && facebookContactMethods.length) ? facebookContactMethods[0].target : '';
 
   console.log("Extracted contact info from company: " + JSON.stringify(contactMethods));
   return contactMethods;

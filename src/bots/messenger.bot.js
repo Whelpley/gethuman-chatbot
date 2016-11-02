@@ -178,7 +178,6 @@ function generateResponsePayloads(genericResponse) {
       payloads.push(makePayload(token, url, sender, elements));
     }
   }
-
   console.log('Payloads prepared by Messenger bot.');
   return payloads;
 }
