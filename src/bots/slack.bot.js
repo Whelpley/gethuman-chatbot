@@ -24,10 +24,10 @@ function translateRequestToGenericFormats(context) {
   // checking for valid token from Slack
   // Is this where this belongs?
   var accessToken = config.slackAccessToken;
-  // unhappy path test
-  var incomingToken = 'totally fake';
-  // // happy path test
-  // var incomingToken = context.userRequest.token;
+  // // unhappy path test
+  // var incomingToken = 'totally fake';
+  // happy path
+  var incomingToken = context.userRequest.token;
   if (accessToken !== incomingToken) {
     console.log('Slack access token mismatch! Ignoring incoming request.')
     return [];
