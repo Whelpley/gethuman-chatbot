@@ -21,6 +21,20 @@ var config = require('../config/config');
  * @return {genericRequests}
  */
 function translateRequestToGenericFormats(context) {
+  // checking for valid token from Slack
+  // Is this where this belongs?
+  var accessToken = config.slackAccessToken;
+  // unhappy path test
+  var incomingToken = 'totally fake';
+  // // happy path test
+  // var incomingToken = context.userRequest.token;
+  if (accessToken !== incomingToken) {
+    console.log('Slack access token mismatch! Ignoring incoming request.')
+    return [];
+  };
+  console.log('Slack access token match! It\'s all good, man.');
+
+
   // do any other kinds of Request come from Slack?
   var genericRequests = [{
     reqType: 'user-input',

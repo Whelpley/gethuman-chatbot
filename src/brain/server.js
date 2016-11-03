@@ -85,8 +85,11 @@ function handleRequest(botHandlers, actionHandlers, config) {
   return function (req, res) {
     var context = getContext(req, res, config);
     console.log('Context captured from request: ' + JSON.stringify(context));
+
     var botHandler = factory.getBotHandler(botHandlers, context);
+
     var genericRequests = botHandler.translateRequestToGenericFormats(context);
+
     genericRequests.forEach((genericRequest) => {
       var actionHandler = factory.getActionHandler(actionHandlers, genericRequest);
       try {
