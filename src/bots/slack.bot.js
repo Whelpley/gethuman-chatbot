@@ -23,15 +23,15 @@ var config = require('../config/config');
 function translateRequestToGenericFormats(context) {
   // checking for valid token from Slack
   // Is this where this belongs?
-  var accessToken = config.slackAccessToken;
+  var verifyToken = config.slackVerifyToken;
   // // unhappy path test
   // var incomingToken = 'totally fake';
   // happy path
   var incomingToken = context.userRequest.token;
-  if (accessToken !== incomingToken) {
+  if (verifyToken !== incomingToken) {
     console.log('Slack access token mismatch! Ignoring incoming request.');
     console.log('Incoming Token: ' + incomingToken);
-    console.log('Access Token: ' + accessToken);
+    console.log('Verify Token: ' + verifyToken);
     return [];
   };
   console.log('Slack access token match! It\'s all good, man.');
