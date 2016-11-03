@@ -157,7 +157,7 @@ function loadPostsAttachments(payloads, posts, name) {
 function loadContactsAttachments(payloads, topContacts, name) {
   payloads[0].json.attachments.push({
       fallback: 'Contact info for ' + name,
-      title: 'Best ways to contact ' + name + ':',
+      title: 'Best ways to contact ' + name,
       color: '#999999',
       text: topContacts,
   });
