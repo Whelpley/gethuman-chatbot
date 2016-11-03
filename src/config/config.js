@@ -15,5 +15,6 @@ module.exports = {
   ghApiBaseUrl: envVars.API_BASE_URL,
   facebookAccessToken: envVars.FB_PAGE_ACCESS_TOKEN,
   slackAccessToken: envVars.INCOMING_WEBHOOK_PATH,
-  facebookVerifyToken: envVars.FACEBOOK_VERIFY_TOKEN
+  facebookVerifyToken: envVars.FACEBOOK_VERIFY_TOKEN,
+  slackVerifyToken: SLACK_ACCESS_TOKEN
 };
