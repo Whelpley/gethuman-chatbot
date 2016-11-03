@@ -29,7 +29,9 @@ function translateRequestToGenericFormats(context) {
   // happy path
   var incomingToken = context.userRequest.token;
   if (accessToken !== incomingToken) {
-    console.log('Slack access token mismatch! Ignoring incoming request.')
+    console.log('Slack access token mismatch! Ignoring incoming request.');
+    console.log('Incoming Token: ' + incomingToken);
+    console.log('Access Token: ' + accessToken);
     return [];
   };
   console.log('Slack access token match! It\'s all good, man.');
