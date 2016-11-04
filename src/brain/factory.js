@@ -9,12 +9,13 @@
  * @return actionHandler
  */
 function getActionHandler(actionHandlers, genericRequest) {
-  // can examine genericRequest.reqType to see
-  if ((genericRequest.reqType === 'user-input') || (genericRequest.reqType === 'postback')) {
+  // to refactor: separate Action Handlers by reqType
+  var reqType = genericRequest.reqType;
+  if ((reqType === 'user-input') || (reqType === 'postback') || (reqType === 'help')) {
     console.log('Receiving a user input');
     return actionHandlers && actionHandlers.length && actionHandlers[0];
   }
-  else if (genericRequest.reqType === 'confirmation') {
+  else if (reqType === 'confirmation') {
     console.log('Receiving a confirmation message');
     return actionHandlers && actionHandlers.length && actionHandlers[1];
   };

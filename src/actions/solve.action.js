@@ -37,10 +37,16 @@ function queryCompany(genericRequest) {
   };
   var company = {};
   var userInput = genericRequest.userInput;
+
   if (!userInput) {
     queryResult.type = 'no-input';
     return Q.when(queryResult);
   }
+  else if (genericRequest.type === 'help') {
+    queryResult.type = 'help';
+    return Q.when(queryResult);
+  };
+
   return Q.when(companySearch.findByText(userInput))
   .then(function(companySearchResults) {
     // If nothing passed in, return an empty object in place of Posts
@@ -73,6 +79,7 @@ function queryCompany(genericRequest) {
  * @return {genericResponse} Promise
  */
 function structureGenericResponse(queryResult) {
+  var type = queryResult.type;
   var genericResponse = {
     userInput: queryResult.userInput,
     data: {
@@ -88,11 +95,12 @@ function structureGenericResponse(queryResult) {
       posts: [],
       otherCompanies: queryResult.data.otherCompanies || []
     },
-    type: queryResult.type || '',
+    type: type || '',
     context: queryResult.context || ''
   }
   // return early if no data or no input
-  if ((queryResult.type === 'no-input') || (queryResult.type === 'nothing-found')) {
+  // refactor this
+  if ((type === 'no-input') || (type === 'nothing-found') || (type === 'help')) {
     return genericResponse;
   };
 // Extract contact methods:

@@ -36,9 +36,10 @@ function translateRequestToGenericFormats(context) {
     };
     var event = context.userRequest.entry[0].messaging[i];
     if (event.message && event.message.text) {
-      console.log("Standard user input Post detected from FB");
-      singleGenericRequest.userInput = event.message.text;
-      singleGenericRequest.reqType = 'user-input';
+      console.log("User input Post detected from FB");
+      var userInput = event.message.text;
+      singleGenericRequest.userInput = userInput;
+      singleGenericRequest.reqType = (userInput === 'help') ? 'help' : 'user-input';
       genericRequests.push(singleGenericRequest);
     }
     else if (event.postback) {

@@ -24,9 +24,7 @@ function translateRequestToGenericFormats(context) {
   // checking for valid token from Slack
   // Is this where this belongs?
   var verifyToken = config.slackVerifyToken;
-  // // unhappy path test
-  // var incomingToken = 'totally fake';
-  // happy path
+
   var incomingToken = context.userRequest.token;
   if (verifyToken !== incomingToken) {
     console.log('Slack access token mismatch! Ignoring incoming request.');
@@ -46,7 +44,10 @@ function translateRequestToGenericFormats(context) {
   var text = context.userRequest.text;
   if (text) {
     genericRequests[0].userInput = text;
-  }
+  };
+  if (text === 'help') {
+    genericRequests[0].reqType = 'help';
+  };
   return genericRequests;
 }
 
@@ -62,12 +63,24 @@ function generateResponsePayloads(genericResponse) {
   if (!genericResponse) {
     return false;
   };
+
+  // hack version:
+  // detect for Help tag
+  // return getHelpResponse
+  // future: separate actionHandler
+
   // form basic payload
   var payloads = formBasicPayload(genericResponse);
   // Case: no user input
   if (genericResponse.type === 'no-input') {
     console.log('No user input flag detected in genericResponse.');
     payloads[0].json.text = 'Tell me the company you would like to contact.';
+    return payloads;
+  }
+  // Case: Help user
+  else if {
+    console.log('Help flag detected in genericResponse.');
+    payloads[0].json.text = 'It looks like you need some help. Please tell me the name of the company you want to reach, and I will provide you with a list of the top issues for customers of this company, their contact info, and a list of other companies you may want to search for.';
     return payloads;
   }
   // Case: nothing returned from Companies search / junk input
