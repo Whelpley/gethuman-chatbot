@@ -151,7 +151,7 @@ function loadNothingFoundElements(userInput) {
 function loadHelpElements() {
   return [{
       "title": "It sounds like you need help",
-      "subtitle": 'Just tell me the name of the company you need to reach, and I will provide you with what I know about them.',
+      "subtitle": 'Just tell me the name of the company you need to reach.',
       "buttons": [{
           "type": "web_url",
           "url": "https://gethuman.com",
