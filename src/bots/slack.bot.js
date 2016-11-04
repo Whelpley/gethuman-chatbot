@@ -21,8 +21,7 @@ var config = require('../config/config');
  * @return {genericRequests}
  */
 function translateRequestToGenericFormats(context) {
-  // checking for valid token from Slack
-  // Is this where this belongs?
+  var text = context.userRequest.text;
   var verifyToken = config.slackVerifyToken;
   var incomingToken = context.userRequest.token;
   var genericRequests = [{
@@ -30,8 +29,8 @@ function translateRequestToGenericFormats(context) {
     userInput: '',
     context: context
   }];
-  var text = context.userRequest.text;
 
+  // checking for valid token from Slack
   if (verifyToken !== incomingToken) {
     console.log('Slack access token mismatch! Ignoring incoming request.');
     console.log('Incoming Token: ' + incomingToken);
@@ -43,7 +42,8 @@ function translateRequestToGenericFormats(context) {
   if (text) {
     genericRequests[0].userInput = text;
   };
-  if (text === 'help') {
+  if (text.toLowerCase() === 'help') {
+    console.log('Detected user input of \"help\"');
     genericRequests[0].reqType = 'help';
   };
   return genericRequests;

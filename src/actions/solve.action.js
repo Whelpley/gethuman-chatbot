@@ -37,12 +37,13 @@ function queryCompany(genericRequest) {
   };
   var company = {};
   var userInput = genericRequest.userInput;
+  var requestType = genericRequest.type;
 
   if (!userInput) {
     queryResult.type = 'no-input';
     return Q.when(queryResult);
   }
-  else if (genericRequest.type === 'help') {
+  else if (requestType === 'help') {
     queryResult.type = 'help';
     return Q.when(queryResult);
   };
@@ -80,6 +81,7 @@ function queryCompany(genericRequest) {
  */
 function structureGenericResponse(queryResult) {
   var type = queryResult.type;
+  var posts = queryResult.data.posts;
   var genericResponse = {
     userInput: queryResult.userInput,
     data: {
@@ -98,15 +100,17 @@ function structureGenericResponse(queryResult) {
     type: type || '',
     context: queryResult.context || ''
   }
-  // return early if no data or no input
+
+  // return early if no data or no input or Help
   // refactor this
   if ((type === 'no-input') || (type === 'nothing-found') || (type === 'help')) {
     return genericResponse;
   };
+
 // Extract contact methods:
   genericResponse.data.contactMethods = extractContactMethods(queryResult.data);
+
 // Extract Posts info
-  var posts = queryResult.data.posts;
   if (posts && posts.length) {
     genericResponse.data.posts = posts.map((post) => {
       return {
