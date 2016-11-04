@@ -65,6 +65,11 @@ function translateRequestToGenericFormats(context) {
  * @return {payloads}
  */
 function generateResponsePayloads(genericResponse) {
+  // if a False object passed in, pass through false
+  if (!genericResponse) {
+    return false;
+  };
+
   console.log("About to begin generating payloads from genericResponse.");
   var payloads = [];
   var token = config.facebookAccessToken;
@@ -72,12 +77,6 @@ function generateResponsePayloads(genericResponse) {
   var sender = genericResponse.context.userRequest.entry[0].messaging[0].sender.id;
   var userInput = genericResponse.userInput;
   var type = genericResponse.type;
-
-  // if a False object passed in (eg from a confirmation, returns blank payload)
-  if (!genericResponse) {
-    payloads = false;
-    return payloads;
-  };
 
   // Case: nothing returned from Companies search / junk input
   if (type === 'nothing-found') {
