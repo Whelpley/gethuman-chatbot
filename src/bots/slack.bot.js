@@ -24,8 +24,14 @@ function translateRequestToGenericFormats(context) {
   // checking for valid token from Slack
   // Is this where this belongs?
   var verifyToken = config.slackVerifyToken;
-
   var incomingToken = context.userRequest.token;
+  var genericRequests = [{
+    reqType: 'user-input',
+    userInput: '',
+    context: context
+  }];
+  var text = context.userRequest.text;
+
   if (verifyToken !== incomingToken) {
     console.log('Slack access token mismatch! Ignoring incoming request.');
     console.log('Incoming Token: ' + incomingToken);
@@ -34,14 +40,6 @@ function translateRequestToGenericFormats(context) {
   };
   console.log('Slack access token match! It\'s all good, man.');
 
-
-  // do any other kinds of Request come from Slack?
-  var genericRequests = [{
-    reqType: 'user-input',
-    userInput: '',
-    context: context
-  }];
-  var text = context.userRequest.text;
   if (text) {
     genericRequests[0].userInput = text;
   };
@@ -59,38 +57,37 @@ function translateRequestToGenericFormats(context) {
  */
 function generateResponsePayloads(genericResponse) {
   console.log("About to begin generating payloads from genericResponse.");
+  // form basic payload
+  var payloads = formBasicPayload(genericResponse);
+  var type = genericResponse.type;
+
   // if a False object passed in, passes down False to next step
   if (!genericResponse) {
     return false;
   };
 
-  // hack version:
-  // detect for Help tag
-  // return getHelpResponse
-  // future: separate actionHandler
-
-  // form basic payload
-  var payloads = formBasicPayload(genericResponse);
+  // Refactor to switch statement?
   // Case: no user input
-  if (genericResponse.type === 'no-input') {
+  if (type === 'no-input') {
     console.log('No user input flag detected in genericResponse.');
     payloads[0].json.text = 'Tell me the company you would like to contact.';
     return payloads;
   }
   // Case: Help user
-  else if {
+  else if (type === 'help') {
     console.log('Help flag detected in genericResponse.');
-    payloads[0].json.text = 'It looks like you need some help. Please tell me the name of the company you want to reach, and I will provide you with a list of the top issues for customers of this company, their contact info, and a list of other companies you may want to search for.';
+    payloads[0].json.text = 'It looks like you need some help. Please tell me the name of the company you want to reach, and I will provide you with a list of the top issues for customers of this company, the company\'s contact info, and a list of other companies you may want to search for.';
     return payloads;
   }
   // Case: nothing returned from Companies search / junk input
-  else if (genericResponse.type === 'nothing-found') {
+  else if (type === 'nothing-found') {
     console.log('No Company Results flag detected in genericResponse.');
     payloads[0].json.text = 'I couldn\'t tell what you meant by \"' + genericResponse.userInput + '\". Please tell me company you are looking for. (ex: \"/gethuman Verizon Wireless\")';
     return payloads;
   }
   // do we need the explicit type check after the first two, or just 'else'?
-  else if (genericResponse.type === 'standard') {
+  // Refactor inner parts of this case to a function?
+  else if (type === 'standard') {
     console.log('Standard type flag detected in genericResponse.');
     var name = genericResponse.data.name || '';
     var posts = genericResponse.data.posts || [];
