@@ -38,12 +38,14 @@ function queryCompany(genericRequest) {
   var company = {};
   var userInput = genericRequest.userInput;
   var requestType = genericRequest.type;
+  console.log('Incoming request type from genericRequest, in queryCompany: ' + requestType);
 
   if (!userInput) {
     queryResult.type = 'no-input';
     return Q.when(queryResult);
   }
   else if (requestType === 'help') {
+    console.log('Help type detected in queryCompany function');
     queryResult.type = 'help';
     return Q.when(queryResult);
   };
