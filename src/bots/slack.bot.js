@@ -46,6 +46,7 @@ function translateRequestToGenericFormats(context) {
     console.log('Detected user input of \"help\"');
     genericRequests[0].reqType = 'help';
   };
+  console.log('Slack bot has prepared this generic request: ' + JSON.stringify(genericRequests));
   return genericRequests;
 }
 
