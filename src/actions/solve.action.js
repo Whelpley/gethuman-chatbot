@@ -37,7 +37,7 @@ function queryCompany(genericRequest) {
   };
   var company = {};
   var userInput = genericRequest.userInput;
-  var requestType = genericRequest.type;
+  var requestType = genericRequest.reqType;
   console.log('Incoming request type from genericRequest, in queryCompany: ' + requestType);
 
   if (!userInput) {
