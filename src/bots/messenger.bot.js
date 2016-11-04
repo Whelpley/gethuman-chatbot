@@ -67,6 +67,11 @@ function translateRequestToGenericFormats(context) {
 function generateResponsePayloads(genericResponse) {
   console.log("About to begin generating payloads from genericResponse.");
   var payloads = [];
+  var token = config.facebookAccessToken;
+  var url = 'https://graph.facebook.com/v2.6/me/messages';
+  var sender = genericResponse.context.userRequest.entry[0].messaging[0].sender.id;
+  var userInput = genericResponse.userInput;
+  var type = genericResponse.type;
 
   // if a False object passed in (eg from a confirmation, returns blank payload)
   if (!genericResponse) {
@@ -74,18 +79,19 @@ function generateResponsePayloads(genericResponse) {
     return payloads;
   };
 
-  var token = config.facebookAccessToken;
-  var url = 'https://graph.facebook.com/v2.6/me/messages';
-  var sender = genericResponse.context.userRequest.entry[0].messaging[0].sender.id;
-  var userInput = genericResponse.userInput;
-
   // Case: nothing returned from Companies search / junk input
-  if (genericResponse.type === 'nothing-found') {
+  if (type === 'nothing-found') {
     console.log('No Company Results flag detected in genericResponse.');
     let elements = loadNothingFoundElements(userInput);
     payloads.push(makePayload(token, url, sender, elements));
   }
-  else if (genericResponse.type === 'standard') {
+  else if (type === 'help') {
+    console.log('Help flag detected in genericResponse.');
+    let elements = loadHelpElements();
+    payloads.push(makePayload(token, url, sender, elements));
+  }
+  // Can we refactor this to compress into another function?
+  else if (type === 'standard') {
     console.log('Standard type flag detected in genericResponse.');
     var name = genericResponse.data.name || '';
     var posts = genericResponse.data.posts || [];
@@ -130,6 +136,23 @@ function loadNothingFoundElements(userInput) {
   return [{
       "title": "Nothing found!",
       "subtitle": 'I couldn\'t tell what you meant by \"' + userInput + '\". Please tell me company you are looking for. (ex: \"Verizon Wireless\")',
+      "buttons": [{
+          "type": "web_url",
+          "url": "https://gethuman.com",
+          "title": "Go to GetHuman"
+      }],
+  }];
+}
+
+/**
+ * Loads response elements for Case: Help input
+ *
+ * @return {elements}
+ */
+function loadHelpElements() {
+  return [{
+      "title": "It sounds like you need help",
+      "subtitle": 'Just tell me the name of the company you need to reach, and I will provide you with what I know about them.',
       "buttons": [{
           "type": "web_url",
           "url": "https://gethuman.com",

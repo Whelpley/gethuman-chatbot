@@ -83,7 +83,7 @@ function queryCompany(genericRequest) {
  */
 function structureGenericResponse(queryResult) {
   var type = queryResult.type;
-  var posts = queryResult.data.posts;
+  var posts = queryResult.data.posts || [];
   var genericResponse = {
     userInput: queryResult.userInput,
     data: {
