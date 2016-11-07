@@ -25,7 +25,7 @@ function findByText(textInput) {
         deferred.reject(error);
       } else {
         deferred.resolve(JSON.parse(body));
-      }
+      };
   });
   return deferred.promise;
 }
