@@ -7,6 +7,10 @@ function processRequest(genericRequest) {
   return { context: genericRequest.context };
 }
 
-return {
+module.exports = {
   isHandler: isHandler
 };
+
+// return {
+//   isHandler: isHandler
+// };

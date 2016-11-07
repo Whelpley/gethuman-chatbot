@@ -1,7 +1,7 @@
-'use strict'
+'use strict';
 
-var utilities = require('../brain/utilities');
-var Q = require('q');
+const utilities = require('../brain/utilities');
+const Q = require('q');
 
 /**
  * Processes a Confirmation message - sends 200, returns False boolean

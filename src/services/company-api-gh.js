@@ -1,8 +1,8 @@
-'use strict'
+'use strict';
 
-var Q = require('q');
-var request = require('request');
-var config = require('../config/config');
+const Q = require('q');
+const request = require('request');
+const config = require('../config/config');
 
 /**
  * Find all companies that match given text input
@@ -11,9 +11,9 @@ var config = require('../config/config');
  * @return {*|promise}
  */
 function findByText(textInput) {
-  var deferred = Q.defer();
-  var url = config.ghApiBaseUrl + '/companies/search';
-  var match = encodeURIComponent(textInput);
+  let deferred = Q.defer();
+  let url = config.ghApiBaseUrl + '/companies/search';
+  let match = encodeURIComponent(textInput);
 
   console.log('Trying to match user input: ' + match);
 

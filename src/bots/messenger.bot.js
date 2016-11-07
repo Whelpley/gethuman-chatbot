@@ -1,7 +1,7 @@
 'use strict'
 
 const phoneFormatter = require('phone-formatter');
-var config = require('../config/config');
+const config = require('../config/config');
 
 /**
  * Verifies new webhook when setting up Messenger app

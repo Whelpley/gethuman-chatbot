@@ -1,7 +1,7 @@
-'use strict'
+'use strict';
 
-var envName = process.env.NODE_ENV || 'dev';
-var envVars = process.env;
+const envName = process.env.NODE_ENV || 'dev';
+const envVars = process.env;
 
 try {
   var env = require('./env');

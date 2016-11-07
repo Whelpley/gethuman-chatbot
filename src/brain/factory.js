@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 /**
  * Select Action Handler based on parameters of request-type flag
@@ -10,7 +10,7 @@
  */
 function getActionHandler(actionHandlers, genericRequest) {
   // to refactor: separate Action Handlers by reqType
-  var reqType = genericRequest.reqType;
+  let reqType = genericRequest.reqType;
   if ((reqType === 'user-input') || (reqType === 'postback') || (reqType === 'help')) {
     console.log('Choosing Solve action handler');
     return actionHandlers && actionHandlers.length && actionHandlers[0];
@@ -29,7 +29,7 @@ function getActionHandler(actionHandlers, genericRequest) {
  * @return handler
  */
 function getBotHandler(botHandlers, context) {
- var handler = botHandlers[context.bot];
+ let handler = botHandlers[context.bot];
  if (handler) {
    console.log('Found bot handler for ' + context.bot + '!');
    return handler;
