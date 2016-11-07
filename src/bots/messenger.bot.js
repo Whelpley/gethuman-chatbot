@@ -134,7 +134,7 @@ function generateResponsePayloads(genericResponse) {
 function loadNothingFoundElements(userInput) {
   return [{
       "title": "Nothing found!",
-      "subtitle": 'I couldn\'t tell what you meant by \"' + userInput + '\". Please tell me company you are looking for. (ex: \"Verizon Wireless\")',
+      "subtitle": 'I didn\'t understand' \"' + userInput + '\". Please tell me the company you are looking for',
       "buttons": [{
           "type": "web_url",
           "url": "https://gethuman.com",
