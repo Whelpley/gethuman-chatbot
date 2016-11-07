@@ -32,7 +32,7 @@ function findByCompany(company) {
       deferred.reject(error);
     }
     else {
-        deferred.resolve(JSON.parse(body));
+      deferred.resolve(JSON.parse(body));
     }
   });
   return deferred.promise;
