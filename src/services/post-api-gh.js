@@ -1,8 +1,8 @@
-'use strict'
+'use strict';
 
-var Q = require('q');
-var request = require('request');
-var config = require('../config/config');
+const Q = require('q');
+const request = require('request');
+const config = require('../config/config');
 
 /**
  * Find top 5 Posts that match given Company object
@@ -11,10 +11,10 @@ var config = require('../config/config');
  * @return {*|promise}
  */
 function findByCompany(company) {
-  var deferred = Q.defer();
-  var url = config.ghApiBaseUrl + '/posts';
-  var limit = 5;
-  var params = encodeURIComponent(JSON.stringify({
+  let deferred = Q.defer();
+  let url = config.ghApiBaseUrl + '/posts';
+  let limit = 5;
+  let params = encodeURIComponent(JSON.stringify({
     type: 'question',
     instanceOf: {'$exists': false},
     guideId: {'$exists': true},
@@ -26,7 +26,7 @@ function findByCompany(company) {
     + limit
     + '&where='
     + params,
-  function (error, response, body) {
+  function(error, response, body) {
     if (error) {
       console.log('Hit an error getting the Posts of a Company!');
       deferred.reject(error);
