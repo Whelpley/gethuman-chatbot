@@ -32,6 +32,7 @@ function findByCompany(company) {
       deferred.reject(error);
     }
     else {
+      console.log('Not-an-error after searching Posts of a Company!');
       deferred.resolve(JSON.parse(body));
     }
   });
