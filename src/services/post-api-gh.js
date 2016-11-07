@@ -20,6 +20,7 @@ function findByCompany(company) {
     guideId: {'$exists': true},
     companyId: company._id
   }));
+  console.log('Params for Post search: ' + params);
   console.log('About to make request to query Posts');
   request(url
     + '?limit='
