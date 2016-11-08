@@ -303,6 +303,6 @@ module.exports = {
   loadContactsAttachments: loadContactsAttachments,
   loadOtherCompaniesAttachments: loadOtherCompaniesAttachments,
   formatContacts: formatContacts,
-  convertArrayToBoldList: convertArrayToBoldList,
-  oauthResponse: oauthResponse
+  convertArrayToBoldList: convertArrayToBoldList
+  // oauthResponse: oauthResponse
 };
