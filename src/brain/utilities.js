@@ -17,6 +17,8 @@ const colors = [
     '#EEFFC3'
 ];
 
+
+// This may not be needed
 /**
  * Sends back 200 response to client if not a test message
  *

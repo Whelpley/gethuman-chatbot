@@ -12,8 +12,8 @@ var utilities = require('../brain/utilities');
  * @return {genericResponse} Promise
  */
 function processRequest(genericRequest) {
-  // send back a 200 response immediately
-  utilities.preResponse(genericRequest.context);
+  // // send back a 200 response immediately
+  // utilities.preResponse(genericRequest.context);
   // get data from Gethuman, then process into generic response
   return Q.when(queryCompany(genericRequest))
     .then((queryResult) => {

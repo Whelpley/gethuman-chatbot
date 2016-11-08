@@ -10,7 +10,7 @@ const Q = require('q');
  * @return {Promise}
  */
 function processRequest(genericRequest) {
-  utilities.preResponse(genericRequest.context);
+  // utilities.preResponse(genericRequest.context);
   return Q.when(false);
 }
 

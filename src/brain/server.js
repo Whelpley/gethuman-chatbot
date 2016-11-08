@@ -86,6 +86,9 @@ function handleRequest(botHandlers, actionHandlers, config) {
     var context = getContext(req, res, config);
     console.log('Context captured from request: ' + JSON.stringify(context));
 
+    // send back a 200 response immediately
+    context.finishResponse();
+
     var botHandler = factory.getBotHandler(botHandlers, context);
 
     var genericRequests = botHandler.translateRequestToGenericFormats(context);
