@@ -4,7 +4,7 @@ function isHandler(genericRequest) {
 }
 
 function processRequest(genericRequest) {
-  return { context: genericRequest.context };
+  return {context: genericRequest.context};
 }
 
 module.exports = {

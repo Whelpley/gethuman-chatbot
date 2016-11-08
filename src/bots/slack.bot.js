@@ -260,6 +260,43 @@ function convertArrayToBoldList(arrayOfStrings) {
   return otherCompaniesList;
 }
 
+/**
+ * OAuth stuff
+ *
+ */
+function oauthResponse(req, res) {
+  var code = req.code;
+  var client_id = '';
+  var client_secret = '';
+  var deferred = Q.defer();
+  var payload = {
+    uri: 'https://slack.com/api/oauth.access',
+    method: 'POST',
+    json: {
+      client_id: client_id,
+      client_secret: client_secret,
+      code: code
+  };
+  // You will need to exchange the code for an access token using the oauth.access method.
+//
+//   Request the Slack API token and webhook URL by making a http POST request in your server code to https://slack.com/api/oauth.access with these parameters:
+
+// client_id   Client ID of your registered Slack application.
+// client_secret   Client Secret of your registered Slack application.
+// code    The code returned by Slack in the query string parameter.
+  request(payload, function (error, response, body) {
+    if (error) {
+      console.log("Ran into error while making request to send Slack payload: " + error);
+      deferred.reject(error);
+    }
+    else {
+      deferred.resolve();
+    }
+  });
+  return deferred.promise;
+}
+
+
 module.exports = {
   // verify: verify,
   translateRequestToGenericFormats: translateRequestToGenericFormats,
@@ -269,5 +306,6 @@ module.exports = {
   loadContactsAttachments: loadContactsAttachments,
   loadOtherCompaniesAttachments: loadOtherCompaniesAttachments,
   formatContacts: formatContacts,
-  convertArrayToBoldList: convertArrayToBoldList
+  convertArrayToBoldList: convertArrayToBoldList,
+  oauthResponse: oauthResponse
 };

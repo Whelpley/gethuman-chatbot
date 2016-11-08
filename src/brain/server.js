@@ -40,6 +40,11 @@ function start(botHandlers, actionHandlers, config) {
     messenger.verify(req, res);
   });
 
+  // FB Messenger verification route
+  app.get('/oauth', function(req, res) {
+    slack.oauthResponse(req, res);
+  });
+
   app.listen(port, function () {
     console.log('API listening for bots on port ' + port);
   });

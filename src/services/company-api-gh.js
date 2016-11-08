@@ -24,7 +24,15 @@ function findByText(textInput) {
       if (error) {
         deferred.reject(error);
       } else {
-        deferred.resolve(JSON.parse(body));
+
+        let jsonBody = [];
+        try {
+          jsonBody = JSON.parse(body);
+        } catch (ex) {
+          console.log('findByText parsing error for match ' + match + ' with body ' + body);
+        }
+
+        deferred.resolve(jsonBody);
       };
   });
   return deferred.promise;
