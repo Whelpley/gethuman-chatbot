@@ -24,7 +24,6 @@ function findByText(textInput) {
       if (error) {
         deferred.reject(error);
       } else {
-
         let jsonBody = [];
         try {
           jsonBody = JSON.parse(body);

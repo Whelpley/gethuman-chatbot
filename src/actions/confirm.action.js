@@ -1,6 +1,3 @@
-'use strict';
-
-const utilities = require('../brain/utilities');
 const Q = require('q');
 
 /**
@@ -10,7 +7,6 @@ const Q = require('q');
  * @return {Promise}
  */
 function processRequest(genericRequest) {
-  // utilities.preResponse(genericRequest.context);
   return Q.when(false);
 }
 

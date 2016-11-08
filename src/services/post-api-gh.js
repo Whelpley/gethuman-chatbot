@@ -31,18 +31,15 @@ function findByCompany(company) {
     if (error) {
       console.log('Hit an error getting the Posts of a Company!');
       deferred.reject(error);
-    }
-    else {
-
+    } else {
         let jsonBody = [];
         try {
           jsonBody = JSON.parse(body);
         } catch (ex) {
           console.log('findByText parsing error for match ' + match + ' with body ' + body);
         }
-
       // console.log('Not-an-error after searching Posts of a Company!');
-      deferred.resolve(JSON.parse(body));
+      deferred.resolve(jsonBody);
     }
   });
   return deferred.promise;

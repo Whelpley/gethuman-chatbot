@@ -14,8 +14,7 @@ function getActionHandler(actionHandlers, genericRequest) {
   if ((reqType === 'user-input') || (reqType === 'postback') || (reqType === 'help')) {
     console.log('Choosing Solve action handler');
     return actionHandlers && actionHandlers.length && actionHandlers[0];
-  }
-  else if (reqType === 'confirmation') {
+  } else if (reqType === 'confirmation') {
     console.log('Choosing Confirm action handler');
     return actionHandlers && actionHandlers.length && actionHandlers[1];
   };

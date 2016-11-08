@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var utilities = require('../brain/utilities');
 var config = require('../config/config');
@@ -73,22 +73,19 @@ function generateResponsePayloads(genericResponse) {
     console.log('No user input flag detected in genericResponse.');
     payloads[0].json.text = 'Tell me the company you would like to contact.';
     return payloads;
-  }
-  // Case: Help user
-  else if (type === 'help') {
+  } else if (type === 'help') {
+    // Case: Help user
     console.log('Help flag detected in genericResponse.');
     payloads[0].json.text = 'It looks like you need some help. Please tell me the name of the company you want to reach, and I will provide you with a list of the top issues for customers of this company, the company\'s contact info, and a list of other companies you may want to search for.';
     return payloads;
-  }
-  // Case: nothing returned from Companies search / junk input
-  else if (type === 'nothing-found') {
+  } else if (type === 'nothing-found') {
+    // Case: nothing returned from Companies search / junk input
     console.log('No Company Results flag detected in genericResponse.');
     payloads[0].json.text = 'I couldn\'t tell what you meant by \"' + genericResponse.userInput + '\". Please tell me company you are looking for. (ex: \"/gethuman Verizon Wireless\")';
     return payloads;
-  }
-  // do we need the explicit type check after the first two, or just 'else'?
-  // Refactor inner parts of this case to a function?
-  else if (type === 'standard') {
+  } else if (type === 'standard') {
+    // do we need the explicit type check after the first two, or just 'else'?
+    // Refactor inner parts of this case to a function?
     console.log('Standard type flag detected in genericResponse.');
     var name = genericResponse.data.name || '';
     var posts = genericResponse.data.posts || [];
@@ -107,7 +104,7 @@ function generateResponsePayloads(genericResponse) {
       console.log('Other Companies info pushed into Payloads');
     };
     if (!payloads[0].json.attachments.length) {
-        payloads[0].json.text = 'I couldn\'t find anything for \"' + name + '\". Please tell me which company you are looking for. (ex: \"/gethuman Verizon Wireless\")'
+        payloads[0].json.text = 'I couldn\'t find anything for \"' + name + '\". Please tell me which company you are looking for. (ex: \"/gethuman Verizon Wireless\")';
         console.log('No card info found for Companies, returning Nothing Found text.');
     }
     return payloads;
@@ -124,7 +121,7 @@ function formBasicPayload(genericResponse) {
   var path = config.slackAccessToken;
   var uri = 'https://hooks.slack.com/services/' + path;
   var channel = genericResponse.context.userRequest.channel_id;
-  var payloads =  [{
+  var payloads = [{
     uri: uri,
     method: 'POST',
     json: {
@@ -151,7 +148,7 @@ function loadPostsAttachments(payloads, posts, name) {
   payloads[0].json.text = 'Top issues for ' + name + ':';
   for (let i = 0; i < posts.length; i++) {
       let title = posts[i].title || '';
-      let urlId = posts[i].urlId || ''
+      let urlId = posts[i].urlId || '';
       let color = colors[i];
       let singleAttachment = {
           "fallback": "Issue for " + name,
@@ -242,7 +239,7 @@ function formatContacts(contactMethods) {
     }
   }
   if (topContacts) {
-    topContacts = topContacts.slice(0,-3);
+    topContacts = topContacts.slice(0, -3);
   }
   console.log("Formatted string for Slack contact methods: " + topContacts);
   return topContacts;
@@ -260,41 +257,41 @@ function convertArrayToBoldList(arrayOfStrings) {
   return otherCompaniesList;
 }
 
-/**
- * OAuth stuff
- *
- */
-function oauthResponse(req, res) {
-  var code = req.code;
-  var client_id = '';
-  var client_secret = '';
-  var deferred = Q.defer();
-  var payload = {
-    uri: 'https://slack.com/api/oauth.access',
-    method: 'POST',
-    json: {
-      client_id: client_id,
-      client_secret: client_secret,
-      code: code
-  };
-  // You will need to exchange the code for an access token using the oauth.access method.
-//
-//   Request the Slack API token and webhook URL by making a http POST request in your server code to https://slack.com/api/oauth.access with these parameters:
+// /**
+//  * OAuth stuff
+//  *
+//  */
+// function oauthResponse(req, res) {
+//   var code = req.code;
+//   var client_id = '';
+//   var client_secret = '';
+//   var deferred = Q.defer();
+//   var payload = {
+//     uri: 'https://slack.com/api/oauth.access',
+//     method: 'POST',
+//     json: {
+//       client_id: client_id,
+//       client_secret: client_secret,
+//       code: code
+//   };
+//   // You will need to exchange the code for an access token using the oauth.access method.
+// //
+// //   Request the Slack API token and webhook URL by making a http POST request in your server code to https://slack.com/api/oauth.access with these parameters:
 
-// client_id   Client ID of your registered Slack application.
-// client_secret   Client Secret of your registered Slack application.
-// code    The code returned by Slack in the query string parameter.
-  request(payload, function (error, response, body) {
-    if (error) {
-      console.log("Ran into error while making request to send Slack payload: " + error);
-      deferred.reject(error);
-    }
-    else {
-      deferred.resolve();
-    }
-  });
-  return deferred.promise;
-}
+// // client_id   Client ID of your registered Slack application.
+// // client_secret   Client Secret of your registered Slack application.
+// // code    The code returned by Slack in the query string parameter.
+//   request(payload, function (error, response, body) {
+//     if (error) {
+//       console.log("Ran into error while making request to send Slack payload: " + error);
+//       deferred.reject(error);
+//     }
+//     else {
+//       deferred.resolve();
+//     }
+//   });
+//   return deferred.promise;
+// }
 
 
 module.exports = {

@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const phoneFormatter = require('phone-formatter');
 const config = require('../config/config');
@@ -13,7 +13,7 @@ function verify(req, res) {
     console.log("Receiving webhook verification from FB.");
     var verifyToken = config.facebookVerifyToken;
     if (req.query['hub.verify_token'] === verifyToken) {
-        res.send(req.query['hub.challenge'])
+        res.send(req.query['hub.challenge']);
     }
     res.send('Error, wrong token');
 }
@@ -41,15 +41,13 @@ function translateRequestToGenericFormats(context) {
       singleGenericRequest.userInput = userInput;
       singleGenericRequest.reqType = (userInput === 'help') ? 'help' : 'user-input';
       genericRequests.push(singleGenericRequest);
-    }
-    else if (event.postback) {
+    } else if (event.postback) {
       console.log("Postback Post detected from FB");
     // Later: determine if this is triggering a new search, or displaying more Companies - right now just triggers new search
       singleGenericRequest.userInput = event.postback.payload;
       singleGenericRequest.reqType = 'postback';
       genericRequests.push(singleGenericRequest);
-    }
-    else {
+    } else {
       console.log("Non-text-input Post detected from FB");
       singleGenericRequest.reqType = 'confirmation';
       genericRequests.push(singleGenericRequest);
@@ -83,14 +81,12 @@ function generateResponsePayloads(genericResponse) {
     console.log('No Company Results flag detected in genericResponse.');
     let elements = loadNothingFoundElements(userInput);
     payloads.push(makePayload(token, url, sender, elements));
-  }
-  else if (type === 'help') {
+  } else if (type === 'help') {
     console.log('Help flag detected in genericResponse.');
     let elements = loadHelpElements();
     payloads.push(makePayload(token, url, sender, elements));
-  }
-  // Can we refactor this to compress into another function?
-  else if (type === 'standard') {
+  } else if (type === 'standard') {
+    // Can we refactor this to compress into another function?
     console.log('Standard type flag detected in genericResponse.');
     var name = genericResponse.data.name || '';
     var posts = genericResponse.data.posts || [];
@@ -171,18 +167,18 @@ function loadPostElements(posts, name) {
   var postElements = [];
   for (let i = 0; i < posts.length; i++) {
     let text = posts[i].title || '';
-    let urlId = posts[i].urlId || ''
+    let urlId = posts[i].urlId || '';
     let singleElement = {
         "title": "Top issues for " + name + ", #" + (i+1) + " of " + posts.length + ":",
         "subtitle": text,
         "buttons": [{
             "type": "web_url",
-            "url": "https://gethuman.com?company=" + encodeURIComponent(name) ,
+            "url": "https://gethuman.com?company=" + encodeURIComponent(name),
             "title": "Solve for Me - $20"
         },
         {
             "type": "web_url",
-            "url": "https://answers.gethuman.co/_" + encodeURIComponent(urlId) ,
+            "url": "https://answers.gethuman.co/_" + encodeURIComponent(urlId),
             "title": "More info ..."
         }],
     };
@@ -220,16 +216,16 @@ function loadOtherCompaniesElements(otherCompanies, name) {
   var otherCompaniesElements = [{
       "title": "Were you trying to reach " + name + "?",
       "subtitle": "Perhaps you would like to ask me about these companies:",
-      "buttons": [],
+      "buttons": []
   }];
-  var otherCompaniesSubSet = otherCompanies.slice(0,3);
-  otherCompaniesSubSet.forEach(function(altCompany){
+  var otherCompaniesSubSet = otherCompanies.slice(0, 3);
+  otherCompaniesSubSet.forEach(function(altCompany) {
       otherCompaniesElements[0].buttons.push({
           "type": "postback",
           "title": altCompany,
           // payload must be string, max 100 chars
           "payload": altCompany
-      })
+      });
   });
   return otherCompaniesElements;
 };
@@ -280,7 +276,7 @@ function formatContactButtons(contactMethods) {
                         "type": "phone_number",
                         "payload": phoneFormatter.format(contactMethods[key], "+1NNNNNNNNNN"),
                         "title": contactMethods[key]
-                    }
+                    };
                     break;
                 case 'email':
                     console.log("Email detected, not creating button for it because Messenger won't let us.");

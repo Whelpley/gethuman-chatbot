@@ -1,9 +1,9 @@
-'use strict'
+'use strict';
 
 var Q = require('q');
 var companySearch = require('../services/company-api-gh');
 var postSearch = require('../services/post-api-gh');
-var utilities = require('../brain/utilities');
+// var utilities = require('../brain/utilities');
 
 /**
  * Processes generic request into Company object, with attached data
@@ -17,7 +17,7 @@ function processRequest(genericRequest) {
   // get data from Gethuman, then process into generic response
   return Q.when(queryCompany(genericRequest))
     .then((queryResult) => {
-      return structureGenericResponse(queryResult)
+      return structureGenericResponse(queryResult);
     });
 }
 
@@ -43,8 +43,7 @@ function queryCompany(genericRequest) {
   if (!userInput) {
     queryResult.type = 'no-input';
     return Q.when(queryResult);
-  }
-  else if (requestType === 'help') {
+  } else if (requestType === 'help') {
     console.log('Help type detected in queryCompany function');
     queryResult.type = 'help';
     return Q.when(queryResult);
@@ -65,12 +64,12 @@ function queryCompany(genericRequest) {
     });
     company = (exactMatch && exactMatch.length) ? exactMatch[0] : companySearchResults[0];
     company = attachOtherCompanies(company, companySearchResults, userInput);
-    return postSearch.findByCompany(company)
+    return postSearch.findByCompany(company);
   })
   .then(function(posts) {
     company.posts = posts;
     queryResult.data = company;
-    console.log('Result of API queries: ' + JSON.stringify(queryResult).substring(0,400));
+    console.log('Result of API queries: ' + JSON.stringify(queryResult).substring(0, 400));
     return queryResult;
   });
 }
@@ -87,7 +86,7 @@ function structureGenericResponse(queryResult) {
   var genericResponse = {
     userInput: queryResult.userInput,
     data: {
-      name: queryResult.data.name || '' ,
+      name: queryResult.data.name || '',
       contactMethods: {
         phone: '',
         email: '',
@@ -101,7 +100,7 @@ function structureGenericResponse(queryResult) {
     },
     type: type || '',
     context: queryResult.context || ''
-  }
+  };
 
   // return early if no data or no input or Help
   // refactor this
@@ -119,7 +118,7 @@ function structureGenericResponse(queryResult) {
         title: post.title || '',
         urlId: post.urlId || '',
       };
-    })
+    });
   };
   return genericResponse;
 }
@@ -159,9 +158,9 @@ function extractContactMethods(queryResultData) {
     facebook: ''
   };
   var company = queryResultData;
-  company.contactMethods.forEach(function(method){
+  company.contactMethods.forEach(function(method) {
       contactMethods[method.type] = method.target;
-  })
+  });
   console.log("Extracted contact info from company: " + JSON.stringify(contactMethods));
   return contactMethods;
 }

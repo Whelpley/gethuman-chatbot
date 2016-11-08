@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -45,7 +45,7 @@ function start(botHandlers, actionHandlers, config) {
     slack.oauthResponse(req, res);
   });
 
-  app.listen(port, function () {
+  app.listen(port, function() {
     console.log('API listening for bots on port ' + port);
   });
 }
@@ -56,7 +56,7 @@ function start(botHandlers, actionHandlers, config) {
  * @param app The express server
  */
 function addMiddleware(app) {
-  app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(bodyParser.urlencoded({extended: true}));
   app.use(bodyParser.json());
 }
 
@@ -87,7 +87,7 @@ function addMiddleware(app) {
  * @returns {Function}
  */
 function handleRequest(botHandlers, actionHandlers, config) {
-  return function (req, res) {
+  return function(req, res) {
     var context = getContext(req, res, config);
     console.log('Context captured from request: ' + JSON.stringify(context));
 
@@ -102,20 +102,18 @@ function handleRequest(botHandlers, actionHandlers, config) {
       var actionHandler = factory.getActionHandler(actionHandlers, genericRequest);
       try {
         actionHandler.processRequest(genericRequest)
-            .then(function (genericResponse) {
+            .then(function(genericResponse) {
               // console.log("Generic Response returned in Server: " + genericResponse);
               var payloads = botHandler.generateResponsePayloads(genericResponse);
               // console.log("Payloads generated: " + JSON.stringify(payloads));
               return sendResponses(context, payloads);
             })
             .done();
-      }
-      catch(error) {
+      } catch(error) {
         console.log('Catching an error in Try/Catch in server: ' + error);
       }
     });
-
-  }
+  };
 }
 
 /**
@@ -128,17 +126,17 @@ function handleRequest(botHandlers, actionHandlers, config) {
 function sendResponses(context, payloads) {
   // cut off function if no payloads
   if (!payloads) {
-    return null
+    return null;
   };
   // force payloads into an array (is this necessary?)
   payloads = [].concat(payloads || []);
-  var calls = payloads.map(function (payload) {
-    return function () {
+  var calls = payloads.map(function(payload) {
+    return function() {
       return sendResponseToPlatform(context, payload)
-          .catch(function (err) {
+          .catch(function(err) {
             console.log('Error from send to platform: ' + err);
           });
-    }
+    };
   });
   return utilities.chainPromises(calls);
 }
@@ -156,13 +154,11 @@ function sendResponseToPlatform(context, payload) {
     console.log("Test flag detected in payload context.");
     context.sendResponse(payload);
     return Q.when();
-  }
-  // if this part needed?
-  else if (!payload || (payload === {})) {
+  } else if (!payload || (payload === {})) {
+    // sf this part needed?
     console.log("No payload data detected.");
     return Q.when();
-  }
-  else {
+  } else {
     return sendRequestAsReply(payload, context);
   }
 }
@@ -177,12 +173,11 @@ function sendResponseToPlatform(context, payload) {
 function sendRequestAsReply(payload, context) {
   var deferred = Q.defer();
   console.log("Last step before sending this payload: " + JSON.stringify(payload));
-  request(payload, function (error, response, body) {
+  request(payload, function(error, response, body) {
     if (error) {
       console.log("Ran into error while making request to send Slack payload: " + error);
       deferred.reject(error);
-    }
-    else {
+    } else {
       deferred.resolve();
     }
   });
@@ -204,7 +199,7 @@ function getContext(req, res, config) {
     userRequest: req.body,
     isTest: !!req.params.isTest,
     bot: req.params.bot,
-    sendResponse: function (payload) {
+    sendResponse: function(payload) {
       res.send(payload);
     },
     finishResponse: function() {
