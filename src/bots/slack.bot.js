@@ -3,6 +3,9 @@
 var utilities = require('../brain/utilities');
 var config = require('../config/config');
 
+var Q = require('q');
+
+
 /**
  * Verifies that request actually coming from Slack
  * not currently in use
