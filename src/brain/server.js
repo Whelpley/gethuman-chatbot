@@ -9,6 +9,8 @@ var request = require('request');
 var utilities = require('./utilities');
 var factory = require('./factory');
 var messenger = require('../bots/messenger.bot');
+var slack = require('../bots/slack.bot');
+
 
 /**
  * Main entry point for the bot server
@@ -42,7 +44,7 @@ function start(botHandlers, actionHandlers, config) {
 
   // FB Messenger verification route
   app.get('/oauth', function(req, res) {
-    console.log('GET request to /oauth path: ' + JSON.stringify(req.body));
+    console.log('GET request to /oauth path: ' + req.params);
     slack.oauthResponse(req, res);
   });
 
