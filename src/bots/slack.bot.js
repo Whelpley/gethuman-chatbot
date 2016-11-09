@@ -266,8 +266,8 @@ function convertArrayToBoldList(arrayOfStrings) {
  * @return {promise}
  */
 function oauthResponse(req, res) {
-  var code = req.code;
-  console.log('Code captured from OAuth request: ' + code);
+  var query = req.query;
+  console.log('Query captured from OAuth request: ' + JSON.stringify(query));
   var client_id = config.slackClientId || '';
   var client_secret = config.slackClientSecret || '';
   var deferred = Q.defer();
