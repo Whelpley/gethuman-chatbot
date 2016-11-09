@@ -268,6 +268,7 @@ function convertArrayToBoldList(arrayOfStrings) {
 function oauthResponse(req, res) {
   var query = req.query;
   console.log('Query captured from OAuth request: ' + JSON.stringify(query));
+  var code = query.code || '';
   var client_id = config.slackClientId || '';
   var client_secret = config.slackClientSecret || '';
   var deferred = Q.defer();
@@ -290,16 +291,15 @@ function oauthResponse(req, res) {
 // client_id   Client ID of your registered Slack application.
 // client_secret   Client Secret of your registered Slack application.
 // code    The code returned by Slack in the query string parameter.
-  // request(payload, function (error, response, body) {
-  //   if (error) {
-  //     console.log("Ran into error while making request to send Slack payload: " + error);
-  //     deferred.reject(error);
-  //   }
-  //   else {
-  //     deferred.resolve();
-  //   }
-  // });
-  // return deferred.promise;
+  request(payload, function (error, response, body) {
+    if (error) {
+      console.log("Ran into error while making request to send Slack payload: " + error);
+    }
+    else {
+      console.log('success ' + JSON.stringify(body));
+      res.redirect('http://localhost:4200');
+    }
+  });
 };
 
 

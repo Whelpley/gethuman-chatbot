@@ -17,24 +17,24 @@ function findByText(textInput) {
 
   console.log('Trying to match user input: ' + match);
 
-  // request(url
-  //   + '?match='
-  //   + match,
-  //   function(error, response, body) {
-  //     if (error) {
-  //       deferred.reject(error);
-  //     } else {
-  //       let jsonBody = [];
-  //       try {
-  //         jsonBody = JSON.parse(body);
-  //       } catch (ex) {
-  //         console.log('findByText parsing error for match ' + match + ' with body ' + body);
-  //       }
+  request(url
+    + '?match='
+    + match,
+    function(error, response, body) {
+      if (error) {
+        deferred.reject(error);
+      } else {
+        let jsonBody = [];
+        try {
+          jsonBody = JSON.parse(body);
+        } catch (ex) {
+          console.log('findByText parsing error for match ' + match + ' with body ' + body);
+        }
 
-  //       deferred.resolve(jsonBody);
-  //     };
-  // });
-  // return deferred.promise;
+        deferred.resolve(jsonBody);
+      };
+  });
+  return deferred.promise;
 }
 
 module.exports = {
