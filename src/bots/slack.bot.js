@@ -293,7 +293,7 @@ function oauthResponse(req, res) {
 // code    The code returned by Slack in the query string parameter.
   request(payload, function (error, response, body) {
     if (error) {
-      console.log("Ran into error while making request to send Slack payload: " + error);
+      console.log('Ran into error while sending reply to OAuth prompt: ' + error);
     }
     else {
       console.log('success ' + JSON.stringify(body));
