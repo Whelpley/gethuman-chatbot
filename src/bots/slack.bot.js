@@ -263,6 +263,7 @@ function convertArrayToBoldList(arrayOfStrings) {
 //  */
 function oauthResponse(req, res) {
   var code = req.code;
+  // will need to set these up in environment vars
   var client_id = '';
   var client_secret = '';
   var deferred = Q.defer();
@@ -273,6 +274,7 @@ function oauthResponse(req, res) {
       client_id: client_id,
       client_secret: client_secret,
       code: code
+    }
   };
 
   // You will need to exchange the code for an access token using the oauth.access method.
@@ -292,7 +294,7 @@ function oauthResponse(req, res) {
   //   }
   // });
   // return deferred.promise;
-}
+};
 
 
 module.exports = {
@@ -304,6 +306,6 @@ module.exports = {
   loadContactsAttachments: loadContactsAttachments,
   loadOtherCompaniesAttachments: loadOtherCompaniesAttachments,
   formatContacts: formatContacts,
-  convertArrayToBoldList: convertArrayToBoldList
+  convertArrayToBoldList: convertArrayToBoldList,
   oauthResponse: oauthResponse
 };
