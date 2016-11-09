@@ -260,18 +260,19 @@ function convertArrayToBoldList(arrayOfStrings) {
   return otherCompaniesList;
 }
 
-// /**
-//  * OAuth stuff
-//  *
-//  */
+/**
+ * OAuth stuff
+ *
+ * @return {promise}
+ */
 function oauthResponse(req, res) {
   var code = req.code;
-  // will need to set these up in environment vars
-  var client_id = '';
-  var client_secret = '';
+  var client_id = config.slackClientId || '';
+  var client_secret = config.slackClientSecret || '';
   var deferred = Q.defer();
+  var uri = 'https://slack.com/api/oauth.access';
   var payload = {
-    uri: 'https://slack.com/api/oauth.access',
+    uri: uri,
     method: 'POST',
     json: {
       client_id: client_id,
@@ -279,6 +280,7 @@ function oauthResponse(req, res) {
       code: code
     }
   };
+  console.log('Payload prepared for OAuth response: ' + JSON.stringify(payload));
 
   // You will need to exchange the code for an access token using the oauth.access method.
 //
