@@ -14,8 +14,9 @@ function verify(req, res) {
     var verifyToken = config.facebookVerifyToken;
     if (req.query['hub.verify_token'] === verifyToken) {
         res.send(req.query['hub.challenge']);
-    }
-    res.send('Error, wrong token');
+    } else {
+      res.send('Error, wrong token');
+    };
 }
 
 /**
