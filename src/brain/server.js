@@ -42,6 +42,7 @@ function start(botHandlers, actionHandlers, config) {
 
   // FB Messenger verification route
   app.get('/oauth', function(req, res) {
+    console.log('GET request to /oauth path: ' + req.body);
     slack.oauthResponse(req, res);
   });
 
