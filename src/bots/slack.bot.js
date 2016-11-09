@@ -1,9 +1,9 @@
 'use strict';
 
-var utilities = require('../brain/utilities');
-var config = require('../config/config');
-
-var Q = require('q');
+const utilities = require('../brain/utilities');
+const config = require('../config/config');
+const request = require('request');
+const Q = require('q');
 
 
 /**
@@ -285,12 +285,7 @@ function oauthResponse(req, res) {
   console.log('Payload prepared for OAuth response: ' + JSON.stringify(payload));
 
   // You will need to exchange the code for an access token using the oauth.access method.
-//
-//   Request the Slack API token and webhook URL by making a http POST request in your server code to https://slack.com/api/oauth.access with these parameters:
 
-// client_id   Client ID of your registered Slack application.
-// client_secret   Client Secret of your registered Slack application.
-// code    The code returned by Slack in the query string parameter.
   request(payload, function (error, response, body) {
     if (error) {
       console.log('Ran into error while sending reply to OAuth prompt: ' + error);
