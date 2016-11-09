@@ -276,6 +276,7 @@ function oauthResponse(req, res) {
   var payload = {
     uri: uri,
     method: 'POST',
+    charset: 'utf-8',
     json: {
       client_id: client_id,
       client_secret: client_secret,
