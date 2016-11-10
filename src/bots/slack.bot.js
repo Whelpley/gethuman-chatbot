@@ -269,17 +269,17 @@ function oauthResponse(req, res) {
   var query = req.query;
   console.log('Query captured from OAuth request: ' + JSON.stringify(query));
   var code = query.code || '';
-  var client_id = config.slackClientId || '';
-  var client_secret = config.slackClientSecret || '';
-  var deferred = Q.defer();
+  var clientId = config.slackClientId || '';
+  var clientSecret = config.slackClientSecret || '';
+  // var deferred = Q.defer();
   var uri = 'https://slack.com/api/oauth.access';
   var payload = {
     uri: uri,
     method: 'POST',
-    charset: 'utf-8',
+    // charset: 'utf-8',
     json: {
-      client_id: client_id,
-      client_secret: client_secret,
+      client_id: clientId,
+      client_secret: clientSecret,
       code: code
     }
   };
