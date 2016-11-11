@@ -270,12 +270,11 @@ function oauthResponse(req, res) {
   let payload = {
     uri: uri,
     method: 'POST',
-    // charset: 'utf-8',
-    json: JSON.parse({
+    qs: {
       client_id: clientId,
       client_secret: clientSecret,
       code: code
-    })
+    }
   };
   console.log('Payload prepared for OAuth response: ' + JSON.stringify(payload));
 
