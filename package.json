@@ -12,6 +12,7 @@
   "dependencies": {
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
+    "firebase": "^3.6.0",
     "phone-formatter": "0.0.2",
     "q": "^1.4.1",
     "request": "^2.75.0"
@@ -23,9 +24,8 @@
     "eslint-config-google": "^0.7.0",
     "eslint-plugin-import": "^2.0.1"
   },
-
   "repository": {
-     "type": "git",
-     "url": "git+ssh://git@bitbucket.org/Whelpley/gethuman-chatbot.git"
-   }
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/Whelpley/gethuman-chatbot.git"
+  }
 }

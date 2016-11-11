@@ -5,7 +5,7 @@ const envVars = process.env;
 
 try {
   var env = require('./env');
-  envVars = Object.assign(envVars, env.base, env[envName]);
+  envVars = Object.assign({}, envVars, env.base, env[envName]);
 } catch(err) {
   console.log('Error in config: ' + err);
 }
@@ -18,5 +18,8 @@ module.exports = {
   facebookVerifyToken: envVars.FACEBOOK_VERIFY_TOKEN,
   slackVerifyToken: envVars.SLACK_VERIFY_TOKEN,
   slackClientId: envVars.SLACK_CLIENT_ID,
-  slackClientSecret: envVars.SLACK_CLIENT_SECRET
+  slackClientSecret: envVars.SLACK_CLIENT_SECRET,
+  firebaseApiKey: envVars.FIREBASE_API_KEY,
+  firebaseProjectName: envVars.FIREBASE_PROJECT_NAME,
+  firebaseSenderId: envVars.FIREBASE_SENDER_ID
 };

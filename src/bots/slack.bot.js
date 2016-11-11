@@ -1,3 +1,5 @@
+let firebase = require('firebase');
+
 const utilities = require('../brain/utilities');
 const config = require('../config/config');
 const request = require('request');
@@ -123,8 +125,10 @@ function generateResponsePayloads(genericResponse) {
  */
  // **** Needs to acces specific webhook path for team that made request *****
 function formBasicPayload(genericResponse) {
-  let path = config.slackAccessToken;
-  let uri = 'https://hooks.slack.com/services/' + path;
+  // let path = config.slackAccessToken;
+  // let uri = 'https://hooks.slack.com/services/' + path;
+  let uri = findUri(genericResponse);
+
   let channel = genericResponse.context.userRequest.channel_id;
   let payloads = [{
     uri: uri,
@@ -294,6 +298,35 @@ function oauthResponse(req, res) {
       res.redirect('http://localhost:4200');
     }
   });
+}
+
+function findUri(genericResponse) {
+  let uri = '';
+  let teamId = genericResponse.context.userRequest.team_id;
+
+  // Initialize Firebase
+  var firebaseApiKey = config.firebaseApiKey;
+  var firebaseProjectName = config.firebaseProjectName;
+  var firebaseSenderId = config.firebaseSenderId;
+  var firebaseConfig = {
+    apiKey: firebaseApiKey,
+    authDomain:  firebaseProjectName + '.firebaseapp.com',
+    databaseURL: 'https://' + firebaseProjectName + '.firebaseio.com',
+    storageBucket: firebaseProjectName + '.appspot.com',
+    messagingSenderId: firebaseSenderId
+  };
+  firebase.initializeApp(fireBaseConfig);
+  // Get a reference to the database service
+  var database = firebase.database();
+
+  // read Firebase data
+  // do we need to Promise this?
+  firebase.database().ref('teams/' + teamId).once('value').then(function(snapshot) {
+    uri = snapshot.val().url;
+  });
+
+  console.log('Uri extracted from Firebase DB: ' + uri);
+  return uri;
 }
 
 module.exports = {
