@@ -1,3 +1,5 @@
+'use strict';
+
 let request = require('request');
 let express = require('express');
 let firebase = require('firebase');

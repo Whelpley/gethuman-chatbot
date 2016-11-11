@@ -1,3 +1,5 @@
+'use strict';
+
 let firebase = require('firebase');
 
 const utilities = require('../brain/utilities');
