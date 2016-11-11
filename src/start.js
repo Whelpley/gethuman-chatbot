@@ -1,3 +1,6 @@
+'use strict';
+
+
 let brainServer = require('./brain/server');
 let config = require('./config/config');
 
