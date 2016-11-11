@@ -6,7 +6,7 @@ let firebase = require('firebase');
 
 let app = express();
 
-const config = require('../src/config/config');
+let config = require('../src/config/config');
 
 const DONE = `
             <html>
@@ -40,7 +40,7 @@ function process(req, res) {
         storageBucket: firebaseProjectName + '.appspot.com',
         messagingSenderId: firebaseSenderId
     };
-    firebase.initializeApp(fireBaseConfig);
+    firebase.initializeApp(firebaseConfig);
     // Get a reference to the database service
     var database = firebase.database();
 
@@ -56,11 +56,12 @@ function process(req, res) {
         };
         request(opts, function (err, resp, body){
 
+            console.log('OAuth call made, retrieved token info:' + JSON.stringify(body));
+
             // add hacked code to save to firebase database
             // need staging and production DB's
             // To save to DB - whole object
             // (could pare it down later and save specific fields only)
-            console.log
             if (body.ok) {
                 let teamId = body.team_id;
                 firebase.database().ref('teams/' + teamId).set(body);

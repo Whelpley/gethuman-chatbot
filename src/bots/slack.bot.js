@@ -272,40 +272,40 @@ function convertArrayToBoldList(arrayOfStrings) {
   return otherCompaniesList;
 }
 
-/**
- * OAuth stuff
- *
- * @return {promise}
- */
-function oauthResponse(req, res) {
-  let query = req.query;
-  console.log('Query captured from OAuth request: ' + JSON.stringify(query));
-  let code = query.code || '';
-  let clientId = config.slackClientId || '';
-  let clientSecret = config.slackClientSecret || '';
-  // let deferred = Q.defer();
-  let uri = 'https://slack.com/api/oauth.access';
-  let payload = {
-    uri: uri,
-    method: 'POST',
-    qs: {
-      client_id: clientId,
-      client_secret: clientSecret,
-      code: code
-    }
-  };
-  console.log('Payload prepared for OAuth response: ' + JSON.stringify(payload));
+// /**
+//  * OAuth stuff
+//  *
+//  * @return {promise}
+//  */
+// function oauthResponse(req, res) {
+//   let query = req.query;
+//   console.log('Query captured from OAuth request: ' + JSON.stringify(query));
+//   let code = query.code || '';
+//   let clientId = config.slackClientId || '';
+//   let clientSecret = config.slackClientSecret || '';
+//   // let deferred = Q.defer();
+//   let uri = 'https://slack.com/api/oauth.access';
+//   let payload = {
+//     uri: uri,
+//     method: 'POST',
+//     qs: {
+//       client_id: clientId,
+//       client_secret: clientSecret,
+//       code: code
+//     }
+//   };
+//   console.log('Payload prepared for OAuth response: ' + JSON.stringify(payload));
 
-  // You will need to exchange the code for an access token using the oauth.access method.
-  request(payload, function (error, response, body) {
-    if (error) {
-      console.log('Ran into error while sending reply to OAuth prompt: ' + error);
-    } else {
-      console.log('Success of reply to OAuth prompt: ' + JSON.stringify(body));
-      res.redirect('http://localhost:4200');
-    }
-  });
-}
+//   // You will need to exchange the code for an access token using the oauth.access method.
+//   request(payload, function (error, response, body) {
+//     if (error) {
+//       console.log('Ran into error while sending reply to OAuth prompt: ' + error);
+//     } else {
+//       console.log('Success of reply to OAuth prompt: ' + JSON.stringify(body));
+//       res.redirect('http://localhost:4200');
+//     }
+//   });
+// }
 
 // calls to Firebase to retrieve incoming webhook url
 function accessUri(genericResponse) {
@@ -323,7 +323,7 @@ function accessUri(genericResponse) {
     storageBucket: firebaseProjectName + '.appspot.com',
     messagingSenderId: firebaseSenderId
   };
-  firebase.initializeApp(fireBaseConfig);
+  firebase.initializeApp(firebaseConfig);
 
   // read Firebase data
   // do we need to Promise this?
@@ -344,6 +344,6 @@ module.exports = {
   loadContactsAttachments: loadContactsAttachments,
   loadOtherCompaniesAttachments: loadOtherCompaniesAttachments,
   formatContacts: formatContacts,
-  convertArrayToBoldList: convertArrayToBoldList,
-  oauthResponse: oauthResponse
+  convertArrayToBoldList: convertArrayToBoldList
+  // oauthResponse: oauthResponse
 };
