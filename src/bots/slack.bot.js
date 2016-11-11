@@ -125,9 +125,14 @@ function generateResponsePayloads(genericResponse) {
  */
  // **** Needs to acces specific webhook path for team that made request *****
 function formBasicPayload(genericResponse) {
-  // let path = config.slackAccessToken;
+
+  // let path = config.slackAccessPath;
   // let uri = 'https://hooks.slack.com/services/' + path;
-  let uri = findUri(genericResponse);
+
+  // How to determine if we're accessing home account, or
+  // How to determine dev vs production environment?
+
+  let uri = accessUri(genericResponse);
 
   let channel = genericResponse.context.userRequest.channel_id;
   let payloads = [{
@@ -300,7 +305,8 @@ function oauthResponse(req, res) {
   });
 }
 
-function findUri(genericResponse) {
+// calls to Firebase to retrieve incoming webhook url
+function accessUri(genericResponse) {
   let uri = '';
   let teamId = genericResponse.context.userRequest.team_id;
 
@@ -316,13 +322,11 @@ function findUri(genericResponse) {
     messagingSenderId: firebaseSenderId
   };
   firebase.initializeApp(fireBaseConfig);
-  // Get a reference to the database service
-  var database = firebase.database();
 
   // read Firebase data
   // do we need to Promise this?
   firebase.database().ref('teams/' + teamId).once('value').then(function(snapshot) {
-    uri = snapshot.val().url;
+    uri = snapshot.val().incoming_webhook.url;
   });
 
   console.log('Uri extracted from Firebase DB: ' + uri);
