@@ -1,6 +1,7 @@
 let request = require('request');
 let express = require('express');
 let app = express();
+const config = require('../src/config/config');
 
 const DONE = `
             <html>
@@ -20,18 +21,27 @@ const SLACKBTN = `
 
 function process(req, res) {
     let code = req.query && req.query.code;
+    let clientId = config.slackClientId;
+    let clientSecret = config.slackClientSecret;
 
     if (code) {
         let opts = {
             method: 'POST',
             url: 'https://slack.com/api/oauth.access',
             qs: {
-                'client_id': '',
-                'client_secret': '',
+                'client_id': clientId,
+                'client_secret': clientSecret,
                 'code': code
             }
         };
         request(opts, function (err, resp, body){
+
+            // add hacked code to save to firebase database
+            // need staging and production DB's
+            // To save to DB:
+            //       incoming_webhook.url
+            //      access_token
+
             res.send(DONE);
         });
     } else {

@@ -28,6 +28,7 @@ function translateRequestToGenericFormats(context) {
     context: context
   }];
 
+
   // checking for valid token from Slack
   if (verifyToken !== incomingToken) {
     console.log('Slack access token mismatch! Ignoring incoming request.');
@@ -36,6 +37,11 @@ function translateRequestToGenericFormats(context) {
     return [];
   }
   console.log('Slack access token match! It\'s all good, man.');
+
+  // extract ____ from context.userRequest.token
+  // draw down Firebase DB
+  // extract Incoming Webhook URL matching the token in DB
+  // save to Context.webHookUrl
 
   if (text) {
     genericRequests[0].userInput = text;
@@ -115,6 +121,7 @@ function generateResponsePayloads(genericResponse) {
  * @param genericResponse
  * @return {payloads}
  */
+ // **** Needs to acces specific webhook path for team that made request *****
 function formBasicPayload(genericResponse) {
   let path = config.slackAccessToken;
   let uri = 'https://hooks.slack.com/services/' + path;
