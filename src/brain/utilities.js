@@ -1,3 +1,6 @@
+'use strict';
+
+
 const Q = require('q');
 
 // GetHuman green palette

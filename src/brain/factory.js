@@ -1,3 +1,4 @@
+'use strict';
 
 /**
  * Select Action Handler based on parameters of request-type flag
