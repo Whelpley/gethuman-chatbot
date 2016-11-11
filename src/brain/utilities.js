@@ -1,6 +1,4 @@
-'use strict';
-
-var Q = require('q');
+const Q = require('q');
 
 // GetHuman green palette
 const colors = [

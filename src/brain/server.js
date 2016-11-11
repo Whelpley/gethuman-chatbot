@@ -1,16 +1,12 @@
-'use strict';
+let express = require('express');
+let bodyParser = require('body-parser');
+let request = require('request');
+let Q = require('q');
 
-var express = require('express');
-var bodyParser = require('body-parser');
-var request = require('request');
-var Q = require('q');
-var request = require('request');
-
-var utilities = require('./utilities');
-var factory = require('./factory');
-var messenger = require('../bots/messenger.bot');
-var slack = require('../bots/slack.bot');
-
+let utilities = require('./utilities');
+let factory = require('./factory');
+let messenger = require('../bots/messenger.bot');
+let slack = require('../bots/slack.bot');
 
 /**
  * Main entry point for the bot server
@@ -20,8 +16,8 @@ var slack = require('../bots/slack.bot');
  * @param config
  */
 function start(botHandlers, actionHandlers, config) {
-  var port = process.env.PORT || 3000;
-  var app = express();
+  let port = process.env.PORT || 3000;
+  let app = express();
 
   console.log('Starting server');
 
@@ -30,6 +26,16 @@ function start(botHandlers, actionHandlers, config) {
   // remove these
   // addTestRoutes(app);
 
+  // FB Messenger verification route
+  app.get('/messenger', function(req, res) {
+      messenger.verify(req, res);
+  });
+
+  // FB Messenger verification route
+  app.get('/oauth', function(req, res) {
+      slack.oauthResponse(req, res);
+  });
+
   // all bots go to this route
   app.post('/:bot', handleRequest(botHandlers, actionHandlers, config));
   // app.all('/:bot', handleRequest(botHandlers, actionHandlers, config));
@@ -37,15 +43,6 @@ function start(botHandlers, actionHandlers, config) {
   // look up Express - app.all - figure out how to process FBM verification
     // should be able to see if it's a Get or Post
 
-  // FB Messenger verification route
-  app.get('/messenger', function(req, res) {
-    messenger.verify(req, res);
-  });
-
-  // FB Messenger verification route
-  app.get('/oauth', function(req, res) {
-    slack.oauthResponse(req, res);
-  });
 
   app.listen(port, function() {
     console.log('API listening for bots on port ' + port);
@@ -90,23 +87,23 @@ function addMiddleware(app) {
  */
 function handleRequest(botHandlers, actionHandlers, config) {
   return function(req, res) {
-    var context = getContext(req, res, config);
+    let context = getContext(req, res, config);
     console.log('Context captured from request: ' + JSON.stringify(context));
 
     // send back a 200 response immediately
     context.finishResponse();
 
-    var botHandler = factory.getBotHandler(botHandlers, context);
+    let botHandler = factory.getBotHandler(botHandlers, context);
 
-    var genericRequests = botHandler.translateRequestToGenericFormats(context);
+    let genericRequests = botHandler.translateRequestToGenericFormats(context);
 
     genericRequests.forEach((genericRequest) => {
-      var actionHandler = factory.getActionHandler(actionHandlers, genericRequest);
+      let actionHandler = factory.getActionHandler(actionHandlers, genericRequest);
       try {
         actionHandler.processRequest(genericRequest)
             .then(function(genericResponse) {
               // console.log("Generic Response returned in Server: " + genericResponse);
-              var payloads = botHandler.generateResponsePayloads(genericResponse);
+              let payloads = botHandler.generateResponsePayloads(genericResponse);
               // console.log("Payloads generated: " + JSON.stringify(payloads));
               return sendResponses(context, payloads);
             })
@@ -126,13 +123,15 @@ function handleRequest(botHandlers, actionHandlers, config) {
  * @returns {Promise}
  */
 function sendResponses(context, payloads) {
+
   // cut off function if no payloads
   if (!payloads) {
     return null;
-  };
+  }
+
   // force payloads into an array (is this necessary?)
   payloads = [].concat(payloads || []);
-  var calls = payloads.map(function(payload) {
+  let calls = payloads.map(function(payload) {
     return function() {
       return sendResponseToPlatform(context, payload)
           .catch(function(err) {
@@ -145,11 +144,10 @@ function sendResponses(context, payloads) {
 
 /**
  * Checks to see if payload should actually be sent to a platform
- * If so, passes it to Send fuction
+ * If so, passes it to Send function
  *
  * @param context
  * @param payload
- * @return {sendRequestAsReply}
  */
 function sendResponseToPlatform(context, payload) {
   if (context.isTest) {
@@ -161,21 +159,20 @@ function sendResponseToPlatform(context, payload) {
     console.log("No payload data detected.");
     return Q.when();
   } else {
-    return sendRequestAsReply(payload, context);
+    return sendRequestAsReply(payload);
   }
 }
 
 /**
  * Makes the request to send to payload
  *
- * @param context
  * @param payload
  * @return {Promise}
  */
-function sendRequestAsReply(payload, context) {
-  var deferred = Q.defer();
+function sendRequestAsReply(payload) {
+  let deferred = Q.defer();
   console.log("Last step before sending this payload: " + JSON.stringify(payload));
-  request(payload, function(error, response, body) {
+  request(payload, function(error) {
     if (error) {
       console.log("Ran into error while making request to send Slack payload: " + error);
       deferred.reject(error);
@@ -193,7 +190,6 @@ function sendRequestAsReply(payload, context) {
  * @param req
  * @param res
  * @param config
- * @returns {context}
  */
 function getContext(req, res, config) {
   return {

@@ -1,4 +1,3 @@
-'use strict';
 
 /**
  * Select Action Handler based on parameters of request-type flag
@@ -9,15 +8,17 @@
  * @return actionHandler
  */
 function getActionHandler(actionHandlers, genericRequest) {
+
   // to refactor: separate Action Handlers by reqType
   let reqType = genericRequest.reqType;
+
   if ((reqType === 'user-input') || (reqType === 'postback') || (reqType === 'help')) {
     console.log('Choosing Solve action handler');
     return actionHandlers && actionHandlers.length && actionHandlers[0];
   } else if (reqType === 'confirmation') {
     console.log('Choosing Confirm action handler');
     return actionHandlers && actionHandlers.length && actionHandlers[1];
-  };
+  }
 }
 
 /**
@@ -29,10 +30,12 @@ function getActionHandler(actionHandlers, genericRequest) {
  */
 function getBotHandler(botHandlers, context) {
  let handler = botHandlers[context.bot];
+
  if (handler) {
    console.log('Found bot handler for ' + context.bot + '!');
    return handler;
  }
+
  throw new Error('No bot handler for ' + context.bot);
 }
 

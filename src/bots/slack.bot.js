@@ -1,10 +1,6 @@
-'use strict';
-
 const utilities = require('../brain/utilities');
 const config = require('../config/config');
 const request = require('request');
-const Q = require('q');
-
 
 /**
  * Verifies that request actually coming from Slack
@@ -21,13 +17,12 @@ const Q = require('q');
  * Makes array of generic request objects from incoming context
  *
  * @param context
- * @return {genericRequests}
  */
 function translateRequestToGenericFormats(context) {
-  var text = context.userRequest.text;
-  var verifyToken = config.slackVerifyToken;
-  var incomingToken = context.userRequest.token;
-  var genericRequests = [{
+  let text = context.userRequest.text;
+  let verifyToken = config.slackVerifyToken;
+  let incomingToken = context.userRequest.token;
+  let genericRequests = [{
     reqType: 'user-input',
     userInput: '',
     context: context
@@ -39,16 +34,16 @@ function translateRequestToGenericFormats(context) {
     console.log('Incoming Token: ' + incomingToken);
     console.log('Verify Token: ' + verifyToken);
     return [];
-  };
+  }
   console.log('Slack access token match! It\'s all good, man.');
 
   if (text) {
     genericRequests[0].userInput = text;
-  };
+  }
   if (text.toLowerCase() === 'help') {
     console.log('Detected user input of \"help\"');
     genericRequests[0].reqType = 'help';
-  };
+  }
   console.log('Slack bot has prepared this generic request: ' + JSON.stringify(genericRequests));
   return genericRequests;
 }
@@ -62,8 +57,8 @@ function translateRequestToGenericFormats(context) {
 function generateResponsePayloads(genericResponse) {
   console.log("About to begin generating payloads from genericResponse.");
   // form basic payload
-  var payloads = formBasicPayload(genericResponse);
-  var type = genericResponse.type;
+  let payloads = formBasicPayload(genericResponse);
+  let type = genericResponse.type;
 
   // if a False object passed in, passes down False to next step
   if (!genericResponse) {
@@ -90,22 +85,22 @@ function generateResponsePayloads(genericResponse) {
     // do we need the explicit type check after the first two, or just 'else'?
     // Refactor inner parts of this case to a function?
     console.log('Standard type flag detected in genericResponse.');
-    var name = genericResponse.data.name || '';
-    var posts = genericResponse.data.posts || [];
-    var otherCompanies = genericResponse.data.otherCompanies || [];
-    var topContacts = formatContacts(genericResponse.data.contactMethods);
+    let name = genericResponse.data.name || '';
+    let posts = genericResponse.data.posts || [];
+    let otherCompanies = genericResponse.data.otherCompanies || [];
+    let topContacts = formatContacts(genericResponse.data.contactMethods);
     if (posts && posts.length) {
       payloads = loadPostsAttachments(payloads, posts, name);
       console.log('Posts info pushed into Payloads');
-    };
+    }
     if (topContacts) {
       payloads = loadContactsAttachments(payloads, topContacts, name);
       console.log('Company Contact Info pushed into Payloads');
-    };
+    }
     if (otherCompanies && otherCompanies.length) {
       payloads = loadOtherCompaniesAttachments(payloads, otherCompanies, name);
       console.log('Other Companies info pushed into Payloads');
-    };
+    }
     if (!payloads[0].json.attachments.length) {
         payloads[0].json.text = 'I couldn\'t find anything for \"' + name + '\". Please tell me which company you are looking for. (ex: \"/gethuman Verizon Wireless\")';
         console.log('No card info found for Companies, returning Nothing Found text.');
@@ -121,10 +116,10 @@ function generateResponsePayloads(genericResponse) {
  * @return {payloads}
  */
 function formBasicPayload(genericResponse) {
-  var path = config.slackAccessToken;
-  var uri = 'https://hooks.slack.com/services/' + path;
-  var channel = genericResponse.context.userRequest.channel_id;
-  var payloads = [{
+  let path = config.slackAccessToken;
+  let uri = 'https://hooks.slack.com/services/' + path;
+  let channel = genericResponse.context.userRequest.channel_id;
+  let payloads = [{
     uri: uri,
     method: 'POST',
     json: {
@@ -147,7 +142,7 @@ function formBasicPayload(genericResponse) {
  * @return {payloads}
  */
 function loadPostsAttachments(payloads, posts, name) {
-  var colors = utilities.colors;
+  let colors = utilities.colors;
   payloads[0].json.text = 'Top issues for ' + name + ':';
   for (let i = 0; i < posts.length; i++) {
       let title = posts[i].title || '';
@@ -200,7 +195,7 @@ function loadContactsAttachments(payloads, topContacts, name) {
  * @return {payloads}
  */
 function loadOtherCompaniesAttachments(payloads, otherCompanies, name) {
-  var otherCompaniesList = convertArrayToBoldList(otherCompanies);
+  let otherCompaniesList = convertArrayToBoldList(otherCompanies);
   payloads[0].json.attachments.push({
       fallback: 'Other solutions',
       title: 'Were you talking about ' + name + '?',
@@ -215,12 +210,11 @@ function loadOtherCompaniesAttachments(payloads, otherCompanies, name) {
  * Takes contact methods, forms a structured string of <= 3 items for display
  *
  * @param contactMethods
- * @return {topContacts}
  */
 function formatContacts(contactMethods) {
-  var topContacts = '';
-  var counter = 1;
-  for(var key in contactMethods) {
+  let topContacts = '';
+  let counter = 1;
+  for(let key in contactMethods) {
     if (contactMethods.hasOwnProperty(key) && (counter <= 3) && (contactMethods[key])) {
       switch(key) {
           case 'twitter':
@@ -246,7 +240,7 @@ function formatContacts(contactMethods) {
   }
   console.log("Formatted string for Slack contact methods: " + topContacts);
   return topContacts;
-};
+}
 
 /**
  * convert an array of strings to one string separated by commas, with each entry *bolded*
@@ -255,7 +249,7 @@ function formatContacts(contactMethods) {
  * @return {otherCompaniesList}
  */
 function convertArrayToBoldList(arrayOfStrings) {
-  var otherCompaniesList = '*';
+  let otherCompaniesList = '*';
   otherCompaniesList = otherCompaniesList + arrayOfStrings.join('*, *') + "*";
   return otherCompaniesList;
 }
@@ -266,14 +260,14 @@ function convertArrayToBoldList(arrayOfStrings) {
  * @return {promise}
  */
 function oauthResponse(req, res) {
-  var query = req.query;
+  let query = req.query;
   console.log('Query captured from OAuth request: ' + JSON.stringify(query));
-  var code = query.code || '';
-  var clientId = config.slackClientId || '';
-  var clientSecret = config.slackClientSecret || '';
-  // var deferred = Q.defer();
-  var uri = 'https://slack.com/api/oauth.access';
-  var payload = {
+  let code = query.code || '';
+  let clientId = config.slackClientId || '';
+  let clientSecret = config.slackClientSecret || '';
+  // let deferred = Q.defer();
+  let uri = 'https://slack.com/api/oauth.access';
+  let payload = {
     uri: uri,
     method: 'POST',
     // charset: 'utf-8',
@@ -289,14 +283,12 @@ function oauthResponse(req, res) {
   request(payload, function (error, response, body) {
     if (error) {
       console.log('Ran into error while sending reply to OAuth prompt: ' + error);
-    }
-    else {
+    } else {
       console.log('Success of reply to OAuth prompt: ' + JSON.stringify(body));
       res.redirect('http://localhost:4200');
     }
   });
-};
-
+}
 
 module.exports = {
   // verify: verify,

@@ -1,7 +1,7 @@
 {
   "name": "gethuman-chatbot",
   "version": "1.0.0",
-  "description": "",
+  "description": "GetHuman chat bots",
   "main": "start.js",
   "scripts": {
     "test": "mocha test/**/*test.js -w",
@@ -27,7 +27,5 @@
   "repository": {
      "type": "git",
      "url": "git+ssh://git@bitbucket.org/Whelpley/gethuman-chatbot.git"
-   },
-
-  "description": "Chat bots for GetHuman"
+   }
 }

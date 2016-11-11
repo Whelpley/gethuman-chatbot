@@ -1,15 +1,13 @@
-'use strict'
+let brainServer = require('./brain/server');
+let config = require('./config/config');
 
-var brainServer = require('./brain/server');
-var config = require('./config/config');
-
-var botHandlers = {
+let botHandlers = {
   slack: require('./bots/slack.bot'),
   messenger: require('./bots/messenger.bot')
-}
+};
 
 // each type of action has its own handler
-var actionHandlers = [
+let actionHandlers = [
   require('./actions/solve.action'),
   require('./actions/confirm.action')
 ];
