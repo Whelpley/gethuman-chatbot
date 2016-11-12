@@ -35,7 +35,7 @@ const DONE = `
 const SLACKBTN = `
             <html>
                 <body>
-                    <a href="https://slack.com/oauth/authorize?scope=incoming-webhook,commands&client_id=2395589825.100394872743"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>
+                    <a href="https://slack.com/oauth/authorize?scope=incoming-webhook,commands&client_id=84580660657.100595915399"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>
                 </body>
             </html>
         `;
@@ -44,7 +44,6 @@ function process(req, res) {
     let code = req.query && req.query.code;
     let clientId = config.slackClientId;
     let clientSecret = config.slackClientSecret;
-
 
     if (code) {
         let opts = {
