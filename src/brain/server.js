@@ -25,6 +25,8 @@ function start(botHandlers, actionHandlers, config) {
 
   addMiddleware(app);
 
+  establishDataSync();
+
   // remove these
   // addTestRoutes(app);
 

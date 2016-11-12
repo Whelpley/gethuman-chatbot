@@ -325,11 +325,24 @@ function accessUri(genericResponse) {
   };
   firebase.initializeApp(firebaseConfig);
 
+
   // read Firebase data
   // do we need to Promise this?
-  firebase.database().ref('teams/' + teamId).once('value').then(function(snapshot) {
-    uri = snapshot.val().incoming_webhook.url;
+  // firebase.database().ref('teams/' + teamId).once('value').then(function(snapshot) {
+  //   uri = snapshot.val().incoming_webhook.url;
+  // });
+
+
+  var state = {};
+
+  firebase.database().ref('gh').on('value', function(snapshot) {
+    Object.assign(state, snapshot);
   });
+
+  // state.slack.teams[teamIdHere]
+
+
+
 
   console.log('Uri extracted from Firebase DB: ' + uri);
   return uri;
