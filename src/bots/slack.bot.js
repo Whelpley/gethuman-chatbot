@@ -278,6 +278,7 @@ function accessUri(genericResponse) {
   let teamId = genericResponse.context.userRequest.team_id;
 
   // Initialize Firebase
+  // this should occur at server-level, passing down the data object
   var firebaseApiKey = config.firebaseApiKey;
   var firebaseProjectName = config.firebaseProjectName;
   var firebaseSenderId = config.firebaseSenderId;

@@ -71,7 +71,7 @@ function process(req, res) {
                 ref.child(teamId).set(body);
 
                  // retrieve data to test it!
-                ref.on('value', function(snapshot) {
+                ref.child(teamId).on('value', function(snapshot) {
                   console.log('Value of team '
                     + teamId
                     + 'now updated to: '
