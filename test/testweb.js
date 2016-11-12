@@ -46,6 +46,7 @@ function process(req, res) {
     let clientSecret = config.slackClientSecret;
 
     if (code) {
+
         let opts = {
             method: 'POST',
             url: 'https://slack.com/api/oauth.access',
@@ -55,6 +56,8 @@ function process(req, res) {
                 'code': code
             }
         };
+        console.log('Code detected, making request with options: ' + JSON.stringify(opts));
+
         request(opts, function (err, resp, body){
 
             console.log('OAuth call made, retrieved token info:' + JSON.stringify(body));
@@ -66,6 +69,14 @@ function process(req, res) {
             if (body.ok) {
                 let teamId = body.team_id;
                 ref.child(teamId).set(body);
+
+                 // retrieve data to test it!
+                ref.on('value', function(snapshot) {
+                  console.log('Value of team '
+                    + teamId
+                    + 'now updated to: '
+                    + JSON.stringify(snapshot.val()));
+                });
             }
 
             res.send(DONE);

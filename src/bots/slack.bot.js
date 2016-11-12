@@ -272,41 +272,6 @@ function convertArrayToBoldList(arrayOfStrings) {
   return otherCompaniesList;
 }
 
-// /**
-//  * OAuth stuff
-//  *
-//  * @return {promise}
-//  */
-// function oauthResponse(req, res) {
-//   let query = req.query;
-//   console.log('Query captured from OAuth request: ' + JSON.stringify(query));
-//   let code = query.code || '';
-//   let clientId = config.slackClientId || '';
-//   let clientSecret = config.slackClientSecret || '';
-//   // let deferred = Q.defer();
-//   let uri = 'https://slack.com/api/oauth.access';
-//   let payload = {
-//     uri: uri,
-//     method: 'POST',
-//     qs: {
-//       client_id: clientId,
-//       client_secret: clientSecret,
-//       code: code
-//     }
-//   };
-//   console.log('Payload prepared for OAuth response: ' + JSON.stringify(payload));
-
-//   // You will need to exchange the code for an access token using the oauth.access method.
-//   request(payload, function (error, response, body) {
-//     if (error) {
-//       console.log('Ran into error while sending reply to OAuth prompt: ' + error);
-//     } else {
-//       console.log('Success of reply to OAuth prompt: ' + JSON.stringify(body));
-//       res.redirect('http://localhost:4200');
-//     }
-//   });
-// }
-
 // calls to Firebase to retrieve incoming webhook url
 function accessUri(genericResponse) {
   let uri = '';
