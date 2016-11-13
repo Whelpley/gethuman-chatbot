@@ -22,7 +22,8 @@ var firebaseConfig = {
 console.log('Prepared config for Firebase: ' + JSON.stringify(firebaseConfig));
 firebase.initializeApp(firebaseConfig);
 // Get a reference to the database service
-var ref = firebase.database().ref('gh/slack/teams');
+// var ref = firebase.database().ref('gh/slack/teams');
+var ref = firebase.database().ref();
 
 const DONE = `
             <html>
@@ -71,12 +72,12 @@ function process(req, res) {
                 ref.child(teamId).set(body);
 
                  // retrieve data to test it!
-                ref.child(teamId).on('value', function(snapshot) {
-                  console.log('Value of team '
-                    + teamId
-                    + 'now updated to: '
-                    + JSON.stringify(snapshot.val()));
-                });
+                // ref.child(teamId).on('value', function(snapshot) {
+                //   console.log('Value of team '
+                //     + teamId
+                //     + 'now updated to: '
+                //     + JSON.stringify(snapshot.val()));
+                // });
             }
 
             res.send(DONE);

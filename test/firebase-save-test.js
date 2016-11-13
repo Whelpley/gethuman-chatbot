@@ -14,15 +14,22 @@ var firebaseConfig = {
     messagingSenderId: firebaseSenderId
 };
 console.log('Prepared config for Firebase: ' + JSON.stringify(firebaseConfig));
+
 firebase.initializeApp(firebaseConfig);
+
 // Get a reference to the database service
-var ref = firebase.database().ref('gh/slack/teams');
+var ref = firebase.database().ref('test/');
 
-var teamId  = 'T30298GCF';
+var sampleData = {
+  first: {
+    one: 'ONE',
+    two: 'TWO'
+  },
+  second: {
+    three: 'THREE',
+    four: 'FOUR'
+  }
+};
 
-ref.child(teamId).on('value', function(snapshot) {
-  console.log('Value of team '
-    + teamId
-    + ' is now: '
-    + JSON.stringify(snapshot.val()));
-});
+// save to firebase
+ref.set(sampleData);
