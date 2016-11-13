@@ -16,13 +16,18 @@ var firebaseConfig = {
 console.log('Prepared config for Firebase: ' + JSON.stringify(firebaseConfig));
 firebase.initializeApp(firebaseConfig);
 // Get a reference to the database service
-var ref = firebase.database().ref('gh/slack/teams');
+// var ref = firebase.database().ref('test/');
 
-var teamId  = 'T30298GCF';
+// ref.child('wow').on('value', function(snapshot) {
+//   console.log('Value of wow is now: '
+//     + JSON.stringify(snapshot.val()));
+// });
 
-ref.child(teamId).on('value', function(snapshot) {
-  console.log('Value of team '
-    + teamId
-    + ' is now: '
+// var teamId  = 'T30298GCF';
+
+var ref = firebase.database().ref('test/');
+
+ref.child('wow').on('value', function(snapshot) {
+  console.log('Value of wow is now: '
     + JSON.stringify(snapshot.val()));
 });

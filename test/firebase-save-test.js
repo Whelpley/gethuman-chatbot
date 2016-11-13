@@ -32,4 +32,4 @@ var sampleData = {
 };
 
 // save to firebase
-ref.set(sampleData);
+ref.child('wow').set(sampleData);

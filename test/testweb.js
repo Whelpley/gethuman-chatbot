@@ -22,8 +22,7 @@ var firebaseConfig = {
 console.log('Prepared config for Firebase: ' + JSON.stringify(firebaseConfig));
 firebase.initializeApp(firebaseConfig);
 // Get a reference to the database service
-// var ref = firebase.database().ref('gh/slack/teams');
-var ref = firebase.database().ref();
+var ref = firebase.database().ref('gh/slack/teams');
 
 const DONE = `
             <html>
@@ -61,15 +60,17 @@ function process(req, res) {
 
         request(opts, function (err, resp, body){
 
-            console.log('OAuth call made, retrieved token info:' + JSON.stringify(body));
+            // console.log('OAuth call made, retrieved token info:' + JSON.stringify(body));
+            console.log('OAuth call made, retrieved token info:' + body);
 
             // add hacked code to save to firebase database
             // need staging and production DB's
             // To save to DB - whole object
-            // (could pare it down later and save specific fields only)
-            if (body.ok) {
-                let teamId = body.team_id;
-                ref.child(teamId).set(body);
+            var parsedBody = JSON.parse(body);
+            if (parsedBody.ok) {
+                let teamId = parsedBody.team_id;
+                console.log('About to save this body to Firebase: ' +JSON.stringify(parsedBody));
+                ref.child(teamId).set(parsedBody);
 
                  // retrieve data to test it!
                 // ref.child(teamId).on('value', function(snapshot) {
