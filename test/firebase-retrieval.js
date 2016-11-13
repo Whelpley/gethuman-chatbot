@@ -23,11 +23,13 @@ firebase.initializeApp(firebaseConfig);
 //     + JSON.stringify(snapshot.val()));
 // });
 
-// var teamId  = 'T30298GCF';
+var teamId  = 'T30298GCF';
 
-var ref = firebase.database().ref('test/');
+var ref = firebase.database().ref('gh/slack/teams');
 
-ref.child('wow').on('value', function(snapshot) {
-  console.log('Value of wow is now: '
+ref.child(teamId).on('value', function(snapshot) {
+  console.log('Value of'
+    + teamId
+    + 'is now: '
     + JSON.stringify(snapshot.val()));
 });
