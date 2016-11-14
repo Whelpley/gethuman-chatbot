@@ -32,6 +32,7 @@ function translateRequestToGenericFormats(context) {
   }];
 
   // checking for valid token from Slack
+  // (export to function?)
   if (verifyToken !== incomingToken) {
     console.log('Slack access token mismatch! Ignoring incoming request.');
     console.log('Incoming Token: ' + incomingToken);
@@ -48,12 +49,8 @@ function translateRequestToGenericFormats(context) {
     genericRequests[0].reqType = 'help';
   }
 
-  return Q.when(findSendPath(context))
-    .then(function(sendPath){
-      genericRequests[0].context.sendPath = sendPath;
-      console.log('Slack bot has prepared these generic requests: ' + JSON.stringify(genericRequests));
-      return genericRequests;
-    })
+  console.log('Slack bot has prepared these generic requests: ' + JSON.stringify(genericRequests));
+  return genericRequests;
 }
 
 /**
@@ -125,9 +122,8 @@ function generateResponsePayloads(genericResponse) {
  */
  // **** Needs to acces specific webhook path for team that made request *****
 function formBasicPayload(genericResponse) {
-
-  let url = genericResponse.context.sendPath.webHookUrl;
-  let channel = genericResponse.context.sendPath.channelId;
+  let url = genericResponse.context.firebaseData.slack.teams[teamId].incoming_webhook.url;
+  let channel = genericResponse.context.firebaseData.slack.teams[teamId].channel_id;
   let payloads = [{
     uri: url,
     method: 'POST',
@@ -263,36 +259,6 @@ function convertArrayToBoldList(arrayOfStrings) {
   return otherCompaniesList;
 }
 
-/**
- * access database reference to retrieve incoming webhook url
- *
- * @param context
- * @return {uri} Promise
- */
-//
-function findSendPath(context) {
-  let sendPath = {
-    webHookUrl: '';
-    channelId: ''
-  };
-  let teamId = context.userRequest.team_id;
-  let database = context.database;
-
-  var state = {};
-
-  // this may have to be done in A-Sync
-  // is this how to do it?
-  return Q.when(database.on('value', function(snapshot) {
-    Object.assign(state, snapshot);
-  }))
-    .then(function(state) {
-      sendPath.webHookUrl = state.slack.teams[teamId].incoming_webhook.url;
-      sendPath.channelId = state.slack.teams[teamId].channel_id;
-      console.log('Send Path extracted from database reference: ' + JSON.stringify(sendPath));
-      return sendPath;
-    })
-}
-
 module.exports = {
   // verify: verify,
   translateRequestToGenericFormats: translateRequestToGenericFormats,
@@ -302,6 +268,5 @@ module.exports = {
   loadContactsAttachments: loadContactsAttachments,
   loadOtherCompaniesAttachments: loadOtherCompaniesAttachments,
   formatContacts: formatContacts,
-  convertArrayToBoldList: convertArrayToBoldList,
-  findSendPath: findSendPath
+  convertArrayToBoldList: convertArrayToBoldList
 };

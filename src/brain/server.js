@@ -17,7 +17,7 @@ let slack = require('../bots/slack.bot');
  * @param actionHandlers
  * @param config
  */
-function start(botHandlers, actionHandlers, config, database) {
+function start(botHandlers, actionHandlers, config, firebaseData) {
   let port = process.env.PORT || 3000;
   let app = express();
 
@@ -31,10 +31,9 @@ function start(botHandlers, actionHandlers, config, database) {
   });
 
   // all bots go to this route
-  app.post('/:bot', handleRequest(botHandlers, actionHandlers, config, database));
+  app.post('/:bot', handleRequest(botHandlers, actionHandlers, config, firebaseData));
   // app.all('/:bot', handleRequest(botHandlers, actionHandlers, config));
-
-  // look up Express - app.all - figure out how to process FBM verification
+    // look up Express - app.all - figure out how to process FBM verification
     // should be able to see if it's a Get or Post
 
   app.listen(port, function() {
@@ -58,11 +57,13 @@ function addMiddleware(app) {
  * @param botHandlers
  * @param actionHandlers
  * @param config
+ * @param config
+ * @param firebaseData
  * @returns {Function}
  */
-function handleRequest(botHandlers, actionHandlers, config, database) {
+function handleRequest(botHandlers, actionHandlers, config, firebaseData) {
   return function(req, res) {
-    let context = getContext(req, res, config);
+    let context = getContext(req, res, config, firebaseData);
     console.log('Context captured from request: ' + JSON.stringify(context));
 
     // send back a 200 response immediately
@@ -70,26 +71,23 @@ function handleRequest(botHandlers, actionHandlers, config, database) {
 
     let botHandler = factory.getBotHandler(botHandlers, context);
 
-    // let genericRequests = botHandler.translateRequestToGenericFormats(context);
+    let genericRequests = botHandler.translateRequestToGenericFormats(context);
 
-    Q.when(botHandler.translateRequestToGenericFormats(context))
-      .then(function(genericRequests) {
-        genericRequests.forEach((genericRequest) => {
-          let actionHandler = factory.getActionHandler(actionHandlers, genericRequest);
-          try {
-            actionHandler.processRequest(genericRequest)
-                .then(function(genericResponse) {
-                  // console.log("Generic Response returned in Server: " + genericResponse);
-                  let payloads = botHandler.generateResponsePayloads(genericResponse);
-                  // console.log("Payloads generated: " + JSON.stringify(payloads));
-                  return sendResponses(context, payloads);
-                })
-                .done();
-          } catch(error) {
-            console.log('Catching an error in Try/Catch in server: ' + error);
-          }
-        });
-      });
+    genericRequests.forEach((genericRequest) => {
+      let actionHandler = factory.getActionHandler(actionHandlers, genericRequest);
+      try {
+        actionHandler.processRequest(genericRequest)
+            .then(function(genericResponse) {
+              // console.log("Generic Response returned in Server: " + genericResponse);
+              let payloads = botHandler.generateResponsePayloads(genericResponse);
+              // console.log("Payloads generated: " + JSON.stringify(payloads));
+              return sendResponses(context, payloads);
+            })
+            .done();
+      } catch(error) {
+        console.log('Catching an error in Try/Catch in server: ' + error);
+      }
+    });
   };
 }
 
@@ -169,10 +167,10 @@ function sendRequestAsReply(payload) {
  * @param res
  * @param config
  */
-function getContext(req, res, config) {
+function getContext(req, res, config, firebaseData) {
   return {
     config: config,
-    database: database,
+    firebaseData: firebaseData,
     userRequest: req.body,
     isTest: !!req.params.isTest,
     bot: req.params.bot,

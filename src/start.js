@@ -19,14 +19,16 @@ let actionHandlers = [
 
 // start the chat server
 // not sure if this needs to be promise-chained
-Q.when(intializeDatabase())
-.then(function(database){
-  brainServer.start(botHandlers, actionHandlers, config, database);
+// should this be done in the Server file?
+Q.when(accessFirebaseData())
+.then(function(firebaseData) {
+  brainServer.start(botHandlers, actionHandlers, config, firebaseData);
 });
 
 // Contact Firebase and obstain a reference
-// where is this an async operation?
-function intializeDatabase() {
+function accessFirebaseData() {
+  var firebaseData = {};
+
   var firebaseApiKey = config.firebaseApiKey;
   var firebaseProjectName = config.firebaseProjectName;
   var firebaseSenderId = config.firebaseSenderId;
@@ -39,8 +41,13 @@ function intializeDatabase() {
       messagingSenderId: firebaseSenderId
   };
   console.log('Prepared config for Firebase: ' + JSON.stringify(firebaseConfig));
+
   firebase.initializeApp(firebaseConfig);
 
-  var database = firebase.database().ref('gh/');
-  return database;
+  firebase.database().ref('gh/').on('value', function(snapshot) {
+    Object.assign(firebaseData, snapshot);
+    console.log("Firebase data updated: " + JSON.stringify(firebaseData));
+  });
+
+  return firebaseData;
 }
