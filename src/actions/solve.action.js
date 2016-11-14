@@ -69,7 +69,8 @@ function queryCompany(genericRequest) {
   .then(function(posts) {
     company.posts = posts;
     queryResult.data = company;
-    console.log('Result of API queries: ' + JSON.stringify(queryResult).substring(0, 400));
+    // circular structure, can't print database
+    // console.log('Result of API queries: ' + JSON.stringify(queryResult).substring(0, 400));
     return queryResult;
   });
 }
