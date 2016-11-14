@@ -46,7 +46,7 @@ function accessFirebaseData() {
 
   firebase.database().ref('gh/').on('value', function(snapshot) {
     Object.assign(firebaseData, snapshot);
-    console.log("Firebase data updated: " + JSON.stringify(firebaseData));
+    console.log("Firebase data updated");
   });
 
   return firebaseData;
