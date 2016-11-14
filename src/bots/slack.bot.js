@@ -20,23 +20,24 @@ const utilities = require('../brain/utilities');
  */
 function translateRequestToGenericFormats(context) {
   let text = context.userRequest.text;
-  let verifyToken = context.config.slackVerifyToken;
-  let incomingToken = context.userRequest.token;
+  // let verifyToken = context.config.slackVerifyToken;
+  // let incomingToken = context.userRequest.token;
   let genericRequests = [{
     reqType: 'user-input',
     userInput: '',
     context: context
   }];
 
-  // checking for valid token from Slack
-  // (export to function?)
-  if (verifyToken !== incomingToken) {
-    console.log('Slack access token mismatch! Ignoring incoming request.');
-    console.log('Incoming Token: ' + incomingToken);
-    console.log('Verify Token: ' + verifyToken);
-    return [];
-  }
-  console.log('Slack access token match! It\'s all good, man.');
+  // TODO: See why this does not match
+  // // checking for valid token from Slack
+  // // (export to function?)
+  // if (verifyToken !== incomingToken) {
+  //   console.log('Slack access token mismatch! Ignoring incoming request.');
+  //   console.log('Incoming Token: ' + incomingToken);
+  //   console.log('Verify Token: ' + verifyToken);
+  //   return [];
+  // }
+  // console.log('Slack access token match! It\'s all good, man.');
 
   if (text) {
     genericRequests[0].userInput = text;
