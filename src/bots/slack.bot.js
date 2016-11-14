@@ -139,6 +139,8 @@ function formBasicPayload(genericResponse) {
       attachments: []
     }
   }];
+  console.log("Basic payloads formed: " + JSON.stringify(payloads));
+
   return payloads;
 };
 
