@@ -120,8 +120,13 @@ function generateResponsePayloads(genericResponse) {
  */
  // **** Needs to acces specific webhook path for team that made request *****
 function formBasicPayload(genericResponse) {
-  let url = genericResponse.context.firebaseData.slack.teams[teamId].incoming_webhook.url;
-  let channel = genericResponse.context.firebaseData.slack.teams[teamId].channel_id;
+  var firebaseData = genericResponse.context.firebaseData;
+  console.log("About to form basic payload with Firebase Data: " + firebaseData);
+  var parsedFBD = JSON.parse(firebaseData);
+  console.log("Parsed version of Firebase Data: " + parsedFBD);
+
+  let url = firebaseData.slack.teams[teamId].incoming_webhook.url;
+  let channel = firebaseData.slack.teams[teamId].channel_id;
   let payloads = [{
     uri: url,
     method: 'POST',
