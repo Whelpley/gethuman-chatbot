@@ -64,7 +64,7 @@ function addMiddleware(app) {
 function handleRequest(botHandlers, actionHandlers, config, firebaseData) {
   return function(req, res) {
     let context = getContext(req, res, config, firebaseData);
-    console.log('Context captured from request: ' + JSON.stringify(context));
+    // console.log('Context captured from request: ' + JSON.stringify(context));
 
     // send back a 200 response immediately
     context.finishResponse();
