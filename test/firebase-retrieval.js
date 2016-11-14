@@ -25,11 +25,11 @@ firebase.initializeApp(firebaseConfig);
 
 var teamId  = 'T30298GCF';
 
-var ref = firebase.database().ref('gh/slack/teams');
+var ref = firebase.database().ref('gh/');
 
-ref.child(teamId).on('value', function(snapshot) {
-  console.log('Value of'
+ref.child('slack/teams/').child(teamId).on('value', function(snapshot) {
+  console.log('Value of '
     + teamId
-    + 'is now: '
+    + ' is now: '
     + JSON.stringify(snapshot.val()));
 });

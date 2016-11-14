@@ -1,10 +1,9 @@
 'use strict';
 
-let firebase = require('firebase');
-
 const utilities = require('../brain/utilities');
-const config = require('../config/config');
 const request = require('request');
+var Q = require('q');
+
 
 /**
  * Verifies that request actually coming from Slack
@@ -24,14 +23,13 @@ const request = require('request');
  */
 function translateRequestToGenericFormats(context) {
   let text = context.userRequest.text;
-  let verifyToken = config.slackVerifyToken;
+  let verifyToken = context.config.slackVerifyToken;
   let incomingToken = context.userRequest.token;
   let genericRequests = [{
     reqType: 'user-input',
     userInput: '',
     context: context
   }];
-
 
   // checking for valid token from Slack
   if (verifyToken !== incomingToken) {
@@ -42,11 +40,6 @@ function translateRequestToGenericFormats(context) {
   }
   console.log('Slack access token match! It\'s all good, man.');
 
-  // extract ____ from context.userRequest.token
-  // draw down Firebase DB
-  // extract Incoming Webhook URL matching the token in DB
-  // save to Context.webHookUrl
-
   if (text) {
     genericRequests[0].userInput = text;
   }
@@ -54,8 +47,13 @@ function translateRequestToGenericFormats(context) {
     console.log('Detected user input of \"help\"');
     genericRequests[0].reqType = 'help';
   }
-  console.log('Slack bot has prepared this generic request: ' + JSON.stringify(genericRequests));
-  return genericRequests;
+
+  return Q.when(findSendPath(context))
+    .then(function(sendPath){
+      genericRequests[0].context.sendPath = sendPath;
+      console.log('Slack bot has prepared these generic requests: ' + JSON.stringify(genericRequests));
+      return genericRequests;
+    })
 }
 
 /**
@@ -128,17 +126,10 @@ function generateResponsePayloads(genericResponse) {
  // **** Needs to acces specific webhook path for team that made request *****
 function formBasicPayload(genericResponse) {
 
-  // let path = config.slackAccessPath;
-  // let uri = 'https://hooks.slack.com/services/' + path;
-
-  // How to determine if we're accessing home account, or
-  // How to determine dev vs production environment?
-
-  let uri = accessUri(genericResponse);
-
-  let channel = genericResponse.context.userRequest.channel_id;
+  let url = genericResponse.context.sendPath.webHookUrl;
+  let channel = genericResponse.context.sendPath.channelId;
   let payloads = [{
-    uri: uri,
+    uri: url,
     method: 'POST',
     json: {
       channel: channel,
@@ -272,46 +263,34 @@ function convertArrayToBoldList(arrayOfStrings) {
   return otherCompaniesList;
 }
 
-// calls to Firebase to retrieve incoming webhook url
-function accessUri(genericResponse) {
-  let uri = '';
-  let teamId = genericResponse.context.userRequest.team_id;
-
-  // Initialize Firebase
-  // this should occur at server-level, passing down the data object
-  var firebaseApiKey = config.firebaseApiKey;
-  var firebaseProjectName = config.firebaseProjectName;
-  var firebaseSenderId = config.firebaseSenderId;
-  var firebaseConfig = {
-    apiKey: firebaseApiKey,
-    authDomain:  firebaseProjectName + '.firebaseapp.com',
-    databaseURL: 'https://' + firebaseProjectName + '.firebaseio.com',
-    storageBucket: firebaseProjectName + '.appspot.com',
-    messagingSenderId: firebaseSenderId
+/**
+ * access database reference to retrieve incoming webhook url
+ *
+ * @param context
+ * @return {uri} Promise
+ */
+//
+function findSendPath(context) {
+  let sendPath = {
+    webHookUrl: '';
+    channelId: ''
   };
-  firebase.initializeApp(firebaseConfig);
-
-
-  // read Firebase data
-  // do we need to Promise this?
-  // firebase.database().ref('teams/' + teamId).once('value').then(function(snapshot) {
-  //   uri = snapshot.val().incoming_webhook.url;
-  // });
-
+  let teamId = context.userRequest.team_id;
+  let database = context.database;
 
   var state = {};
 
-  firebase.database().ref('gh').on('value', function(snapshot) {
+  // this may have to be done in A-Sync
+  // is this how to do it?
+  return Q.when(database.on('value', function(snapshot) {
     Object.assign(state, snapshot);
-  });
-
-  // state.slack.teams[teamIdHere]
-
-
-
-
-  console.log('Uri extracted from Firebase DB: ' + uri);
-  return uri;
+  }))
+    .then(function(state) {
+      sendPath.webHookUrl = state.slack.teams[teamId].incoming_webhook.url;
+      sendPath.channelId = state.slack.teams[teamId].channel_id;
+      console.log('Send Path extracted from database reference: ' + JSON.stringify(sendPath));
+      return sendPath;
+    })
 }
 
 module.exports = {
@@ -323,6 +302,6 @@ module.exports = {
   loadContactsAttachments: loadContactsAttachments,
   loadOtherCompaniesAttachments: loadOtherCompaniesAttachments,
   formatContacts: formatContacts,
-  convertArrayToBoldList: convertArrayToBoldList
-  // oauthResponse: oauthResponse
+  convertArrayToBoldList: convertArrayToBoldList,
+  findSendPath: findSendPath
 };

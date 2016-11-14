@@ -17,7 +17,7 @@ let slack = require('../bots/slack.bot');
  * @param actionHandlers
  * @param config
  */
-function start(botHandlers, actionHandlers, config) {
+function start(botHandlers, actionHandlers, config, database) {
   let port = process.env.PORT || 3000;
   let app = express();
 
@@ -25,28 +25,17 @@ function start(botHandlers, actionHandlers, config) {
 
   addMiddleware(app);
 
-  establishDataSync();
-
-  // remove these
-  // addTestRoutes(app);
-
   // FB Messenger verification route
   app.get('/messenger', function(req, res) {
       messenger.verify(req, res);
   });
 
-  // FB Messenger verification route
-  app.get('/oauth', function(req, res) {
-      slack.oauthResponse(req, res);
-  });
-
   // all bots go to this route
-  app.post('/:bot', handleRequest(botHandlers, actionHandlers, config));
+  app.post('/:bot', handleRequest(botHandlers, actionHandlers, config, database));
   // app.all('/:bot', handleRequest(botHandlers, actionHandlers, config));
 
   // look up Express - app.all - figure out how to process FBM verification
     // should be able to see if it's a Get or Post
-
 
   app.listen(port, function() {
     console.log('API listening for bots on port ' + port);
@@ -64,24 +53,6 @@ function addMiddleware(app) {
 }
 
 /**
- * Add test routes (remove in the future)
- *
- * @param app The express server
- */
-// function addTestRoutes(app) {
-
-//   // test route
-//   app.get('/', function (req, res) {
-//     res.status(200).send('Hello world!')
-//   });
-
-//   // Slack hellobot - keep for testing
-//   app.post('/hello', require('../deprecated/hellobot.js'));
-//   // Slack dicebot - keep for testing
-//   app.post('/roll', require('../deprecated/dicebot.js'));
-// }
-
-/**
  * Handle requests from the bots to our api
  *
  * @param botHandlers
@@ -89,7 +60,7 @@ function addMiddleware(app) {
  * @param config
  * @returns {Function}
  */
-function handleRequest(botHandlers, actionHandlers, config) {
+function handleRequest(botHandlers, actionHandlers, config, database) {
   return function(req, res) {
     let context = getContext(req, res, config);
     console.log('Context captured from request: ' + JSON.stringify(context));
@@ -99,23 +70,26 @@ function handleRequest(botHandlers, actionHandlers, config) {
 
     let botHandler = factory.getBotHandler(botHandlers, context);
 
-    let genericRequests = botHandler.translateRequestToGenericFormats(context);
+    // let genericRequests = botHandler.translateRequestToGenericFormats(context);
 
-    genericRequests.forEach((genericRequest) => {
-      let actionHandler = factory.getActionHandler(actionHandlers, genericRequest);
-      try {
-        actionHandler.processRequest(genericRequest)
-            .then(function(genericResponse) {
-              // console.log("Generic Response returned in Server: " + genericResponse);
-              let payloads = botHandler.generateResponsePayloads(genericResponse);
-              // console.log("Payloads generated: " + JSON.stringify(payloads));
-              return sendResponses(context, payloads);
-            })
-            .done();
-      } catch(error) {
-        console.log('Catching an error in Try/Catch in server: ' + error);
-      }
-    });
+    Q.when(botHandler.translateRequestToGenericFormats(context))
+      .then(function(genericRequests) {
+        genericRequests.forEach((genericRequest) => {
+          let actionHandler = factory.getActionHandler(actionHandlers, genericRequest);
+          try {
+            actionHandler.processRequest(genericRequest)
+                .then(function(genericResponse) {
+                  // console.log("Generic Response returned in Server: " + genericResponse);
+                  let payloads = botHandler.generateResponsePayloads(genericResponse);
+                  // console.log("Payloads generated: " + JSON.stringify(payloads));
+                  return sendResponses(context, payloads);
+                })
+                .done();
+          } catch(error) {
+            console.log('Catching an error in Try/Catch in server: ' + error);
+          }
+        });
+      });
   };
 }
 
@@ -198,6 +172,7 @@ function sendRequestAsReply(payload) {
 function getContext(req, res, config) {
   return {
     config: config,
+    database: database,
     userRequest: req.body,
     isTest: !!req.params.isTest,
     bot: req.params.bot,
@@ -213,7 +188,6 @@ function getContext(req, res, config) {
 module.exports = {
   start: start,
   addMiddleware: addMiddleware,
-  // addTestRoutes: addTestRoutes,
   handleRequest: handleRequest,
   sendResponses: sendResponses,
   sendResponseToPlatform: sendResponseToPlatform,
