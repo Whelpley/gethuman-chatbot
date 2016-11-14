@@ -8,7 +8,7 @@ let Q = require('q');
 let utilities = require('./utilities');
 let factory = require('./factory');
 let messenger = require('../bots/messenger.bot');
-let slack = require('../bots/slack.bot');
+// let slack = require('../bots/slack.bot');
 
 /**
  * Main entry point for the bot server

@@ -1,9 +1,6 @@
 'use strict';
 
 const utilities = require('../brain/utilities');
-const request = require('request');
-var Q = require('q');
-
 
 /**
  * Verifies that request actually coming from Slack
