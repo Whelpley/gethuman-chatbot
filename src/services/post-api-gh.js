@@ -36,7 +36,7 @@ function findByCompany(company) {
         try {
           jsonBody = JSON.parse(body);
         } catch (ex) {
-          console.log('findByText parsing error for match ' + match + ' with body ' + body);
+          console.log('findByCompany parsing error for match with body: ' + body);
         }
       // console.log('Not-an-error after searching Posts of a Company!');
       deferred.resolve(jsonBody);
