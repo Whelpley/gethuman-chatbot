@@ -12,46 +12,62 @@ function getArrayOfStrings() {
   return ['check', 'it', 'out'];
 }
 
-// // returns a pared-down Company object, with Posts and Other Companies attached
-// function getGenericResponse(context) {
-//   return {
-//     userInput: context.userInput,
-//     data: {
-//       name: '',
-//       contactMethods: {
-//         phone: '',
-//         email: '',
-//         twitter: '',
-//         web: '',
-//         chat: '',
-//         facebook: ''
-//       },
-//       posts: [{
-//         title: post.title || '',
-//         urlId: post.urlId || '',
-//       },
-//       {
-//         title: post.title || '',
-//         urlId: post.urlId || '',
-//       },
-//       {
-//         title: post.title || '',
-//         urlId: post.urlId || '',
-//       },
-//       {
-//         title: post.title || '',
-//         urlId: post.urlId || '',
-//       },
-//       {
-//         title: post.title || '',
-//         urlId: post.urlId || '',
-//       }],
-//       otherCompanies: ['', '', '', '', '']
-//     },
-//     type: '',
-//     context: context
-//   }
-// }
+// returns a generic response object
+// always the same, no matter what the input is
+function getGenericResponse(context) {
+  return {
+    "userInput":"verizon",
+    "data":{
+      "name":"Verizon",
+      "contactMethods":{
+        "phone":"888-553-1555",
+        "email":"",
+        "twitter":"@VerizonSupport",
+        "web":"http://www22.verizon.com/content/contactus/",
+        "chat":"http://www22.verizon.com/content/contactus/",
+        "facebook":""
+      },
+      "posts":[
+        {
+          "title":"How do I switch number to new phone?",
+          "urlId":"A4u"
+        },
+        {
+          "title":"How do I file an insurance claim?",
+          "urlId":"7uV"
+        },
+        {
+          "title":"How do I replace my phone?",
+          "urlId":"7e1"
+        },
+        {
+          "title":"I want to download backup assistant for Verizon",
+          "urlId":"690"
+        },
+        {
+          "title":"How do I start with Verizon Prepaid?",
+          "urlId":"Li_"
+        }
+      ],
+      "otherCompanies":[
+        "Verizon Business",
+        "Verizon DSL",
+        "Verizon Smart Rewards",
+        "Verizon Wireless Prepay",
+        "Verizon Web Support",
+        "Verizon Wireless Financial",
+        "Verizon Billing",
+        "Verizon Repair",
+        "Verizon Wireless",
+        "Verizon FiOS",
+        "Verizon Land Line",
+        "Verizon Center for Customers with Disabilities"
+      ]
+    },
+    "type":"standard",
+    "context": context
+  }
+}
 
 module.exports = {
   getArrayOfStrings: getArrayOfStrings

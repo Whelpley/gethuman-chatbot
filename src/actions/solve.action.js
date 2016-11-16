@@ -3,7 +3,6 @@
 var Q = require('q');
 var companySearch = require('../services/company-api-gh');
 var postSearch = require('../services/post-api-gh');
-// var utilities = require('../brain/utilities');
 
 /**
  * Processes generic request into Company object, with attached data
@@ -16,7 +15,7 @@ function processRequest(genericRequest) {
   /*
   Insert conditional: if Env variables not accessible (ie someone else has copied & is using this code), queryCompany should return a mock object
   */
-  // unsure if this is how to check if environment vars not there...
+  // (unsure if this is how to check if environment vars not there...)
   if (!genericRequest.context.config || !genericRequest.context.config.environment) {
     var context = genericRequest.context;
     var mockGenericResponse = mockData.getGenericResponse(context);
