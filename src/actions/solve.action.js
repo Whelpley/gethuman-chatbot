@@ -40,6 +40,10 @@ function queryCompany(genericRequest) {
   var requestType = genericRequest.reqType;
   console.log('Incoming request type from genericRequest, in queryCompany: ' + requestType);
 
+  /*
+  Insert conditional: if Env variables not accessible (ie someone else has copied & is using this code), queryCompany should return a mock object
+  */
+
   if (!userInput) {
     queryResult.type = 'no-input';
     return Q.when(queryResult);

@@ -1,6 +1,6 @@
 # GetHuman Chatbots
 
-A Node.js interface for accessing GetHuman's customer service contacts database through chat platforms. Currently supporting Slack and Facebook Messenger
+A Node.js interface for accessing GetHuman's customer service contacts database through chat platforms. Currently supporting Slack and Facebook Messenger.
 
 *(Readme currently incomplete)*
 
@@ -28,6 +28,8 @@ Please note that the GetHuman API is a protected resource, so the existing code 
 
 ### Prerequisites
 
+(what is needed?)
+
 What things you need to install the software and how to install them
 
 ```
@@ -38,7 +40,7 @@ Give examples
 
 A step by step series of examples that tell you have to get a development env running
 
-Say what the step will be
+Node packages
 
 ```
 Give the example
@@ -70,12 +72,10 @@ Explain how to run the automated tests for this system
 
 ### Break down into end to end tests
 
-(none currently exist)
-
-Explain what these tests test and why
+Testing framework is set up, but tests are currently incomplete.
 
 ```
-Give an example
+npm run test
 ```
 
 ### And coding style tests
@@ -92,9 +92,9 @@ Add additional notes about how to deploy this on a live system
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [Node.js](https://www.npmjs.com/) - The web framework used
+* [??](https://maven.apache.org/) - Dependency Management
+* [???](https://rometools.github.io/rome/) - Used to generate RSS Feeds
 
 ## Contributing
 
