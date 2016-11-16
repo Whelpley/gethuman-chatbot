@@ -2,9 +2,29 @@
 
 A Node.js interface for accessing GetHuman's customer service contacts database through chat platforms. Currently supporting Slack and Facebook Messenger
 
-## Getting Started
+*(Readme currently incomplete)*
+
+## Using The Existing Bots
+
+Without any software installation or coding, you may interact with these bots in their deployed versions:
+
+### Slack
+
+To install the GetHuman Bot on your own Slack Team:
+
+* Visit the installation landing page at _______ .
+* Click on the "Add to Slack" Button, and choose the Slack channel you wish.
+* After successful installation, invoke the slash command by typing "/gethuman", followed by the name of the company you want information for.
+
+### Facebook Messenger
+
+Bot currently awaiting approval from Facebook, will post instructions when ready.
+
+## Getting Started with Your Own Bot
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+
+Please note that the GetHuman API is a protected resource, so the existing code will only draw down dummy data. This code is meant as a framework for utlizing the API calls of your choosing.
 
 ### Prerequisites
 
@@ -32,11 +52,25 @@ until finished
 
 End with an example of getting some data out of the system or using it for a little demo
 
+### Creating a New Facebook Messenger Bot
+
+Follow [this guide](https://github.com/jw84/messenger-bot-tutorial) to create your own bot.
+
+(To Do: Pare down guide to relevant bits, copy here)
+
+### Creating a New Slack Bot
+
+Follow [this guide](https://github.com/mccreath/isitup-for-slack/blob/master/docs/TUTORIAL.md) to create your own bot.
+
+(To Do: Pare down guide to relevant bits, copy here)
+
 ## Running the tests
 
 Explain how to run the automated tests for this system
 
 ### Break down into end to end tests
+
+(none currently exist)
 
 Explain what these tests test and why
 
@@ -78,7 +112,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 * **Michael Whelpley** - *Initial work* - [whelpley](https://github.com/whelpley)
 
-* **Michael Whelpley** - *Advisor/Editor* - [jeffwhelpley](https://github.com/jeffwhelpley)
+* **Jeff Whelpley** - *Advisor/Editor* - [jeffwhelpley](https://github.com/jeffwhelpley)
 
 (delete reference to contributors?)
 
