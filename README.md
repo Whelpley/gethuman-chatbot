@@ -13,7 +13,7 @@ Without any software installation or coding, you may interact with these bots in
 To install the GetHuman Bot on your own Slack Team:
 
 * Visit the installation landing page at _______ .
-* Click on the "Add to Slack" Button, and choose the Slack channel you wish.
+* Click on the "Add to Slack" Button, and choose the Slack channel you wish the bot to live in.
 * After successful installation, invoke the slash command by typing "/gethuman", followed by the name of the company you want information for.
 
 ### Facebook Messenger
@@ -26,8 +26,9 @@ These instructions will get you a copy of the project up and running on your loc
 
 Please note that the GetHuman API is a protected resource, so the existing code will only draw down dummy data. This code is meant as a framework for utlizing the API calls of your choosing.
 
+Also note that the Slack and Messenger bots will not work from a locally-deployed server. You must deploy to a secure server (see below) to connect to these platforms.
 
-### Installing
+### Installing Locally
 
 (Need to edit this to relevant steps - need to re-word?)
 
@@ -49,6 +50,20 @@ Steps to ready this code for your own use:
     npm start
     ```
 
+### Local Usage
+
+???
+
+### Deployment
+
+The code must first be deployed to a local server in order to interact with the platforms.
+
+1. Get a server running at provider of your choice
+2. Change the Webhooks in ____ to _____
+3. Change the following URL's in code
+4. Deploy code
+4. ???
+
 
 ### Creating a New Facebook Messenger Bot
 
@@ -56,9 +71,12 @@ To create your own bot, follow [this guide](https://github.com/jw84/messenger-bo
 
 ### Creating a New Slack Bot
 
-Follow [this guide](https://github.com/mccreath/isitup-for-slack/blob/master/docs/TUTORIAL.md) to create your own bot.
+Follow [Slack's documentation](https://api.slack.com/slash-commands) to create your own custom command, with the following notes:
 
-(To Do: Pare down guide to relevant bits, copy here)
+1. /Command name match - in Slack, in Code
+2. Webhook URL match
+3. ???
+
 
 ## Running the tests
 
@@ -69,10 +87,6 @@ To run the unit tests, run from the home directory:
 ```
 npm test
 ```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
 
 ## Built With
 
