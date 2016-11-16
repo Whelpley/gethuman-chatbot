@@ -12,8 +12,18 @@ var postSearch = require('../services/post-api-gh');
  * @return {genericResponse} Promise
  */
 function processRequest(genericRequest) {
-  // // send back a 200 response immediately
-  // utilities.preResponse(genericRequest.context);
+
+  /*
+  Insert conditional: if Env variables not accessible (ie someone else has copied & is using this code), queryCompany should return a mock object
+  */
+  // unsure if this is how to check if environment vars not there...
+  if (!genericRequest.context.config || !genericRequest.context.config.environment) {
+    var context = genericRequest.context;
+    var mockGenericResponse = mockData.getGenericResponse(context);
+    console.log('Returning mock company object: ' + JSON.stringify(mockGenericResponse));
+    return Q.when(mockGenericResponse);
+  }
+
   // get data from Gethuman, then process into generic response
   return Q.when(queryCompany(genericRequest))
     .then((queryResult) => {
@@ -39,10 +49,6 @@ function queryCompany(genericRequest) {
   var userInput = genericRequest.userInput;
   var requestType = genericRequest.reqType;
   console.log('Incoming request type from genericRequest, in queryCompany: ' + requestType);
-
-  /*
-  Insert conditional: if Env variables not accessible (ie someone else has copied & is using this code), queryCompany should return a mock object
-  */
 
   if (!userInput) {
     queryResult.type = 'no-input';
@@ -73,7 +79,6 @@ function queryCompany(genericRequest) {
   .then(function(posts) {
     company.posts = posts;
     queryResult.data = company;
-    // circular structure, can't print database
     // console.log('Result of API queries: ' + JSON.stringify(queryResult).substring(0, 400));
     return queryResult;
   });
