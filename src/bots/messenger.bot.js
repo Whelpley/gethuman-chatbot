@@ -103,30 +103,40 @@ function generateResponsePayloads(genericResponse) {
     var posts = genericResponse.data.posts || [];
     var contactMethods = genericResponse.data.contactMethods || [];
     var otherCompanies = genericResponse.data.otherCompanies || [];
+    var elements = [];
 
     // load Payload cards for Posts
     if (posts && posts.length) {
       var postElements = loadPostElements(posts, name);
-      payloads.push(makePayload(token, url, sender, postElements));
+      elements.concat(postElements);
+      // payloads.push(makePayload(token, url, sender, postElements));
     }
+
     // load Contact Methods card to Payload
     if (contactMethods) {
       var contactMethodsElements = loadContactMethodsElements(contactMethods, name);
       // only push in if at least one button exists:
       if (contactMethodsElements[0].subtitle || contactMethodsElements[0].buttons.length) {
-          payloads.push(makePayload(token, url, sender, contactMethodsElements));
+          elements.concat(contactMethodsElements);
+          // payloads.push(makePayload(token, url, sender, contactMethodsElements));
       };
     }
+
     // make Other Companies Card
     if (otherCompanies && otherCompanies.length) {
       var otherCompaniesElements = loadOtherCompaniesElements(otherCompanies, name);
-      payloads.push(makePayload(token, url, sender, otherCompaniesElements));
+      elements.concat(otherCompaniesElements);
+      // payloads.push(makePayload(token, url, sender, otherCompaniesElements));
     }
+
     // if no other payload loaded up, send a Nothing-Found reponse
     if (!payloads.length) {
-      let elements = loadNothingFoundElements();
-      payloads.push(makePayload(token, url, sender, elements));
+      let nothingFoundElements = loadNothingFoundElements();
+      elements.concat(nothingFoundElements);
+      // payloads.push(makePayload(token, url, sender, elements));
     }
+
+    payloads.push(makePayload(token, url, sender, elements));
   }
   console.log('Payloads prepared by Messenger bot.');
   return payloads;
