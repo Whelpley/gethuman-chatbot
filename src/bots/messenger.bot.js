@@ -109,7 +109,6 @@ function generateResponsePayloads(genericResponse) {
     if (posts && posts.length) {
       var postElements = loadPostElements(posts, name);
       elements = elements.concat(postElements);
-      // payloads.push(makePayload(token, url, sender, postElements));
     }
 
     // load Contact Methods card to Payload
@@ -118,7 +117,6 @@ function generateResponsePayloads(genericResponse) {
       // only push in if at least one button exists:
       if (contactMethodsElements[0].subtitle || contactMethodsElements[0].buttons.length) {
           elements = elements.concat(contactMethodsElements);
-          // payloads.push(makePayload(token, url, sender, contactMethodsElements));
       };
     }
 
@@ -126,14 +124,12 @@ function generateResponsePayloads(genericResponse) {
     if (otherCompanies && otherCompanies.length) {
       var otherCompaniesElements = loadOtherCompaniesElements(otherCompanies, name);
       elements = elements.concat(otherCompaniesElements);
-      // payloads.push(makePayload(token, url, sender, otherCompaniesElements));
     }
 
     // if no other payload loaded up, send a Nothing-Found reponse
-    if (!payloads.length) {
+    if (!elements.length) {
       let nothingFoundElements = loadNothingFoundElements();
       elements = elements.concat(nothingFoundElements);
-      // payloads.push(makePayload(token, url, sender, elements));
     }
 
     payloads.push(makePayload(token, url, sender, elements));
