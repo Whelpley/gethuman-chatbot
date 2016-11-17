@@ -14,7 +14,7 @@ let botHandlers = {
 // each type of action has its own handler
 let actionHandlers = [
   require('./actions/solve.action'),
-  require('./actions/confirm.action')
+  require('./actions/ignore.action')
 ];
 
 // start the chat server

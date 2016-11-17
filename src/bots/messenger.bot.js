@@ -39,20 +39,29 @@ function translateRequestToGenericFormats(context) {
     if (event.message && event.message.text) {
       console.log("User input Post detected from FB");
       var userInput = event.message.text;
-      singleGenericRequest.userInput = userInput;
-      singleGenericRequest.reqType = (userInput === 'help') ? 'help' : 'user-input';
-      genericRequests.push(singleGenericRequest);
+
+      if ((userInput === 'help') || (userInput === 'bot help')) {
+        singleGenericRequest.userInput = userInput;
+        singleGenericRequest.reqType = 'help';
+      }
+      else if (userInput.slice(0,4) === 'bot ') {
+        singleGenericRequest.userInput = userInput.slice(4,-1);
+        singleGenericRequest.reqType = 'user-input';
+      }
+      else {
+        singleGenericRequest.userInput = userInput;
+        singleGenericRequest.reqType = 'ignore';
+      };
     } else if (event.postback) {
       console.log("Postback Post detected from FB");
     // Later: determine if this is triggering a new search, or displaying more Companies - right now just triggers new search
       singleGenericRequest.userInput = event.postback.payload;
       singleGenericRequest.reqType = 'postback';
-      genericRequests.push(singleGenericRequest);
     } else {
       console.log("Non-text-input Post detected from FB");
-      singleGenericRequest.reqType = 'confirmation';
-      genericRequests.push(singleGenericRequest);
-    }
+      singleGenericRequest.reqType = 'ignore';
+    };
+    genericRequests.push(singleGenericRequest);
   }
   return genericRequests;
 }
@@ -83,6 +92,7 @@ function generateResponsePayloads(genericResponse) {
     let elements = loadNothingFoundElements(userInput);
     payloads.push(makePayload(token, url, sender, elements));
   } else if (type === 'help') {
+    // this should be solved by a separate Action Handler
     console.log('Help flag detected in genericResponse.');
     let elements = loadHelpElements();
     payloads.push(makePayload(token, url, sender, elements));
