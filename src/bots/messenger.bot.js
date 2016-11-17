@@ -157,7 +157,7 @@ function loadNothingFoundElements() {
  */
 function loadHelpElements() {
   return [{
-      "title": "It sounds like you need help",
+      "title": "It sounds like you need help.",
       "subtitle": 'Just tell me the name of the company you need to reach.',
       "buttons": [{
           "type": "web_url",
@@ -226,17 +226,19 @@ function loadContactMethodsElements(contactMethods, name) {
 function loadOtherCompaniesElements(otherCompanies, name) {
   var otherCompaniesElements = [{
       "title": "Were you trying to reach " + name + "?",
-      "subtitle": "Perhaps you would like to ask me about these companies:",
+      "subtitle": "Perhaps you would like to ask me about this company:",
       "buttons": []
   }];
-  var otherCompaniesSubSet = otherCompanies.slice(0, 3);
-  otherCompaniesSubSet.forEach(function(altCompany) {
-      otherCompaniesElements[0].buttons.push({
-          "type": "postback",
-          "title": altCompany,
-          // payload must be string, max 100 chars
-          "payload": altCompany
-      });
+  var altCompany = otherCompanies[0];
+  otherCompaniesElements[0].buttons.push({
+      "type": "postback",
+      "title": altCompany,
+      "payload": altCompany
+  });
+  otherCompaniesElements[0].buttons.push({
+      "type": "web_url",
+      "url": "https://gethuman.com/",
+      "title": "Something else"
   });
   return otherCompaniesElements;
 };
@@ -251,7 +253,7 @@ function formatContactButtons(contactMethods) {
     var buttons = [];
     var counter = 1;
     for(var key in contactMethods) {
-        if ((counter <= 3) && (contactMethods[key])) {
+        if ((counter <= 2) && (contactMethods[key])) {
             var button = {};
             switch(key) {
                 case 'twitter':
