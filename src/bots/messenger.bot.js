@@ -89,7 +89,7 @@ function generateResponsePayloads(genericResponse) {
   // Case: nothing returned from Companies search / junk input
   if (type === 'nothing-found') {
     console.log('No Company Results flag detected in genericResponse.');
-    let elements = loadNothingFoundElements(userInput);
+    let elements = loadNothingFoundElements();
     payloads.push(makePayload(token, url, sender, elements));
   } else if (type === 'help') {
     // this should be solved by a separate Action Handler
@@ -124,7 +124,7 @@ function generateResponsePayloads(genericResponse) {
     }
     // if no other payload loaded up, send a Nothing-Found reponse
     if (!payloads.length) {
-      let elements = loadNothingFoundElements(userInput);
+      let elements = loadNothingFoundElements();
       payloads.push(makePayload(token, url, sender, elements));
     }
   }
@@ -138,10 +138,10 @@ function generateResponsePayloads(genericResponse) {
  * @param userInput
  * @return {elements}
  */
-function loadNothingFoundElements(userInput) {
+function loadNothingFoundElements() {
   return [{
-      "title": "Nothing found!",
-      "subtitle": 'I didn\'t understand \"' + userInput + '\". Please tell me the company you are looking for',
+      "title": "I didn\’t understand.",
+      "subtitle": 'Please start by telling me the company name. (ex: \'bot verizon\')',
       "buttons": [{
           "type": "web_url",
           "url": "https://gethuman.com",
@@ -177,15 +177,15 @@ function loadHelpElements() {
 function loadPostElements(posts, name) {
   var postElements = [];
   for (let i = 0; i < posts.length; i++) {
-    let text = posts[i].title || '';
+    let title = posts[i].title || '';
     let urlId = posts[i].urlId || '';
     let singleElement = {
-        "title": "Top issues for " + name + ", #" + (i+1) + " of " + posts.length + ":",
-        "subtitle": text,
+        "title": title,
+        "subtitle": '#' + (i+1) + ' most common ' + name + ' issue',
         "buttons": [{
             "type": "web_url",
             "url": "https://gethuman.com?company=" + encodeURIComponent(name),
-            "title": "Solve for Me - $20"
+            "title": "Fix this issue for me"
         },
         {
             "type": "web_url",
