@@ -72,7 +72,7 @@ function generateResponsePayloads(genericResponse) {
   // Case: no user input
   if (type === 'no-input') {
     console.log('No user input flag detected in genericResponse.');
-    payloads[0].json.text = 'Tell me the company you would like to contact.';
+    payloads[0].json.text = 'What company are you having an issue with?';
     return payloads;
   } else if (type === 'help') {
     // Case: Help user
@@ -101,7 +101,7 @@ function generateResponsePayloads(genericResponse) {
       console.log('Company Contact Info pushed into Payloads');
     }
     if (otherCompanies && otherCompanies.length) {
-      payloads = loadOtherCompaniesAttachments(payloads, otherCompanies, name);
+      payloads = loadOtherCompaniesAttachments(payloads, otherCompanies);
       console.log('Other Companies info pushed into Payloads');
     }
     if (!payloads[0].json.attachments.length) {
@@ -165,11 +165,11 @@ function loadPostsAttachments(payloads, posts, name) {
           "color": color,
           "fields": [
               {
-                  "value": "<https://gethuman.com?company=" + encodeURIComponent(name) + "|Solve for me - $20>",
+                  "value": "<https://gethuman.com?company=" + encodeURIComponent(name) + "|Fix this issue for me>",
                   "short": true
               },
               {
-                  "value": "<https://answers.gethuman.co/_" + encodeURIComponent(urlId) + "|More info ...>",
+                  "value": "<https://answers.gethuman.co/_" + encodeURIComponent(urlId) + "|More...>",
                   "short": true
               }
           ]
@@ -205,13 +205,13 @@ function loadContactsAttachments(payloads, topContacts, name) {
  * @param name
  * @return {payloads}
  */
-function loadOtherCompaniesAttachments(payloads, otherCompanies, name) {
-  let otherCompaniesList = convertArrayToBoldList(otherCompanies);
+function loadOtherCompaniesAttachments(payloads, otherCompanies) {
+  let otherCompaniesList = otherCompanies.slice(0,3).join(', ');
   payloads[0].json.attachments.push({
       fallback: 'Other solutions',
-      title: 'Were you talking about ' + name + '?',
+      title: 'Or maybe you meant:',
       color: '#BBBBBB',
-      text: 'Or maybe you meant ' + otherCompaniesList + '?',
+      text: otherCompaniesList,
       mrkdwn_in: ["text"]
   });
   return payloads;
@@ -253,17 +253,6 @@ function formatContacts(contactMethods) {
   return topContacts;
 }
 
-/**
- * convert an array of strings to one string separated by commas, with each entry *bolded*
- *
- * @param arrayOfStrings
- * @return {otherCompaniesList}
- */
-function convertArrayToBoldList(arrayOfStrings) {
-  let otherCompaniesList = '*';
-  otherCompaniesList = otherCompaniesList + arrayOfStrings.join('*, *') + "*";
-  return otherCompaniesList;
-}
 
 module.exports = {
   // verify: verify,
@@ -273,6 +262,5 @@ module.exports = {
   loadPostsAttachments: loadPostsAttachments,
   loadContactsAttachments: loadContactsAttachments,
   loadOtherCompaniesAttachments: loadOtherCompaniesAttachments,
-  formatContacts: formatContacts,
-  convertArrayToBoldList: convertArrayToBoldList
+  formatContacts: formatContacts
 };
