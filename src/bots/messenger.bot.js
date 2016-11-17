@@ -83,7 +83,7 @@ function generateResponsePayloads(genericResponse) {
   var token = config.facebookAccessToken;
   var url = 'https://graph.facebook.com/v2.6/me/messages';
   var sender = genericResponse.context.userRequest.entry[0].messaging[0].sender.id;
-  var userInput = genericResponse.userInput;
+  // var userInput = genericResponse.userInput;
   var type = genericResponse.type;
 
   // Case: nothing returned from Companies search / junk input
