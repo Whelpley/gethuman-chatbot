@@ -164,7 +164,7 @@ function loadNothingFoundElements() {
 function loadHelpElements() {
   return [{
       "title": "It sounds like you need help.",
-      "subtitle": 'Just tell me the name of the company you need to reach.',
+      "subtitle": 'Start by saying \'bot\', followed by the company name. (ex: \'bot verizon\')',
       "buttons": [{
           "type": "web_url",
           "url": "https://gethuman.com",
