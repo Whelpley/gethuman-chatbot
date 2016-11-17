@@ -210,7 +210,7 @@ function loadContactsAttachments(payloads, topContacts, name) {
  * @return {payloads}
  */
 function loadOtherCompaniesAttachments(payloads, otherCompanies) {
-  let otherCompaniesList = otherCompanies.slice(0,3).join(', ');
+  let otherCompaniesList = otherCompanies.slice(0, 3).join(', ');
   payloads[0].json.attachments.push({
       fallback: 'Other solutions',
       title: 'Or maybe you meant:',
