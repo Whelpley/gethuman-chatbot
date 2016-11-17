@@ -108,7 +108,7 @@ function generateResponsePayloads(genericResponse) {
     // load Payload cards for Posts
     if (posts && posts.length) {
       var postElements = loadPostElements(posts, name);
-      elements.concat(postElements);
+      elements = elements.concat(postElements);
       // payloads.push(makePayload(token, url, sender, postElements));
     }
 
@@ -117,7 +117,7 @@ function generateResponsePayloads(genericResponse) {
       var contactMethodsElements = loadContactMethodsElements(contactMethods, name);
       // only push in if at least one button exists:
       if (contactMethodsElements[0].subtitle || contactMethodsElements[0].buttons.length) {
-          elements.concat(contactMethodsElements);
+          elements = elements.concat(contactMethodsElements);
           // payloads.push(makePayload(token, url, sender, contactMethodsElements));
       };
     }
@@ -125,20 +125,20 @@ function generateResponsePayloads(genericResponse) {
     // make Other Companies Card
     if (otherCompanies && otherCompanies.length) {
       var otherCompaniesElements = loadOtherCompaniesElements(otherCompanies, name);
-      elements.concat(otherCompaniesElements);
+      elements = elements.concat(otherCompaniesElements);
       // payloads.push(makePayload(token, url, sender, otherCompaniesElements));
     }
 
     // if no other payload loaded up, send a Nothing-Found reponse
     if (!payloads.length) {
       let nothingFoundElements = loadNothingFoundElements();
-      elements.concat(nothingFoundElements);
+      elements = elements.concat(nothingFoundElements);
       // payloads.push(makePayload(token, url, sender, elements));
     }
 
     payloads.push(makePayload(token, url, sender, elements));
   }
-  console.log('Payloads prepared by Messenger bot.');
+  console.log('Payloads prepared by Messenger bot: ' + JSON.stringify(payloads));
   return payloads;
 }
 
