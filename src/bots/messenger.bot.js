@@ -45,7 +45,7 @@ function translateRequestToGenericFormats(context) {
         singleGenericRequest.reqType = 'help';
       }
       else if (userInput.slice(0, 4) === 'bot ') {
-        singleGenericRequest.userInput = userInput.slice(4, -1);
+        singleGenericRequest.userInput = userInput.slice(4);
         singleGenericRequest.reqType = 'user-input';
       }
       else {
