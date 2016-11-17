@@ -188,9 +188,13 @@ function loadPostsAttachments(payloads, posts, name) {
  * @return {payloads}
  */
 function loadContactsAttachments(payloads, topContacts, name) {
+  let title = 'Best way to contact ' + name;
+  if (topContacts.includes('|')) {
+    title = 'Best ways to contact ' + name;
+  };
   payloads[0].json.attachments.push({
       fallback: 'Contact info for ' + name,
-      title: 'Best ways to contact ' + name,
+      title: title,
       color: '#999999',
       text: topContacts,
   });
@@ -218,15 +222,16 @@ function loadOtherCompaniesAttachments(payloads, otherCompanies) {
 }
 
 /**
- * Takes contact methods, forms a structured string of <= 3 items for display
+ * Takes contact methods, forms a structured string of <= 2 items for display
  *
  * @param contactMethods
+ * @return topContacts
  */
 function formatContacts(contactMethods) {
   let topContacts = '';
   let counter = 1;
   for(let key in contactMethods) {
-    if (contactMethods.hasOwnProperty(key) && (counter <= 3) && (contactMethods[key])) {
+    if (contactMethods.hasOwnProperty(key) && (counter <= 2) && (contactMethods[key])) {
       switch(key) {
           case 'twitter':
               topContacts = topContacts + '<https://twitter.com/' + contactMethods[key] +'|Twitter> | ';
