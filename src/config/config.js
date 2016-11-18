@@ -1,6 +1,8 @@
 'use strict';
 
 let envName = process.env.NODE_ENV || 'dev';
+// let envName = process.env.NODE_ENV || 'production';
+
 let envVars = process.env;
 
 try {

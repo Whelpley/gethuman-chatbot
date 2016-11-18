@@ -68,7 +68,6 @@ function process(req, res) {
             console.log('OAuth call made, retrieved token info:' + body);
 
             // add hacked code to save to firebase database
-            // need staging and production DB's
             // To save to DB - whole object
             var parsedBody = JSON.parse(body);
             if (parsedBody.ok) {
