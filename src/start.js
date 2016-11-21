@@ -16,7 +16,7 @@ let actionHandlers = [
   require('./actions/ignore.action')
 ];
 
-store.initialize()
+Q.when(store.initialize())
 .then(function(state) {
   server.start(botHandlers, actionHandlers, config, state);
 });
