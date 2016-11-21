@@ -82,7 +82,7 @@ function handleRequest(botHandlers, actionHandlers, config, firebaseData) {
       try {
         actionHandler.processRequest(genericRequest)
             .then(function(genericResponse) {
-              console.log("Generic Response returned in Server: " + JSON.stringify(genericResponse));
+              // console.log("Generic Response returned in Server: " + JSON.stringify(genericResponse));
               let payloads = botHandler.generateResponsePayloads(genericResponse);
               // console.log("Payloads generated: " + JSON.stringify(payloads));
               return sendResponses(context, payloads);

@@ -11,15 +11,11 @@ let botHandlers = {
   messenger: require('./bots/messenger.bot')
 };
 
-// each type of action has its own handler
 let actionHandlers = [
   require('./actions/solve.action'),
   require('./actions/ignore.action')
 ];
 
-// start the chat server
-// not sure if this needs to be promise-chained
-// should this be done in the Server file?
 Q.when(accessFirebaseData())
 .then(function(firebaseData) {
   brainServer.start(botHandlers, actionHandlers, config, firebaseData);
