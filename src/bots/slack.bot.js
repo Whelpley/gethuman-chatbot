@@ -3,34 +3,26 @@
 const utilities = require('../brain/utilities');
 
 /**
- * Verifies that request actually coming from Slack
- * not currently in use
- *
- * @param req
- * @param res
- */
-// function verify() {
-//   console.log("Nothing to see here.")
-// }
-
-/**
  * Makes array of generic request objects from incoming context
  *
  * @param context
  */
 function translateRequestToGenericFormats(context) {
   let text = context.userRequest.text;
-  // let verifyToken = context.config.slackVerifyToken;
-  // let incomingToken = context.userRequest.token;
+
   let genericRequests = [{
     reqType: 'user-input',
     userInput: '',
     context: context
   }];
 
-  // TODO: See why this does not match
+  // // TODO: See why this does not match
   // // checking for valid token from Slack
   // // (export to function?)
+  //
+  // let verifyToken = context.config.slackVerifyToken;
+  // let incomingToken = context.userRequest.token;
+  //
   // if (verifyToken !== incomingToken) {
   //   console.log('Slack access token mismatch! Ignoring incoming request.');
   //   console.log('Incoming Token: ' + incomingToken);
@@ -118,13 +110,10 @@ function generateResponsePayloads(genericResponse) {
  * @param genericResponse
  * @return {payloads}
  */
- // **** Needs to acces specific webhook path for team that made request *****
 function formBasicPayload(genericResponse) {
   var teamId = genericResponse.context.userRequest.team_id;
   var firebaseData = genericResponse.context.firebaseData;
   console.log("About to form basic payload with Firebase Data: " + JSON.stringify(firebaseData));
-  // var parsedFBD = JSON.parse(firebaseData);
-  // console.log("Parsed version of Firebase Data: " + parsedFBD);
 
   let url = firebaseData.slack.teams[teamId].incoming_webhook.url;
   let channel = firebaseData.slack.teams[teamId].channel_id;
@@ -260,7 +249,6 @@ function formatContacts(contactMethods) {
 
 
 module.exports = {
-  // verify: verify,
   translateRequestToGenericFormats: translateRequestToGenericFormats,
   generateResponsePayloads: generateResponsePayloads,
   formBasicPayload: formBasicPayload,

@@ -12,9 +12,10 @@ Without any software installation or coding, you may interact with these bots in
 
 To install the GetHuman Bot on your own Slack Team:
 
+* Join Slack, and either create a new Team, or have admin access to an existing team.
 * Visit the installation landing page at _______ .
 * Click on the "Add to Slack" Button, and choose the Slack channel you wish the bot to live in.
-* After successful installation, invoke the slash command by typing "/gethuman", followed by the name of the company you want information for.
+* After successful installation, invoke the slash command by typing "/gethuman", followed by the name of the company you want information for, in the channel you have installed the bot.
 
 ### Facebook Messenger
 
@@ -50,43 +51,38 @@ Steps to ready this code for your own use:
     npm start
     ```
 
-### Local Usage
+### Local Usage Guide
 
 ???
-
-### Deployment
-
-The code must first be deployed to a local server in order to interact with the platforms.
-
-1. Get a server running at provider of your choice
-2. Change the Webhooks in ____ to _____
-3. Change the following URL's in code
-4. Deploy code
-4. ???
 
 
 ### Creating a New Facebook Messenger Bot
 
-To create your own bot, follow [this guide](https://github.com/jw84/messenger-bot-tutorial) , using the steps in the "Setup the Facebook App" section, replacing the New Page callback url with the URL of your deployed server, followed by _____
+To create your own bot, follow [this guide](https://github.com/jw84/messenger-bot-tutorial) , using the steps in the "Setup the Facebook App" section, with the following changes:
+
+1. Replace the New Page callback url with the URL of your deployed server, followed by "/messenger"
+2. Match the Verify Token to the "FACEBOOK_VERIFY_TOKEN" environment variable that you have set in your code. (Note that the "env.js" file is not included with this code for security reasons; you will need to add it yourself. Keep it secret - don't show it publicly!)
+3. Save the Page Access Token to the "FB_PAGE_ACCESS_TOKEN" environment variable.
+3.
 
 ### Creating a New Slack Bot
 
-Follow [Slack's documentation](https://api.slack.com/slash-commands) to create your own custom command, with the following notes:
+Please refer to [Slack's documentation](https://api.slack.com/slash-commands) for details on creating your own custom command. When you're ready, visit the [Custom Integrations page](https://api.slack.com/custom-integrations) and follow the process, with the following notes:
 
-1. /Command name match - in Slack, in Code
-2. Webhook URL match
-3. ???
+1. When selecting Integration Settings, choose the URL of your deployed server, followed by "/slack"
+2. Create your Incoming Webhook to receive messages from the bot; in the setting page for that webhook, find the Webhook URL field. Set this to your
+3. Set your environment variables in a secure location. (How???) . Do not upload unsecured tokens to a public code repository.
 
 
 ## Running the tests
-
-(Testing framework is set up, but tests are currently incomplete.)
 
 To run the unit tests, run from the home directory:
 
 ```
 npm test
 ```
+
+(Testing framework is set up, but tests are currently incomplete.)
 
 ## Built With
 
@@ -95,7 +91,7 @@ npm test
 
 ## Authors
 
-* **Michael Whelpley** - *Initial work* - [whelpley](https://github.com/whelpley)
+* **Michael Whelpley** - *Developer* - [whelpley](https://github.com/whelpley)
 
 * **Jeff Whelpley** - *Advisor/Editor* - [jeffwhelpley](https://github.com/jeffwhelpley)
 
@@ -107,6 +103,16 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
+* Hat tip to anyone who's code was used
+* Thanks to the team at GetHuman
+
+## Feedback
+
+If anything is unclear in this Readme & the code, or if you have any other questions, drop me an email: whelpley@gmail.com
+
+## Want to learn more about making bots?
+
+Here are some resources you can use as a jumping-off point:
 
 * Hat tip to anyone who's code was used
 * Inspiration

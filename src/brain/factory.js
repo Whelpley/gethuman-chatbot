@@ -17,7 +17,7 @@ function getActionHandler(actionHandlers, genericRequest) {
     console.log('Choosing Solve action handler');
     return actionHandlers && actionHandlers.length && actionHandlers[0];
   } else if (reqType === 'ignore') {
-    console.log('Choosing Confirm action handler');
+    console.log('Choosing Ignore action handler');
     return actionHandlers && actionHandlers.length && actionHandlers[1];
   }
 }
