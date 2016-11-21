@@ -11,7 +11,7 @@ function initialize() {
   var firebaseSenderId = config.firebaseSenderId;
   var firebaseConfig = {
       apiKey: firebaseApiKey,
-      authDomain:  firebaseProjectName + '.firebaseapp.com',
+      authDomain: firebaseProjectName + '.firebaseapp.com',
       databaseURL: 'https://' + firebaseProjectName + '.firebaseio.com',
       storageBucket: firebaseProjectName + '.appspot.com',
       messagingSenderId: firebaseSenderId
@@ -30,4 +30,4 @@ function initialize() {
 
 module.exports = {
   initialize: initialize
-}
+};
