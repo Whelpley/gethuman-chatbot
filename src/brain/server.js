@@ -71,6 +71,8 @@ function handleRequest(botHandlers, actionHandlers, config, firebaseData) {
     // send back a 200 response immediately
     context.finishResponse();
 
+// main code to talk about in presentation
+
     let botHandler = factory.getBotHandler(botHandlers, context);
 
     let genericRequests = botHandler.translateRequestToGenericFormats(context);
@@ -107,7 +109,7 @@ function sendResponses(context, payloads) {
     return null;
   }
 
-  // force payloads into an array (is this necessary?)
+  // force payloads into an array
   payloads = [].concat(payloads || []);
   let calls = payloads.map(function(payload) {
     return function() {
