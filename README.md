@@ -63,15 +63,18 @@ To create your own bot, follow [this guide](https://github.com/jw84/messenger-bo
 1. Replace the New Page callback url with the URL of your deployed server, followed by "/messenger"
 2. Match the Verify Token to the "FACEBOOK_VERIFY_TOKEN" environment variable that you have set in your code. (Note that the "env.js" file is not included with this code for security reasons; you will need to add it yourself. Keep it secret - don't show it publicly!)
 3. Save the Page Access Token to the "FB_PAGE_ACCESS_TOKEN" environment variable.
-3.
 
-### Creating a New Slack Bot
+### Creating a New Slack App
 
-Please refer to [Slack's documentation](https://api.slack.com/slash-commands) for details on creating your own custom command. When you're ready, visit the [Custom Integrations page](https://api.slack.com/custom-integrations) and follow the process, with the following notes:
+Please refer to Slack's documentation on:
+[Creating a new app](https://api.slack.com/slack-apps) and [Creating a slash command](https://api.slack.com/slash-commands)
 
-1. When selecting Integration Settings, choose the URL of your deployed server, followed by "/slack"
-2. Create your Incoming Webhook to receive messages from the bot; in the setting page for that webhook, find the Webhook URL field. Set this to your
-3. Set your environment variables in a secure location. (How???) . Do not upload unsecured tokens to a public code repository.
+When you're ready, follow the process they have outlined, with the following notes:
+
+1. When selecting Integration Settings, choose the URL of your deployed server, followed by "/slack".
+2. You will need landing page to install the [Add to Slack](https://api.slack.com/docs/slack-button) button, as part of the Oauth process.
+3. On the same landing page, you will need to save a new team's Incoming Webhook path to a database. Refer to "test/testweb.js" for an example of how this works. We have used Firebase to save the external data; if you choose this as well, you will need to save the appropriate environment variables (FIREBASE_API_KEY, FIREBASE_PROJECT_NAME, FIREBASE_SENDER_ID) from your own instance. (Note that the "env.js" file is not included with this code for security reasons; you will need to add it yourself. Keep it secret - don't show it publicly!)
+4. *Optional*: If you wish to verify that the message is coming from slack, go to your App's settings page, click on the "Basic Information" tab, find the Verification Token and set the "SLACK_ACCESS_TOKEN" environment variable to that token. Then un-comment lines ____ in "src/bots/slack.bot.js" to enable a verification step that cancels any response that does not match the token.
 
 
 ## Running the tests
@@ -109,6 +112,8 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 ## Feedback
 
 If anything is unclear in this Readme & the code, or if you have any other questions, drop me an email: whelpley@gmail.com
+
+(Should I ask for pull requests?)
 
 ## Want to learn more about making bots?
 

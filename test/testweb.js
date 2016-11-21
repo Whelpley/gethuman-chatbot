@@ -64,24 +64,13 @@ function process(req, res) {
 
         request(opts, function (err, resp, body){
 
-            // console.log('OAuth call made, retrieved token info:' + JSON.stringify(body));
             console.log('OAuth call made, retrieved token info:' + body);
 
-            // add hacked code to save to firebase database
-            // To save to DB - whole object
             var parsedBody = JSON.parse(body);
             if (parsedBody.ok) {
                 let teamId = parsedBody.team_id;
                 console.log('About to save this body to Firebase: ' +JSON.stringify(parsedBody));
                 ref.child(teamId).set(parsedBody);
-
-                 // retrieve data to test it!
-                // ref.child(teamId).on('value', function(snapshot) {
-                //   console.log('Value of team '
-                //     + teamId
-                //     + 'now updated to: '
-                //     + JSON.stringify(snapshot.val()));
-                // });
             }
 
             res.send(DONE);

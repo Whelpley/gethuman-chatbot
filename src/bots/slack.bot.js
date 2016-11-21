@@ -16,10 +16,10 @@ function translateRequestToGenericFormats(context) {
     context: context
   }];
 
-  // // TODO: See why this does not match
-  // // checking for valid token from Slack
-  // // (export to function?)
-  //
+  /* Verify that incoming message is coming from Slack
+  *    by checking for valid token
+  *   Only needed before submitting for App Directory approval
+  */
   // let verifyToken = context.config.slackVerifyToken;
   // let incomingToken = context.userRequest.token;
   //
@@ -29,7 +29,7 @@ function translateRequestToGenericFormats(context) {
   //   console.log('Verify Token: ' + verifyToken);
   //   return [];
   // }
-  // console.log('Slack access token match! It\'s all good, man.');
+  // console.log('Slack access token match! Request will be processed.');
 
   if (text) {
     genericRequests[0].userInput = text;
