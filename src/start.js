@@ -33,7 +33,6 @@ function accessFirebaseData() {
       authDomain:  firebaseProjectName + '.firebaseapp.com',
       databaseURL: 'https://' + firebaseProjectName + '.firebaseio.com',
       storageBucket: firebaseProjectName + '.appspot.com',
-      // not sure if this part is needed
       messagingSenderId: firebaseSenderId
   };
   console.log('Prepared config for Firebase: ' + JSON.stringify(firebaseConfig));
