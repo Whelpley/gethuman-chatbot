@@ -17,7 +17,7 @@ let messenger = require('../bots/messenger.bot');
  * @param actionHandlers
  * @param config
  */
-function start(botHandlers, actionHandlers, config, firebaseData) {
+function start(botHandlers, actionHandlers, config, state) {
   let port = process.env.PORT || 3000;
   let app = express();
 
@@ -31,7 +31,7 @@ function start(botHandlers, actionHandlers, config, firebaseData) {
   });
 
   // all bots go to this route
-  app.post('/:bot', handleRequest(botHandlers, actionHandlers, config, firebaseData));
+  app.post('/:bot', handleRequest(botHandlers, actionHandlers, config, state));
   // app.all('/:bot', handleRequest(botHandlers, actionHandlers, config));
     // look up Express - app.all - figure out how to process FBM verification
     // should be able to see if it's a Get or Post
@@ -58,14 +58,14 @@ function addMiddleware(app) {
  * @param actionHandlers
  * @param config
  * @param config
- * @param firebaseData
+ * @param state
  * @returns {Function}
  */
-function handleRequest(botHandlers, actionHandlers, config, firebaseData) {
+function handleRequest(botHandlers, actionHandlers, config, state) {
   return function(req, res) {
     console.log('Incoming request: ' + JSON.stringify(req.body));
 
-    let context = getContext(req, res, config, firebaseData);
+    let context = getContext(req, res, config, state);
     // console.log('Context captured from request: ' + JSON.stringify(context));
 
     // send back a 200 response immediately
@@ -171,10 +171,10 @@ function sendRequestAsReply(payload) {
  * @param res
  * @param config
  */
-function getContext(req, res, config, firebaseData) {
+function getContext(req, res, config, state) {
   return {
     config: config,
-    firebaseData: firebaseData,
+    state: state,
     userRequest: req.body,
     isTest: !!req.params.isTest,
     bot: req.params.bot,

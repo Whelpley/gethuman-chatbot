@@ -112,11 +112,11 @@ function generateResponsePayloads(genericResponse) {
  */
 function formBasicPayload(genericResponse) {
   var teamId = genericResponse.context.userRequest.team_id;
-  var firebaseData = genericResponse.context.firebaseData;
-  console.log("About to form basic payload with Firebase Data: " + JSON.stringify(firebaseData));
+  var state = genericResponse.context.state;
+  console.log("About to form basic payload with State: " + JSON.stringify(state));
 
-  let url = firebaseData.slack.teams[teamId].incoming_webhook.url;
-  let channel = firebaseData.slack.teams[teamId].channel_id;
+  let url = state.slack.teams[teamId].incoming_webhook.url;
+  let channel = state.slack.teams[teamId].channel_id;
   let payloads = [{
     uri: url,
     method: 'POST',
