@@ -191,7 +191,7 @@ function loadHelpElements() {
 function loadGreetingElements() {
   return [{
       "title": 'Hello!',
-      "subtitle": 'One of our representatives will be with you shortly',
+      "subtitle": 'One of our representatives will be with you shortly.',
       "buttons": [{
           "type": 'web_url',
           "url": 'https://gethuman.com',
