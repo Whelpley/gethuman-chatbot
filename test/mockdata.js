@@ -69,6 +69,14 @@ function getGenericResponse(context) {
   }
 }
 
+function getNormalizedRequestIgnore() {
+  return {
+    reqType: 'ignore',
+    userInput: 'blah',
+    context: {}
+  };
+}
 module.exports = {
-  getArrayOfStrings: getArrayOfStrings
+  getArrayOfStrings: getArrayOfStrings,
+  getNormalizedRequestIgnore: getNormalizedRequestIgnore
 }

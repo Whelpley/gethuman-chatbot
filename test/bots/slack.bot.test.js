@@ -1,12 +1,11 @@
 // Checklist:
-  // translateRequestToGenericFormats: dummy
+  // normalizeRequests: dummy
   // generateResponsePayloads: dummy
   // formBasicPayload: dummy
   // loadPostsAttachments: dummy
   // loadContactsAttachments: dummy
   // loadOtherCompaniesAttachments: dummy
   // formatContacts: dummy
-  // convertArrayToBoldList: dummy
 
 'use strict'
 
@@ -20,7 +19,7 @@ var slackBot = require('../../src/bots/slack.bot');
 
 describe('Bots: Slack', function() {
 
-  describe('translateRequestToGenericFormats(context)', function() {
+  describe('normalizeRequests(context)', function() {
     it('dummy test', function() {
       assert.equal(2, 2);
     })
@@ -59,14 +58,6 @@ describe('Bots: Slack', function() {
   describe('formatContacts(contactMethods)', function() {
     it('dummy test', function() {
       assert.equal(2, 2);
-    })
-  });
-
-  describe('convertArrayToBoldList(arrayOfStrings)', function() {
-    it('happy path', function() {
-      let arrayOfStrings = mockData.getArrayOfStrings();
-      let convertedArray = slackBot.convertArrayToBoldList(arrayOfStrings)
-      assert.equal(convertedArray, '*check*, *it*, *out*');
     })
   });
 

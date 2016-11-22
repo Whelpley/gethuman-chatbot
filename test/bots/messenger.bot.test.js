@@ -1,6 +1,6 @@
 // Checklist:
 //   verify: dummy (unsure if testable)
-//   translateRequestToGenericFormats: dummy
+//   normalizeRequests: dummy
 //   generateResponsePayloads: dummy
 //   formatContactButtons: dummy
 //   makePayload: dummy
@@ -27,7 +27,7 @@ describe('Bots: Messenger', function() {
     })
   });
 
-  describe('translateRequestToGenericFormats(context)', function() {
+  describe('normalizeRequests(context)', function() {
     it('dummy test', function() {
       assert.equal(2, 2);
     })
