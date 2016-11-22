@@ -200,7 +200,7 @@ function loadGreetingElements() {
   },
   {
       "title": 'Want to talk to our bot?',
-      "subtitle": 'Start with \'bot\', followed by the company name. (ex: \'bot verizon\')'
+      "subtitle": 'Start with \'bot\', followed by the company name. (ex: \'bot verizon\')',
       "buttons": [{
           "type": 'web_url',
           "url": 'https://gethuman.com',
