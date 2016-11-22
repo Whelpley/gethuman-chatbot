@@ -225,7 +225,7 @@ function loadPostElements(posts, name) {
         "subtitle": '#' + (i+1) + ' most common ' + name + ' issue',
         "buttons": [{
             "type": "web_url",
-            "url": "https://gethuman.com?company=" + encodeURIComponent(name),
+            "url": "https://problems.gethuman.com/" + encodeURIComponent(name),
             "title": "Fix this issue for me"
         },
         {

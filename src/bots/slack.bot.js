@@ -165,7 +165,7 @@ function loadPostsAttachments(payloads, posts, name) {
           "color": color,
           "fields": [
               {
-                  "value": "<https://gethuman.com?company=" + encodeURIComponent(name) + "|Fix this issue for me>",
+                  "value": "<https://problems.gethuman.com/" + encodeURIComponent(name) + "|Fix this issue for me>",
                   "short": true
               },
               {
