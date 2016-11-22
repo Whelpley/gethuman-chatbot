@@ -87,6 +87,14 @@ npm test
 
 (Testing framework is set up, but range of tests is currently limited.)
 
+## Want to learn more about making bots?
+
+Here are some resources you can use as a jumping-off point:
+
+* [A beginner's guide to chatbots](https://chatbotsmagazine.com/the-complete-beginner-s-guide-to-chatbots-8280b7b906ca#.tlcxjxon9)
+* [A listing of available tools](https://chatbotsmagazine.com/the-tools-every-bot-creator-must-know-c0e9dd685094#.2dpmk29m3)
+* [A dive into UX for bots](https://medium.muz.li/the-ultimate-guide-to-chatbots-why-theyre-disrupting-ux-and-best-practices-for-building-345e2150b682#.iod8agnqx)
+
 ## Built With
 
 * [Node.js](https://www.npmjs.com/) - Development platform
@@ -114,11 +122,4 @@ I'm always seeking to improve. If anything is unclear in the code or this guide,
 
 ( I'm also seeking full-time developer work in the Bay area; if you like what you see here, find me on [LinkedIn](https://www.linkedin.com/in/whelpley) )
 
-## Want to learn more about making bots?
 
-Here are some resources you can use as a jumping-off point:
-
-* Hat tip to anyone who's code was used
-* Inspiration
-* etc
-* Thanks to the team at GetHuman
