@@ -119,7 +119,10 @@ function structureGenericResponse(queryResult) {
 
   // return early if no data or no input or Help
   // refactor this
-  if ((type === 'no-input') || (type === 'nothing-found') || (type === 'help')) {
+  if ((type === 'no-input')
+    || (type === 'nothing-found')
+    || (type === 'help')
+    || (type === 'greeting')) {
     return genericResponse;
   };
 
