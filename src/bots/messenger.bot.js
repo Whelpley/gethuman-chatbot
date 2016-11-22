@@ -190,16 +190,22 @@ function loadHelpElements() {
  */
 function loadGreetingElements() {
   return [{
-      "title": "Hi there! One of our reps will be with you shortly.",
+      "title": 'Hello!',
+      "subtitle": 'One of our representatives will be with you shortly',
       "buttons": [{
-          "type": "web_url",
-          "url": "https://gethuman.com",
-          "title": "Go to GetHuman"
-      }],
+          "type": 'web_url',
+          "url": 'https://gethuman.com',
+          "title": 'Go to GetHuman'
+      }]
   },
   {
-      "title": "Want to talk to our bot?",
+      "title": 'Want to talk to our bot?',
       "subtitle": 'Start with \'bot\', followed by the company name. (ex: \'bot verizon\')'
+      "buttons": [{
+          "type": 'web_url',
+          "url": 'https://gethuman.com',
+          "title": 'Go to GetHuman'
+      }]
   }];
 }
 
