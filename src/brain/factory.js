@@ -13,7 +13,7 @@ function getActionHandler(actionHandlers, genericRequest) {
   // to refactor: separate Action Handlers by reqType
   let reqType = genericRequest.reqType;
 
-  if ((reqType === 'user-input') || (reqType === 'postback') || (reqType === 'help')) {
+  if ((reqType === 'user-input') || (reqType === 'postback') || (reqType === 'help') || (reqType === 'greeting')) {
     console.log('Choosing Solve action handler');
     return actionHandlers && actionHandlers.length && actionHandlers[0];
   } else if (reqType === 'ignore') {

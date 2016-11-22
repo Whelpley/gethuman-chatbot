@@ -44,6 +44,10 @@ function translateRequestToGenericFormats(context) {
         singleGenericRequest.userInput = userInput;
         singleGenericRequest.reqType = 'help';
       }
+      else if ((userInput === 'hi') || (userInput === 'hello')) {
+        singleGenericRequest.userInput = userInput;
+        singleGenericRequest.reqType = 'greeting';
+      }
       else if (userInput.slice(0, 4) === 'bot ') {
         singleGenericRequest.userInput = userInput.slice(4);
         singleGenericRequest.reqType = 'user-input';
@@ -91,13 +95,19 @@ function generateResponsePayloads(genericResponse) {
     console.log('No Company Results flag detected in genericResponse.');
     let elements = loadNothingFoundElements();
     payloads.push(makePayload(token, url, sender, elements));
-  } else if (type === 'help') {
-    // this should be solved by a separate Action Handler
+  }
+  else if (type === 'help') {
     console.log('Help flag detected in genericResponse.');
     let elements = loadHelpElements();
     payloads.push(makePayload(token, url, sender, elements));
-  } else if (type === 'standard') {
-    // Can we refactor this to compress into another function?
+  }
+  else if (type === 'greeting') {
+    console.log('Greeting flag detected in genericResponse.');
+    let elements = loadGreetingElements();
+    payloads.push(makePayload(token, url, sender, elements));
+  }
+  else if (type === 'standard') {
+    // Refactor this to compress into another function
     console.log('Standard type flag detected in genericResponse.');
     var name = genericResponse.data.name || '';
     var posts = genericResponse.data.posts || [];
@@ -165,6 +175,23 @@ function loadHelpElements() {
   return [{
       "title": "It sounds like you need help.",
       "subtitle": 'Start by saying \'bot\', followed by the company name. (ex: \'bot verizon\')',
+      "buttons": [{
+          "type": "web_url",
+          "url": "https://gethuman.com",
+          "title": "Go to GetHuman"
+      }],
+  }];
+}
+
+/**
+ * Loads response elements for Case: Help input
+ *
+ * @return {elements}
+ */
+function loadHelpElements() {
+  return [{
+      "title": "Hi there! One of our reps will be with you shortly.",
+      "subtitle": 'If you want to talk with our bot, start by saying \'bot\', followed by the company name. (ex: \'bot verizon\')',
       "buttons": [{
           "type": "web_url",
           "url": "https://gethuman.com",

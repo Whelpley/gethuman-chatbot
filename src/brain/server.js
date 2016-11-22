@@ -8,7 +8,6 @@ let Q = require('q');
 let utilities = require('./utilities');
 let factory = require('./factory');
 let messenger = require('../bots/messenger.bot');
-// let slack = require('../bots/slack.bot');
 
 /**
  * Main entry point for the bot server
@@ -32,9 +31,9 @@ function start(botHandlers, actionHandlers, config, state) {
 
   // all bots go to this route
   app.post('/:bot', handleRequest(botHandlers, actionHandlers, config, state));
+
+  // To-Do: route all requests through:
   // app.all('/:bot', handleRequest(botHandlers, actionHandlers, config));
-    // look up Express - app.all - figure out how to process FBM verification
-    // should be able to see if it's a Get or Post
 
   app.listen(port, function() {
     console.log('API listening for bots on port ' + port);
@@ -70,8 +69,6 @@ function handleRequest(botHandlers, actionHandlers, config, state) {
 
     // send back a 200 response immediately
     context.finishResponse();
-
-// main code to talk about in presentation
 
     let botHandler = factory.getBotHandler(botHandlers, context);
 
@@ -111,6 +108,7 @@ function sendResponses(context, payloads) {
 
   // force payloads into an array
   payloads = [].concat(payloads || []);
+
   let calls = payloads.map(function(payload) {
     return function() {
       return sendResponseToPlatform(context, payload)
@@ -119,6 +117,7 @@ function sendResponses(context, payloads) {
           });
     };
   });
+
   return utilities.chainPromises(calls);
 }
 
