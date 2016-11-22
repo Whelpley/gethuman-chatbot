@@ -38,7 +38,6 @@ function findByCompany(company) {
         } catch (ex) {
           console.log('findByCompany parsing error for match with body: ' + body);
         }
-      // console.log('Not-an-error after searching Posts of a Company!');
       deferred.resolve(jsonBody);
     }
   });

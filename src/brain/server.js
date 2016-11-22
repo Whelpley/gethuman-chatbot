@@ -5,7 +5,6 @@ let bodyParser = require('body-parser');
 let request = require('request');
 let Q = require('q');
 
-let utilities = require('./utilities');
 let factory = require('./factory');
 let messenger = require('../bots/messenger.bot');
 
@@ -118,7 +117,22 @@ function sendResponses(context, payloads) {
     };
   });
 
-  return utilities.chainPromises(calls);
+  return chainPromises(calls);
+}
+
+
+/**
+ * Chain promises together in a sequence
+ *
+ * @param calls Array of functions that return a promise
+ * @param val Value to pass among chain
+ * @return Promise from the end of the chain
+ */
+function chainPromises(calls, val) {
+    if (!calls || !calls.length) {
+        return Q.when(val);
+    }
+    return calls.reduce(Q.when, Q.when(val));
 }
 
 /**

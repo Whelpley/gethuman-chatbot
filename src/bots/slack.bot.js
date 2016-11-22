@@ -1,6 +1,18 @@
 'use strict';
 
-const utilities = require('../brain/utilities');
+const colors = [
+    '#6E9E43',
+    '#7BAB50',
+    '#88B85D',
+    '#94C469',
+    '#A1D176',
+    '#AEDE83',
+    '#BBEB90',
+    '#C8F89D',
+    '#D4FFA9',
+    '#E1FFB6',
+    '#EEFFC3'
+];
 
 /**
  * Makes array of generic request objects from incoming context
@@ -142,7 +154,6 @@ function formBasicPayload(genericResponse) {
  * @return {payloads}
  */
 function loadPostsAttachments(payloads, posts, name) {
-  let colors = utilities.colors;
   payloads[0].json.text = 'Top issues for ' + name + ':';
   for (let i = 0; i < posts.length; i++) {
       let title = posts[i].title || '';
