@@ -188,7 +188,7 @@ function loadHelpElements() {
  *
  * @return {elements}
  */
-function loadHelpElements() {
+function loadGreetingElements() {
   return [{
       "title": "Hi there! One of our reps will be with you shortly.",
       "buttons": [{
