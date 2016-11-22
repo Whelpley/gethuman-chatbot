@@ -40,7 +40,6 @@ function queryCompany(genericRequest) {
   var queryResult = {
     userInput: genericRequest.userInput,
     data: {},
-    // types: 'standard', 'no-input', 'not-found'
     type: '',
     context: genericRequest.context
   };
@@ -117,8 +116,7 @@ function structureGenericResponse(queryResult) {
     context: queryResult.context || ''
   };
 
-  // return early if no data or no input or Help
-  // refactor this
+  // return early if no data or no input or Help or Greeting
   if ((type === 'no-input')
     || (type === 'nothing-found')
     || (type === 'help')

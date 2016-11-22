@@ -3,6 +3,11 @@
 let firebase = require('firebase');
 let config = require('../config/config');
 
+/**
+ * Contacts Firebase and returns a reference to the database
+ *
+ * @returns state
+ */
 function initialize() {
   var state = {};
 

@@ -210,25 +210,4 @@ module.exports = {
   getContext: getContext
 };
 
-// change file names in main code to match this
-
-  // app.post('/:bot', function (req, res) {
-  //   let context = getGenericContext(req);
-  //   let botHandler = factory.getBotHandler(botHandlers, context);
-  //   let normalizedRequests = botHandler.normalizeRequests(context);
-
-  //   res.send(200);
-
-  //   normalizedRequests.forEach(function (normalizedReq) {
-  //     let actionHandler =
-  //       factory.getActionHandler(actionHandlers, normalizedReq);
-
-  //     actionHandler.processRequest(normalizedReq)
-  //       .then(function(response) {
-  //         let payloads = botHandler.generatePayloads(response);
-  //         return sendResponses(context, payloads);
-  //       })
-  //       .catch(logger.error);
-  //   });
-  // });
 
