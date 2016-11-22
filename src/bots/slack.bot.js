@@ -249,7 +249,7 @@ function formatContacts(contactMethods) {
 
 
 module.exports = {
-  translateRequestToGenericFormats: translateRequestToGenericFormats,
+  normalizeRequests: normalizeRequests,
   generateResponsePayloads: generateResponsePayloads,
   formBasicPayload: formBasicPayload,
   loadPostsAttachments: loadPostsAttachments,

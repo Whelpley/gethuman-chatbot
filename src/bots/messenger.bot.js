@@ -380,7 +380,7 @@ function makePayload(token, url, sender, elements) {
 
 module.exports = {
   verify: verify,
-  translateRequestToGenericFormats: translateRequestToGenericFormats,
+  normalizeRequests: normalizeRequests,
   generateResponsePayloads: generateResponsePayloads,
   loadOtherCompaniesElements: loadOtherCompaniesElements,
   loadContactMethodsElements: loadContactMethodsElements,
