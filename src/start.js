@@ -53,3 +53,21 @@ Q.when(store.initialize())
 
 //   return firebaseData;
 // }
+
+
+
+let botHandlers = {
+  slack: require('./bots/slack.bot'),
+  messenger: require('./bots/messenger.bot')
+};
+
+let actionHandlers = [
+  require('./actions/solve.action'),
+  require('./actions/ignore.action')
+];
+
+store.initialize()
+.then(function(state) {
+  server.start(botHandlers, actionHandlers, state);
+});
+

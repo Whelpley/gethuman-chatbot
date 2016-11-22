@@ -77,21 +77,6 @@ function handleRequest(botHandlers, actionHandlers, config, state) {
 
     let genericRequests = botHandler.translateRequestToGenericFormats(context);
 
-    // genericRequests.forEach((genericRequest) => {
-    //   let actionHandler = factory.getActionHandler(actionHandlers, genericRequest);
-    //   try {
-    //     actionHandler.processRequest(genericRequest)
-    //         .then(function(genericResponse) {
-    //           // console.log("Generic Response returned in Server: " + JSON.stringify(genericResponse));
-    //           let payloads = botHandler.generateResponsePayloads(genericResponse);
-    //           // console.log("Payloads generated: " + JSON.stringify(payloads));
-    //           return sendResponses(context, payloads);
-    //         })
-    //         .done();
-    //   } catch(error) {
-    //     console.log('Catching an error in Try/Catch in server: ' + error);
-    //   }
-    // });
     genericRequests.forEach((genericRequest) => {
       let actionHandler = factory.getActionHandler(actionHandlers, genericRequest);
 
@@ -99,15 +84,14 @@ function handleRequest(botHandlers, actionHandlers, config, state) {
         return actionHandler.processRequest(genericRequest);
       })
       .then(function(genericResponse) {
-          // console.log("Generic Response returned in Server: " + JSON.stringify(genericResponse));
           let payloads = botHandler.generateResponsePayloads(genericResponse);
-          // console.log("Payloads generated: " + JSON.stringify(payloads));
           return sendResponses(context, payloads);
         })
       .catch(function(error) {
         console.log('Catching an error in Try/Catch in server: ' + error);
       });
     });
+
   };
 }
 
@@ -212,3 +196,26 @@ module.exports = {
   sendRequestAsReply: sendRequestAsReply,
   getContext: getContext
 };
+
+// change file names in main code to match this
+
+  // app.post('/:bot', function (req, res) {
+  //   let context = getGenericContext(req);
+  //   let botHandler = factory.getBotHandler(botHandlers, context);
+  //   let normalizedRequests = botHandler.normalizeRequests(context);
+
+  //   res.send(200);
+
+  //   normalizedRequests.forEach(function (normalizedReq) {
+  //     let actionHandler =
+  //       factory.getActionHandler(actionHandlers, normalizedReq);
+
+  //     actionHandler.processRequest(normalizedReq)
+  //       .then(function(response) {
+  //         let payloads = botHandler.generatePayloads(response);
+  //         return sendResponses(context, payloads);
+  //       })
+  //       .catch(logger.error);
+  //   });
+  // });
+

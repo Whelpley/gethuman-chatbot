@@ -85,11 +85,11 @@ To run the unit tests, run from the home directory:
 npm test
 ```
 
-(Testing framework is set up, but tests are currently incomplete.)
+(Testing framework is set up, but range of tests is currently limited.)
 
 ## Built With
 
-* [Node.js](https://www.npmjs.com/) - The web framework used
+* [Node.js](https://www.npmjs.com/) - Development platform
 * [Firebase](https://firebase.google.com/) - Real-time database
 
 ## Authors
@@ -100,20 +100,19 @@ npm test
 
 ## License
 
-(need to choose License)
-
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
 ## Acknowledgments
 
-* Hat tip to anyone who's code was used
-* Thanks to the team at GetHuman
+* Much love to [Jeff Whelpley](https://github.com/jeffwhelpley), who guided me through the creation of my first major Node project.
+* Thanks to the team at [GetHuman](https://gethuman.com/) for hosting me as an intern & providing focus for my continued eduction.
+* A tip of the hat to [Dev Bootcamp](https://devbootcamp.com/), for reformatting my brain, and enabling me to start a new career in software development.
 
 ## Feedback
 
-If anything is unclear in this Readme & the code, or if you have any other questions, drop me an email: whelpley@gmail.com
+I'm always seeking to improve. If anything is unclear in the code or this guide, or if you have any other comments, drop me an email: whelpley@gmail.com
 
-(Should I ask for pull requests?)
+( I'm also seeking full-time developer work in the Bay area; if you like what you see here, find me on [LinkedIn](https://www.linkedin.com/in/whelpley) )
 
 ## Want to learn more about making bots?
 
