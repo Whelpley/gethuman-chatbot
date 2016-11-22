@@ -25,12 +25,12 @@ function verify(req, res) {
  * @param context
  * @return {genericRequests}
  */
-function translateRequestToGenericFormats(context) {
-  var genericRequests = [];
+function normalizeRequests(context) {
+  var normalizedRequests = [];
   // iterate over messaging events - FBM uses batch processing
   var messaging_events = context.userRequest.entry[0].messaging;
   for (let i = 0; i < messaging_events.length; i++) {
-    let singleGenericRequest = {
+    let singleNormalizedRequest = {
       reqType: '',
       userInput: '',
       context: context
@@ -41,33 +41,33 @@ function translateRequestToGenericFormats(context) {
       var userInput = event.message.text;
 
       if ((userInput === 'help') || (userInput === 'bot help')) {
-        singleGenericRequest.userInput = userInput;
-        singleGenericRequest.reqType = 'help';
+        singleNormalizedRequest.userInput = userInput;
+        singleNormalizedRequest.reqType = 'help';
       }
       else if ((userInput === 'hi') || (userInput === 'hello')) {
-        singleGenericRequest.userInput = userInput;
-        singleGenericRequest.reqType = 'greeting';
+        singleNormalizedRequest.userInput = userInput;
+        singleNormalizedRequest.reqType = 'greeting';
       }
       else if (userInput.slice(0, 4) === 'bot ') {
-        singleGenericRequest.userInput = userInput.slice(4);
-        singleGenericRequest.reqType = 'user-input';
+        singleNormalizedRequest.userInput = userInput.slice(4);
+        singleNormalizedRequest.reqType = 'user-input';
       }
       else {
-        singleGenericRequest.userInput = userInput;
-        singleGenericRequest.reqType = 'ignore';
+        singleNormalizedRequest.userInput = userInput;
+        singleNormalizedRequest.reqType = 'ignore';
       };
     } else if (event.postback) {
       console.log("Postback Post detected from FB");
     // Later: determine if this is triggering a new search, or displaying more Companies - right now just triggers new search
-      singleGenericRequest.userInput = event.postback.payload;
-      singleGenericRequest.reqType = 'postback';
+      singleNormalizedRequest.userInput = event.postback.payload;
+      singleNormalizedRequest.reqType = 'postback';
     } else {
       console.log("Non-text-input Post detected from FB");
-      singleGenericRequest.reqType = 'ignore';
+      singleNormalizedRequest.reqType = 'ignore';
     };
-    genericRequests.push(singleGenericRequest);
+    normalizedRequests.push(singleNormalizedRequest);
   }
-  return genericRequests;
+  return normalizedRequests;
 }
 
 /**

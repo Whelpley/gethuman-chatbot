@@ -7,10 +7,10 @@ const utilities = require('../brain/utilities');
  *
  * @param context
  */
-function translateRequestToGenericFormats(context) {
+function normalizeRequests(context) {
   let text = context.userRequest.text;
 
-  let genericRequests = [{
+  let normalizedRequests = [{
     reqType: 'user-input',
     userInput: '',
     context: context
@@ -32,15 +32,15 @@ function translateRequestToGenericFormats(context) {
   // console.log('Slack access token match! Request will be processed.');
 
   if (text) {
-    genericRequests[0].userInput = text;
+    normalizedRequests[0].userInput = text;
   }
   if (text.toLowerCase() === 'help') {
     console.log('Detected user input of \"help\"');
-    genericRequests[0].reqType = 'help';
+    normalizedRequests[0].reqType = 'help';
   }
 
-  // console.log('Slack bot has prepared these generic requests: ' + JSON.stringify(genericRequests));
-  return genericRequests;
+  // console.log('Slack bot has prepared these normalized requests: ' + JSON.stringify(normalizedRequests));
+  return normalizedRequests;
 }
 
 /**

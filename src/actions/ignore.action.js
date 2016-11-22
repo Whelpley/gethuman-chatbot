@@ -8,7 +8,7 @@ const Q = require('q');
  * @param genericRequest
  * @return {Promise}
  */
-function processRequest(genericRequest) {
+function processRequest(normalizedRequest) {
   return Q.when(false);
 }
 

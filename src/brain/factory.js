@@ -8,10 +8,10 @@
  * @param genericRequest
  * @return actionHandler
  */
-function getActionHandler(actionHandlers, genericRequest) {
+function getActionHandler(actionHandlers, normalizedRequest) {
 
   // to refactor: separate Action Handlers by reqType
-  let reqType = genericRequest.reqType;
+  let reqType = normalizedRequest.reqType;
 
   if ((reqType === 'user-input') || (reqType === 'postback') || (reqType === 'help') || (reqType === 'greeting')) {
     console.log('Choosing Solve action handler');

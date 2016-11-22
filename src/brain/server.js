@@ -72,13 +72,13 @@ function handleRequest(botHandlers, actionHandlers, config, state) {
 
     let botHandler = factory.getBotHandler(botHandlers, context);
 
-    let genericRequests = botHandler.translateRequestToGenericFormats(context);
+    let normalizedRequests = botHandler.normalizeRequests(context);
 
-    genericRequests.forEach((genericRequest) => {
-      let actionHandler = factory.getActionHandler(actionHandlers, genericRequest);
+    normalizedRequests.forEach((normalizedRequest) => {
+      let actionHandler = factory.getActionHandler(actionHandlers, normalizedRequest);
 
       Q.fcall(function() {
-        return actionHandler.processRequest(genericRequest);
+        return actionHandler.processRequest(normalizedRequest);
       })
       .then(function(genericResponse) {
           let payloads = botHandler.generateResponsePayloads(genericResponse);

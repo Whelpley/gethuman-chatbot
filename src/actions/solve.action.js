@@ -10,21 +10,21 @@ var postSearch = require('../services/post-api-gh');
  * @param genericRequest
  * @return {genericResponse} Promise
  */
-function processRequest(genericRequest) {
+function processRequest(normalizedRequest) {
 
   /*
   Insert conditional: if Env variables not accessible (ie someone else has copied & is using this code), queryCompany should return a mock object
   */
   // (unsure if this is how to check if environment vars not there...)
-  if (!genericRequest.context.config || !genericRequest.context.config.environment) {
-    var context = genericRequest.context;
+  if (!normalizedRequest.context.config || !normalizedRequest.context.config.environment) {
+    var context = normalizedRequest.context;
     var mockGenericResponse = mockData.getGenericResponse(context);
     console.log('Returning mock company object: ' + JSON.stringify(mockGenericResponse));
     return Q.when(mockGenericResponse);
   }
 
   // get data from Gethuman, then process into generic response
-  return Q.when(queryCompany(genericRequest))
+  return Q.when(queryCompany(normalizedRequest))
     .then((queryResult) => {
       return structureGenericResponse(queryResult);
     });
