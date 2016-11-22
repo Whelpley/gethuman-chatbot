@@ -196,11 +196,13 @@ function loadHelpElements() {
           "url": "https://gethuman.com",
           "title": "Go to GetHuman"
       }],
-  },
-  {
-      "title": "Want to talk to our bot?",
-      "subtitle": 'Start with \'bot\', followed by the company name. (ex: \'bot verizon\')'
-  }];
+  }
+  // ,
+  // {
+  //     "title": "Want to talk to our bot?",
+  //     "subtitle": 'Start with \'bot\', followed by the company name. (ex: \'bot verizon\')'
+  // }
+  ];
 }
 
 /**
