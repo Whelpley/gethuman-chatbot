@@ -15,7 +15,7 @@ describe('Brain: Factory', function() {
 
   describe('getActionHandler(actionHandlers, genericRequest)', function() {
     it('dummy test', function() {
-      assert.equal(2, 2);
+      assert.equal(4, 4);
     })
   });
 

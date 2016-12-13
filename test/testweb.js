@@ -35,10 +35,10 @@ const DONE = `
 const SLACKBTN = `
             <html>
                 <body>
-                    // Dev Bot install
-                    // <a href="https://slack.com/oauth/authorize?scope=incoming-webhook,commands&client_id=84580660657.100595915399"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>
+                    Dev Bot install
+                    <a href="https://slack.com/oauth/authorize?scope=incoming-webhook,commands&client_id=84580660657.100595915399"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>
 
-                    // Production bot install
+                    Production bot install
                     <a href="https://slack.com/oauth/authorize?scope=incoming-webhook,commands&client_id=2395589825.100394872743"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>
                 </body>
             </html>
