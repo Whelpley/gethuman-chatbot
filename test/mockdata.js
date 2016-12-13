@@ -20,7 +20,7 @@ function getGenericResponse(context) {
     "data":{
       "name":"Verizon",
       "contactMethods":{
-        "phone":"888-553-1555",
+        "phone":"888-553-2555",
         "email":"",
         "twitter":"@VerizonSupport",
         "web":"http://www22.verizon.com/content/contactus/",
