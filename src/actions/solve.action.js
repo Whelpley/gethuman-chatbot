@@ -174,6 +174,9 @@ function extractContactMethods(queryResultData) {
     facebook: ''
   };
   var company = queryResultData;
+
+  if (!(company) || !(company.contactMethods)) return contactMethods;
+
   company.contactMethods.forEach(function(method) {
       contactMethods[method.type] = method.target;
   });

@@ -17,9 +17,9 @@ function getArrayOfStrings() {
 function getGenericResponse(context) {
   return {
     "userInput":"verizon",
-    "data":{
+    "data": {
       "name":"Verizon",
-      "contactMethods":{
+      "contactMethods": {
         "phone":"888-553-2555",
         "email":"",
         "twitter":"@VerizonSupport",
@@ -27,7 +27,7 @@ function getGenericResponse(context) {
         "chat":"http://www22.verizon.com/content/contactus/",
         "facebook":""
       },
-      "posts":[
+      "posts": [
         {
           "title":"How do I switch number to new phone?",
           "urlId":"A4u"
@@ -69,6 +69,27 @@ function getGenericResponse(context) {
   }
 }
 
+function getQueryResultData() {
+  return {
+    contactMethods: [
+      {
+        type: 'phone',
+        target: '666-666-6666'
+      },
+      {
+        type: 'email',
+        target: 'guy@internet.com'
+      }
+    ]
+  }
+}
+
+function getJunkObject() {
+  return {
+    blah: 'this does nothing'
+  }
+}
+
 function getNormalizedRequestIgnore() {
   return {
     reqType: 'ignore',
@@ -76,7 +97,11 @@ function getNormalizedRequestIgnore() {
     context: {}
   };
 }
+
 module.exports = {
   getArrayOfStrings: getArrayOfStrings,
-  getNormalizedRequestIgnore: getNormalizedRequestIgnore
+  getNormalizedRequestIgnore: getNormalizedRequestIgnore,
+  getGenericResponse: getGenericResponse,
+  getQueryResultData: getQueryResultData,
+  getJunkObject: getJunkObject
 }
