@@ -39,9 +39,11 @@ describe('Bots: Messenger', function() {
     })
   });
 
-  describe('loadNothingFoundElements(userInput) ', function() {
-    it('dummy test', function() {
-      assert.equal(2, 2);
+  describe('loadNothingFoundElements() ', function() {
+    var noFoElements = messengerBot.loadNothingFoundElements();
+
+    it('happy path', function() {
+      assert.equal(noFoElements[0].title, "I didn\’t understand.");
     })
   });
 

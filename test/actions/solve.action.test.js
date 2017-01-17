@@ -41,8 +41,6 @@ describe('Actions: Solve', function() {
     })
   });
 
-// needs a mock data object for queryResultData
-
   describe('extractContactMethods(queryResultData)', function() {
     var qrData = mockData.getQueryResultData();
     var junk = mockData.getJunkObject();
