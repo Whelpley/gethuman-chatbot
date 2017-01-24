@@ -1,3 +1,4 @@
+let Q = require('q');
 
 let firebase = require('firebase');
 let config = require('../config/config');
@@ -29,7 +30,7 @@ function initialize() {
     console.log("Firebase data updated");
   });
 
-  return state;
+  return Q.when(state);
 }
 
 module.exports = {

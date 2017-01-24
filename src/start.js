@@ -1,4 +1,4 @@
-let Q = require('q');
+// let Q = require('q');
 
 let server = require('./brain/server');
 let store = require('./brain/store');
@@ -14,7 +14,12 @@ let actionHandlers = [
   require('./actions/ignore.action')
 ];
 
-Q.when(store.initialize())
+store.initialize()
 .then(function(state) {
   server.start(botHandlers, actionHandlers, config, state);
 });
+
+// Q.when(store.initialize())
+// .then(function(state) {
+//   server.start(botHandlers, actionHandlers, config, state);
+// });
