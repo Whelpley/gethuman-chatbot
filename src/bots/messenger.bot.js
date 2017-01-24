@@ -96,36 +96,32 @@ function generateResponsePayloads(genericResponse) {
   // TODO - cut up the "else-ifs"
   // Case: nothing returned from Companies search / junk input
   if (type === 'nothing-found') {
-    // console.log('No Company Results flag detected in genericResponse.');
     let elements = loadNothingFoundElements();
     payloads.push(makePayload(token, url, sender, elements));
   }
-  else if (type === 'help') {
-    // console.log('Help flag detected in genericResponse.');
+
+  if (type === 'help') {
     let elements = loadHelpElements();
     payloads.push(makePayload(token, url, sender, elements));
   }
-  else if (type === 'greeting') {
-    // console.log('Greeting flag detected in genericResponse.');
+
+  if (type === 'greeting') {
     let elements = loadGreetingElements();
     payloads.push(makePayload(token, url, sender, elements));
   }
-  else if (type === 'standard') {
-    // Refactor this to compress into another function
-    // console.log('Standard type flag detected in genericResponse.');
+
+  if (type === 'standard') {
     var name = genericResponse.data.name || '';
     var posts = genericResponse.data.posts || [];
     var contactMethods = genericResponse.data.contactMethods || [];
     var otherCompanies = genericResponse.data.otherCompanies || [];
     var elements = [];
 
-    // load Payload cards for Posts
     if (posts && posts.length) {
       var postElements = loadPostElements(posts, name);
       elements = elements.concat(postElements);
     }
 
-    // load Contact Methods card to Payload
     if (contactMethods) {
       var contactMethodsElements = loadContactMethodsElements(contactMethods, name);
       // only push in if at least one button exists:
@@ -134,7 +130,6 @@ function generateResponsePayloads(genericResponse) {
       };
     }
 
-    // make Other Companies Card
     if (otherCompanies && otherCompanies.length) {
       var otherCompaniesElements = loadOtherCompaniesElements(otherCompanies, name);
       elements = elements.concat(otherCompaniesElements);
@@ -148,7 +143,7 @@ function generateResponsePayloads(genericResponse) {
 
     payloads.push(makePayload(token, url, sender, elements));
   }
-  // console.log('Payloads prepared by Messenger bot: ' + JSON.stringify(payloads));
+
   return payloads;
 }
 
@@ -225,24 +220,20 @@ function loadPostElements(posts, name) {
   for (let i = 0; i < posts.length; i++) {
     let title = posts[i].title || '';
     let urlId = posts[i].urlId || '';
-    let problemsUrl = config.ghProblemsUrl;
-    let answersUrl = config.ghAnswersUrl;
+    let ghProblemsUrl = config.ghProblemsUrl;
+    let ghAnswersUrl = config.ghAnswersUrl;
 
     let singleElement = {
         "title": title,
         "subtitle": '#' + (i+1) + ' most common ' + name + ' issue',
         "buttons": [{
             "type": "web_url",
-            // export to Config
-            // "url": "https://problems.gethuman.com/" + encodeURIComponent(name),
-            "url": problemsUrl + encodeURIComponent(name),
+            "url": ghProblemsUrl + encodeURIComponent(name),
             "title": "Fix this issue for me"
         },
         {
             "type": "web_url",
-            // export to Config
-            // "url": "https://answers.gethuman.co/_" + encodeURIComponent(urlId),
-            "url": answersUrl + encodeURIComponent(urlId),
+            "url": ghAnswersUrl + encodeURIComponent(urlId),
             "title": "More info ..."
         }],
     };

@@ -170,8 +170,8 @@ function loadPostsAttachments(payloads, posts, name) {
       let title = posts[i].title || '';
       let urlId = posts[i].urlId || '';
       let color = colors[i];
-      let problemsUrl = config.ghProblemsUrl;
-      let answersUrl = config.ghAnswersUrl;
+      let ghProblemsUrl = config.ghProblemsUrl;
+      let ghAnswersUrl = config.ghAnswersUrl;
 
       let singleAttachment = {
           "fallback": "Issue for " + name,
