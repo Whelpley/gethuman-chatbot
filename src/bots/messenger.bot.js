@@ -228,6 +228,9 @@ function loadPostElements(posts, name) {
   for (let i = 0; i < posts.length; i++) {
     let title = posts[i].title || '';
     let urlId = posts[i].urlId || '';
+    let problemsUrl = config.ghProblemsUrl;
+    let answersUrl = config.ghAnswersUrl;
+
     let singleElement = {
         "title": title,
         "subtitle": '#' + (i+1) + ' most common ' + name + ' issue',
@@ -235,14 +238,14 @@ function loadPostElements(posts, name) {
             "type": "web_url",
             // export to Config
             // "url": "https://problems.gethuman.com/" + encodeURIComponent(name),
-            "url": "https://problems.gethuman.com/" + encodeURIComponent(name),
+            "url": problemsUrl + encodeURIComponent(name),
             "title": "Fix this issue for me"
         },
         {
             "type": "web_url",
             // export to Config
             // "url": "https://answers.gethuman.co/_" + encodeURIComponent(urlId),
-            "url": "https://answers.gethuman.co/_" + encodeURIComponent(urlId),
+            "url": answersUrl + encodeURIComponent(urlId),
             "title": "More info ..."
         }],
     };

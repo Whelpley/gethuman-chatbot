@@ -169,6 +169,9 @@ function loadPostsAttachments(payloads, posts, name) {
       let title = posts[i].title || '';
       let urlId = posts[i].urlId || '';
       let color = colors[i];
+      let problemsUrl = config.ghProblemsUrl;
+      let answersUrl = config.ghAnswersUrl;
+
       let singleAttachment = {
           "fallback": "Issue for " + name,
           "title": title,
@@ -177,13 +180,13 @@ function loadPostsAttachments(payloads, posts, name) {
               {
                   // export to Config
                   // "value": "<https://problems.gethuman.com/" + encodeURIComponent(name) + "|Fix this issue for me>",
-                  "value": "<https://problems.gethuman.com/" + encodeURIComponent(name) + "|Fix this issue for me>",
+                  "value": "<" + ghProblemsUrl + encodeURIComponent(name) + "|Fix this issue for me>",
                   "short": true
               },
               {
                   // export to Config
                   // "value": "<https://answers.gethuman.co/_" + encodeURIComponent(urlId) + "|More...>",
-                  "value": "<https://answers.gethuman.co/_" + encodeURIComponent(urlId) + "|More...>",
+                  "value": "<" + ghAnswersUrl + encodeURIComponent(urlId) + "|More...>",
                   "short": true
               }
           ]

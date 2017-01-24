@@ -24,5 +24,7 @@ module.exports = {
   firebaseApiKey: envVars.FIREBASE_API_KEY,
   firebaseProjectName: envVars.FIREBASE_PROJECT_NAME,
   firebaseSenderId: envVars.FIREBASE_SENDER_ID,
-  facebookSendUrl: envVars.FB_SEND_URL
+  facebookSendUrl: envVars.FB_SEND_URL,
+  ghProblemsUrl: envVars.GH_PROBLEMS_URL,
+  ghAnswersUrl: envVars.GH_ANSWERS_URL
 };
