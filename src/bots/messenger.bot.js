@@ -90,13 +90,13 @@ function generateResponsePayloads(genericResponse) {
 
   // export to Config
   // var url = 'https://graph.facebook.com/v2.6/me/messages';
-  var url = 'https://graph.facebook.com/v2.6/me/messages';
-
+  var url = config.facebookSendUrl;
 
   // needs explanation for deep targeting
   var sender = genericResponse.context.userRequest.entry[0].messaging[0].sender.id;
   var type = genericResponse.type;
 
+  // TODO - cut up the "else-ifs"
   // Case: nothing returned from Companies search / junk input
   if (type === 'nothing-found') {
     // console.log('No Company Results flag detected in genericResponse.');

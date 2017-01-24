@@ -23,5 +23,6 @@ module.exports = {
   slackClientSecret: envVars.SLACK_CLIENT_SECRET,
   firebaseApiKey: envVars.FIREBASE_API_KEY,
   firebaseProjectName: envVars.FIREBASE_PROJECT_NAME,
-  firebaseSenderId: envVars.FIREBASE_SENDER_ID
+  firebaseSenderId: envVars.FIREBASE_SENDER_ID,
+  facebookSendUrl: envVars.FB_SEND_URL
 };
