@@ -155,6 +155,7 @@ function structureGenericResponse(queryResult) {
  * @return {company}
  */
 function attachOtherCompanies(company, companySearchResults, userInput) {
+    var userInputLower = userInput.toLowerCase();
     var companyNames = companySearchResults.map((eachCompany) => {
       return eachCompany.name;
     });
