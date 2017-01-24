@@ -28,42 +28,45 @@ function normalizeRequests(context) {
   var normalizedRequests = [];
   // iterate over messaging events - FBM uses batch processing
   var messaging_events = context.userRequest.entry[0].messaging;
+
   for (let i = 0; i < messaging_events.length; i++) {
     let singleNormalizedRequest = {
-      reqType: '',
+      reqType: 'ignore',
       userInput: '',
       context: context
     };
     var event = context.userRequest.entry[0].messaging[i];
+
     if (event.message && event.message.text) {
-      console.log("User input Post detected from FB");
+      // console.log("User input Post detected from FB");
       var userInput = event.message.text;
+
+      singleNormalizedRequest.userInput = userInput;
+      // singleNormalizedRequest.reqType = 'ignore';
 
       if ((userInput === 'help') || (userInput === 'bot help')) {
         singleNormalizedRequest.userInput = userInput;
         singleNormalizedRequest.reqType = 'help';
       }
-      else if ((userInput === 'hi') || (userInput === 'hello')) {
+
+      if ((userInput === 'hi') || (userInput === 'hello')) {
         singleNormalizedRequest.userInput = userInput;
         singleNormalizedRequest.reqType = 'greeting';
       }
-      else if (userInput.slice(0, 4) === 'bot ') {
+
+      if (userInput.slice(0, 4) === 'bot ') {
         singleNormalizedRequest.userInput = userInput.slice(4);
         singleNormalizedRequest.reqType = 'user-input';
       }
-      else {
-        singleNormalizedRequest.userInput = userInput;
-        singleNormalizedRequest.reqType = 'ignore';
-      };
-    } else if (event.postback) {
-      console.log("Postback Post detected from FB");
+    }
+
+    if (event.postback) {
+      // console.log("Postback Post detected from FB");
     // Later: determine if this is triggering a new search, or displaying more Companies - right now just triggers new search
       singleNormalizedRequest.userInput = event.postback.payload;
       singleNormalizedRequest.reqType = 'postback';
-    } else {
-      console.log("Non-text-input Post detected from FB");
-      singleNormalizedRequest.reqType = 'ignore';
-    };
+    }
+
     normalizedRequests.push(singleNormalizedRequest);
   }
   return normalizedRequests;
@@ -81,10 +84,12 @@ function generateResponsePayloads(genericResponse) {
     return false;
   };
 
-  console.log("About to begin generating payloads from genericResponse.");
+  // console.log("About to begin generating payloads from genericResponse.");
   var payloads = [];
   var token = config.facebookAccessToken;
   var url = 'https://graph.facebook.com/v2.6/me/messages';
+
+  // needs explanation for deep targeting
   var sender = genericResponse.context.userRequest.entry[0].messaging[0].sender.id;
   var type = genericResponse.type;
 

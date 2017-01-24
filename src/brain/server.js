@@ -146,13 +146,15 @@ function sendResponseToPlatform(context, payload) {
     console.log("Test flag detected in payload context.");
     context.sendResponse(payload);
     return Q.when();
-  } else if (!payload || (payload === {})) {
+  }
+
+  if (!payload || (payload === {})) {
     // sf this part needed?
     console.log("No payload data detected.");
     return Q.when();
-  } else {
-    return sendRequestAsReply(payload);
   }
+
+  return sendRequestAsReply(payload);
 }
 
 /**
