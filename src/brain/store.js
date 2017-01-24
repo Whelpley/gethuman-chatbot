@@ -1,4 +1,3 @@
-'use strict';
 
 let firebase = require('firebase');
 let config = require('../config/config');

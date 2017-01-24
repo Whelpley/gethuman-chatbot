@@ -1,4 +1,3 @@
-'use strict';
 
 const phoneFormatter = require('phone-formatter');
 const config = require('../config/config');

@@ -1,4 +1,3 @@
-'use strict';
 
 var Q = require('q');
 var companySearch = require('../services/company-api-gh');

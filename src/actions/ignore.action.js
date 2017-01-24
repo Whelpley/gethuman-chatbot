@@ -1,4 +1,3 @@
-'use strict';
 
 const Q = require('q');
 

@@ -1,5 +1,3 @@
-'use strict';
-
 let Q = require('q');
 
 let server = require('./brain/server');
