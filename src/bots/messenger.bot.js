@@ -84,15 +84,12 @@ function generateResponsePayloads(genericResponse) {
     return false;
   };
 
-  // console.log("About to begin generating payloads from genericResponse.");
   var payloads = [];
   var token = config.facebookAccessToken;
 
-  // export to Config
-  // var url = 'https://graph.facebook.com/v2.6/me/messages';
   var url = config.facebookSendUrl;
 
-  // needs explanation for deep targeting
+  // Need to dig into the incoming User Request object to find the ID of the Sender to receive the response we are constructing
   var sender = genericResponse.context.userRequest.entry[0].messaging[0].sender.id;
   var type = genericResponse.type;
 
