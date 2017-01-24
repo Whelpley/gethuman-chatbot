@@ -18,7 +18,7 @@ function start(botHandlers, actionHandlers, config, state) {
   let port = process.env.PORT || 3000;
   let app = express();
 
-  console.log('Starting server');
+  // console.log('Starting server');
 
   addMiddleware(app);
 
@@ -165,7 +165,7 @@ function sendResponseToPlatform(context, payload) {
  */
 function sendRequestAsReply(payload) {
   let deferred = Q.defer();
-  console.log("Last step before sending this payload: " + JSON.stringify(payload));
+  // console.log("Last step before sending this payload: " + JSON.stringify(payload));
   request(payload, function(error) {
     if (error) {
       console.log("Ran into error while making request to send Slack payload: " + error);

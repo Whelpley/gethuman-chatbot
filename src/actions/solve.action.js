@@ -18,7 +18,7 @@ function processRequest(normalizedRequest) {
   if (!normalizedRequest.context.config || !normalizedRequest.context.config.environment) {
     var context = normalizedRequest.context;
     var mockGenericResponse = mockData.getGenericResponse(context);
-    console.log('Returning mock company object: ' + JSON.stringify(mockGenericResponse));
+    // console.log('Returning mock company object: ' + JSON.stringify(mockGenericResponse));
     return Q.when(mockGenericResponse);
   }
 
@@ -45,7 +45,7 @@ function queryCompany(genericRequest) {
   var company = {};
   var userInput = genericRequest.userInput;
   var requestType = genericRequest.reqType;
-  console.log('Incoming request type from genericRequest, in queryCompany: ' + requestType);
+  // console.log('Incoming request type from genericRequest, in queryCompany: ' + requestType);
 
   if (!userInput) {
     queryResult.type = 'no-input';
@@ -53,32 +53,32 @@ function queryCompany(genericRequest) {
   }
 
   if (requestType === 'help') {
-    console.log('Help type detected in queryCompany function');
+    // console.log('Help type detected in queryCompany function');
     queryResult.type = 'help';
     return Q.when(queryResult);
   }
 
   if (requestType === 'greeting') {
-    console.log('Greeting type detected in queryCompany function');
+    // console.log('Greeting type detected in queryCompany function');
     queryResult.type = 'greeting';
     return Q.when(queryResult);
   };
 
-  // removing the Q - already returns a Promise
-  // return Q.when(companySearch.findByText(userInput))
   return companySearch.findByText(userInput)
   .then(function(companySearchResults) {
     // If nothing passed in, return an empty object in place of Posts
     // to next step in Promise chain
     if (!companySearchResults.length) {
-      console.log('Nothing found in initial Company search');
+      // console.log('Nothing found in initial Company search');
       queryResult.type = 'nothing-found';
       return Q.when({});
     }
+
     queryResult.type = 'standard';
     var exactMatch = companySearchResults.filter(function(eachCompany) {
       return eachCompany.name.toLowerCase() === userInput.toLowerCase();
     });
+
     company = (exactMatch && exactMatch.length) ? exactMatch[0] : companySearchResults[0];
     company = attachOtherCompanies(company, companySearchResults, userInput);
     return postSearch.findByCompany(company);
@@ -86,7 +86,6 @@ function queryCompany(genericRequest) {
   .then(function(posts) {
     company.posts = posts;
     queryResult.data = company;
-    // console.log('Result of API queries: ' + JSON.stringify(queryResult).substring(0, 400));
     return queryResult;
   });
 }
@@ -154,7 +153,7 @@ function attachOtherCompanies(company, companySearchResults, userInput) {
     var companyNames = companySearchResults.map((eachCompany) => {
       return eachCompany.name;
     });
-    console.log("List of company names: " + JSON.stringify(companyNames));
+    // console.log("List of company names: " + JSON.stringify(companyNames));
     company.otherCompanies = companyNames.filter((name) => {
       return name.toLowerCase() !== userInput.toLowerCase();
     });
@@ -183,7 +182,7 @@ function extractContactMethods(queryResultData) {
   company.contactMethods.forEach(function(method) {
       contactMethods[method.type] = method.target;
   });
-  console.log("Extracted contact info from company: " + JSON.stringify(contactMethods));
+  // console.log("Extracted contact info from company: " + JSON.stringify(contactMethods));
   return contactMethods;
 }
 

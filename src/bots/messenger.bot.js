@@ -87,7 +87,11 @@ function generateResponsePayloads(genericResponse) {
   // console.log("About to begin generating payloads from genericResponse.");
   var payloads = [];
   var token = config.facebookAccessToken;
+
+  // export to Config
+  // var url = 'https://graph.facebook.com/v2.6/me/messages';
   var url = 'https://graph.facebook.com/v2.6/me/messages';
+
 
   // needs explanation for deep targeting
   var sender = genericResponse.context.userRequest.entry[0].messaging[0].sender.id;
@@ -95,23 +99,23 @@ function generateResponsePayloads(genericResponse) {
 
   // Case: nothing returned from Companies search / junk input
   if (type === 'nothing-found') {
-    console.log('No Company Results flag detected in genericResponse.');
+    // console.log('No Company Results flag detected in genericResponse.');
     let elements = loadNothingFoundElements();
     payloads.push(makePayload(token, url, sender, elements));
   }
   else if (type === 'help') {
-    console.log('Help flag detected in genericResponse.');
+    // console.log('Help flag detected in genericResponse.');
     let elements = loadHelpElements();
     payloads.push(makePayload(token, url, sender, elements));
   }
   else if (type === 'greeting') {
-    console.log('Greeting flag detected in genericResponse.');
+    // console.log('Greeting flag detected in genericResponse.');
     let elements = loadGreetingElements();
     payloads.push(makePayload(token, url, sender, elements));
   }
   else if (type === 'standard') {
     // Refactor this to compress into another function
-    console.log('Standard type flag detected in genericResponse.');
+    // console.log('Standard type flag detected in genericResponse.');
     var name = genericResponse.data.name || '';
     var posts = genericResponse.data.posts || [];
     var contactMethods = genericResponse.data.contactMethods || [];
@@ -147,7 +151,7 @@ function generateResponsePayloads(genericResponse) {
 
     payloads.push(makePayload(token, url, sender, elements));
   }
-  console.log('Payloads prepared by Messenger bot: ' + JSON.stringify(payloads));
+  // console.log('Payloads prepared by Messenger bot: ' + JSON.stringify(payloads));
   return payloads;
 }
 
@@ -229,11 +233,15 @@ function loadPostElements(posts, name) {
         "subtitle": '#' + (i+1) + ' most common ' + name + ' issue',
         "buttons": [{
             "type": "web_url",
+            // export to Config
+            // "url": "https://problems.gethuman.com/" + encodeURIComponent(name),
             "url": "https://problems.gethuman.com/" + encodeURIComponent(name),
             "title": "Fix this issue for me"
         },
         {
             "type": "web_url",
+            // export to Config
+            // "url": "https://answers.gethuman.co/_" + encodeURIComponent(urlId),
             "url": "https://answers.gethuman.co/_" + encodeURIComponent(urlId),
             "title": "More info ..."
         }],

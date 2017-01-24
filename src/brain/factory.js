@@ -15,10 +15,13 @@ function getActionHandler(actionHandlers, normalizedRequest) {
   if ((reqType === 'user-input') || (reqType === 'postback') || (reqType === 'help') || (reqType === 'greeting')) {
     console.log('Choosing Solve action handler');
     return actionHandlers && actionHandlers.length && actionHandlers[0];
-  } else if (reqType === 'ignore') {
+  }
+
+  if (reqType === 'ignore') {
     console.log('Choosing Ignore action handler');
     return actionHandlers && actionHandlers.length && actionHandlers[1];
   }
+
 }
 
 /**
@@ -32,7 +35,7 @@ function getBotHandler(botHandlers, context) {
  let handler = botHandlers[context.bot];
 
  if (handler) {
-   console.log('Found bot handler for ' + context.bot + '!');
+   // console.log('Found bot handler for ' + context.bot + '!');
    return handler;
  }
 

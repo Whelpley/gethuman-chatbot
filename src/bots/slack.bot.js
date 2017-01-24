@@ -175,10 +175,14 @@ function loadPostsAttachments(payloads, posts, name) {
           "color": color,
           "fields": [
               {
+                  // export to Config
+                  // "value": "<https://problems.gethuman.com/" + encodeURIComponent(name) + "|Fix this issue for me>",
                   "value": "<https://problems.gethuman.com/" + encodeURIComponent(name) + "|Fix this issue for me>",
                   "short": true
               },
               {
+                  // export to Config
+                  // "value": "<https://answers.gethuman.co/_" + encodeURIComponent(urlId) + "|More...>",
                   "value": "<https://answers.gethuman.co/_" + encodeURIComponent(urlId) + "|More...>",
                   "short": true
               }
