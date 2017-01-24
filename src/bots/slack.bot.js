@@ -1,3 +1,4 @@
+const config = require('../config/config');
 
 const colors = [
     '#6E9E43',
