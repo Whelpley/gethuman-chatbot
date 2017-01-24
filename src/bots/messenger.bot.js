@@ -83,15 +83,24 @@ function generateResponsePayloads(genericResponse) {
 
   var payloads = [];
   var token = config.facebookAccessToken;
-
   var url = config.facebookSendUrl;
-
+  var type = genericResponse.type;
   // Need to dig into the incoming User Request object to find the ID of the Sender to receive the response we are constructing
   var sender = genericResponse.context.userRequest.entry[0].messaging[0].sender.id;
-  var type = genericResponse.type;
 
-  // TODO - cut up the "else-ifs"
-  // Case: nothing returned from Companies search / junk input
+  // var actionResponses = {
+  //   'nothing-found': nothingFoundResponse(),
+  //   'help': helpResponse(),
+  //   'greeting': greetingResponse(),
+  //   'standard': standardResponse()
+  // }
+  // var botActionResponseHandler = actionResponses[type];
+  // if (!botActionResponseHandler) {
+  //   throw new Error('No response handler found for messenger action ' + type);
+  // }
+
+  // return botActionResponseHandler(genericResponse)
+
   if (type === 'nothing-found') {
     let elements = loadNothingFoundElements();
     payloads.push(makePayload(token, url, sender, elements));
