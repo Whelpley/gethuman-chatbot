@@ -97,10 +97,15 @@ function queryCompany(genericRequest) {
  * @return {genericResponse} Promise
  */
 function structureGenericResponse(queryResult) {
-  var type = queryResult.type;
-  var posts = queryResult.data.posts || [];
+  // var type = queryResult.type;
+  // var posts = queryResult.data.posts || [];
+
+  var { type, data, userInput } = queryResult;
+  var posts = data.posts || [];
+
   var genericResponse = {
-    userInput: queryResult.userInput,
+    // userInput: queryResult.userInput,
+    userInput: userInput,
     data: {
       name: queryResult.data.name || '',
       contactMethods: {
@@ -153,10 +158,14 @@ function attachOtherCompanies(company, companySearchResults, userInput) {
     var companyNames = companySearchResults.map((eachCompany) => {
       return eachCompany.name;
     });
-    // console.log("List of company names: " + JSON.stringify(companyNames));
-    company.otherCompanies = companyNames.filter((name) => {
-      return name.toLowerCase() !== userInput.toLowerCase();
-    });
+
+    // --- changing this for ES6 magic ---
+    // company.otherCompanies = companyNames.filter((name) => {
+    //   return name.toLowerCase() !== userInput.toLowerCase();
+    // });
+
+    company.otherCompanies = companyNames.filter(n => n.toLowerCase() !== userInputLower);
+
     return company;
 };
 
