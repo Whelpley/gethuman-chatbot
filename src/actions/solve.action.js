@@ -64,7 +64,9 @@ function queryCompany(genericRequest) {
     return Q.when(queryResult);
   };
 
-  return Q.when(companySearch.findByText(userInput))
+  // removing the Q - already returns a Promise
+  // return Q.when(companySearch.findByText(userInput))
+  return companySearch.findByText(userInput)
   .then(function(companySearchResults) {
     // If nothing passed in, return an empty object in place of Posts
     // to next step in Promise chain
