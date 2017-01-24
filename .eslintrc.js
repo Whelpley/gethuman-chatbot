@@ -14,6 +14,7 @@ module.exports = {
      "camelcase": 0,
      "eol-last": 0,
      "space-before-function-paren": 0,
-     "padded-blocks": 0
+     "padded-blocks": 0,
+     "max-statements": 1
    }
 };
