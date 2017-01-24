@@ -51,12 +51,14 @@ function queryCompany(genericRequest) {
     queryResult.type = 'no-input';
     return Q.when(queryResult);
   }
-  else if (requestType === 'help') {
+
+  if (requestType === 'help') {
     console.log('Help type detected in queryCompany function');
     queryResult.type = 'help';
     return Q.when(queryResult);
   }
-  else if (requestType === 'greeting') {
+
+  if (requestType === 'greeting') {
     console.log('Greeting type detected in queryCompany function');
     queryResult.type = 'greeting';
     return Q.when(queryResult);
