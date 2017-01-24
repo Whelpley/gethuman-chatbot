@@ -9,7 +9,7 @@ const config = require('../config/config');
  * @param res
  */
 function verify(req, res) {
-    console.log("Receiving webhook verification from FB.");
+    // console.log("Receiving webhook verification from FB.");
     var verifyToken = config.facebookVerifyToken;
     if (req.query['hub.verify_token'] === verifyToken) {
         res.send(req.query['hub.challenge']);
@@ -42,15 +42,12 @@ function normalizeRequests(context) {
       var userInput = event.message.text;
 
       singleNormalizedRequest.userInput = userInput;
-      // singleNormalizedRequest.reqType = 'ignore';
 
       if ((userInput === 'help') || (userInput === 'bot help')) {
-        singleNormalizedRequest.userInput = userInput;
         singleNormalizedRequest.reqType = 'help';
       }
 
       if ((userInput === 'hi') || (userInput === 'hello')) {
-        singleNormalizedRequest.userInput = userInput;
         singleNormalizedRequest.reqType = 'greeting';
       }
 
@@ -336,10 +333,10 @@ function formatContactButtons(contactMethods) {
                     };
                     break;
                 case 'email':
-                    console.log("Email detected, not creating button for it because Messenger won't let us.");
+                    // console.log("Email detected, not creating button for it because Messenger won't let us.");
                     break;
                 default:
-                    console.log("Something went wrong in Facebook contact button formatting");
+                    // console.log("Something went wrong in Facebook contact button formatting");
             }
             if (button.type) {
                 buttons.push(button);
@@ -347,7 +344,7 @@ function formatContactButtons(contactMethods) {
             }
         }
     }
-    console.log("Buttons formatted from contact methods: " + JSON.stringify(buttons));
+    // console.log("Buttons formatted from contact methods: " + JSON.stringify(buttons));
     return buttons;
 }
 

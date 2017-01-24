@@ -13,12 +13,12 @@ function getActionHandler(actionHandlers, normalizedRequest) {
   let reqType = normalizedRequest.reqType;
 
   if ((reqType === 'user-input') || (reqType === 'postback') || (reqType === 'help') || (reqType === 'greeting')) {
-    console.log('Choosing Solve action handler');
+    // console.log('Choosing Solve action handler');
     return actionHandlers && actionHandlers.length && actionHandlers[0];
   }
 
   if (reqType === 'ignore') {
-    console.log('Choosing Ignore action handler');
+    // console.log('Choosing Ignore action handler');
     return actionHandlers && actionHandlers.length && actionHandlers[1];
   }
 

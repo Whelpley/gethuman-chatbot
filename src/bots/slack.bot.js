@@ -47,7 +47,7 @@ function normalizeRequests(context) {
     normalizedRequests[0].userInput = text;
   }
   if (text.toLowerCase() === 'help') {
-    console.log('Detected user input of \"help\"');
+    // console.log('Detected user input of \"help\"');
     normalizedRequests[0].reqType = 'help';
   }
 
@@ -62,7 +62,6 @@ function normalizeRequests(context) {
  * @return {payloads}
  */
 function generateResponsePayloads(genericResponse) {
-  console.log("About to begin generating payloads from genericResponse.");
   // form basic payload
   let payloads = formBasicPayload(genericResponse);
   let type = genericResponse.type;
@@ -72,17 +71,16 @@ function generateResponsePayloads(genericResponse) {
     return false;
   };
 
-  // Refactor to switch statement?
   // Case: no user input
   if (type === 'no-input') {
-    console.log('No user input flag detected in genericResponse.');
+    // console.log('No user input flag detected in genericResponse.');
     payloads[0].json.text = 'What company are you having an issue with?';
     return payloads;
   }
 
   if (type === 'help') {
     // Case: Help user
-    console.log('Help flag detected in genericResponse.');
+    // console.log('Help flag detected in genericResponse.');
     payloads[0].json.text = 'It looks like you need some help. Please tell me the name of the company you want to reach, and I will provide you with a list of the top issues for customers of this company, the company\'s contact info, and a list of other companies you may want to search for.';
     return payloads;
   }
@@ -105,22 +103,22 @@ function generateResponsePayloads(genericResponse) {
 
     if (posts && posts.length) {
       payloads = loadPostsAttachments(payloads, posts, name);
-      console.log('Posts info pushed into Payloads');
+      // console.log('Posts info pushed into Payloads');
     }
 
     if (topContacts) {
       payloads = loadContactsAttachments(payloads, topContacts, name);
-      console.log('Company Contact Info pushed into Payloads');
+      // console.log('Company Contact Info pushed into Payloads');
     }
 
     if (otherCompanies && otherCompanies.length) {
       payloads = loadOtherCompaniesAttachments(payloads, otherCompanies);
-      console.log('Other Companies info pushed into Payloads');
+      // console.log('Other Companies info pushed into Payloads');
     }
 
     if (!payloads[0].json.attachments.length) {
         payloads[0].json.text = 'I couldn\'t find anything for \"' + name + '\". Please tell me which company you are looking for. (ex: \"/gethuman Verizon Wireless\")';
-        console.log('No card info found for Companies, returning Nothing Found text.');
+        // console.log('No card info found for Companies, returning Nothing Found text.');
     }
 
     return payloads;
@@ -136,7 +134,7 @@ function generateResponsePayloads(genericResponse) {
 function formBasicPayload(genericResponse) {
   var teamId = genericResponse.context.userRequest.team_id;
   var state = genericResponse.context.state;
-  console.log("About to form basic payload with State: " + JSON.stringify(state));
+  // console.log("About to form basic payload with State: " + JSON.stringify(state));
 
   let url = state.slack.teams[teamId].incoming_webhook.url;
   let channel = state.slack.teams[teamId].channel_id;
@@ -151,7 +149,7 @@ function formBasicPayload(genericResponse) {
       attachments: []
     }
   }];
-  console.log("Basic payloads formed: " + JSON.stringify(payloads));
+  // console.log("Basic payloads formed: " + JSON.stringify(payloads));
 
   return payloads;
 };
@@ -272,7 +270,7 @@ function formatContacts(contactMethods) {
   if (topContacts) {
     topContacts = topContacts.slice(0, -3);
   }
-  console.log("Formatted string for Slack contact methods: " + topContacts);
+  // console.log("Formatted string for Slack contact methods: " + topContacts);
   return topContacts;
 }
 

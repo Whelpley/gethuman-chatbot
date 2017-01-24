@@ -21,13 +21,13 @@ function initialize() {
       storageBucket: firebaseProjectName + '.appspot.com',
       messagingSenderId: firebaseSenderId
   };
-  console.log('Prepared config for Firebase: ' + JSON.stringify(firebaseConfig));
+  // console.log('Prepared config for Firebase: ' + JSON.stringify(firebaseConfig));
 
   firebase.initializeApp(firebaseConfig);
 
   firebase.database().ref('gh/').on('value', function(snapshot) {
     Object.assign(state, snapshot.val());
-    console.log("Firebase data updated");
+    // console.log("Firebase data updated");
   });
 
   return Q.when(state);
