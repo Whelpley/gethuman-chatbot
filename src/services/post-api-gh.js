@@ -19,8 +19,8 @@ function findByCompany(company) {
     guideId: {'$exists': true},
     companyId: company._id
   }));
-  console.log('Params for Post search: ' + params);
-  console.log('About to make request to query Posts');
+  // console.log('Params for Post search: ' + params);
+  // console.log('About to make request to query Posts');
   request(url
     + '?limit='
     + limit
@@ -28,7 +28,7 @@ function findByCompany(company) {
     + params,
   function(error, response, body) {
     if (error) {
-      console.log('Hit an error getting the Posts of a Company!');
+      // console.log('Hit an error getting the Posts of a Company!');
       deferred.reject(error);
     } else {
         let jsonBody = [];

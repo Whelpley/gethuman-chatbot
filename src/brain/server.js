@@ -107,7 +107,7 @@ function sendResponses(context, payloads) {
   // force payloads into an array
   payloads = [].concat(payloads || []);
 
-  let calls = payloads.map(function(payload) {
+  let calls = payloads.map((payload) => {
     return function() {
       return sendResponseToPlatform(context, payload)
           .catch(function(err) {

@@ -13,7 +13,6 @@ function findByText(textInput) {
   let deferred = Q.defer();
   let url = config.ghApiBaseUrl + '/companies/search';
   let match = encodeURIComponent(textInput);
-  // console.log('Trying to match user input: ' + match);
 
   request(url
     + '?match='
@@ -26,7 +25,7 @@ function findByText(textInput) {
         try {
           jsonBody = JSON.parse(body);
         } catch (ex) {
-          // console.log('findByText parsing error for match ' + match + ' with body ' + body);
+          console.log('findByText parsing error for match ' + match + ' with body ' + body);
         }
 
         deferred.resolve(jsonBody);

@@ -69,13 +69,12 @@ function queryCompany(genericRequest) {
     // If nothing passed in, return an empty object in place of Posts
     // to next step in Promise chain
     if (!companySearchResults.length) {
-      // console.log('Nothing found in initial Company search');
       queryResult.type = 'nothing-found';
       return Q.when({});
     }
 
     queryResult.type = 'standard';
-    var exactMatch = companySearchResults.filter(function(eachCompany) {
+    var exactMatch = companySearchResults.filter((eachCompany) => {
       return eachCompany.name.toLowerCase() === userInput.toLowerCase();
     });
 
@@ -97,14 +96,9 @@ function queryCompany(genericRequest) {
  * @return {genericResponse} Promise
  */
 function structureGenericResponse(queryResult) {
-  // var type = queryResult.type;
-  // var posts = queryResult.data.posts || [];
-
   var { type, data, userInput } = queryResult;
   var posts = data.posts || [];
-
   var genericResponse = {
-    // userInput: queryResult.userInput,
     userInput: userInput,
     data: {
       name: queryResult.data.name || '',
@@ -159,11 +153,6 @@ function attachOtherCompanies(company, companySearchResults, userInput) {
     var companyNames = companySearchResults.map((eachCompany) => {
       return eachCompany.name;
     });
-
-    // --- changing this for ES6 magic ---
-    // company.otherCompanies = companyNames.filter((name) => {
-    //   return name.toLowerCase() !== userInput.toLowerCase();
-    // });
 
     company.otherCompanies = companyNames.filter(n => n.toLowerCase() !== userInputLower);
 
