@@ -93,7 +93,7 @@ function queryCompany(genericRequest) {
  * @return {genericResponse} Promise
  */
 function structureGenericResponse(queryResult) {
-  var { type, data, userInput } = queryResult;
+  var {type, data, userInput} = queryResult;
   var posts = data.posts || [];
   var genericResponse = {
     userInput: userInput,
