@@ -1,4 +1,3 @@
-
 var Q = require('q');
 var companySearch = require('../services/company-api-gh');
 var postSearch = require('../services/post-api-gh');
@@ -12,13 +11,11 @@ var postSearch = require('../services/post-api-gh');
 function processRequest(normalizedRequest) {
 
   /*
-  Insert conditional: if Env variables not accessible (ie someone else has copied & is using this code), queryCompany should return a mock object
+  TODO: Insert conditional: if Env variables not accessible (ie someone else has copied & is using this code), queryCompany should return a mock object
   */
-  // (unsure if this is how to check if environment vars not there...)
   if (!normalizedRequest.context.config || !normalizedRequest.context.config.environment) {
     var context = normalizedRequest.context;
     var mockGenericResponse = mockData.getGenericResponse(context);
-    // console.log('Returning mock company object: ' + JSON.stringify(mockGenericResponse));
     return Q.when(mockGenericResponse);
   }
 
@@ -45,7 +42,6 @@ function queryCompany(genericRequest) {
   var company = {};
   var userInput = genericRequest.userInput;
   var requestType = genericRequest.reqType;
-  // console.log('Incoming request type from genericRequest, in queryCompany: ' + requestType);
 
   if (!userInput) {
     queryResult.type = 'no-input';
@@ -53,13 +49,11 @@ function queryCompany(genericRequest) {
   }
 
   if (requestType === 'help') {
-    // console.log('Help type detected in queryCompany function');
     queryResult.type = 'help';
     return Q.when(queryResult);
   }
 
   if (requestType === 'greeting') {
-    // console.log('Greeting type detected in queryCompany function');
     queryResult.type = 'greeting';
     return Q.when(queryResult);
   };
@@ -74,12 +68,15 @@ function queryCompany(genericRequest) {
     }
 
     queryResult.type = 'standard';
-    var exactMatch = companySearchResults.filter((eachCompany) => {
-      return eachCompany.name.toLowerCase() === userInput.toLowerCase();
-    });
+
+    // var exactMatch = companySearchResults.filter((eachCompany) => {
+    //   return eachCompany.name.toLowerCase() === userInput.toLowerCase();
+    // });
+    let exactMatch = companySearchResults.filter(eachCompany => eachCompany.name.toLowerCase() === userInput.toLowerCase());
 
     company = (exactMatch && exactMatch.length) ? exactMatch[0] : companySearchResults[0];
     company = attachOtherCompanies(company, companySearchResults, userInput);
+
     return postSearch.findByCompany(company);
   })
   .then(function(posts) {

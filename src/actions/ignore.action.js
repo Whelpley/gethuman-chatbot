@@ -1,4 +1,3 @@
-
 const Q = require('q');
 
 /**

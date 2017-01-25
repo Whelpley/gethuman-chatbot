@@ -6,7 +6,7 @@ let config = require('../config/config');
 /**
  * Contacts Firebase and returns a reference to the database
  *
- * @returns state
+ * @returns Promise {state}
  */
 function initialize() {
   var state = {};
@@ -21,13 +21,11 @@ function initialize() {
       storageBucket: firebaseProjectName + '.appspot.com',
       messagingSenderId: firebaseSenderId
   };
-  // console.log('Prepared config for Firebase: ' + JSON.stringify(firebaseConfig));
 
   firebase.initializeApp(firebaseConfig);
 
   firebase.database().ref('gh/').on('value', function(snapshot) {
     Object.assign(state, snapshot.val());
-    // console.log("Firebase data updated");
   });
 
   return Q.when(state);

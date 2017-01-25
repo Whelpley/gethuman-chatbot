@@ -18,19 +18,18 @@ function start(botHandlers, actionHandlers, config, state) {
   let port = process.env.PORT || 3000;
   let app = express();
 
-  // console.log('Starting server');
-
   addMiddleware(app);
 
-  // FB Messenger verification route
+  // Verification route for webhook to confirm new Facebook page
+  //  to connect with bot
   app.get('/messenger', function(req, res) {
       messenger.verify(req, res);
   });
 
-  // all bots go to this route
+  // All other incoming Post requests go through here:
   app.post('/:bot', handleRequest(botHandlers, actionHandlers, config, state));
 
-  // To-Do: route all requests through:
+  // To-Do: route all requests (including FB verification) through:
   // app.all('/:bot', handleRequest(botHandlers, actionHandlers, config));
 
   app.listen(port, function() {
@@ -60,12 +59,11 @@ function addMiddleware(app) {
  */
 function handleRequest(botHandlers, actionHandlers, config, state) {
   return function(req, res) {
-    console.log('Incoming request: ' + JSON.stringify(req.body));
 
     let context = getContext(req, res, config, state);
-    // console.log('Context captured from request: ' + JSON.stringify(context));
 
     // send back a 200 response immediately
+    // (to satisfy communication protocols)
     context.finishResponse();
 
     let botHandler = factory.getBotHandler(botHandlers, context);
@@ -78,15 +76,14 @@ function handleRequest(botHandlers, actionHandlers, config, state) {
       Q.fcall(function() {
         return actionHandler.processRequest(normalizedRequest);
       })
-      .then(function(genericResponse) {
+      .then((genericResponse) => {
           let payloads = botHandler.generateResponsePayloads(genericResponse);
           return sendResponses(context, payloads);
         })
-      .catch(function(error) {
+      .catch((error) => {
         console.log('Catching an error in Try/Catch in server: ' + error);
       });
     });
-
   };
 }
 
@@ -104,7 +101,7 @@ function sendResponses(context, payloads) {
     return null;
   }
 
-  // force payloads into an array
+  // Arrange payloads into an array if not already
   payloads = [].concat(payloads || []);
 
   let calls = payloads.map((payload) => {
@@ -143,14 +140,11 @@ function chainPromises(calls, val) {
  */
 function sendResponseToPlatform(context, payload) {
   if (context.isTest) {
-    console.log("Test flag detected in payload context.");
     context.sendResponse(payload);
     return Q.when();
   }
 
   if (!payload || (payload === {})) {
-    // sf this part needed?
-    console.log("No payload data detected.");
     return Q.when();
   }
 
@@ -165,7 +159,6 @@ function sendResponseToPlatform(context, payload) {
  */
 function sendRequestAsReply(payload) {
   let deferred = Q.defer();
-  // console.log("Last step before sending this payload: " + JSON.stringify(payload));
   request(payload, function(error) {
     if (error) {
       console.log("Ran into error while making request to send Slack payload: " + error);
