@@ -47,11 +47,9 @@ function normalizeRequests(context) {
     normalizedRequests[0].userInput = text;
   }
   if (text.toLowerCase() === 'help') {
-    // console.log('Detected user input of \"help\"');
     normalizedRequests[0].reqType = 'help';
   }
 
-  // console.log('Slack bot has prepared these normalized requests: ' + JSON.stringify(normalizedRequests));
   return normalizedRequests;
 }
 
@@ -62,40 +60,30 @@ function normalizeRequests(context) {
  * @return {payloads}
  */
 function generateResponsePayloads(genericResponse) {
-  // form basic payload
   let payloads = formBasicPayload(genericResponse);
   let type = genericResponse.type;
 
-  // if a False object passed in, passes down False to next step
   if (!genericResponse) {
     return false;
   };
 
-  // Case: no user input
   if (type === 'no-input') {
-    // console.log('No user input flag detected in genericResponse.');
     payloads[0].json.text = 'What company are you having an issue with?';
     return payloads;
   }
 
   if (type === 'help') {
-    // Case: Help user
-    // console.log('Help flag detected in genericResponse.');
     payloads[0].json.text = 'It looks like you need some help. Please tell me the name of the company you want to reach, and I will provide you with a list of the top issues for customers of this company, the company\'s contact info, and a list of other companies you may want to search for.';
     return payloads;
   }
 
   if (type === 'nothing-found') {
-    // Case: nothing returned from Companies search / junk input
     console.log('No Company Results flag detected in genericResponse.');
     payloads[0].json.text = 'I couldn\'t tell what you meant by \"' + genericResponse.userInput + '\". Please tell me company you are looking for. (ex: \"/gethuman Verizon Wireless\")';
     return payloads;
   }
 
   if (type === 'standard') {
-    // do we need the explicit type check after the first two, or just 'else'?
-    // Refactor inner parts of this case to a function?
-    // console.log('Standard type flag detected in genericResponse.');
     let name = genericResponse.data.name || '';
     let posts = genericResponse.data.posts || [];
     let otherCompanies = genericResponse.data.otherCompanies || [];
@@ -103,22 +91,18 @@ function generateResponsePayloads(genericResponse) {
 
     if (posts && posts.length) {
       payloads = loadPostsAttachments(payloads, posts, name);
-      // console.log('Posts info pushed into Payloads');
     }
 
     if (topContacts) {
       payloads = loadContactsAttachments(payloads, topContacts, name);
-      // console.log('Company Contact Info pushed into Payloads');
     }
 
     if (otherCompanies && otherCompanies.length) {
       payloads = loadOtherCompaniesAttachments(payloads, otherCompanies);
-      // console.log('Other Companies info pushed into Payloads');
     }
 
     if (!payloads[0].json.attachments.length) {
         payloads[0].json.text = 'I couldn\'t find anything for \"' + name + '\". Please tell me which company you are looking for. (ex: \"/gethuman Verizon Wireless\")';
-        // console.log('No card info found for Companies, returning Nothing Found text.');
     }
 
     return payloads;
@@ -134,7 +118,6 @@ function generateResponsePayloads(genericResponse) {
 function formBasicPayload(genericResponse) {
   var teamId = genericResponse.context.userRequest.team_id;
   var state = genericResponse.context.state;
-  // console.log("About to form basic payload with State: " + JSON.stringify(state));
 
   let url = state.slack.teams[teamId].incoming_webhook.url;
   let channel = state.slack.teams[teamId].channel_id;
@@ -149,7 +132,6 @@ function formBasicPayload(genericResponse) {
       attachments: []
     }
   }];
-  // console.log("Basic payloads formed: " + JSON.stringify(payloads));
 
   return payloads;
 };
@@ -177,14 +159,10 @@ function loadPostsAttachments(payloads, posts, name) {
           "color": color,
           "fields": [
               {
-                  // export to Config
-                  // "value": "<https://problems.gethuman.com/" + encodeURIComponent(name) + "|Fix this issue for me>",
                   "value": "<" + ghProblemsUrl + encodeURIComponent(name) + "|Fix this issue for me>",
                   "short": true
               },
               {
-                  // export to Config
-                  // "value": "<https://answers.gethuman.co/_" + encodeURIComponent(urlId) + "|More...>",
                   "value": "<" + ghAnswersUrl + encodeURIComponent(urlId) + "|More...>",
                   "short": true
               }
@@ -270,7 +248,6 @@ function formatContacts(contactMethods) {
   if (topContacts) {
     topContacts = topContacts.slice(0, -3);
   }
-  // console.log("Formatted string for Slack contact methods: " + topContacts);
   return topContacts;
 }
 

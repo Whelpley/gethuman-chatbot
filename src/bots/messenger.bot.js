@@ -26,7 +26,8 @@ function verify(req, res) {
  */
 function normalizeRequests(context) {
   var normalizedRequests = [];
-  // iterate over messaging events - FBM uses batch processing
+
+  // Need to iterate over messaging events - Messenger sends bursts of messages as single objects
   var messaging_events = context.userRequest.entry[0].messaging;
 
   for (let i = 0; i < messaging_events.length; i++) {
@@ -38,7 +39,6 @@ function normalizeRequests(context) {
     var event = context.userRequest.entry[0].messaging[i];
 
     if (event.message && event.message.text) {
-      // console.log("User input Post detected from FB");
       var userInput = event.message.text;
 
       singleNormalizedRequest.userInput = userInput;
@@ -58,8 +58,7 @@ function normalizeRequests(context) {
     }
 
     if (event.postback) {
-      // console.log("Postback Post detected from FB");
-    // Later: determine if this is triggering a new search, or displaying more Companies - right now just triggers new search
+    // A postback event will trigger a new search based on its payload
       singleNormalizedRequest.userInput = event.postback.payload;
       singleNormalizedRequest.reqType = 'postback';
     }
@@ -76,7 +75,7 @@ function normalizeRequests(context) {
  * @return {payloads}
  */
 function generateResponsePayloads(genericResponse) {
-  // if a False object passed in, pass through false
+
   if (!genericResponse) {
     return false;
   };
@@ -85,21 +84,11 @@ function generateResponsePayloads(genericResponse) {
   var token = config.facebookAccessToken;
   var url = config.facebookSendUrl;
   var type = genericResponse.type;
-  // Need to dig into the incoming User Request object to find the ID of the Sender to receive the response we are constructing
+
+  // Explanation for deep targeting:
+  // Need to dig into the incoming User Request object
+  //  to find the ID of the Sender to receive the response we are constructing
   var sender = genericResponse.context.userRequest.entry[0].messaging[0].sender.id;
-
-  // var actionResponses = {
-  //   'nothing-found': nothingFoundResponse(),
-  //   'help': helpResponse(),
-  //   'greeting': greetingResponse(),
-  //   'standard': standardResponse()
-  // }
-  // var botActionResponseHandler = actionResponses[type];
-  // if (!botActionResponseHandler) {
-  //   throw new Error('No response handler found for messenger action ' + type);
-  // }
-
-  // return botActionResponseHandler(genericResponse)
 
   if (type === 'nothing-found') {
     let elements = loadNothingFoundElements();
@@ -342,18 +331,19 @@ function formatContactButtons(contactMethods) {
                     };
                     break;
                 case 'email':
-                    // console.log("Email detected, not creating button for it because Messenger won't let us.");
+                    // Not creating button for email link because Messenger won't let us ;(
                     break;
                 default:
-                    // console.log("Something went wrong in Facebook contact button formatting");
+                    // It should never go here
             }
+
             if (button.type) {
                 buttons.push(button);
                 counter += 1;
             }
         }
     }
-    // console.log("Buttons formatted from contact methods: " + JSON.stringify(buttons));
+
     return buttons;
 }
 
