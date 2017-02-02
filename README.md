@@ -122,7 +122,3 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 ## Feedback
 
 I'm always seeking to improve. If anything is unclear in the code or this guide, or if you have any other comments, drop me an email: whelpley@gmail.com
-
-( I'm also seeking full-time developer work in the Bay area; if you like what you see here, find me on [LinkedIn](https://www.linkedin.com/in/whelpley) )
-
-
