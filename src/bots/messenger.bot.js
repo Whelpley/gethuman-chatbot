@@ -1,4 +1,3 @@
-
 const phoneFormatter = require('phone-formatter');
 const config = require('../config/config');
 
@@ -9,8 +8,8 @@ const config = require('../config/config');
  * @param res
  */
 function verify(req, res) {
-    // console.log("Receiving webhook verification from FB.");
     var verifyToken = config.facebookVerifyToken;
+
     if (req.query['hub.verify_token'] === verifyToken) {
         res.send(req.query['hub.challenge']);
     } else {
@@ -19,7 +18,7 @@ function verify(req, res) {
 }
 
 /**
- * Makes array of generic request objects from incoming context
+ * Makes array of normalized request objects from incoming context
  *
  * @param context
  * @return {genericRequests}
@@ -27,16 +26,17 @@ function verify(req, res) {
 function normalizeRequests(context) {
   var normalizedRequests = [];
 
-  // Need to iterate over messaging events - Messenger sends bursts of messages as single objects
+  // The actual events are buried in the incoming request object (via context)
   var messaging_events = context.userRequest.entry[0].messaging;
 
+  // Need to iterate over messaging events - Messenger sends bursts of messages as single objects
   for (let i = 0; i < messaging_events.length; i++) {
     let singleNormalizedRequest = {
       reqType: 'ignore',
       userInput: '',
       context: context
     };
-    var event = context.userRequest.entry[0].messaging[i];
+    let event = context.userRequest.entry[0].messaging[i];
 
     if (event.message && event.message.text) {
       var userInput = event.message.text;
@@ -51,14 +51,15 @@ function normalizeRequests(context) {
         singleNormalizedRequest.reqType = 'greeting';
       }
 
+      // when user inputs a string starting with 'bot'
       if (userInput.slice(0, 4) === 'bot ') {
         singleNormalizedRequest.userInput = userInput.slice(4);
         singleNormalizedRequest.reqType = 'user-input';
       }
     }
 
-    if (event.postback) {
     // A postback event will trigger a new search based on its payload
+    if (event.postback) {
       singleNormalizedRequest.userInput = event.postback.payload;
       singleNormalizedRequest.reqType = 'postback';
     }
@@ -69,13 +70,14 @@ function normalizeRequests(context) {
 }
 
 /**
- * Takes generic response data and structures payloads for Messenger sending
+ * Takes generic response data and structures payloads to send to Messenger
  *
  * @param genericResponse
- * @return {payloads}
+ * @return payloads
  */
 function generateResponsePayloads(genericResponse) {
 
+  // an Ignore action with call this function with no parameters
   if (!genericResponse) {
     return false;
   };
@@ -85,9 +87,10 @@ function generateResponsePayloads(genericResponse) {
   var url = config.facebookSendUrl;
   var type = genericResponse.type;
 
-  // Explanation for deep targeting:
-  // Need to dig into the incoming User Request object
-  //  to find the ID of the Sender to receive the response we are constructing
+  /** Explanation for deep targeting:
+  *     Need to dig into the incoming User Request object
+  *     to find the ID of the Sender to receive the response we are constructing
+  */
   var sender = genericResponse.context.userRequest.entry[0].messaging[0].sender.id;
 
   if (type === 'nothing-found') {

@@ -28,9 +28,7 @@ function normalizeRequests(context) {
     context: context
   }];
 
-  /* Verify that incoming message is coming from Slack
-  *    by checking for valid token
-  *   Only needed before submitting for App Directory approval
+  /** TO-DO: Verify that incoming message is coming from Slack
   */
   // let verifyToken = context.config.slackVerifyToken;
   // let incomingToken = context.userRequest.token;

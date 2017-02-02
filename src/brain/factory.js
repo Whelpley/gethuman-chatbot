@@ -9,7 +9,6 @@
  */
 function getActionHandler(actionHandlers, normalizedRequest) {
 
-  // TODO: separate Action Handlers by reqType
   let reqType = normalizedRequest.reqType;
 
   if ((reqType === 'user-input') || (reqType === 'postback') || (reqType === 'help') || (reqType === 'greeting')) {

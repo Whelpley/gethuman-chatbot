@@ -1,4 +1,5 @@
 var Q = require('q');
+
 var companySearch = require('../services/company-api-gh');
 var postSearch = require('../services/post-api-gh');
 
@@ -178,7 +179,6 @@ function extractContactMethods(queryResultData) {
   company.contactMethods.forEach(function(method) {
       contactMethods[method.type] = method.target;
   });
-  // console.log("Extracted contact info from company: " + JSON.stringify(contactMethods));
   return contactMethods;
 }
 

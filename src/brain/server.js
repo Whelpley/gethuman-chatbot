@@ -21,7 +21,6 @@ function start(botHandlers, actionHandlers, config, state) {
   addMiddleware(app);
 
   // Verification route for webhook to confirm new Facebook page
-  //  to connect with bot
   app.get('/messenger', function(req, res) {
       messenger.verify(req, res);
   });
@@ -185,9 +184,11 @@ function getContext(req, res, config, state) {
     userRequest: req.body,
     isTest: !!req.params.isTest,
     bot: req.params.bot,
+    // is this even used anywhere?
     sendResponse: function(payload) {
       res.send(payload);
     },
+    // is this even used anywhere?
     finishResponse: function() {
       res.status(200).end();
     }
