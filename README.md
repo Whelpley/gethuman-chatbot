@@ -12,6 +12,8 @@ Without any software installation or coding, you may interact with these bots in
 
 To install the GetHuman Bot on your own Slack Team:
 
+*(Coming soon!)*
+
 * Join Slack, and either create a new Team, or have admin access to an existing team.
 * Visit the installation landing page at gethuman.com [coming soon!] .
 * Click on the "Add to Slack" Button, and choose the Slack channel you wish the bot to live in.
