@@ -2,26 +2,16 @@
 
 A Node.js interface for accessing GetHuman's customer service contacts database through chat platforms. Currently supporting Slack and Facebook Messenger.
 
-*(Readme currently incomplete)*
 
 ## Using The Existing Bots
 
-Without any software installation or coding, you may interact with these bots in their deployed versions:
+Without any software installation or coding, you will soon be able to interact with these bots in their deployed versions, once they are approved for public usage from Slack and Facebook.
 
-### Slack
+#### Slack
 
-To install the GetHuman Bot on your own Slack Team:
-
-*(Coming soon!)*
-
-* Join Slack, and either create a new Team, or have admin access to an existing team.
-* Visit the installation landing page at gethuman.com [coming soon!] .
-* Click on the "Add to Slack" Button, and choose the Slack channel you wish the bot to live in.
-* After successful installation, invoke the slash command by typing "/gethuman", followed by the name of the company you want information for, in the channel you have installed the bot.
-
-### Facebook Messenger
-
-Bot currently awaiting approval from Facebook, will post instructions when ready.
+*Coming soon!*
+#### Facebook Messenger
+*Coming soon!*
 
 ## Getting Started with Your Own Bot
 
@@ -33,9 +23,7 @@ Also note that the Slack and Messenger bots will not work from a locally-deploye
 
 ### Installing Locally
 
-(Need to edit this to relevant steps - need to re-word?)
-
-Steps to ready this code for your own use:
+Steps to ready this code for your own use (usage is limited, see below):
 
 1. Copy the repo to your local directory
 
@@ -55,7 +43,7 @@ Steps to ready this code for your own use:
 
 ### Local Usage Guide
 
-???
+Local usage is limited, due to reliance on a protected API. This code is more useful as a template for creating your own bots.
 
 
 ### Creating a New Facebook Messenger Bot
@@ -89,12 +77,25 @@ npm test
 
 (Testing framework is set up, but range of tests is currently limited.)
 
+## To-Do's
+
+
+* Create separate Action Handlers for Help, Greeting, and Feedback actions.
+* "slack.bot.js": Add verification step to ensure requests are coming from Slack.
+* "messenger.bot.js", "slack.bot.js": Restructure code to implement factory pattern for choosing response actions.
+* AFTER all other steps above implemented, submit bots for approval on Messenger and Slack.
+* Incorporate payment processing in Messenger for GetHuman's premium service.
+* Increate bot intelligence by incorporating Natural Language Processing.
+* Integrate a new platform
+
+
 ## Want to learn more about making bots?
 
 Here are some resources you can use as a jumping-off point:
 
 * [A beginner's guide to chatbots](https://chatbotsmagazine.com/the-complete-beginner-s-guide-to-chatbots-8280b7b906ca#.tlcxjxon9)
 * [A listing of available tools](https://chatbotsmagazine.com/the-tools-every-bot-creator-must-know-c0e9dd685094#.2dpmk29m3)
+* [A more in-depth review of some tools](https://tryolabs.com/blog/2017/01/25/building-a-chatbot-analysis--limitations-of-modern-platforms/)
 * [A dive into UX for bots](https://medium.muz.li/the-ultimate-guide-to-chatbots-why-theyre-disrupting-ux-and-best-practices-for-building-345e2150b682#.iod8agnqx)
 
 ## Built With
