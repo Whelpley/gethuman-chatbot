@@ -70,9 +70,6 @@ function queryCompany(genericRequest) {
 
     queryResult.type = 'standard';
 
-    // var exactMatch = companySearchResults.filter((eachCompany) => {
-    //   return eachCompany.name.toLowerCase() === userInput.toLowerCase();
-    // });
     let exactMatch = companySearchResults.filter(eachCompany => eachCompany.name.toLowerCase() === userInput.toLowerCase());
 
     company = (exactMatch && exactMatch.length) ? exactMatch[0] : companySearchResults[0];
@@ -123,10 +120,10 @@ function structureGenericResponse(queryResult) {
     return genericResponse;
   };
 
-// Extract contact methods:
+  // Extract contact methods:
   genericResponse.data.contactMethods = extractContactMethods(queryResult.data);
 
-// Extract Posts info
+  // Extract Posts info
   if (posts && posts.length) {
     genericResponse.data.posts = posts.map((post) => {
       return {
