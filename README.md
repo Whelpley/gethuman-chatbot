@@ -64,7 +64,7 @@ When you're ready, follow the process they have outlined, with the following not
 1. When selecting Integration Settings, choose the URL of your deployed server, followed by "/slack".
 2. You will need landing page to install the [Add to Slack](https://api.slack.com/docs/slack-button) button, as part of the Oauth process.
 3. On the same landing page, you will need to save a new team's Incoming Webhook path to a database. Refer to "test/testweb.js" for an example of how this works. We have used Firebase to save the external data; if you choose this as well, you will need to save the appropriate environment variables (FIREBASE_API_KEY, FIREBASE_PROJECT_NAME, FIREBASE_SENDER_ID) from your own instance. (Note that the "env.js" file is not included with this code for security reasons; you will need to add it yourself. Keep it secret - don't show it publicly!)
-4. *Optional*: If you wish to verify that the message is coming from slack, go to your App's settings page, click on the "Basic Information" tab, find the Verification Token and set the "SLACK_ACCESS_TOKEN" environment variable to that token. Then un-comment lines ____ in "src/bots/slack.bot.js" to enable a verification step that cancels any response that does not match the token.
+4. *Optional*: If you wish to verify that the message is coming from slack, go to your App's settings page, click on the "Basic Information" tab, find the Verification Token and set the "SLACK_ACCESS_TOKEN" environment variable to that token. Then un-comment lines 33-42 in "src/bots/slack.bot.js" to enable a verification step that cancels any response that does not match the token.
 
 
 ## Running the tests

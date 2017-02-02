@@ -28,7 +28,7 @@ function normalizeRequests(context) {
     context: context
   }];
 
-  /** TO-DO: Verify that incoming message is coming from Slack
+  /** Verify that incoming message is coming from Slack
   */
   // let verifyToken = context.config.slackVerifyToken;
   // let incomingToken = context.userRequest.token;
